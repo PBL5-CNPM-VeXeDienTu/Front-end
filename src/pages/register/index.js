@@ -1,10 +1,14 @@
-import { Form, Input, Button ,Select} from 'antd';
-import { UserOutlined ,UnlockOutlined,MailOutlined ,SettingOutlined} from '@ant-design/icons';
-import background from '../../assets/images/background.png';
-import avatar from '../../assets/images/avatar.svg'
-import 'antd/dist/antd.min.css';
-import '../register/style.css'
+import { Form, Input, Button ,Select } from 'antd';
+import { UserOutlined ,UnlockOutlined,MailOutlined ,SettingOutlined } from '@ant-design/icons';
+import messages from 'assets/lang/messages';
+
+import background from 'assets/images/background.png';
+import avatar from 'assets/images/avatar.svg';
+
+import 'pages/register/style.css';
+
 const { Option } = Select;
+
 function register() {
     return (
       <div className='register-container-main'>
@@ -27,7 +31,7 @@ function register() {
                       rules={[
                         {
                           required: true,
-                          message: 'Bạn chưa nhập tên',
+                          message: messages['name_required'],
                         },
                       ]}
                   >
@@ -41,11 +45,11 @@ function register() {
                     rules={[
                         {
                           type: 'email',
-                          message: 'Email không hợp lệ (VD: example@gmail.com)',
+                          message: messages['invalid_email'],
                         },
                         {
                           required: true,
-                          message: 'Bạn chưa nhập email',
+                          message: messages['email_required'],
                         },
                     ]}
                   >
@@ -58,7 +62,7 @@ function register() {
                   <Form.Item className='form-item' name="categories" rules={[ {  required: false, }, ]} >
                     <Select defaultValue="Basic User" className="input role"  >
                         <Option value="Basic User">Basic user</Option>
-                        <Option value="Pakinglot User">Pakinglot user</Option>
+                        <Option value="Packing-lot User">Pakinglot user</Option>
                     </Select>
                     </Form.Item>
                   </div>
@@ -69,11 +73,11 @@ function register() {
                       rules={[
                         {
                           required: true,
-                          message: 'Bạn chưa nhập mật khẩu',
+                          message: messages['password_required'],
                         },
                         {
                           type: 'string', min: 8, max: 24,
-                          message: 'Mật khẩu ít nhất 8 kí tự',
+                          message: messages['invalid_password_length'],
                         },
                       ]}
                     >
@@ -87,14 +91,14 @@ function register() {
                     rules={[
                       {
                         required: true,
-                        message: 'Mời nhập lại mật khẩu',
+                        message: messages['confirm_password_require'],
                       },
                       ({ getFieldValue }) => ({
                         validator(_, value) {
                           if (!value || getFieldValue('password') === value) {
                             return Promise.resolve();
                           }
-                          return Promise.reject(new Error('Mật khẩu không trùng khớp'));
+                          return Promise.reject(new Error(messages['confirm_password_not_match']));
                         },
                       }),
                     ]}

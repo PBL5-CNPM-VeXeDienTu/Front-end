@@ -1,9 +1,12 @@
 import { Form, Input, Button } from 'antd';
 import { UserOutlined ,UnlockOutlined } from '@ant-design/icons';
-import background from '../../assets/images/background.png';
-import avatar from '../../assets/images/avatar.svg'
-import 'antd/dist/antd.min.css';
-import '../login/style.css'
+import messages from 'assets/lang/messages';
+
+import background from 'assets/images/background.png';
+import avatar from 'assets/images/avatar.svg'
+
+import 'pages/login/style.css'
+
 function login() {
     return (
       <div className='login-container-main'>
@@ -27,12 +30,12 @@ function login() {
                   <Form.Item className='form-item' name="email"
                     rules={[
                       {
-                        type: 'email',
-                        message: 'Email không hợp lệ (VD: example@gmail.com)',
+                        required: true,
+                        message: messages['email_required'],
                       },
                       {
-                        required: true,
-                        message: 'Bạn chưa nhập email',
+                        type: 'email',
+                        message: messages['invalid_email'],
                       },
                     ]}
                   >
@@ -46,20 +49,20 @@ function login() {
                       rules={[
                         {
                           required: true,
-                          message: 'Bạn chưa nhập mật khẩu',
+                          message: messages['password_required'],
                         },
                         {
                           type: 'string', min: 8, max: 24,
-                          message: 'Mật khẩu ít nhất 8 kí tự',
+                          message: messages['invalid_password_length'],
                         },
                       ]}
                     >
                       <Input.Password placeholder="Password" className='input password' />
                     </Form.Item>
                 </div>
-                <a className='forgot-password' href="#">Forgot Password</a>
+                <a className='forgot-password' href="./">Forgot Password</a>
                 <Button className='button-submit' >LOGIN</Button>
-                <a className="create-account" href="#">Create new account </a>
+                <a className="create-account" href="./">Create new account </a>
               </Form>
             </div>
           </div>
