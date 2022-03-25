@@ -9,7 +9,7 @@ import 'pages/register/style.css';
 
 const { Option } = Select;
 
-function register() {
+function Register() {
     return (
       <div className='register-container-main'>
         {/* <img className='wave' src={ware} alt={"ware"} /> */}
@@ -115,4 +115,4 @@ function register() {
     );
 }
 
-export default register;
+export default Register;
