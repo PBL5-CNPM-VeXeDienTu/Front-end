@@ -7,7 +7,7 @@ import avatar from 'assets/images/avatar.svg'
 
 import 'pages/login/style.css'
 
-function login() {
+function Login() {
     return (
       <div className='login-container-main'>
         {/* <img className='wave' src={ware} alt={"ware"} /> */}
@@ -71,4 +71,4 @@ function login() {
     );
 }
 
-export default login;
+export default Login;
