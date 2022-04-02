@@ -1,6 +1,6 @@
 .header {
     background: #fff;
-    height: 7vh;
+    height: 100%;
     width: 100%;
     padding: 0;
 }
@@ -55,27 +55,6 @@
         line-height: 8px;
         margin: 0;
     }
-
-    // .ant-popover {
-    //     width: 320px;
-    //     border-radius: 5px;
-    //     top: 35px !important;
-
-    //     .ant-popover-title {
-    //         height: 40px;
-    //         padding: 13px 0 13px 20px;
-    //         line-height: 14px;
-    //     }
-
-    //     .ant-popover-inner-content {
-    //         padding: 0 0 0 10px;
-    //         min-height: 50px;
-    //     }
-
-    //     .ant-popover-arrow {
-    //         display: none;
-    //     }
-    // }
 }
 
 .selected {

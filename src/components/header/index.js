@@ -66,10 +66,10 @@ class Header extends React.Component {
                             ></img>
 
                             <div>
-                                <div class="header-right__content__name">
+                                <div className="header-right__content__name">
                                     <span>Phạm Văn Thọ</span>
                                 </div>
-                                <div class="header-right__content__role">
+                                <div className="header-right__content__role">
                                     <span>Basic User</span>
                                 </div>
                             </div>
