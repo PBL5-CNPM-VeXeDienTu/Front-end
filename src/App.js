@@ -1,13 +1,16 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// import { UserContext } from 'hooks/UserContext';
-
-import Login from 'views/pages/login';
-import Register from 'views/pages/register';
-// import Routes from 'views/routes'
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from 'contexts/UserContext';
 import AllRoutes from 'views/routes';
 
 function App() {
-    return <AllRoutes />;
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <AllRoutes />
+            </AuthProvider>
+        </BrowserRouter>
+    );
 }
 
 export default App;

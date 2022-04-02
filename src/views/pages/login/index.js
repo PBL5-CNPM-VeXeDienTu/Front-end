@@ -5,7 +5,7 @@ import messages from 'assets/lang/messages';
 import background from 'assets/images/background.png';
 import avatar from 'assets/images/avatar.svg';
 
-import 'views/pages/login/login.scss';
+import './login.scss';
 
 function Login() {
     return (
@@ -86,7 +86,7 @@ function Login() {
                                 Forgot Password
                             </a>
                             <Button className="button-submit">LOGIN</Button>
-                            <a className="create-account" href="./">
+                            <a className="create-account" href="/register">
                                 Create new account{' '}
                             </a>
                         </Form>

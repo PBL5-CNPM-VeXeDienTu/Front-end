@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Dropdown, message, Popover } from 'antd';
-import { BellOutlined, DownOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import avatar from 'assets/images/avatar.jpg';
 import speaker from 'assets/images/speaker.png';
 import 'components/header/header.scss';
