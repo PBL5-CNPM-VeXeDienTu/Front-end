@@ -1,0 +1,47 @@
+root {
+    overflow: hidden;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.body-wrapper {
+    height: 100%;
+    position: relative;
+}
+
+.content-wrapper {
+    height: 100%;
+}
+
+.app-layout {
+    height: 100%;
+
+    &__right {
+        position: relative;
+        height: 100%;
+
+        &--content {
+            position: absolute;
+            margin: 66px 30px 60px 30px;
+            padding: 16px 40px 20px 40px;
+            background: #ffffff;
+            border-radius: 20px;
+            min-height: calc(100% - 130px);
+            width: calc(100% - 50px);
+            z-index: 1;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+        }
+    }
+
+    &__sticky {
+        top: 160px;
+    }
+}

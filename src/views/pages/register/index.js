@@ -10,7 +10,7 @@ import messages from 'assets/lang/messages';
 import background from 'assets/images/background.png';
 import avatar from 'assets/images/avatar.svg';
 
-import 'pages/register/register.scss';
+import 'views/pages/register/register.scss';
 
 const { Option } = Select;
 
@@ -90,11 +90,7 @@ function Register() {
                                 <Form.Item
                                     className="form-item"
                                     name="categories"
-                                    rules={[
-                                        {
-                                            required: false,
-                                        },
-                                    ]}
+                                    rules={[{ required: false }]}
                                 >
                                     <Select
                                         defaultValue="Basic User"
