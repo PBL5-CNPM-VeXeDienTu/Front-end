@@ -1,9 +1,6 @@
 import React from 'react';
-import { Layout } from 'antd';
 import avatar from 'assets/images/avatar.jpg';
 import './profile.scss';
-
-const { Content } = Layout;
 
 function Profile() {
     return (
