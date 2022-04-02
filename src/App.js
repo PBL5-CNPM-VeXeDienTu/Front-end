@@ -1,22 +1,16 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import { UserContext } from 'hooks/UserContext';
-
-import Login from 'pages/login';
-import Register from 'pages/register'
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from 'contexts/UserContext';
+import AllRoutes from 'views/routes';
 
 function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <UserContext.Provider value={"User data goes here"}>
-          <Routes>
-            <Route exact path='/' element={<Login/>}/>
-            <Route exact path='/register' element={<Register/>}/>
-          </Routes>
-        </UserContext.Provider>
-      </BrowserRouter>
-    </div>
-  );
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <AllRoutes />
+            </AuthProvider>
+        </BrowserRouter>
+    );
 }
 
 export default App;
