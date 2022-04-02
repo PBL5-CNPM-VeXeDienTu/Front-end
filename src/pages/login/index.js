@@ -5,7 +5,7 @@ import messages from 'assets/lang/messages';
 import background from 'assets/images/background.png';
 import avatar from 'assets/images/avatar.svg';
 
-import 'pages/login/style.css';
+import 'pages/login/login.scss';
 
 function Login() {
     return (

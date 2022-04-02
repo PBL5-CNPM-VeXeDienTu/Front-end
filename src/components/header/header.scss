@@ -1,0 +1,110 @@
+
+.header{
+    background: #fff;
+    height: 7vh;
+    width: 100%;
+    padding: 0;
+}
+.header-right{
+    height: 100%;
+    width: fit-content;
+    float:right;
+    display: flex;
+    align-items: center;
+    &__content{
+        width: fit-content;
+        float:right;
+        display: flex;
+        align-items: center;
+        margin-right:1vw ;
+        &__avatar{
+            margin: 0;
+            border-radius: 50%;
+            width: 2.3vw;
+            margin-right:1vw ;
+        }
+        &__name{
+            font-size: 2vh;
+            margin-right:1vw ;
+            color: #555;
+        }
+        &__role{
+            font-size: 1.5vh;
+            margin-right:1vw ;
+            color: #555;
+        }
+    }
+}
+
+.header-notification {
+    margin-right:2vw ;
+    font-size: 17px;
+    align-items: center;
+    &__icon {
+        width: 1.5vw;
+        cursor: pointer;
+    }
+
+    &__unread {
+        position: absolute;
+        background-color: rgba(212, 19, 13, 1);
+        color: #fff;
+        border-radius: 50%;
+        padding: 4px 4px;
+        font: 8px Verdana;
+        height: 15px;
+        line-height: 8px;
+        margin: 0;
+    }
+
+    // .ant-popover {
+    //     width: 320px;
+    //     border-radius: 5px;
+    //     top: 35px !important;
+
+    //     .ant-popover-title {
+    //         height: 40px;
+    //         padding: 13px 0 13px 20px;
+    //         line-height: 14px;
+    //     }
+
+    //     .ant-popover-inner-content {
+    //         padding: 0 0 0 10px;
+    //         min-height: 50px;
+    //     }
+
+    //     .ant-popover-arrow {
+    //         display: none;
+    //     }
+    // }
+}
+
+.selected {
+    background-color: #EEEEEE;
+}
+
+
+.ant-dropdown-trigger {
+    color: #555;
+}
+
+.ant-dropdown-icon {
+    color: #41bc3f !important;
+    font-size: 90% !important;
+    margin-right: 1vw;
+}
+.header-menu{
+    background: #fff;
+    margin-top: 0;
+}
+
+.ant-dropdown-menu-item-only-child {
+    font-size: 100% !important;
+    margin-top: 6% !important;
+    
+}
+
+.ant-dropdown-menu-item-only-child:hover {
+    color: #41bc3f !important;
+   
+}

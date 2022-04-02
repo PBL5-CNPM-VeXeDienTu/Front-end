@@ -10,7 +10,7 @@ import messages from 'assets/lang/messages';
 import background from 'assets/images/background.png';
 import avatar from 'assets/images/avatar.svg';
 
-import 'pages/register/style.css';
+import 'pages/register/register.scss';
 
 const { Option } = Select;
 

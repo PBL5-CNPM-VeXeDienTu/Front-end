@@ -1,0 +1,176 @@
+.content-card {
+    box-shadow: 0 4px 20px 0 rgba(0,0,0,0.5); 
+	transition: 0.3s;
+	width: 100%;
+    height: 100%;
+	background-color: #41bc3f;
+	border-radius: 20px;
+    display: grid;
+    grid-template-rows :10% 90%;
+    font-size: 2.2vh;
+    /* position: absolute; */
+    /* top: 12%;
+    left: 14%;
+    z-index: 0; */
+
+}
+
+.title {
+    font-size: 6vh;
+    margin: auto;
+    padding: 4%;
+}
+
+.content-user {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 30% 70%
+    /* display: flex;
+    flex-direction: row;
+    justify-content:space-evenly ;
+    position: relative;
+    top: 5%; */
+}
+
+.content-user-avatar {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    padding-top:10%;
+    flex-direction: column;
+    margin-left: 20%;
+    margin-top: 10%;
+}
+
+.profile-avatar {
+    box-shadow: 0 3px 3px 0 #555; 
+    width: 30vh;
+    height: 30vh;
+    border-radius: 50%;
+    margin:auto;
+}
+
+.profile-user-edit-btn {
+    height: 5vh;
+    width: 7vw;
+    background-color: #b4e2b3;
+    border-radius: 50px;
+    margin:auto;
+    border: none;
+    color:#555;
+    
+}
+.profile-user-edit-btn:hover{
+    background-color: #41bc3f;
+    color:#fff;
+}
+.row-item{
+    text-align: right;
+}
+
+.content-user-infor{
+    display: flex;
+    width: 100%;
+    height: 90%;
+    
+}
+.content-user-infor-table{
+    margin: auto;
+    width:50vw;
+    border-spacing: 1.8vw;
+    border-collapse: separate;
+}
+.content-user-infor-table td{
+    position: relative;
+}
+.content-user-infor-table th{
+    color:#555;
+}
+.content-user-infor-table span{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+/* .user-infor-name {
+    display: flex;
+    flex-direction: row;
+}
+
+.content-user-infor {
+    font-size: 2.5vh;
+    line-height: 6vh;
+}
+
+.user-infor-name-lable {
+    min-width: 250px;
+}
+
+.user-infor-name-input {
+    flex: 1;
+}
+
+.user-infor-email {
+    display: flex;
+    flex-direction: row; 
+}
+
+.user-infor-email-lable {
+    min-width: 250px;
+}
+
+.user-infor-email-input {
+    flex: 1;
+}
+
+.user-infor-gender {
+    display: flex;
+    flex-direction: row; 
+}
+.user-infor-gender-lable {
+    min-width: 250px;
+}
+
+.user-infor-email-input-item {
+    flex: 1;
+}
+
+.user-infor-birthday {
+    display: flex;
+    flex-direction: row; 
+}
+
+.user-infor-birthday-lable {
+    min-width: 250px;
+}
+
+.user-infor-birthday-input-icon {
+    margin-left: 100px;
+}
+
+.user-infor-address {
+    display: flex;
+    flex-direction: row;
+}
+
+.user-infor-address-lable {
+    min-width: 250px;
+}
+
+.user-infor-address-input {
+    flex: 1;
+}
+
+.user-infor-phone {
+    display: flex;
+    flex-direction: row;
+}
+
+.user-infor-phone-lable {
+    min-width: 250px;
+}
+
+.user-infor-phone-input {
+    flex: 1;
+} */
