@@ -7,6 +7,7 @@ import useAuth from 'hooks/useAuth';
 const Login = loadableComponent(() => import('views/pages/login'));
 const Register = loadableComponent(() => import('views/pages/register'));
 const Profile = loadableComponent(() => import('views/pages/profile'));
+const EditProfile = loadableComponent(() => import('views/pages/editProfile'));
 
 // const availableRoles = [0, 1, 2];
 // const BASIC_USER_ROLE = 1;
@@ -24,6 +25,10 @@ function AllRoutes() {
             <Route
                 path="/profile"
                 element={<MainLayout component={Profile} />}
+            />
+            <Route
+                path="/profile/edit"
+                element={<MainLayout component={EditProfile} />}
             />
             {/* <AuthenticatedRoute
                 path="/profile"

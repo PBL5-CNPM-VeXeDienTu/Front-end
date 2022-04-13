@@ -1,0 +1,136 @@
+.container {
+    width: 100%;
+    height: 100%;
+    background-color: #41bc3f;
+    position: relative;
+}
+.content-card {
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+    width: 90%;
+    height: 90%;
+    background-color: #fff;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: 10% 90%;
+    font-size: 2.2vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.title {
+    font-size: 6vh;
+    margin: auto;
+    padding: 4%;
+}
+
+.content-user {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+.content-user-avatar {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    padding-top: 10%;
+    flex-direction: column;
+    margin-left: 20%;
+    margin-top: 10%;
+}
+
+.profile-avatar {
+    box-shadow: 0 3px 3px 0 #555;
+    width: 30vh;
+    height: 30vh;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.row-item {
+    text-align: right;
+}
+
+.content-user-infor {
+    display: flex;
+    width: 90%;
+    height: 100%;
+}
+.content-user-infor-table {
+    margin: auto;
+    width: 55vw;
+    border-spacing: 1.3vw;
+    border-collapse: separate;
+}
+.content-user-infor-table td {
+    position: relative;
+}
+.content-user-infor-table th {
+    color: #555;
+}
+
+.savebtn {
+    width: 13vh;
+    height: 6vh;
+    border-radius: 25px;
+    outline: none;
+    border: none;
+    background-size: 200%;
+    color: #555;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3vh;
+    transition: 0.5s;
+    background-color: #b4e2b3;
+    margin: auto;
+}
+.savebtn:hover {
+    width: 13vh;
+    height: 6vh;
+    border-radius: 25px;
+    outline: none;
+    border: none;
+    background-image: linear-gradient(to right, #41bc3f, #55c653, #41bc3f);
+    background-size: 200%;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3vh;
+    transition: 0.5s;
+    background-color: #41bc3f;
+    margin: auto;
+}
+
+.cancelbtn {
+    width: 13vh;
+    height: 6vh;
+    font-size: 3vh;
+    border-radius: 25px;
+    outline: none;
+    border: none;
+    background-size: 200%;
+    color: #555;
+    font-family: 'Poppins', sans-serif;
+    margin-left: 10%;
+    transition: 0.5s;
+    background-color: #f57665;
+    position: relative;
+}
+
+.cancelbtn:hover {
+    width: 13vh;
+    height: 6vh;
+    font-size: 3vh;
+    border-radius: 25px;
+    outline: none;
+    border: none;
+    background-size: 200%;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    margin-left: 10%;
+    transition: 0.5s;
+    background-color: #bb2916;
+    position: relative;
+}

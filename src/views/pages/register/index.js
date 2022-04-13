@@ -182,7 +182,10 @@ function Register() {
                             </div>
                             <Button className="button-submit">REGISTER</Button>
                             <span className="span-logIn">
-                                Already have an account?  <a className="a-logIn" href="/login">Log in{' '}</a>
+                                Already have an account?{' '}
+                                <a className="a-logIn" href="/login">
+                                    Log in{' '}
+                                </a>
                             </span>
                         </Form>
                     </div>
