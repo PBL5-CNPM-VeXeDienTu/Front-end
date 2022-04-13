@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+import useAuth from 'hooks/useAuth';
 import avatar from 'assets/images/avatar.jpg';
 import './profile.scss';
 
 function Profile() {
+    const { user } = useAuth();
+
     return (
-        // <Layout_basic>
-        //   <Layout_basic.Main>
         <div className="container">
             <div className="content-card">
                 <div className="title">Profile</div>
@@ -24,11 +25,11 @@ function Profile() {
                         <table className="content-user-infor-table">
                             <tr>
                                 <th className="row-item">Tên</th>
-                                <td>Phạm Văn Thọ</td>
+                                <td>{user.name}</td>
                             </tr>
                             <tr>
                                 <th className="row-item">Email</th>
-                                <td>Thopham.21082001@gmail.com</td>
+                                <td>{user.email}</td>
                             </tr>
                             <tr>
                                 <th className="row-item">Giới tính</th>
@@ -41,10 +42,7 @@ function Profile() {
                             <tr>
                                 <th className="row-item">Địa chỉ</th>
                                 <td>
-                                    <span>
-                                        Tổ 3 , thôn Đại la, xã Hòa Sơn, huyện
-                                        Hòa vang , TP Đà Nẵng
-                                    </span>
+                                    <span>{user.address}</span>
                                 </td>
                             </tr>
                             <tr>

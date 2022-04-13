@@ -10,7 +10,7 @@ export const Loading = (
 
 const LoadableComponent = (func) => {
     const Component = lazy(func);
-  
+
     return (props) => (
         <Suspense fallback={Loading}>
             <Component {...props} />
