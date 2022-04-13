@@ -1,13 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, Dropdown, message, Popover } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import useAuth from 'hooks/useAuth';
 import avatar from 'assets/images/avatar.jpg';
 import speaker from 'assets/images/speaker.png';
 import 'components/header/header.scss';
 
-const onClick = ({ key }) => {
-    message.info(`Click on item ${key}`);
-};
+const onClick = ({ key }) => {};
 
 const content = (
     <div>
@@ -16,69 +16,87 @@ const content = (
     </div>
 );
 
-class Header extends React.Component {
-    menu = () => {
+function Header() {
+    const { user, setUser, setToken } = useAuth();
+    const handleLogout = () => {
+        setUser({});
+        setToken(null);
+    };
+    const menu = () => {
         return (
             <Menu
                 class="header-menu"
                 styles={'background-color:red'}
                 onClick={onClick}
             >
-                <Menu.Item key="1">Trang cá nhân</Menu.Item>
-                <Menu.Item key="2">Thay đổi password</Menu.Item>
-                <Menu.Item key="3">Đăng xuất</Menu.Item>
+                <Menu.Item key="1">
+                    <Link to="/profile">Trang cá nhân</Link>
+                </Menu.Item>
+                <Menu.Item key="2">
+                    <Link to="/change-password">Thay đổi password</Link>
+                </Menu.Item>
+                <Menu.Item key="3" onClick={handleLogout}>
+                    Đăng xuất
+                </Menu.Item>
             </Menu>
         );
     };
+    const userRole = () => {
+        switch (user.role) {
+            case 1:
+                return 'Parking-lot User';
+            case 2:
+                return 'Basic User';
+            case 3:
+                return 'Admin';
+            default:
+                return 'Another';
+        }
+    };
 
-    render() {
-        return (
-            <div className="header">
-                <div className="header-right">
-                    {/* <BellOutlined className="header-right__icon"/> */}
-                    <Popover
-                        className="header-notification"
-                        content={content}
-                        title="Title"
-                        trigger="click"
+    return (
+        <div className="header">
+            <div className="header-right">
+                <Popover
+                    className="header-notification"
+                    content={content}
+                    title="Title"
+                    trigger="click"
+                >
+                    <span className="">
+                        <img
+                            className="header-notification__icon"
+                            src={speaker}
+                            alt="speaker"
+                        ></img>
+                        <span className="header-notification__unread">10</span>
+                    </span>
+                </Popover>
+
+                <Dropdown overlay={menu} trigger="click">
+                    <a
+                        className="header-right__content"
+                        onClick={(e) => e.preventDefault()}
                     >
-                        <span className="">
-                            <img
-                                className="header-notification__icon"
-                                src={speaker}
-                                alt="speaker"
-                            ></img>
-                            <span className="header-notification__unread">
-                                10
-                            </span>
-                        </span>
-                    </Popover>
-                    ,
-                    <Dropdown overlay={this.menu} trigger="click">
-                        <a
-                            className="header-right__content"
-                            onClick={(e) => e.preventDefault()}
-                        >
-                            <img
-                                className="header-right__content__avatar"
-                                src={avatar}
-                                alt="logo"
-                            ></img>
+                        <img
+                            className="header-right__content__avatar"
+                            src={avatar}
+                            alt="logo"
+                        ></img>
 
-                            <div>
-                                <div className="header-right__content__name">
-                                    <span>Phạm Văn Thọ</span>
-                                </div>
-                                <div className="header-right__content__role">
-                                    <span>Basic User</span>
-                                </div>
+                        <div>
+                            <div className="header-right__content__name">
+                                <span>{user.name}</span>
                             </div>
-                            <DownOutlined className="header-right__content__dropdown" />
-                        </a>
-                    </Dropdown>
-                </div>
+                            <div className="header-right__content__role">
+                                <span>{userRole()}</span>
+                            </div>
+                        </div>
+                        <DownOutlined className="header-right__content__dropdown" />
+                    </a>
+                </Dropdown>
             </div>
-        );
-    }
+        </div>
+    );
 }
 export default Header;

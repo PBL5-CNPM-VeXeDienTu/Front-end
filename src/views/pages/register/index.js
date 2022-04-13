@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Select } from 'antd';
 import {
     UserOutlined,
@@ -6,6 +7,7 @@ import {
     SettingOutlined,
 } from '@ant-design/icons';
 import messages from 'assets/lang/messages';
+import auth from 'api/auth';
 
 import background from 'assets/images/background.png';
 import avatar from 'assets/images/avatar.svg';
@@ -15,9 +17,20 @@ import './register.scss';
 const { Option } = Select;
 
 function Register() {
+    const navigate = useNavigate();
+    const handleSubmit = async (values) => {
+        try {
+            values.role = parseInt(values.role);
+            const response = await auth.register(values);
+            alert(response.data.message);
+            navigate('/login');
+        } catch (error) {
+            //TODO: hiển bị thông báo theo từng error code (error.request.status === 404)
+            alert(error.response.data.message);
+        }
+    };
     return (
         <div className="register-container-main">
-            {/* <img className='wave' src={ware} alt={"ware"} /> */}
             <div className="register-card">
                 <div className="register-img-background">
                     <img
@@ -29,7 +42,11 @@ function Register() {
                 <div className="register-container-sub">
                     <div className="register-content"></div>
                     <div className="register-form-content">
-                        <Form name="register" className="register-form">
+                        <Form
+                            name="register"
+                            className="register-form"
+                            onFinish={handleSubmit}
+                        >
                             <img src={avatar} alt={'avatar'} />
                             <h2>Welcome</h2>
 
@@ -89,17 +106,20 @@ function Register() {
                                 </i>
                                 <Form.Item
                                     className="form-item"
-                                    name="categories"
-                                    rules={[{ required: false }]}
+                                    name="role"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'moi chon role',
+                                        },
+                                    ]}
                                 >
                                     <Select
-                                        defaultValue="Basic User"
+                                        defaultValue="Role"
                                         className="input role"
                                     >
-                                        <Option value="Basic User">
-                                            Basic user
-                                        </Option>
-                                        <Option value="Packing-lot User">
+                                        <Option value="1">Basic user</Option>
+                                        <Option value="2">
                                             Pakinglot user
                                         </Option>
                                     </Select>
@@ -121,7 +141,7 @@ function Register() {
                                         },
                                         {
                                             type: 'string',
-                                            min: 8,
+                                            min: 6,
                                             max: 24,
                                             message:
                                                 messages[
@@ -180,10 +200,20 @@ function Register() {
                                     />
                                 </Form.Item>
                             </div>
-                            <Button className="button-submit">REGISTER</Button>
-                            <span className="span-logIn">
-                                Already have an account?  <a className="a-logIn" href="/login">Log in{' '}</a>
-                            </span>
+                            <Button
+                                className="button-submit"
+                                type="primary"
+                                htmlType="submit"
+                            >
+                                REGISTER
+                            </Button>
+                            <p className="have-an-account">
+                                Already have an account?{' '}
+                                <a className="have-an-account" href="/login">
+                                    {' '}
+                                    LOG IN
+                                </a>
+                            </p>
                         </Form>
                     </div>
                 </div>
@@ -191,5 +221,4 @@ function Register() {
         </div>
     );
 }
-
 export default Register;
