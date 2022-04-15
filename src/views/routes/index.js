@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import MainLayout from 'components/layouts/MainLayout';
 import loadableComponent from 'components/loadable-component';
-import useAuth from 'hooks/useAuth';
 
 const Login = loadableComponent(() => import('views/pages/login'));
 const Register = loadableComponent(() => import('views/pages/register'));
@@ -17,15 +16,6 @@ const ChangePassword = loadableComponent(() =>
 // const ADMIN_ROLE = 3;
 
 function AllRoutes() {
-    const { token } = useAuth();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!token) {
-            navigate('/login');
-        }
-    }, [token, navigate]);
-
     return (
         <Routes>
             <Route path="/login" element={<Login />} />

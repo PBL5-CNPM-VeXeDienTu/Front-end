@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Dropdown, message, Popover } from 'antd';
+import { Menu, Dropdown, Popover } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import useAuth from 'hooks/useAuth';
-import avatar from 'assets/images/avatar.jpg';
 import speaker from 'assets/images/speaker.png';
 import 'components/header/header.scss';
 
@@ -18,10 +17,13 @@ const content = (
 
 function Header() {
     const { user, setUser, setToken } = useAuth();
+    const avatarURL = process.env.REACT_APP_API_URL + user.avatar;
+
     const handleLogout = () => {
         setUser({});
         setToken(null);
     };
+
     const menu = () => {
         return (
             <Menu
@@ -30,10 +32,10 @@ function Header() {
                 onClick={onClick}
             >
                 <Menu.Item key="1">
-                    <Link to="/profile">Trang cá nhân</Link>
+                    <Link to="/profile">Profile</Link>
                 </Menu.Item>
                 <Menu.Item key="2">
-                    <Link to="/change-password">Thay đổi password</Link>
+                    <Link to="/change-password">Đổi mật khẩu</Link>
                 </Menu.Item>
                 <Menu.Item key="3" onClick={handleLogout}>
                     Đăng xuất
@@ -41,6 +43,7 @@ function Header() {
             </Menu>
         );
     };
+
     const userRole = () => {
         switch (user.role) {
             case 1:
@@ -80,7 +83,7 @@ function Header() {
                     >
                         <img
                             className="header-right__content__avatar"
-                            src={avatar}
+                            src={avatarURL}
                             alt="logo"
                         ></img>
 

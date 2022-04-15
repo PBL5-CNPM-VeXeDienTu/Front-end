@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button } from 'antd';
 import auth from 'api/auth';
-import useAuth from 'hooks/useAuth';
 import messages from 'assets/lang/messages';
 import './change-password.scss';
 
