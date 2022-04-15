@@ -1,7 +1,11 @@
 import React from 'react';
 import { Menu, Dropdown, message, Popover } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+<<<<<<< Updated upstream
 import avatar from 'assets/images/avatar.jpg';
+=======
+import useAuth from 'hooks/useAuth';
+>>>>>>> Stashed changes
 import speaker from 'assets/images/speaker.png';
 import 'components/header/header.scss';
 
@@ -30,6 +34,40 @@ class Header extends React.Component {
             </Menu>
         );
     };
+<<<<<<< Updated upstream
+=======
+    const userRole = () => {
+        switch (user.role) {
+            case 1:
+                return 'Parking-lot User';
+            case 2:
+                return 'Basic User';
+            case 3:
+                return 'Admin';
+            default:
+                return 'Another';
+        }
+    };
+    const avatar = 'http://localhost:8000/' + user.avatar;
+    return (
+        <div className="header">
+            <div className="header-right">
+                <Popover
+                    className="header-notification"
+                    content={content}
+                    title="Title"
+                    trigger="click"
+                >
+                    <span className="">
+                        <img
+                            className="header-notification__icon"
+                            src={speaker}
+                            alt="speaker"
+                        ></img>
+                        <span className="header-notification__unread">10</span>
+                    </span>
+                </Popover>
+>>>>>>> Stashed changes
 
     render() {
         return (

@@ -1,8 +1,24 @@
 import React from 'react';
+<<<<<<< Updated upstream
 import avatar from 'assets/images/avatar.jpg';
 import './profile.scss';
 
 function Profile() {
+=======
+import useAuth from 'hooks/useAuth';
+import './profile.scss';
+
+function Profile() {
+    const { user } = useAuth();
+    const gender = user.gender ? 'Nam' : 'Nữ';
+    const avatar = 'http://localhost:8000/' + user.avatar;
+    let birthday = '01/01/2022';
+    try {
+        const dateFormat = user.birthday.split('T')[0].split('-');
+        birthday = [dateFormat[2], dateFormat[1], dateFormat[0]].join('/');
+    } catch (error) {}
+
+>>>>>>> Stashed changes
     return (
         // <Layout_basic>
         //   <Layout_basic.Main>
@@ -32,11 +48,11 @@ function Profile() {
                             </tr>
                             <tr>
                                 <th className="row-item">Giới tính</th>
-                                <td>Nam</td>
+                                <td>{gender}</td>
                             </tr>
                             <tr>
                                 <th className="row-item">Ngày sinh</th>
-                                <td>31/08/2001</td>
+                                <td>{birthday}</td>
                             </tr>
                             <tr>
                                 <th className="row-item">Địa chỉ</th>
@@ -49,7 +65,7 @@ function Profile() {
                             </tr>
                             <tr>
                                 <th className="row-item">Số điện thoại</th>
-                                <td>0702399134</td>
+                                <td>{user.phone_number}</td>
                             </tr>
                         </table>
                     </div>

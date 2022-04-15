@@ -14,9 +14,12 @@ const Profile = loadableComponent(() => import('views/pages/profile'));
 // const ADMIN_ROLE = 3;
 
 function AllRoutes() {
+<<<<<<< Updated upstream
     const { user } = useAuth();
     console.log(user);
 
+=======
+>>>>>>> Stashed changes
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
