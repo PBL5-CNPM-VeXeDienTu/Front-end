@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useAuth from 'hooks/useAuth';
-import avatar from 'assets/images/avatar.jpg';
 import './profile.scss';
 
 function Profile() {
     const { user } = useAuth();
+    const avatarURL = process.env.REACT_APP_API_URL + user.avatar;
+    const gender = user.gender ? 'Nam' : 'Nữ';
+    let birthday = '01/01/2022';
+    try {
+        const dateFormat = user.birthday.split('T')[0].split('-');
+        birthday = [dateFormat[2], dateFormat[1], dateFormat[0]].join('/');
+    } catch (error) {}
 
     return (
         <div className="container">
@@ -14,7 +20,7 @@ function Profile() {
                     <div className="content-user-avatar">
                         <img
                             className="profile-avatar"
-                            src={avatar}
+                            src={avatarURL}
                             alt="avatar"
                         ></img>
                         <button className="profile-user-edit-btn">
@@ -33,11 +39,11 @@ function Profile() {
                             </tr>
                             <tr>
                                 <th className="row-item">Giới tính</th>
-                                <td>Nam</td>
+                                <td>{gender}</td>
                             </tr>
                             <tr>
                                 <th className="row-item">Ngày sinh</th>
-                                <td>31/08/2001</td>
+                                <td>{birthday}</td>
                             </tr>
                             <tr>
                                 <th className="row-item">Địa chỉ</th>
@@ -47,7 +53,7 @@ function Profile() {
                             </tr>
                             <tr>
                                 <th className="row-item">Số điện thoại</th>
-                                <td>0702399134</td>
+                                <td>{user.phone_number}</td>
                             </tr>
                         </table>
                     </div>
