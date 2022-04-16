@@ -1,28 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, Dropdown, Popover } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-import useAuth from 'hooks/useAuth';
-import speaker from 'assets/images/speaker.png';
-import 'components/header/header.scss';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { Menu, Dropdown, Popover } from 'antd'
+import { DownOutlined } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
+import speaker from 'assets/images/speaker.png'
+import 'components/header/header.scss'
 
-const onClick = ({ key }) => {};
+const onClick = ({ key }) => {}
 
 const content = (
     <div>
         <p>Content</p>
         <p>Content</p>
     </div>
-);
+)
 
 function Header() {
-    const { user, setUser, setToken } = useAuth();
-    const avatarURL = process.env.REACT_APP_API_URL + user.avatar;
+    const { user, setUser, setToken } = useAuth()
+    const avatarURL = process.env.REACT_APP_API_URL + user.avatar
 
     const handleLogout = () => {
-        setUser({});
-        setToken(null);
-    };
+        setUser({})
+        setToken(null)
+    }
 
     const menu = () => {
         return (
@@ -41,21 +41,21 @@ function Header() {
                     Đăng xuất
                 </Menu.Item>
             </Menu>
-        );
-    };
+        )
+    }
 
     const userRole = () => {
         switch (user.role) {
             case 1:
-                return 'Parking-lot User';
+                return 'Parking-lot User'
             case 2:
-                return 'Basic User';
+                return 'Basic User'
             case 3:
-                return 'Admin';
+                return 'Admin'
             default:
-                return 'Another';
+                return 'Another'
         }
-    };
+    }
 
     return (
         <div className="header">
@@ -100,6 +100,6 @@ function Header() {
                 </Dropdown>
             </div>
         </div>
-    );
+    )
 }
-export default Header;
+export default Header

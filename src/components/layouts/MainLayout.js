@@ -1,7 +1,7 @@
-import React from 'react';
-import 'components/layouts/main-layout.scss';
-import Header from 'components/header';
-import Siderbar from 'components/siderbar';
+import React from 'react'
+import 'components/layouts/main-layout.scss'
+import Header from 'components/header'
+import Siderbar from 'components/siderbar'
 
 function MainLayout(props) {
     return (
@@ -12,7 +12,7 @@ function MainLayout(props) {
                 <props.component className="main-layout__content__main" />
             </div>
         </div>
-    );
+    )
 }
 
-export default MainLayout;
+export default MainLayout

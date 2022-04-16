@@ -1,7 +1,7 @@
-import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import React from 'react'
+import { Route, Navigate } from 'react-router-dom'
 
-const ADMIN_ROLE = 2;
+const ADMIN_ROLE = 2
 
 const AuthenticatedRoute = ({
     component: Component,
@@ -13,15 +13,15 @@ const AuthenticatedRoute = ({
             <Navigate
                 to={{ pathname: '/login', state: { from: rest.location } }}
             />
-        );
+        )
     }
 
-    const userRole = rest.user.role;
+    const userRole = rest.user.role
     const adminRedirect =
-        userRole === ADMIN_ROLE && rest.location.pathname === '/';
+        userRole === ADMIN_ROLE && rest.location.pathname === '/'
 
     if (adminRedirect) {
-        return <Navigate to={{ pathname: '/admins' }} />;
+        return <Navigate to={{ pathname: '/admins' }} />
     }
 
     if (Component) {
@@ -32,19 +32,19 @@ const AuthenticatedRoute = ({
             />
         ) : (
             <div>403</div>
-        );
+        )
     }
 
     return rest.acceptedRoles.includes(userRole) ? (
         <Route {...rest} render={Render} />
     ) : (
         <div>403</div>
-    );
-};
+    )
+}
 
 AuthenticatedRoute.defaultProps = {
     location: {},
     render: () => {},
-};
+}
 
-export default AuthenticatedRoute;
+export default AuthenticatedRoute

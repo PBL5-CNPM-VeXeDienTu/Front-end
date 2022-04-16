@@ -1,43 +1,44 @@
-import axiosClient from 'api/axiosClient';
-import { createContext, useState, useEffect, useMemo } from 'react';
-import auth from 'api/auth';
+import axiosClient from 'api/axiosClient'
+import { createContext, useState, useEffect, useMemo } from 'react'
+import auth from 'api/auth'
 
-const UserContext = createContext({});
+const UserContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(null);
-    const [user, setUser] = useState({});
+    const [token, setToken] = useState(localStorage.getItem('token'))
+    const [user, setUser] = useState({})
     const providerValue = useMemo(
         () => ({ user, setUser, token, setToken }),
         [user, setUser, token, setToken],
-    );
+    )
 
     useEffect(() => {
         if (token) {
             // Set authenticate token to axios
             axiosClient.defaults.headers.common[
                 'Authorization'
-            ] = `Bearer ${token}`;
+            ] = `Bearer ${token}`
 
             // Get current user's data
             auth.getAuthenticatedUser()
                 .then((response) => {
-                    setUser(response.data);
+                    setUser(response.data)
                 })
                 .catch((error) => {
-                    console.log(error);
-                });
+                    console.log(error)
+                })
         } else {
             // User logout
-            setUser({});
+            setUser({})
+            localStorage.setItem('token', null)
         }
-    }, [token]);
+    }, [token])
 
     return (
         <UserContext.Provider value={providerValue}>
             {children}
         </UserContext.Provider>
-    );
-};
+    )
+}
 
-export default UserContext;
+export default UserContext

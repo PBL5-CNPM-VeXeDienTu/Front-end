@@ -1,1 +1,1 @@
-export { default as AuthenticatedRoute } from './authenticated-route';
+export { default as AuthenticatedRoute } from './authenticated-route'
