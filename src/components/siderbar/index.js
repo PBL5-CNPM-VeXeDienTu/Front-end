@@ -12,7 +12,6 @@ import {
     LeftOutlined,
     RightOutlined,
 } from '@ant-design/icons'
-import logoFull from 'assets/images/app-logo/header_logo_full.png'
 import 'antd/dist/antd.min.css'
 import 'components/siderbar/siderbar.scss'
 
@@ -46,7 +45,7 @@ const RenderMenu = () => {
             >
                 <Link to="/" onClick={(e) => onClickLink(e)}>
                     <div className="sider-bar__logo">
-                        {collapsed == false ? (
+                        {collapsed === false ? (
                             <div className="logo-full" />
                         ) : (
                             <div className="logo-collapsed" />
@@ -64,7 +63,7 @@ const RenderMenu = () => {
                         icon={<HomeOutlined className="menu-item-icon" />}
                     >
                         <Link className="sider-bar__link" to="#">
-                            Home
+                            Danh sách các xe
                         </Link>
                     </Menu.Item>
                     <Menu.Item
