@@ -1,22 +1,22 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button } from 'antd';
-import auth from 'api/auth';
-import messages from 'assets/lang/messages';
-import './change-password.scss';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Form, Input, Button } from 'antd'
+import auth from 'api/auth'
+import messages from 'assets/lang/messages'
+import './change-password.scss'
 
 function ChangePassword() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const handleSubmit = async (values) => {
         try {
-            const response = await auth.changePassword(values);
-            alert(response.data.message);
-            navigate('/profile');
+            const response = await auth.changePassword(values)
+            alert(response.data.message)
+            navigate('/profile')
         } catch (error) {
             //TODO: hiển bị thông báo theo từng error code (error.request.status === 404)
-            alert(error.response.data.message);
+            alert(error.response.data.message)
         }
-    };
+    }
     return (
         <div className="background">
             <div className="container">
@@ -91,7 +91,7 @@ function ChangePassword() {
                                             getFieldValue('newPassword') ===
                                                 value
                                         ) {
-                                            return Promise.resolve();
+                                            return Promise.resolve()
                                         }
                                         return Promise.reject(
                                             new Error(
@@ -99,7 +99,7 @@ function ChangePassword() {
                                                     'confirm_password_not_match'
                                                 ],
                                             ),
-                                        );
+                                        )
                                     },
                                 }),
                             ]}
@@ -127,7 +127,7 @@ function ChangePassword() {
                 </Form>
             </div>
         </div>
-    );
+    )
 }
 
-export default ChangePassword;
+export default ChangePassword

@@ -1,7 +1,7 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from 'contexts/UserContext';
-import AllRoutes from 'views/routes';
+import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from 'contexts/UserContext'
+import AllRoutes from 'views/routes'
 
 function App() {
     return (
@@ -10,7 +10,7 @@ function App() {
                 <AllRoutes />
             </AuthProvider>
         </BrowserRouter>
-    );
+    )
 }
 
-export default App;
+export default App

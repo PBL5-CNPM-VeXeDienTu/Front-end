@@ -1,15 +1,15 @@
-import React from 'react';
-import useAuth from 'hooks/useAuth';
-import './profile.scss';
+import React from 'react'
+import useAuth from 'hooks/useAuth'
+import './profile.scss'
 
 function Profile() {
-    const { user } = useAuth();
-    const avatarURL = process.env.REACT_APP_API_URL + user.avatar;
-    const gender = user.gender ? 'Nam' : 'Nữ';
-    let birthday = '01/01/2022';
+    const { user } = useAuth()
+    const avatarURL = process.env.REACT_APP_API_URL + user.avatar
+    const gender = user.gender ? 'Nam' : 'Nữ'
+    let birthday = '01/01/2022'
     try {
-        const dateFormat = user.birthday.split('T')[0].split('-');
-        birthday = [dateFormat[2], dateFormat[1], dateFormat[0]].join('/');
+        const dateFormat = user.birthday.split('T')[0].split('-')
+        birthday = [dateFormat[2], dateFormat[1], dateFormat[0]].join('/')
     } catch (error) {}
 
     return (
@@ -60,7 +60,7 @@ function Profile() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default Profile;
+export default Profile

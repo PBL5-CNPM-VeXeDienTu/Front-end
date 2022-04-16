@@ -1,34 +1,34 @@
-import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Select } from 'antd';
+import { useNavigate } from 'react-router-dom'
+import { Form, Input, Button, Select } from 'antd'
 import {
     UserOutlined,
     UnlockOutlined,
     MailOutlined,
     SettingOutlined,
-} from '@ant-design/icons';
-import messages from 'assets/lang/messages';
-import auth from 'api/auth';
+} from '@ant-design/icons'
+import messages from 'assets/lang/messages'
+import auth from 'api/auth'
 
-import background from 'assets/images/background.png';
-import avatar from 'assets/images/avatar.svg';
+import background from 'assets/images/background.png'
+import avatar from 'assets/images/avatar.svg'
 
-import './register.scss';
+import './register.scss'
 
-const { Option } = Select;
+const { Option } = Select
 
 function Register() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const handleSubmit = async (values) => {
         try {
-            values.role = parseInt(values.role);
-            const response = await auth.register(values);
-            alert(response.data.message);
-            navigate('/login');
+            values.role = parseInt(values.role)
+            const response = await auth.register(values)
+            alert(response.data.message)
+            navigate('/login')
         } catch (error) {
             //TODO: hiển bị thông báo theo từng error code (error.request.status === 404)
-            alert(error.response.data.message);
+            alert(error.response.data.message)
         }
-    };
+    }
     return (
         <div className="register-container-main">
             <div className="register-card">
@@ -181,7 +181,7 @@ function Register() {
                                                         'password',
                                                     ) === value
                                                 ) {
-                                                    return Promise.resolve();
+                                                    return Promise.resolve()
                                                 }
                                                 return Promise.reject(
                                                     new Error(
@@ -189,7 +189,7 @@ function Register() {
                                                             'confirm_password_not_match'
                                                         ],
                                                     ),
-                                                );
+                                                )
                                             },
                                         }),
                                     ]}
@@ -219,6 +219,6 @@ function Register() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
-export default Register;
+export default Register

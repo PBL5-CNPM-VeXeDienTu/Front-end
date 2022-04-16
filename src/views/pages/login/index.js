@@ -1,54 +1,55 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Modal } from 'antd';
-import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
-import messages from 'assets/lang/messages';
-import auth from 'api/auth';
-import useAuth from 'hooks/useAuth';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Form, Input, Button, Modal } from 'antd'
+import { UserOutlined, UnlockOutlined } from '@ant-design/icons'
+import messages from 'assets/lang/messages'
+import auth from 'api/auth'
+import useAuth from 'hooks/useAuth'
 
-import background from 'assets/images/background.png';
-import avatar from 'assets/images/avatar.svg';
+import background from 'assets/images/background.png'
+import avatar from 'assets/images/avatar.svg'
 
-import './login.scss';
+import './login.scss'
 
 function Login() {
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [form] = Form.useForm();
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [form] = Form.useForm()
 
     const showModal = () => {
-        setIsModalVisible(true);
-    };
+        setIsModalVisible(true)
+    }
 
     const handleCancel = () => {
-        setIsModalVisible(false);
-    };
+        setIsModalVisible(false)
+    }
 
-    const { setToken } = useAuth();
-    const navigate = useNavigate();
+    const { setToken } = useAuth()
+    const navigate = useNavigate()
     const handleSubmit = async (values) => {
         try {
-            const response = await auth.login(values);
+            const response = await auth.login(values)
             if (response.request.status === 200) {
-                setToken(response.data.token);
-                navigate('/profile');
-                alert(response.data.message);
+                setToken(response.data.token)
+                localStorage.setItem('token', response.data.token)
+                navigate('/profile')
+                alert(response.data.message)
             }
         } catch (error) {
             //TODO: hiển bị thông báo theo từng error code (error.request.status === 404)
-            alert(error.response.data.message);
+            alert(error.response.data.message)
         }
-    };
+    }
 
     const handleForgotPasswordSubmit = async (values) => {
         try {
-            const response = await auth.forgotPassword(values);
-            alert(response.data.message);
+            const response = await auth.forgotPassword(values)
+            alert(response.data.message)
         } catch (error) {
             //TODO: hiển bị thông báo theo từng error code (error.request.status === 404)
-            alert(error.response.data.message);
+            alert(error.response.data.message)
         }
-        setIsModalVisible(false);
-    };
+        setIsModalVisible(false)
+    }
 
     return (
         <div className="login-container-main">
@@ -193,7 +194,7 @@ function Login() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default Login;
+export default Login

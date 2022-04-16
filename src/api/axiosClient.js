@@ -1,5 +1,5 @@
-import axios from 'axios';
-import queryString from 'query-string';
+import axios from 'axios'
+import queryString from 'query-string'
 
 const axiosClient = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
@@ -7,6 +7,6 @@ const axiosClient = axios.create({
         'content-type': 'application/json',
     },
     paramsSerializer: (params) => queryString.stringify(params),
-});
+})
 
-export default axiosClient;
+export default axiosClient

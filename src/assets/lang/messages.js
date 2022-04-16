@@ -6,6 +6,6 @@ const messages = {
     name_required: 'Bạn chưa nhập tên',
     confirm_password_require: 'Mời nhập lại mật khẩu',
     confirm_password_not_match: 'Mật khẩu không trùng khớp',
-};
+}
 
-export default messages;
+export default messages

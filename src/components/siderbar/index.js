@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Layout, Menu } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Button, Layout, Menu } from 'antd'
+import { Link } from 'react-router-dom'
 import {
     HomeOutlined,
     OrderedListOutlined,
@@ -11,20 +11,20 @@ import {
     MessageOutlined,
     LeftOutlined,
     RightOutlined,
-} from '@ant-design/icons';
-import logoFull from 'assets/images/app-logo/header_logo_full.png';
-import 'antd/dist/antd.min.css';
-import 'components/siderbar/siderbar.scss';
+} from '@ant-design/icons'
+import logoFull from 'assets/images/app-logo/header_logo_full.png'
+import 'antd/dist/antd.min.css'
+import 'components/siderbar/siderbar.scss'
 
-const siderWidth = 200;
-const minimizeSiderWidth = 80;
+const siderWidth = 200
+const minimizeSiderWidth = 80
 
 const RenderMenu = () => {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(false)
     const toggleCollapsed = () => {
-        setCollapsed(!collapsed);
-    };
-    const { Sider } = Layout;
+        setCollapsed(!collapsed)
+    }
+    const { Sider } = Layout
 
     const onClickLink = (e, url = '/') => {
         // if (isEditingData) {
@@ -33,7 +33,7 @@ const RenderMenu = () => {
         //     setConfirmVisible(true);
         //     setRedirectUrl(url);
         // }
-    };
+    }
 
     return (
         <Layout className="layout-container">
@@ -128,7 +128,7 @@ const RenderMenu = () => {
                 </Menu>
             </Sider>
         </Layout>
-    );
-};
+    )
+}
 
-export default RenderMenu;
+export default RenderMenu
