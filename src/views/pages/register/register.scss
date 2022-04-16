@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 .register-container-main {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
     position: relative;
     background: #41bc3f;
+    font-family: 'Poppins', sans-serif;
 }
 
 .register-card {
@@ -148,22 +151,21 @@
     cursor: pointer;
     transition: 0.5s;
     background-color: #41bc3f;
+    font-size: medium;
 }
 .register-form .button-submit:hover {
     background-position: right;
 }
 
-.register-form .create-account {
+.register-form .have-an-account {
     text-align: center;
-}
-.forgot-password {
     color: #999;
-    margin-bottom: 2%;
-    float: right;
+    a {
+        text-decoration: underline;
+        color: #41bc3f;
+    }
 }
-.forgot-password:hover {
-    text-decoration: underline;
-}
+
 .ant-form-item-explain-error {
     color: #ff4d4f;
     text-align: left;
@@ -183,10 +185,6 @@
         font-size: 2.4rem;
         margin: 8px 0;
     }
-
-    /* .img-background{
-		width: 400px;
-	} */
 }
 
 @media screen and (max-width: 900px) {

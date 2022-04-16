@@ -1,8 +1,9 @@
 .container {
     width: 100%;
-    height: 93vh;
+    height: 100%;
     background-color: #41bc3f;
     position: relative;
+    border-radius: none;
 }
 .content-card {
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
@@ -45,7 +46,7 @@
 }
 
 .profile-avatar {
-    box-shadow: 0 3px 3px 0 #555;
+    box-shadow: 0 0 10px #ccc;
     width: 30vh;
     height: 30vh;
     border-radius: 50%;
@@ -91,85 +92,3 @@
     top: 0px;
     left: 0px;
 }
-
-/* .user-infor-name {
-    display: flex;
-    flex-direction: row;
-}
-
-.content-user-infor {
-    font-size: 2.5vh;
-    line-height: 6vh;
-}
-
-.user-infor-name-lable {
-    min-width: 250px;
-}
-
-.user-infor-name-input {
-    flex: 1;
-}
-
-.user-infor-email {
-    display: flex;
-    flex-direction: row; 
-}
-
-.user-infor-email-lable {
-    min-width: 250px;
-}
-
-.user-infor-email-input {
-    flex: 1;
-}
-
-.user-infor-gender {
-    display: flex;
-    flex-direction: row; 
-}
-.user-infor-gender-lable {
-    min-width: 250px;
-}
-
-.user-infor-email-input-item {
-    flex: 1;
-}
-
-.user-infor-birthday {
-    display: flex;
-    flex-direction: row; 
-}
-
-.user-infor-birthday-lable {
-    min-width: 250px;
-}
-
-.user-infor-birthday-input-icon {
-    margin-left: 100px;
-}
-
-.user-infor-address {
-    display: flex;
-    flex-direction: row;
-}
-
-.user-infor-address-lable {
-    min-width: 250px;
-}
-
-.user-infor-address-input {
-    flex: 1;
-}
-
-.user-infor-phone {
-    display: flex;
-    flex-direction: row;
-}
-
-.user-infor-phone-lable {
-    min-width: 250px;
-}
-
-.user-infor-phone-input {
-    flex: 1;
-} */
