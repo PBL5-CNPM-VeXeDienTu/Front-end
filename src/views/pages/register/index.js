@@ -211,7 +211,7 @@ function Register() {
                                 Already have an account?{' '}
                                 <a className="have-an-account" href="/login">
                                     {' '}
-                                    LOG IN
+                                    Login now
                                 </a>
                             </p>
                         </Form>

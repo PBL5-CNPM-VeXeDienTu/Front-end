@@ -218,6 +218,7 @@
     margin: 2% 0;
     cursor: pointer;
     transition: 0.5s;
+    font-size: medium;
 }
 .login-form .button-submit:hover {
     background-position: right !important;
@@ -239,6 +240,7 @@
 .forgot-password:hover {
     text-decoration: underline;
     color: #41bc3f;
+    cursor: pointer;
 }
 .ant-form-item-explain-error {
     color: #ff4d4f;

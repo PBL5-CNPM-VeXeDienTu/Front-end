@@ -12,10 +12,11 @@
     &__logo {
         position: relative;
         z-index: 1;
-        padding: 3px 10px 4px 10px;
+        padding: 4px 10px 4px 10px;
         // box-shadow: 0 4px 5px -4px rgba(0, 43, 22, 0.3);
     }
     &__link {
+        font-size: medium;
         color: black;
     }
     &__link:link {
@@ -111,16 +112,16 @@
 
 .ant-menu-item-selected {
     background-color: #b4e2b3 !important;
-    color: #41bc3f !important;
-    font-weight: bold;
+    color: #2d8d2c !important;
+    font-weight: 600;
 }
 
 .ant-menu-item-selected:active {
     background-color: #b4e2b3 !important;
     color: #41bc3f;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .menu-item-icon {
-    font-size: 120% !important;
+    font-size: 140% !important;
 }

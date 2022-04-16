@@ -16,11 +16,10 @@ const content = (
 )
 
 function Header() {
-    const { user, setUser, setToken } = useAuth()
+    const { user, setToken } = useAuth()
     const avatarURL = process.env.REACT_APP_API_URL + user.avatar
 
     const handleLogout = () => {
-        setUser({})
         setToken(null)
     }
 
@@ -77,7 +76,7 @@ function Header() {
                 </Popover>
 
                 <Dropdown overlay={menu} trigger="click">
-                    <a
+                    <label
                         className="header-right__content"
                         onClick={(e) => e.preventDefault()}
                     >
@@ -96,7 +95,7 @@ function Header() {
                             </div>
                         </div>
                         <DownOutlined className="header-right__content__dropdown" />
-                    </a>
+                    </label>
                 </Dropdown>
             </div>
         </div>

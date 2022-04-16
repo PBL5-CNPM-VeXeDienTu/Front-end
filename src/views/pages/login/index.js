@@ -128,9 +128,12 @@ function Login() {
                                     />
                                 </Form.Item>
                             </div>
-                            <a className="forgot-password" onClick={showModal}>
+                            <label
+                                className="forgot-password"
+                                onClick={showModal}
+                            >
                                 Forgot Password
-                            </a>
+                            </label>
                             <Modal
                                 className="forgot-password-modal"
                                 title="Quên mật khẩu"
