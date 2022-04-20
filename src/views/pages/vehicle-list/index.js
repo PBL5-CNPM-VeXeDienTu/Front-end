@@ -1,10 +1,12 @@
 import React from 'react'
-import Link from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 // import image from 'assets/images/motoo.png'
 import './vehicle-list.scss'
 function Vehicles() {
-    const avatarURL = process.env.REACT_APP_API_URL + 'public/images/avatars/vehicle/default-avatar.png';
+    const avatarURL =
+        process.env.REACT_APP_API_URL +
+        'public/images/avatars/vehicle/default-avatar.png'
     return (
         <div className="vehicles-list-background">
             <div className="vehicles-list-container">
