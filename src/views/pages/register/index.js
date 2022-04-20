@@ -110,7 +110,7 @@ function Register() {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'moi chon role',
+                                            message: 'mời chọn role',
                                         },
                                     ]}
                                 >
