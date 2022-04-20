@@ -1,5 +1,6 @@
 import React from 'react'
-import { PlusOutlined, EditOutlined, CloseOutlined }from '@ant-design/icons'
+import Link from 'react-router-dom'
+import { PlusOutlined, EditOutlined, CloseOutlined } from '@ant-design/icons'
 // import image from 'assets/images/motoo.png'
 import './vehicle-list.scss'
 function Vehicles() {
@@ -8,15 +9,22 @@ function Vehicles() {
         <div className="vehicles-list-background">
             <div className="vehicles-list-container">
                 <div className="vehicles-list-container__button-add">
-                    <button>
-                        Đăng ký xe
-                        <span><PlusOutlined/></span>  
-                    </button>
+                    <Link to="/vehicles/add">
+                        <button>
+                            Đăng ký xe
+                            <span>
+                                <PlusOutlined />
+                            </span>
+                        </button>
+                    </Link>
                 </div>
                 <div className="vehicles-list-container__content">
                     <div className="vehicles-list-container__content__sub">
                         <div className="vehicles-list-container__content__item">
-                            <img className="vehicles-list-container__content__item__image" src={avatarURL}/>
+                            <img
+                                className="vehicles-list-container__content__item__image"
+                                src={avatarURL}
+                            />
                             <div className="vehicles-list-container__content__item__info">
                                 <div>
                                     <span className="properties">Hãng xe</span>
@@ -31,7 +39,9 @@ function Vehicles() {
                                     <span>123456</span>
                                 </div>
                                 <div>
-                                    <span className="properties">Ngày đăng ký</span>
+                                    <span className="properties">
+                                        Ngày đăng ký
+                                    </span>
                                     <span>01/01/2022</span>
                                 </div>
                                 <div>
@@ -40,20 +50,31 @@ function Vehicles() {
                                 </div>
                                 <div>
                                     <span className="properties">Hãng xe</span>
-                                    <span>xe có đầy đủ 2 kính ,  bánh xe có vành màu cam , ống bô độ vip.</span>
+                                    <span>
+                                        xe có đầy đủ 2 kính , bánh xe có vành
+                                        màu cam , ống bô độ vip.
+                                    </span>
                                 </div>
                             </div>
-                            
                         </div>
                         <div className="vehicles-list-container__content__icon">
-                            <span className="edit-vehicle"><EditOutlined/></span>
-                            <span className="delete-vehicle"><CloseOutlined/></span>
+                            <Link to="/vehicles/edit">
+                                <span className="edit-vehicle">
+                                    <EditOutlined />
+                                </span>
+                            </Link>
+                            <span className="delete-vehicle">
+                                <CloseOutlined />
+                            </span>
                         </div>
                     </div>
 
                     <div className="vehicles-list-container__content__sub">
                         <div className="vehicles-list-container__content__item">
-                            <img className="vehicles-list-container__content__item__image" src={avatarURL}/>
+                            <img
+                                className="vehicles-list-container__content__item__image"
+                                src={avatarURL}
+                            />
                             <div className="vehicles-list-container__content__item__info">
                                 <div>
                                     <span className="properties">Hãng xe</span>
@@ -68,7 +89,9 @@ function Vehicles() {
                                     <span>123456</span>
                                 </div>
                                 <div>
-                                    <span className="properties">Ngày đăng ký</span>
+                                    <span className="properties">
+                                        Ngày đăng ký
+                                    </span>
                                     <span>01/01/2022</span>
                                 </div>
                                 <div>
@@ -77,20 +100,29 @@ function Vehicles() {
                                 </div>
                                 <div>
                                     <span className="properties">Hãng xe</span>
-                                    <span>xe có đầy đủ 2 kính ,  bánh xe có vành màu cam , ống bô độ vip.</span>
+                                    <span>
+                                        xe có đầy đủ 2 kính , bánh xe có vành
+                                        màu cam , ống bô độ vip.
+                                    </span>
                                 </div>
                             </div>
-                            
                         </div>
                         <div className="vehicles-list-container__content__icon">
-                            <span className="edit-vehicle"><EditOutlined/></span>
-                            <span className="delete-vehicle"><CloseOutlined/></span>
+                            <span className="edit-vehicle">
+                                <EditOutlined />
+                            </span>
+                            <span className="delete-vehicle">
+                                <CloseOutlined />
+                            </span>
                         </div>
                     </div>
 
                     <div className="vehicles-list-container__content__sub">
                         <div className="vehicles-list-container__content__item">
-                            <img className="vehicles-list-container__content__item__image" src={avatarURL}/>
+                            <img
+                                className="vehicles-list-container__content__item__image"
+                                src={avatarURL}
+                            />
                             <div className="vehicles-list-container__content__item__info">
                                 <div>
                                     <span className="properties">Hãng xe</span>
@@ -105,7 +137,9 @@ function Vehicles() {
                                     <span>123456</span>
                                 </div>
                                 <div>
-                                    <span className="properties">Ngày đăng ký</span>
+                                    <span className="properties">
+                                        Ngày đăng ký
+                                    </span>
                                     <span>01/01/2022</span>
                                 </div>
                                 <div>
@@ -114,18 +148,24 @@ function Vehicles() {
                                 </div>
                                 <div>
                                     <span className="properties">Hãng xe</span>
-                                    <span>xe có đầy đủ 2 kính ,  bánh xe có vành màu cam , ống bô độ vip.</span>
+                                    <span>
+                                        xe có đầy đủ 2 kính , bánh xe có vành
+                                        màu cam , ống bô độ vip.
+                                    </span>
                                 </div>
                             </div>
-                            
                         </div>
                         <div className="vehicles-list-container__content__icon">
-                            <span className="edit-vehicle"><EditOutlined/></span>
-                            <span className="delete-vehicle"><CloseOutlined/></span>
+                            <Link to='/vehicles/edit'>
+                                <span className="edit-vehicle">
+                                    <EditOutlined />
+                                </span>
+                            </Link>
+                            <span className="delete-vehicle">
+                                <CloseOutlined />
+                            </span>
                         </div>
                     </div>
-
-                    
                 </div>
             </div>
         </div>

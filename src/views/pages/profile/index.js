@@ -1,34 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import moment from 'moment'
+import { Link } from 'react-router-dom'
+import { EditOutlined } from '@ant-design/icons'
+
 import useAuth from 'hooks/useAuth'
 import './profile.scss'
 
 function Profile() {
     const { user } = useAuth()
+    // alert(user.birthday)
     const avatarURL = process.env.REACT_APP_API_URL + user.avatar
     const gender = user.gender ? 'Nam' : 'Nữ'
-    let birthday = '01/01/2022'
-    try {
-        const dateFormat = user.birthday.split('T')[0].split('-')
-        birthday = [dateFormat[2], dateFormat[1], dateFormat[0]].join('/')
-    } catch (error) {}
+    const [birthday, setBirthday] = useState('01-01-2001')
+    useEffect(() => {
+        try {
+            if (user) {
+                const [month, day, year] = moment(user.birthday)
+                    .format('L')
+                    .split('/')
+                setBirthday([day, month, year].join('/'))
+            }
+        } catch (error) {}
+    }, [user])
 
     return (
-        <div className="container">
-            <div className="content-card">
-                <div className="title">Profile</div>
-                <div className="content-user">
-                    <div className="content-user-avatar">
-                        <img
-                            className="profile-avatar"
-                            src={avatarURL}
-                            alt="avatar"
-                        ></img>
-                        <button className="profile-user-edit-btn">
-                            Chỉnh sửa
-                        </button>
+        <div className="profile-container">
+            <div className="profile-content">
+                <div className="profile-content__title">
+                    <span>Profile</span>
+                    <Link
+                        to="/profile/edit"
+                        className="profile-content__button-edit"
+                    >
+                        <EditOutlined />
+                    </Link>
+                </div>
+
+                <div className="profile-content__user">
+                    <div className="profile-content__user__avatar">
+                        <img src={avatarURL} alt="avatar"></img>
+                        {/* <button className="profile-content__user__button-edit">
+                            <Link to="/profile/edit">Chỉnh sửa</Link>
+                        </button> */}
                     </div>
-                    <div className="content-user-infor">
-                        <table className="content-user-infor-table">
+
+                    <div className="profile-content__user__infor">
+                        <table className="profile-content__user__infor__table">
                             <tr>
                                 <th className="row-item">Tên</th>
                                 <td>{user.name}</td>
