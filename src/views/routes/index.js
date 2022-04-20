@@ -8,6 +8,12 @@ import GuestRoute from './guest-route'
 const Login = loadableComponent(() => import('views/pages/login'))
 const Register = loadableComponent(() => import('views/pages/register'))
 const Profile = loadableComponent(() => import('views/pages/profile'))
+const EditVehicle = loadableComponent(() =>
+    import('views/pages/vehicles/edit-vehicle'),
+)
+const AddVehicle = loadableComponent(() =>
+    import('views/pages/vehicles/add-vehicle'),
+)
 const ChangePassword = loadableComponent(() =>
     import('views/pages/change-password'),
 )
@@ -35,6 +41,14 @@ function AllRoutes() {
                 <Route
                     path="/change-password"
                     element={<MainLayout component={ChangePassword} />}
+                />
+                <Route
+                    path="/vehicles/edit"
+                    element={<MainLayout component={EditVehicle} />}
+                />
+                <Route
+                    path="/vehicles/add"
+                    element={<MainLayout component={AddVehicle} />}
                 />
             </Route>
         </Routes>
