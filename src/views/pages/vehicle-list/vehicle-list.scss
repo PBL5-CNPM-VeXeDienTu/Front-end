@@ -1,17 +1,11 @@
-.vehicles-list-background {
-    width: 100%;
-    height: 100%;
-    background-color: #41bc3f;
-    position: relative;
-    // display: flex;
-}
+
 
 .vehicles-list-container {
-    width: 90%;
+    width: 100%;
     height: 100%;
     margin: auto;
     display: grid;
-    grid-template-rows: 8% 92%;
+    grid-template-rows: 7% 93%;
 
     &__button-add {
         height: 100%;
@@ -27,7 +21,7 @@
             border: none;
             position: absolute;
             right: 0;
-            top: 50%;
+            top: 25%;
             transform: translateY(-50%);
 
             span {
@@ -47,7 +41,7 @@
 
     &__content {
         width: 100%;
-        height: 85.5vh;
+        height: 82vh;
         -ms-overflow-style: none;
         scrollbar-width: none;
         overflow-y: scroll;
@@ -56,6 +50,7 @@
         &__sub {
             width: 100%;
             height: 80vh;
+            margin-bottom: 20px;
             display: grid;
             grid-template-rows: 1% 99%;
         }
@@ -63,7 +58,7 @@
         &__icon {
             width: 100%;
             margin-left: 90%;
-            margin-top: 50px;
+            margin-top: 5vh;
             justify-content: flex-end;
             span {
                 font-size: 20px;
@@ -73,14 +68,16 @@
             .delete-vehicle:hover {
                 color: red;
             }
-
+            .edit-vehicle {
+                color: #555;
+            }
             .edit-vehicle:hover {
                 color: #41bc3f;
             }
         }
 
         &__item {
-            height: 70vh;
+            height: 80vh;
             width: 100%;
             margin: 0 auto;
             border-radius: 20px;

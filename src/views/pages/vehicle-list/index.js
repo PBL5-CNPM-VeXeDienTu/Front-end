@@ -8,7 +8,6 @@ function Vehicles() {
         process.env.REACT_APP_API_URL +
         'public/images/avatars/vehicle/default-avatar.png'
     return (
-        <div className="vehicles-list-background">
             <div className="vehicles-list-container">
                 <div className="vehicles-list-container__button-add">
                     <Link to="/vehicles/add">
@@ -170,7 +169,6 @@ function Vehicles() {
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
 
