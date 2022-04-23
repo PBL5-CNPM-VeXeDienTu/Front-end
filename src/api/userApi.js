@@ -9,6 +9,10 @@ const userApi = {
         const url = `/users/${id}`
         return axiosClient.get(url)
     },
+    update: (id, credentials) => {
+        const url = `/api/users/${id}`
+        return axiosClient.patch(url, credentials)
+    },
 }
 
 export default userApi

@@ -62,7 +62,7 @@ const RenderMenu = () => {
                         key="1"
                         icon={<HomeOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/vehicles">
                             Danh sách các xe
                         </Link>
                     </Menu.Item>

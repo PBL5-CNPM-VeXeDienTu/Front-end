@@ -9,7 +9,11 @@ function MainLayout(props) {
             <Siderbar className="main-layout__siderbar" />
             <div className="main-layout__content">
                 <Header className="main-layout__content__header" />
-                <props.component className="main-layout__content__main" />
+                <div className="main-layout__content__main">
+                    <div className="main-layout__content__main__component">
+                        <props.component />
+                    </div>
+                </div>
             </div>
         </div>
     )

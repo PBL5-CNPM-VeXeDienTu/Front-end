@@ -18,114 +18,108 @@ function ChangePassword() {
         }
     }
     return (
-        <div className="background">
-            <div className="container">
-                <Form
-                    name="register"
-                    className="content"
-                    onFinish={handleSubmit}
-                >
-                    <div className="content__form">
-                        <h3>Mật khẩu hiện tại</h3>
-                        <Form.Item
-                            name="currentPassword"
-                            className="content__form__item"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: messages['password_required'],
-                                },
-                                {
-                                    type: 'string',
-                                    min: 6,
-                                    max: 24,
-                                    message:
-                                        messages['invalid_password_length'],
-                                },
-                            ]}
-                        >
-                            <Input.Password placeholder="Current password" />
-                        </Form.Item>
-                    </div>
+        <div className="change-password-container">
+            <Form
+                name="register"
+                className="change-password-content"
+                onFinish={handleSubmit}
+            >
+                <div className="change-password-content__form">
+                    <h3>Mật khẩu hiện tại</h3>
+                    <Form.Item
+                        name="currentPassword"
+                        className="change-password-content__form__item"
+                        rules={[
+                            {
+                                required: true,
+                                message: messages['password_required'],
+                            },
+                            {
+                                type: 'string',
+                                min: 6,
+                                max: 24,
+                                message: messages['invalid_password_length'],
+                            },
+                        ]}
+                    >
+                        <Input.Password placeholder="Current password" />
+                    </Form.Item>
+                </div>
 
-                    <div className="content__form">
-                        <h3>Mật khẩu mới</h3>
-                        <Form.Item
-                            name="newPassword"
-                            className="content__form__item"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: messages['password_required'],
-                                },
-                                {
-                                    type: 'string',
-                                    min: 6,
-                                    max: 24,
-                                    message:
-                                        messages['invalid_password_length'],
-                                },
-                            ]}
-                        >
-                            <Input.Password placeholder="New password" />
-                        </Form.Item>
-                    </div>
+                <div className="change-password-content__form">
+                    <h3>Mật khẩu mới</h3>
+                    <Form.Item
+                        name="newPassword"
+                        className="change-password-content__form__item"
+                        rules={[
+                            {
+                                required: true,
+                                message: messages['password_required'],
+                            },
+                            {
+                                type: 'string',
+                                min: 6,
+                                max: 24,
+                                message: messages['invalid_password_length'],
+                            },
+                        ]}
+                    >
+                        <Input.Password placeholder="New password" />
+                    </Form.Item>
+                </div>
 
-                    <div className="content__form">
-                        <h3>Nhập lại mật khẩu mới</h3>
-                        <Form.Item
-                            name="confirmNewPassword"
-                            className="content__form__item"
-                            dependencies={['newPassword']}
-                            hasFeedback
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        messages['confirm_password_require'],
+                <div className="change-password-content__form">
+                    <h3>Nhập lại mật khẩu mới</h3>
+                    <Form.Item
+                        name="confirmNewPassword"
+                        className="change-password-content__form__item"
+                        dependencies={['newPassword']}
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: messages['confirm_password_require'],
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (
+                                        !value ||
+                                        getFieldValue('newPassword') === value
+                                    ) {
+                                        return Promise.resolve()
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            messages[
+                                                'confirm_password_not_match'
+                                            ],
+                                        ),
+                                    )
                                 },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        if (
-                                            !value ||
-                                            getFieldValue('newPassword') ===
-                                                value
-                                        ) {
-                                            return Promise.resolve()
-                                        }
-                                        return Promise.reject(
-                                            new Error(
-                                                messages[
-                                                    'confirm_password_not_match'
-                                                ],
-                                            ),
-                                        )
-                                    },
-                                }),
-                            ]}
-                        >
-                            <Input.Password placeholder="Confirm new password" />
-                        </Form.Item>
-                    </div>
+                            }),
+                        ]}
+                    >
+                        <Input.Password placeholder="Confirm new password" />
+                    </Form.Item>
+                </div>
 
-                    <div className="content__button">
-                        <span>
-                            <Button
-                                className="content__button__save"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Lưu thay đổi
-                            </Button>
-                        </span>
-                        <span>
-                            <Button className="content__button__cancel">
-                                Thoát
-                            </Button>
-                        </span>
-                    </div>
-                </Form>
-            </div>
+                <div className="change-password-content__button">
+                    <span>
+                        <Button className="change-password-content__button__cancel">
+                            Hủy
+                        </Button>
+                    </span>
+                    <span>
+                        <Button
+                            className="change-password-content__button__save"
+                            type="primary"
+                            htmlType="submit"
+                        >
+                            Lưu
+                        </Button>
+                    </span>
+                </div>
+            </Form>
         </div>
     )
 }
