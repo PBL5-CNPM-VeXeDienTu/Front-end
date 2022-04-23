@@ -29,17 +29,17 @@ function EditProfile() {
             <div className="edit-profile-content__title">Profile</div>
             <Form
                 name="editprofile"
-                className="edit-profile-content__user"
+                className="edit-profile-content__sub"
                 onFinish={handleSubmit}
             >
-                <div className="edit-profile-content__user__avatar">
+                <div className="edit-profile-content__sub__avatar">
                     <img src={avatarURL} alt="avatar" />
-                    <div className="edit-profile-content__user__avatar__button-upload">
-                        <CameraOutlined className="edit-profile-content__user__avatar__icon" />
+                    <div className="edit-profile-content__sub__avatar__button-upload">
+                        <CameraOutlined className="edit-profile-content__sub__avatar__icon" />
                     </div>
                 </div>
-                <div className="edit-profile-content__user__infor">
-                    <div className="edit-profile-content__user__infor__item">
+                <div className="edit-profile-content__sub__info">
+                    <div className="edit-profile-content__sub__info__item">
                         <span className="span">Tên</span>
                         <Form.Item
                             name="name"
@@ -60,7 +60,7 @@ function EditProfile() {
                         </Form.Item>
                     </div>
 
-                    <div className="edit-profile-content__user__infor__item">
+                    <div className="edit-profile-content__sub__info__item">
                         <span className="span">Email</span>
                         <Form.Item
                             name="email"
@@ -85,7 +85,7 @@ function EditProfile() {
                         </Form.Item>
                     </div>
 
-                    <div className="edit-profile-content__user__infor__item">
+                    <div className="edit-profile-content__sub__info__item">
                         <span className="span">Giới tính</span>
                         <Form.Item name="gender">
                             <Radio.Group defaultValue={gender}>
@@ -95,7 +95,7 @@ function EditProfile() {
                         </Form.Item>
                     </div>
 
-                    <div className="edit-profile-content__user__infor__item">
+                    <div className="edit-profile-content__sub__info__item">
                         <span className="span">Ngày sinh</span>
                         <Form.Item
                             name="birthday"
@@ -117,7 +117,7 @@ function EditProfile() {
                         </Form.Item>
                     </div>
 
-                    <div className="edit-profile-content__user__infor__item">
+                    <div className="edit-profile-content__sub__info__item">
                         <span className="span">Địa chỉ</span>
                         <Form.Item
                             name="address"
@@ -137,7 +137,7 @@ function EditProfile() {
                         </Form.Item>
                     </div>
 
-                    <div className="edit-profile-content__user__infor__item">
+                    <div className="edit-profile-content__sub__info__item">
                         <span className="span">Số điện thoại</span>
                         <Form.Item
                             name="phone_number"
@@ -159,7 +159,7 @@ function EditProfile() {
                         </Form.Item>
                     </div>
 
-                    <div className="edit-profile-content__user__info__button">
+                    <div className="edit-profile-content__sub__info__button">
                         <Button className="button-cancel">
                             <Link to="/profile">Hủy</Link>
                         </Button>

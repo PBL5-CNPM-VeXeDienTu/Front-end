@@ -7,11 +7,12 @@ import './edit-vehicle.scss'
 function EditVehicle() {
     const avatarVehicleURL =
         process.env.REACT_APP_API_URL +
-        'public/images/avatars/vehicle/default-avatar-test.png'
+        'public/images/avatars/vehicle/default-avatar.png'
     return (
         <div className="edit-vehicle-content__card">
             <div className="edit-vehicle__title">Chỉnh sửa thông tin xe</div>
-            <Form className="edit-vehicle-content">
+            <Form className="edit-vehicle-content"
+            >
                 <div className="edit-vehicle-content__vehicle">
                     <div className="edit-vehicle-content__vehicle__avatar">
                         <img
@@ -32,10 +33,7 @@ function EditVehicle() {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                messages[
-                                                    'vehicle_type_required'
-                                                ],
+                                            message: messages['text_required'],
                                         },
                                     ]}
                                 >
@@ -52,10 +50,7 @@ function EditVehicle() {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                messages[
-                                                    'vehicle_color_required'
-                                                ],
+                                            message: messages['text_required'],
                                         },
                                     ]}
                                 >
@@ -72,10 +67,7 @@ function EditVehicle() {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                messages[
-                                                    'vehicle_detail_required'
-                                                ],
+                                            message: messages['text_required'],
                                         },
                                     ]}
                                 >
