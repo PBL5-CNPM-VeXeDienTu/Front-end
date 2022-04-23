@@ -22,6 +22,10 @@ const AddVehicle = loadableComponent(() =>
     import('views/pages/vehicle-list/add'),
 )
 
+const DetailParkingLot = loadableComponent(() =>
+    import('views/pages/parking-lot-list/detail'),
+)
+
 const availableRoles = [0, 1, 2]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -63,12 +67,8 @@ function AllRoutes() {
                     element={<MainLayout component={AddVehicle} />}
                 />
                 <Route
-                    path="/vehicles/edit"
-                    element={<MainLayout component={EditVehicle} />}
-                />
-                <Route
-                    path="/vehicles/add"
-                    element={<MainLayout component={AddVehicle} />}
+                    path="/parkinglot/detail"
+                    element={<MainLayout component={DetailParkingLot} />}
                 />
             </Route>
         </Routes>

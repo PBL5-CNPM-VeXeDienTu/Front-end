@@ -20,7 +20,7 @@ function Profile() {
                     .split('/')
                 setBirthday([day, month, year].join('/'))
             }
-        } catch (error) { }
+        } catch (error) {}
     }, [user])
 
     return (
@@ -37,10 +37,7 @@ function Profile() {
 
             <div className="profile-content__user">
                 <div className="profile-content__user__avatar">
-                    <img src={avatarURL} alt="avatar"></img>
-                    {/* <button className="profile-content__user__button-edit">
-                            <Link to="/profile/edit">Chỉnh sửa</Link>
-                        </button> */}
+                    <img src={avatarURL} alt="avatar" />
                 </div>
 
                 <div className="profile-content__user__infor">

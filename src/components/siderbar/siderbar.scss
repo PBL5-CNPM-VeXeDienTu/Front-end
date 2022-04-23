@@ -9,10 +9,10 @@
     background: #fff;
     flex: 1;
     &__logo {
-        position: relative;
+        height: 7vh;
         z-index: 1;
         padding: 4px 10px 4px 10px;
-        // box-shadow: 0 4px 5px -4px rgba(0, 43, 22, 0.3);
+        box-shadow: 0 0 0 1px rgba($color: #555, $alpha: 0.3);
     }
     &__link {
         font-size: medium;
@@ -27,7 +27,7 @@
     &__menu {
         height: 100%;
         width: 100%;
-        margin-top: -1vh;
+        margin-top: 0.1vh;
     }
 }
 .ant-layout-sider-children {

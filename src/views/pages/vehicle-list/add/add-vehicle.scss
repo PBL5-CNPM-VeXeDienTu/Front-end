@@ -6,7 +6,7 @@
     // font-size: 2.2vh;
 }
 
-.content-card {
+.add-vehicle-content__card {
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
     transition: 0.3s;
     width: 100%;
@@ -18,13 +18,13 @@
     font-size: 1.1rem;
 }
 
-.title {
+.add-vehicle__title {
     font-size: 2.8rem;
     margin: auto;
     padding: 2%;
 }
 
-.content {
+.add-vehicle-content {
     display: flex;
     flex-direction: column;
     &__vehicle {
@@ -128,10 +128,11 @@
         }
     }
 }
-.row-item {
-    width: 150px;
-    font-size: 1.1rem !important;
+.add-vehicle-row-item {
+    width: 5vw;
     font-weight: bold;
+    text-align: right;
+    margin-right: 2vw;
 }
 
 .ant-form-item-control-input-content {
