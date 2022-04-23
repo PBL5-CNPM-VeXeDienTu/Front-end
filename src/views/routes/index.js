@@ -26,6 +26,14 @@ const DetailParkingLot = loadableComponent(() =>
     import('views/pages/parking-lot-list/detail'),
 )
 
+const EditParkingLot = loadableComponent(() =>
+    import('views/pages/parking-lot-list/edit'),
+)
+
+const AddParkingLot = loadableComponent(() =>
+    import('views/pages/parking-lot-list/add'),
+)
+
 const availableRoles = [0, 1, 2]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -67,8 +75,16 @@ function AllRoutes() {
                     element={<MainLayout component={AddVehicle} />}
                 />
                 <Route
-                    path="/parkinglot/detail"
+                    path="/parking-lot/detail"
                     element={<MainLayout component={DetailParkingLot} />}
+                />
+                <Route
+                    path="/parking-lot/edit"
+                    element={<MainLayout component={EditParkingLot} />}
+                />
+                <Route
+                    path="/parking-lot/add"
+                    element={<MainLayout component={AddParkingLot} />}
                 />
             </Route>
         </Routes>

@@ -35,40 +35,37 @@ function Profile() {
                 </Link>
             </div>
 
-            <div className="profile-content__user">
-                <div className="profile-content__user__avatar">
+            <div className="profile-content__sub">
+                <div className="profile-content__sub__avatar">
                     <img src={avatarURL} alt="avatar" />
                 </div>
 
-                <div className="profile-content__user__infor">
-                    <table className="profile-content__user__infor__table">
-                        <tr>
-                            <th className="row-item">Tên</th>
-                            <td>{user.name}</td>
-                        </tr>
-                        <tr>
-                            <th className="row-item">Email</th>
-                            <td>{user.email}</td>
-                        </tr>
-                        <tr>
-                            <th className="row-item">Giới tính</th>
-                            <td>{gender}</td>
-                        </tr>
-                        <tr>
-                            <th className="row-item">Ngày sinh</th>
-                            <td>{birthday}</td>
-                        </tr>
-                        <tr>
-                            <th className="row-item">Địa chỉ</th>
-                            <td>
-                                <span>{user.address}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="row-item">Số điện thoại</th>
-                            <td>{user.phone_number}</td>
-                        </tr>
-                    </table>
+                <div className="profile-content__sub__info">
+                <div>
+                        <span className="properties">Tên</span>
+                        <span>{user.name}</span>
+                    </div>
+                    <div>
+                        <span className="properties">Email</span>
+                        <span>{user.email}</span>
+                    </div>
+                    <div>
+                        <span className="properties">Giới tính</span>
+                        <span>{gender}</span>
+                    </div>
+                    <div>
+                        <span className="properties">Ngày sinh</span>
+                        <span>{birthday}</span>
+                    </div>
+                    <div>
+                        <span className="properties">Địa chỉ</span>
+                        <span>{user.address}</span>
+                    </div>
+                    <div>
+                        <span className="properties">Số điện thoại</span>
+                        <span>{user.phone_number}</span>
+                    </div>
+                   
                 </div>
             </div>
         </div>

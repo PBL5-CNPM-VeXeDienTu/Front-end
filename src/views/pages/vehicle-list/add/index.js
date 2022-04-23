@@ -38,10 +38,7 @@ function AddVehicle() {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                messages[
-                                                    'license_plate_required'
-                                                ],
+                                            message: messages['text_required'],
                                         },
                                     ]}
                                 >
@@ -58,10 +55,7 @@ function AddVehicle() {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                messages[
-                                                    'vehicle_color_required'
-                                                ],
+                                            message: messages['text_required'],
                                         },
                                     ]}
                                 >
@@ -78,10 +72,7 @@ function AddVehicle() {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                messages[
-                                                    'vehicle_type_required'
-                                                ],
+                                            message: messages['text_required'],
                                         },
                                     ]}
                                 >
@@ -98,10 +89,7 @@ function AddVehicle() {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                messages[
-                                                    'vehicle_detail_required'
-                                                ],
+                                            message: messages['text_required'],
                                         },
                                     ]}
                                 >
