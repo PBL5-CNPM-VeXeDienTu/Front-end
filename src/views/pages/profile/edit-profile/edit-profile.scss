@@ -18,7 +18,6 @@
     grid-template-rows: 10% 90%;
     font-size: 1.1rem !important;
 
-
     &__title {
         font-size: 2.8rem;
         margin: auto;
@@ -38,6 +37,22 @@
             flex-direction: column;
             margin-left: 20%;
             margin-top: 10%;
+            &__button-upload {
+                width: 4.5vh;
+                height: 4.5vh;
+                border-radius: 50%;
+                background-color: #ddd;
+                cursor: pointer;
+                display: flex;
+                position: absolute;
+                top: 62%;
+                left: 24%;
+            }
+            &__icon {
+                color: #000;
+                font-size: 3vh;
+                margin: auto;
+            }
 
             img {
                 box-shadow: 0 0 10px #ccc;
@@ -55,7 +70,7 @@
             padding-top: 10vh;
 
             &__item {
-                height: 60px;
+                height: 7vh;
                 display: grid;
                 padding: auto 0;
                 grid-template-columns: 25% 75%;

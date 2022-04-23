@@ -38,8 +38,7 @@ function ChangePassword() {
                                 type: 'string',
                                 min: 6,
                                 max: 24,
-                                message:
-                                    messages['invalid_password_length'],
+                                message: messages['invalid_password_length'],
                             },
                         ]}
                     >
@@ -61,8 +60,7 @@ function ChangePassword() {
                                 type: 'string',
                                 min: 6,
                                 max: 24,
-                                message:
-                                    messages['invalid_password_length'],
+                                message: messages['invalid_password_length'],
                             },
                         ]}
                     >
@@ -80,22 +78,20 @@ function ChangePassword() {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    messages['confirm_password_require'],
+                                message: messages['confirm_password_require'],
                             },
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
                                     if (
                                         !value ||
-                                        getFieldValue('newPassword') ===
-                                        value
+                                        getFieldValue('newPassword') === value
                                     ) {
                                         return Promise.resolve()
                                     }
                                     return Promise.reject(
                                         new Error(
                                             messages[
-                                            'confirm_password_not_match'
+                                                'confirm_password_not_match'
                                             ],
                                         ),
                                     )
@@ -109,17 +105,17 @@ function ChangePassword() {
 
                 <div className="change-password-content__button">
                     <span>
+                        <Button className="change-password-content__button__cancel">
+                            Hủy
+                        </Button>
+                    </span>
+                    <span>
                         <Button
                             className="change-password-content__button__save"
                             type="primary"
                             htmlType="submit"
                         >
-                            Lưu thay đổi
-                        </Button>
-                    </span>
-                    <span>
-                        <Button className="change-password-content__button__cancel">
-                            Thoát
+                            Lưu
                         </Button>
                     </span>
                 </div>

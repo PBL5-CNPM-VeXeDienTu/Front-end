@@ -5,7 +5,7 @@
     font-family: 'Poppins', sans-serif;
     // font-size: 2.2vh;
 }
-.content-card {
+.edit-vehicle-content__card {
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
     transition: 0.3s;
     width: 100%;
@@ -17,13 +17,13 @@
     font-size: 1.1rem;
 }
 
-.title {
+.edit-vehicle__title {
     font-size: 2.8rem;
     margin: auto;
     padding: 4%;
 }
 
-.content {
+.edit-vehicle-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -86,10 +86,11 @@
     display: flex;
     justify-content: flex-end !important;
 }
-.row-item {
-    width: 150px;
-    font-size: 1.1rem !important;
+.edit-vehicle-row-item {
+    width: 5vw;
     font-weight: bold;
+    text-align: right;
+    margin-right: 2vw;
 }
 
 .ant-form-item-control-input-content {

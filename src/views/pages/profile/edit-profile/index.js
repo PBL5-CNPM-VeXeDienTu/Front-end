@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Input, Radio, Form, Button, DatePicker } from 'antd'
+import { CameraOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import useAuth from 'hooks/useAuth'
 import messages from 'assets/lang/messages'
@@ -32,7 +33,10 @@ function EditProfile() {
                 onFinish={handleSubmit}
             >
                 <div className="edit-profile-content__user__avatar">
-                    <img src={avatarURL} alt="avatar"></img>
+                    <img src={avatarURL} alt="avatar" />
+                    <div className="edit-profile-content__user__avatar__button-upload">
+                        <CameraOutlined className="edit-profile-content__user__avatar__icon" />
+                    </div>
                 </div>
                 <div className="edit-profile-content__user__infor">
                     <div className="edit-profile-content__user__infor__item">
@@ -141,15 +145,13 @@ function EditProfile() {
                             rules={[
                                 {
                                     required: true,
-                                    message:
-                                        messages['phone_number_required'],
+                                    message: messages['phone_number_required'],
                                 },
                                 {
                                     pattern: '^([-]?[0-9][0-9]*|0)$',
                                     min: 10,
                                     max: 10,
-                                    message:
-                                        messages['invalid_phone_number'],
+                                    message: messages['invalid_phone_number'],
                                 },
                             ]}
                         >
