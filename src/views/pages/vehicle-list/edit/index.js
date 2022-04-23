@@ -6,25 +6,25 @@ import './edit-vehicle.scss'
 function VehicleEdit() {
     const avatarVehicleURL =
         process.env.REACT_APP_API_URL +
-        'public/images/avatars/vehicle/default-avatar.png'
+        'public/images/avatars/vehicle/default-avatar-test.png'
     return (
-        <div className="content-card">
-            <div className="title">Chỉnh sửa thông tin xe</div>
-            <Form className="content">
-                <div className="content__vehicle">
-                    <div className="content__vehicle__avatar">
+        <div className="edit-vehicle-content__card">
+            <div className="edit-vehicle__title">Chỉnh sửa thông tin xe</div>
+            <Form className="edit-vehicle-content">
+                <div className="edit-vehicle-content__vehicle">
+                    <div className="edit-vehicle-content__vehicle__avatar">
                         <img
-                            className="content__vehicle__avatar__img"
+                            className="edit-vehicle-content__vehicle__avatar__img"
                             src={avatarVehicleURL}
                             alt="avatar"
                         ></img>
                     </div>
-                    <div className="content__vehicle__infor">
-                        <div className="content__vehicle__infor__table">
-                            <div className="content__vehicle__infor__table__item">
-                                <span className="row-item">Hãng xe :</span>
+                    <div className="edit-vehicle-content__vehicle__infor">
+                        <div className="edit-vehicle-content__vehicle__infor__table">
+                            <div className="edit-vehicle-content__vehicle__infor__table__item">
+                                <span className="edit-vehicle-row-item">Hãng xe :</span>
                                 <Form.Item
-                                    className="content__vehicle__infor__table__item__input"
+                                    className="edit-vehicle-content__vehicle__infor__table__item__input"
                                     name="type"
                                     rules={[
                                         {
@@ -39,10 +39,10 @@ function VehicleEdit() {
                                     <Input type="string" value="Suzuki" />
                                 </Form.Item>
                             </div>
-                            <div className="content__vehicle__infor__table__item">
-                                <span className="row-item">Màu :</span>
+                            <div className="edit-vehicle-content__vehicle__infor__table__item">
+                                <span className="edit-vehicle-row-item">Màu :</span>
                                 <Form.Item
-                                    className="content__vehicle__infor__table__item__input"
+                                    className="edit-vehicle-content__vehicle__infor__table__item__input"
                                     name="color"
                                     rules={[
                                         {
@@ -57,12 +57,12 @@ function VehicleEdit() {
                                     <Input type="string" />
                                 </Form.Item>
                             </div>
-                            <div className="content__vehicle__infor__table__item">
-                                <span className="row-item ">
+                            <div className="edit-vehicle-content__vehicle__infor__table__item">
+                                <span className="edit-vehicle-row-item ">
                                     Chi tiết :
                                 </span>
                                 <Form.Item
-                                    className="content__vehicle__infor__table__item__input"
+                                    className="edit-vehicle-content__vehicle__infor__table__item__input"
                                     name="detail"
                                     rules={[
                                         {
@@ -75,17 +75,17 @@ function VehicleEdit() {
                                     ]}
                                 >
                                     <Input.TextArea
-                                        className="content__vehicle__infor__table__item__textarea"
+                                        className="edit-vehicle-content__vehicle__infor__table__item__textarea"
                                         type="string"
                                     />
                                 </Form.Item>
                             </div>
                         </div>
-                        <div className="content__vehicle__infor__table__btn">
-                            <Button className="content__vehicle__infor__table__btn__cancel">
+                        <div className="edit-vehicle-content__vehicle__infor__table__btn">
+                            <Button className="edit-vehicle-content__vehicle__infor__table__btn__cancel">
                                 Hủy
                             </Button>
-                            <Button className="content__vehicle__infor__table__btn__Ok">
+                            <Button className="edit-vehicle-content__vehicle__infor__table__btn__Ok">
                                 Lưu
                             </Button>
                         </div>
