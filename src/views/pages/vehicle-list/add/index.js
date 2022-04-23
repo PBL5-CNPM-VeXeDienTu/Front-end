@@ -7,30 +7,30 @@ import './add-vehicle.scss'
 function VehicleAdd() {
     const avatarVehicleURL =
         process.env.REACT_APP_API_URL +
-        'public/images/avatars/vehicle/default-avatar.png'
+        'public/images/avatars/vehicle/default-avatar-test.png'
     const cavetFrontURL =
         process.env.REACT_APP_API_URL + 'public/images/cavet/default.png'
     const cavetBackURL =
         process.env.REACT_APP_API_URL + 'public/images/cavet/default.png'
     return (
-        <div className="content-card">
-            <div className="title">Đăng kí xe</div>
-            <Form className="content">
-                <div className="content__vehicle">
-                    <div className="content__vehicle__avatar">
+        <div className="add-vehicle-content__card">
+            <div className="add-vehicle__title">Đăng kí xe</div>
+            <Form className="add-vehicle-content">
+                <div className="add-vehicle-content__vehicle">
+                    <div className="add-vehicle-content__vehicle__avatar">
                         <img
-                            className="content__vehicle__avatar__img"
+                            className="add-vehicle-content__vehicle__avatar__img"
                             src={avatarVehicleURL}
                             alt="avatar"
                         />
-                        <UploadOutlined className="content__vehicle__avatar__icon" />
+                        <UploadOutlined className="add-vehicle-content__vehicle__avatar__icon" />
                     </div>
-                    <div className="content__vehicle__infor">
-                        <div className="content__vehicle__infor__table">
-                            <div className="content__vehicle__infor__table__item">
-                                <span className="row-item">Biển số :</span>
+                    <div className="add-vehicle-content__vehicle__infor">
+                        <div className="add-vehicle-content__vehicle__infor__table">
+                            <div className="add-vehicle-content__vehicle__infor__table__item">
+                                <span className="add-vehicle-row-item">Biển số :</span>
                                 <Form.Item
-                                    className="content__vehicle__infor__table__item__input"
+                                    className="add-vehicle-content__vehicle__infor__table__item__input"
                                     name="license_plate"
                                     rules={[
                                         {
@@ -45,10 +45,10 @@ function VehicleAdd() {
                                     <Input type="license_plate" />
                                 </Form.Item>
                             </div>
-                            <div className="content__vehicle__infor__table__item">
-                                <span className="row-item">Màu :</span>
+                            <div className="add-vehicle-content__vehicle__infor__table__item">
+                                <span className="add-vehicle-row-item">Màu :</span>
                                 <Form.Item
-                                    className="content__vehicle__infor__table__item__input"
+                                    className="add-vehicle-content__vehicle__infor__table__item__input"
                                     name="color"
                                     rules={[
                                         {
@@ -63,10 +63,10 @@ function VehicleAdd() {
                                     <Input type="string" />
                                 </Form.Item>
                             </div>
-                            <div className="content__vehicle__infor__table__item">
-                                <span className="row-item">Hãng xe :</span>
+                            <div className="add-vehicle-content__vehicle__infor__table__item">
+                                <span className="add-vehicle-row-item">Hãng xe :</span>
                                 <Form.Item
-                                    className="content__vehicle__infor__table__item__input"
+                                    className="add-vehicle-content__vehicle__infor__table__item__input"
                                     name="type"
                                     rules={[
                                         {
@@ -81,12 +81,12 @@ function VehicleAdd() {
                                     <Input type="string" />
                                 </Form.Item>
                             </div>
-                            <div className="content__vehicle__infor__table__item">
-                                <span className="row-item ">
+                            <div className="add-vehicle-content__vehicle__infor__table__item">
+                                <span className="add-vehicle-row-item">
                                     Chi tiết :
                                 </span>
                                 <Form.Item
-                                    className="content__vehicle__infor__table__item__input"
+                                    className="add-vehicle-content__vehicle__infor__table__item__input"
                                     name="detail"
                                     rules={[
                                         {
@@ -99,7 +99,7 @@ function VehicleAdd() {
                                     ]}
                                 >
                                     <Input.TextArea
-                                        className="content__vehicle__infor__table__item__textarea"
+                                        className="add-vehicle-content__vehicle__infor__table__item__textarea"
                                         type="string"
                                     />
                                 </Form.Item>
@@ -107,46 +107,46 @@ function VehicleAdd() {
                         </div>
                     </div>
                 </div>
-                <div className="content__cavet">
+                <div className="add-vehicle-content__cavet">
                     <div>
-                        <div className="content__cavet__font">
-                            <label className="content__cavet__font__lable">
+                        <div className="add-vehicle-content__cavet__font">
+                            <label className="add-vehicle-content__cavet__font__lable">
                                 Hình ảnh caver trước
                             </label>
-                            <div className="content__cavet__font__upload">
+                            <div className="add-vehicle-content__cavet__font__upload">
                                 <img
-                                    className="content__cavet__font__upload__img"
+                                    className="add-vehicle-content__cavet__font__upload__img"
                                     src={cavetFrontURL}
                                     alt="cavet_font"
                                 />
-                                <UploadOutlined className="content__cavet__font__upload__icon" />
+                                <UploadOutlined className="add-vehicle-content__cavet__font__upload__icon" />
                             </div>
                         </div>
                     </div>
                     <div>
-                        <div className="content__cavet__back">
-                            <label className="content__cavet__font__lable">
+                        <div className="add-vehicle-content__cavet__back">
+                            <label className="add-vehicle-content__cavet__font__lable">
                                 Hình ảnh caver trước sau
                             </label>
                             <div>
                                 <img
-                                    className="content__cavet__back__img"
+                                    className="add-vehicle-content__cavet__back__img"
                                     src={cavetBackURL}
                                     alt="cavet_back"
                                 />
-                                <UploadOutlined className="content__cavet__back__icon" />
+                                <UploadOutlined className="add-vehicle-content__cavet__back__icon" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="content__btn">
+                <div className="add-vehicle-content__btn">
                     <div>
-                        <Button className="content__btn__cancel">
+                        <Button className="add-vehicle-content__btn__cancel">
                             Hủy
                         </Button>
                     </div>
                     <div>
-                        <Button className="content__btn__Ok">Lưu</Button>
+                        <Button className="add-vehicle-content__btn__Ok">Lưu</Button>
                     </div>
                 </div>
             </Form>
