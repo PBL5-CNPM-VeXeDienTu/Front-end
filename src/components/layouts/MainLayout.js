@@ -10,7 +10,9 @@ function MainLayout(props) {
             <div className="main-layout__content">
                 <Header className="main-layout__content__header" />
                 <div className="main-layout__content__main">
-                    <props.component />
+                    <div className="main-layout__content__main__component">
+                        <props.component />
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Modal } from 'antd'
+import { Modal } from 'antd'
 import {
     PlusCircleOutlined,
     EditOutlined,
@@ -9,7 +9,6 @@ import {
 import './vehicle-list.scss'
 function Vehicles() {
     const [isModalVisible, setIsModalVisible] = useState(false)
-    const [form] = Form.useForm()
 
     const showModal = () => {
         setIsModalVisible(true)
