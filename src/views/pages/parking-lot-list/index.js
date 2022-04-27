@@ -74,9 +74,9 @@ function ParkingLots() {
     }
 
     return (
-        <div className="packing-lot-list-content">
-            <div className="packing-lot-list-content__action">
-                <div className="packing-lot-list-content__action__select">
+        <div className="parking-lot-list-content">
+            <div className="parking-lot-list-content__action">
+                <div className="parking-lot-list-content__action__select">
                     <span>Hiển thị </span>
                     <Select
                         className="select-box"
@@ -93,7 +93,7 @@ function ParkingLots() {
                     </Select>
                 </div>
 
-                <div className="packing-lot-list-content__action__search">
+                <div className="parking-lot-list-content__action__search">
                     <Search
                         className="search-box"
                         placeholder="Tìm kiếm"
@@ -102,10 +102,10 @@ function ParkingLots() {
                     />
                 </div>
 
-                <div className="packing-lot-list-content__action__search"></div>
+                <div className="parking-lot-list-content__action__search"></div>
             </div>
 
-            <div className="packing-lot-list-content__sub">
+            <div className="parking-lot-list-content__sub">
                 <Table
                     columns={columns}
                     dataSource={data}

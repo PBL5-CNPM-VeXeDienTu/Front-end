@@ -21,7 +21,7 @@ const EditVehicle = loadableComponent(() =>
 const AddVehicle = loadableComponent(() =>
     import('views/pages/vehicle-list/add'),
 )
-const PackingLotsList = loadableComponent(() =>
+const ParkingLots = loadableComponent(() =>
     import('views/pages/parking-lot-list'),
 )
 
@@ -76,6 +76,10 @@ function AllRoutes() {
                 <Route
                     path="/vehicles/add"
                     element={<MainLayout component={AddVehicle} />}
+                />
+                 <Route
+                    path="/parking-lots"
+                    element={<MainLayout component={ParkingLots}/>}
                 />
                 <Route
                     path="/parking-lot/detail"
