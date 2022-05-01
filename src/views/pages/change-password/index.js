@@ -105,18 +105,18 @@ function ChangePassword() {
 
                 <div className="change-password-content__button">
                     <span>
-                        <Button className="change-password-content__button__cancel">
+                        <button className="change-password-content__button__cancel">
                             Hủy
-                        </Button>
+                        </button>
                     </span>
                     <span>
-                        <Button
+                        <button
                             className="change-password-content__button__save"
                             type="primary"
                             htmlType="submit"
                         >
                             Lưu
-                        </Button>
+                        </button>
                     </span>
                 </div>
             </Form>

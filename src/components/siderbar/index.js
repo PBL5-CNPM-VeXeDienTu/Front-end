@@ -112,7 +112,7 @@ const RenderMenu = () => {
                         key="7"
                         icon={<MessageOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/feedbacks">
                             Feedback
                         </Link>
                     </Menu.Item>

@@ -5,6 +5,7 @@ import loadableComponent from 'components/loadable-component'
 import AuthenticatedRoute from './authenticated-route'
 import GuestRoute from './guest-route'
 
+
 const Login = loadableComponent(() => import('views/pages/login'))
 const Register = loadableComponent(() => import('views/pages/register'))
 const Profile = loadableComponent(() => import('views/pages/profile'))
@@ -36,6 +37,12 @@ const EditParkingLot = loadableComponent(() =>
 const AddParkingLot = loadableComponent(() =>
     import('views/pages/parking-lot-list/add'),
 )
+const Feedbacks = loadableComponent(() =>
+    import('views/pages/feedback-list'),
+)
+const AddFeedback = loadableComponent(() =>
+    import('views/pages/feedback-list/add'),
+)
 
 const availableRoles = [0, 1, 2]
 // const BASIC_USER_ROLE = 0;
@@ -43,6 +50,7 @@ const availableRoles = [0, 1, 2]
 // const ADMIN_ROLE = 2;
 
 function AllRoutes() {
+    
     return (
         <Routes>
             <Route element={<GuestRoute />}>
@@ -51,7 +59,7 @@ function AllRoutes() {
             </Route>
 
             <Route
-                element={<AuthenticatedRoute acceptedRoles={availableRoles} />}
+                // element={<AuthenticatedRoute acceptedRoles={availableRoles} />}
             >
                 <Route
                     path="/change-password"
@@ -82,16 +90,24 @@ function AllRoutes() {
                     element={<MainLayout component={ParkingLots}/>}
                 />
                 <Route
-                    path="/parking-lot/detail"
+                    path="/parking-lots/detail"
                     element={<MainLayout component={DetailParkingLot} />}
                 />
                 <Route
-                    path="/parking-lot/edit"
+                    path="/parking-lots/edit"
                     element={<MainLayout component={EditParkingLot} />}
                 />
                 <Route
-                    path="/parking-lot/add"
+                    path="/parking-lots/add"
                     element={<MainLayout component={AddParkingLot} />}
+                />
+                <Route
+                    path="/feedbacks"
+                    element={<MainLayout component={Feedbacks} />}
+                />
+                <Route
+                    path="/feedbacks/add"
+                    element={<MainLayout component={AddFeedback} />}
                 />
             </Route>
         </Routes>

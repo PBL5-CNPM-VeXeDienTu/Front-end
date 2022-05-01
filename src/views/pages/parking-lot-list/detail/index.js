@@ -13,7 +13,7 @@ function DetailParkingLot() {
             <div className="detail-parking-lot-content__title">
                 <span>Thông tin nhà xe</span>
                 <Link
-                    to="/parking-lot/edit"
+                    to="/parking-lots/edit"
                     className="detail-parking-lot-content__button-edit"
                 >
                     <EditOutlined />

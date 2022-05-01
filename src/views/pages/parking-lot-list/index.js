@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { Table } from 'antd'
-import { Select } from 'antd'
-import { Input } from 'antd'
+import { Table, Select, Input } from 'antd'
 
 import './parking-lot-list.scss'
 
@@ -34,17 +32,6 @@ const columns = [
     },
 ]
 
-const data = []
-for (let i = 0; i < 46; i++) {
-    data.push({
-        key: i,
-        name: `Edward King ${i}`,
-        time: '7h - 21h30',
-        capacity: 200,
-        status: 'Đang mở cửa',
-        address: `30 Ngô Sĩ Liên, ${i} `,
-    })
-}
 
 function ParkingLots() {
     const [item, setItem] = useState(20)
@@ -57,7 +44,7 @@ function ParkingLots() {
     console.log(item)
 
     const data = []
-    for (let i = 0; i < 46; i++) {
+    for (let i = 0; i < item; i++) {
         data.push({
             key: i,
             name: `Edward King ${i}`,
