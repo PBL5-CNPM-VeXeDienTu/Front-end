@@ -44,7 +44,7 @@ const AddFeedback = loadableComponent(() =>
     import('views/pages/feedback-list/add'),
 )
 
-const availableRoles = [0, 1, 2]
+const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
 // const ADMIN_ROLE = 2;
@@ -59,7 +59,7 @@ function AllRoutes() {
             </Route>
 
             <Route
-                // element={<AuthenticatedRoute acceptedRoles={availableRoles} />}
+                element={<AuthenticatedRoute acceptedRoles={availableRoles} />}
             >
                 <Route
                     path="/change-password"
