@@ -12,6 +12,7 @@ function MainLayout(props) {
                 <div className="main-layout__content__main">
                     <div className="main-layout__content__main__component">
                         <props.component />
+                        <div className="main-layout__content__main__footer"></div>
                     </div>
                 </div>
             </div>

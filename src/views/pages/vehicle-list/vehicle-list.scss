@@ -2,14 +2,14 @@
     width: 100%;
     height: 100%;
     margin: auto;
-    display: grid;
-    grid-template-rows: 7% 93%;
 
     &__button-add {
-        height: 100%;
-        width: 100%;
+        position: absolute;
+        left: 87.5%;
+        top: 0%;
+        height: fit-content;
+        width: fit-content;
         position: relative;
-        text-align: center;
         background-color: transparent;
 
         button {
@@ -18,9 +18,7 @@
             background-color: #fff;
             border-radius: 10px;
             border: none;
-            position: absolute;
-            right: 0;
-            top: 25%;
+          
             transform: translateY(-50%);
             color: black;
 
@@ -45,7 +43,7 @@
         height: 82vh;
         -ms-overflow-style: none;
         scrollbar-width: none;
-        overflow-y: scroll;
+        overflow-y: auto;
         overflow-x: hidden;
 
         &__sub {

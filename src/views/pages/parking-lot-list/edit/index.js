@@ -147,7 +147,7 @@ function EditParkingLot() {
 
 
                 </div>
-                <div className="edit-parking-lot-content__sub__info__button">
+                <div className="edit-parking-lot-content__sub__button">
                     <Button className="button-cancel">
                         <Link to="/profile">Hủy</Link>
                     </Button>

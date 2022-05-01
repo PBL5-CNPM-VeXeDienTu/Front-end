@@ -22,8 +22,8 @@
     &__button-edit{
         font-size: 30px;
         position: absolute;
-        right: 5%;
-        top: 5%;
+        right: 6%;
+        top: 8%;
         color: #555;
     }
 
@@ -69,4 +69,14 @@
             }
         }
     }
+}
+.ant-input-focused,
+.ant-input:focus {
+    box-shadow: 0 0 3px #41bc3f;
+    border-color: #41bc3f;
+}
+
+.ant-input:hover {
+    border-color: #41bc3f;
+    box-shadow: 0 0 3px #41bc3f;
 }

@@ -38,7 +38,7 @@
                 cursor: pointer;
                 display: flex;
                 position: absolute;
-                top: 80%;
+                top: 78%;
                 left: 35%;
             }
             &__icon {
@@ -71,7 +71,7 @@
                     text-align: right;
                     margin-top: 5px;
                     font-size: 1.1rem;
-                    width: 8vw;
+                    width: 9vw;
                     // color: #555;
                 }
                 input{
@@ -79,51 +79,62 @@
                 }
 
                 input:hover {
-                    box-shadow: none !important;
+                    box-shadow: 0 0 3px #41bc3f !important;
                 }
 
                 input:hover {
-                    box-shadow: none !important;
+                    box-shadow: 0 0 3px #41bc3f !important;
                     border-color: #41bc3f !important;
                 }
             }
 
-            &__button {
-                position: absolute;
-                right: 5%;
-                bottom: 5%;
-                margin-left: 13vw;
+            
+        }
+        &__button {
+            position: absolute;
+            right: 13%;
+            bottom: 10%;
+            margin-left: 13vw;
 
-                button {
-                    margin: 0 20px;
-                    width: 7vw;
-                    height: 5vh;    
-                    border: none;
-                    border-radius: 20px;
-                    color: #000;
-                    font-size: 1.1rem;
-                    text-align: center;
-                }
+            button {
+                margin: 0 20px;
+                width: 7vw;
+                height: 5vh;    
+                border: none;
+                border-radius: 20px;
+                color: #000;
+                font-size: 1.1rem;
+                text-align: center;
+            }
 
-                .button-cancel {
-                    background-color: #ff8080;
-                }
+            .button-cancel {
+                background-color: #ff8080;
+            }
 
-                .button-cancel:hover {
-                    background-color: red;
-                    color: #fff;
-                    cursor: pointer;
-                }
+            .button-cancel:hover {
+                background-color: red;
+                color: #fff;
+                cursor: pointer;
+            }
 
-                .button-save {
-                    background-color: #b4e2b3;
-                }
+            .button-save {
+                background-color: #b4e2b3;
+            }
 
-                .button-save:hover {
-                    background-color: #41bc3f;
-                    cursor: pointer;
-                }
+            .button-save:hover {
+                background-color: #41bc3f;
+                cursor: pointer;
             }
         }
     }
+}
+.ant-input-focused,
+.ant-input:focus {
+    box-shadow: 0 0 3px #41bc3f;
+    border-color: #41bc3f;
+}
+
+.ant-input:hover {
+    border-color: #41bc3f;
+    box-shadow: 0 0 3px #41bc3f;
 }
