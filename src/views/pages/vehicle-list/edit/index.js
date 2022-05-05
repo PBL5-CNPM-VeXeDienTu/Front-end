@@ -11,8 +11,7 @@ function EditVehicle() {
     return (
         <div className="edit-vehicle-content__card">
             <div className="edit-vehicle__title">Chỉnh sửa thông tin xe</div>
-            <Form className="edit-vehicle-content"
-            >
+            <Form className="edit-vehicle-content">
                 <div className="edit-vehicle-content__vehicle">
                     <div className="edit-vehicle-content__vehicle__avatar">
                         <img

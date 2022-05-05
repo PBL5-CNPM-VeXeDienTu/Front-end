@@ -12,8 +12,6 @@ const messages = {
     invalid_phone_number: 'Số điện thoại phải là 10 số',
     confirm_password_require: 'Mời nhập lại mật khẩu',
     confirm_password_not_match: 'Mật khẩu không trùng khớp',
-
-
 }
 
 export default messages

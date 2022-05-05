@@ -19,7 +19,7 @@
         margin: auto;
         padding: 4%;
     }
-    &__button-edit{
+    &__button-edit {
         font-size: 30px;
         position: absolute;
         right: 6%;
@@ -48,10 +48,10 @@
         &__info {
             width: 100%;
             margin: auto;
-            padding-right: 5vw ;
-            
+            padding-right: 5vw;
+
             div {
-                 height: 7vh;
+                height: 7vh;
                 display: grid;
                 padding: auto 0;
                 grid-template-columns: 30% 70%;

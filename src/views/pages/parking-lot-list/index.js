@@ -32,7 +32,6 @@ const columns = [
     },
 ]
 
-
 function ParkingLots() {
     const [item, setItem] = useState(20)
     const onSearch = (value) => console.log(value)

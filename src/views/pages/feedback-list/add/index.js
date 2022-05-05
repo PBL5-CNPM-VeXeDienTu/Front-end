@@ -6,19 +6,39 @@ import './add-feedback.scss'
 const { Option } = Select
 
 function AddFeedback() {
-    const FeedbackTypes = [];
+    const FeedbackTypes = []
     for (let i = 0; i < 1; i++) {
-        FeedbackTypes.push(<Option key={i.toString(36) + i}>Mong muốn thêm chức năng</Option>);
-        FeedbackTypes.push(<Option key={i.toString(36) + i+1}>Liên lạc về lỗi của hệ thống</Option>);
-        FeedbackTypes.push(<Option key={i.toString(36) + i+2}>Câu hỏi</Option>);
+        FeedbackTypes.push(
+            <Option key={i.toString(36) + i}>Mong muốn thêm chức năng</Option>,
+        )
+        FeedbackTypes.push(
+            <Option key={i.toString(36) + i + 1}>
+                Liên lạc về lỗi của hệ thống
+            </Option>,
+        )
+        FeedbackTypes.push(
+            <Option key={i.toString(36) + i + 2}>Câu hỏi</Option>,
+        )
     }
 
-    const Features = [];
+    const Features = []
     for (let i = 0; i < 1; i++) {
-        Features.push(<Option key={i.toString(36) + i}>Nạp tiền vào ví cá nhân</Option>);
-        Features.push(<Option key={i.toString(36) + i+1}>Quản lý lịch sử gửi xe</Option>);
-        Features.push(<Option key={i.toString(36) + i+2}>Hủy đăng ký xe'</Option>);
-        Features.push(<Option key={i.toString(36) + i+2}>Chỉnh sửa thông tin xe'</Option>);
+        Features.push(
+            <Option key={i.toString(36) + i}>Nạp tiền vào ví cá nhân</Option>,
+        )
+        Features.push(
+            <Option key={i.toString(36) + i + 1}>
+                Quản lý lịch sử gửi xe
+            </Option>,
+        )
+        Features.push(
+            <Option key={i.toString(36) + i + 2}>Hủy đăng ký xe'</Option>,
+        )
+        Features.push(
+            <Option key={i.toString(36) + i + 2}>
+                Chỉnh sửa thông tin xe'
+            </Option>,
+        )
     }
     return (
         <div className="add-feedback-content">
@@ -26,10 +46,9 @@ function AddFeedback() {
             <Form
                 name="addprofile"
                 className="add-feedback-content__sub"
-            // onFinish={handleSubmit}
+                // onFinish={handleSubmit}
             >
                 <div className="add-feedback-content__sub__info">
-
                     <div className="add-feedback-content__sub__info__item">
                         <span className="span">Loại Feedback</span>
                         <Form.Item
@@ -41,9 +60,7 @@ function AddFeedback() {
                                 },
                             ]}
                         >
-                            <Select>
-                                {FeedbackTypes}
-                            </Select>
+                            <Select>{FeedbackTypes}</Select>
                         </Form.Item>
                     </div>
 
@@ -59,9 +76,7 @@ function AddFeedback() {
                                 },
                             ]}
                         >
-                            <Select >
-                                {Features}
-                            </Select>
+                            <Select>{Features}</Select>
                         </Form.Item>
                     </div>
 
