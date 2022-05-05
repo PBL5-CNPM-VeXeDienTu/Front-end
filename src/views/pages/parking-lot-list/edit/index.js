@@ -11,13 +11,14 @@ function EditParkingLot() {
         'public/images/avatars/parking-lot/default-avatar.png'
     return (
         <div className="edit-parking-lot-content">
-            <div className="edit-parking-lot-content__title">Chỉnh sửa thông tin nhà xe</div>
+            <div className="edit-parking-lot-content__title">
+                Chỉnh sửa thông tin nhà xe
+            </div>
             <Form
                 name="form"
                 className="edit-parking-lot-content__sub"
-            // onFinish={handleSubmit}
+                // onFinish={handleSubmit}
             >
-
                 <div className="edit-parking-lot-content__sub__avatar">
                     <img src={avatarURL} alt="avatar" />
                     <div className="edit-parking-lot-content__sub__avatar__button-upload">
@@ -25,7 +26,7 @@ function EditParkingLot() {
                     </div>
                 </div>
                 <div className="edit-parking-lot-content__sub__info">
-                <div className="edit-parking-lot-content__sub__info__item">
+                    <div className="edit-parking-lot-content__sub__info__item">
                         <span className="span">Tên nhà xe</span>
                         <Form.Item
                             name="name"
@@ -144,8 +145,6 @@ function EditParkingLot() {
                             />
                         </Form.Item>
                     </div>
-
-
                 </div>
                 <div className="edit-parking-lot-content__sub__button">
                     <Button className="button-cancel">

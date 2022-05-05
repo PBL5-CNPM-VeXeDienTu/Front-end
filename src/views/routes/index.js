@@ -5,7 +5,6 @@ import loadableComponent from 'components/loadable-component'
 import AuthenticatedRoute from './authenticated-route'
 import GuestRoute from './guest-route'
 
-
 const Login = loadableComponent(() => import('views/pages/login'))
 const Register = loadableComponent(() => import('views/pages/register'))
 const Profile = loadableComponent(() => import('views/pages/profile'))
@@ -37,9 +36,7 @@ const EditParkingLot = loadableComponent(() =>
 const AddParkingLot = loadableComponent(() =>
     import('views/pages/parking-lot-list/add'),
 )
-const Feedbacks = loadableComponent(() =>
-    import('views/pages/feedback-list'),
-)
+const Feedbacks = loadableComponent(() => import('views/pages/feedback-list'))
 const AddFeedback = loadableComponent(() =>
     import('views/pages/feedback-list/add'),
 )
@@ -50,7 +47,6 @@ const availableRoles = [1, 2, 3]
 // const ADMIN_ROLE = 2;
 
 function AllRoutes() {
-    
     return (
         <Routes>
             <Route element={<GuestRoute />}>
@@ -85,9 +81,9 @@ function AllRoutes() {
                     path="/vehicles/add"
                     element={<MainLayout component={AddVehicle} />}
                 />
-                 <Route
+                <Route
                     path="/parking-lots"
-                    element={<MainLayout component={ParkingLots}/>}
+                    element={<MainLayout component={ParkingLots} />}
                 />
                 <Route
                     path="/parking-lots/detail"

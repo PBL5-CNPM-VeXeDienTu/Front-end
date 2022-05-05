@@ -45,7 +45,7 @@ function DetailParkingLot() {
                         <span className="properties">Sức chứa </span>
                         <span>1000</span>
                     </div>
-                   
+
                     <div>
                         <span className="properties">Địa chỉ </span>
                         <span>

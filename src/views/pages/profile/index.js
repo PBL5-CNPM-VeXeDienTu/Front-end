@@ -41,7 +41,7 @@ function Profile() {
                 </div>
 
                 <div className="profile-content__sub__info">
-                <div>
+                    <div>
                         <span className="properties">Tên</span>
                         <span>{user.name}</span>
                     </div>
@@ -65,7 +65,6 @@ function Profile() {
                         <span className="properties">Số điện thoại</span>
                         <span>{user.phone_number}</span>
                     </div>
-                   
                 </div>
             </div>
         </div>
