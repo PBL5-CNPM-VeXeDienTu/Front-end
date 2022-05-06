@@ -96,7 +96,7 @@ const RenderMenu = () => {
                         key="5"
                         icon={<HistoryOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/history">
                             Lịch sử gửi xe
                         </Link>
                     </Menu.Item>
