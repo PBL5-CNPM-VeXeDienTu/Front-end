@@ -37,9 +37,7 @@ const AddParkingLot = loadableComponent(() =>
     import('views/pages/parking-lot-list/add'),
 )
 const Feedbacks = loadableComponent(() => import('views/pages/feedback-list'))
-const AddFeedback = loadableComponent(() =>
-    import('views/pages/feedback-list/add'),
-)
+const History = loadableComponent(() => import('views/pages/history-list'))
 
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
@@ -102,8 +100,8 @@ function AllRoutes() {
                     element={<MainLayout component={Feedbacks} />}
                 />
                 <Route
-                    path="/feedbacks/add"
-                    element={<MainLayout component={AddFeedback} />}
+                    path="/history"
+                    element={<MainLayout component={History} />}
                 />
             </Route>
         </Routes>
