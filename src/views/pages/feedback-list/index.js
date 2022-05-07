@@ -96,6 +96,13 @@ function ParkingLots() {
             content: 'Muốn có thêm chức năng nạp tiền bằng tài khoản ngân hàng',
         })
     }
+    const handleCancel = () => {
+        setIsModalVisible(false)
+    }
+    const onClickFeedbackItem = (record) => {
+        setIsModalVisible(true)
+        setFeedback(record)
+    }
 
     const menu = () => {
         return (
@@ -158,14 +165,6 @@ function ParkingLots() {
                 </div>
             </Menu>
         )
-    }
-
-    const handleCancel = () => {
-        setIsModalVisible(false)
-    }
-    const onClickFeedbackItem = (record) => {
-        setIsModalVisible(true)
-        setFeedback(record)
     }
 
     return (

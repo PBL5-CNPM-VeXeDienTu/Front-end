@@ -140,7 +140,7 @@ function AddParkingLot() {
                 </div>
                 <div className="add-parking-lot-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to="/profile">Hủy</Link>
+                        <Link to="/parking-lots">Hủy</Link>
                     </Button>
                     <Button
                         className="button-save"

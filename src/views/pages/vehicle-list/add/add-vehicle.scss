@@ -3,146 +3,208 @@
     margin: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    // font-size: 2.2vh;
-}
-
-.add-vehicle-content__card {
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
-    transition: 0.3s;
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    border-radius: 20px;
-    display: grid;
-    grid-template-rows: 10% 90%;
-    font-size: 1.1rem;
-}
-
-.add-vehicle__title {
-    font-size: 2.8rem;
-    margin: auto;
-    padding: 2%;
+    // font-size: 1.1rem;
 }
 
 .add-vehicle-content {
-    display: flex;
-    flex-direction: column;
-    &__vehicle {
+    width: 100%;
+    height: fit-content;
+    border-radius: 20px;
+    background-color: #fff;
+
+    &__title {
+        width: 100%;
+        font-size: 2.8rem;
+        text-align: center;
+        padding: 1.5% 0;
+    }
+
+    &__sub {
+        width: 100%;
+        height: 100%;
+        margin-top: 5vh;
         display: flex;
-        margin-top: 4%;
-        justify-content: center;
-        &__avatar {
-            &__img {
-                width: 20vw;
-                height: 25vh;
-                border-radius: 4%;
-                margin-right: 3vh;
-            }
-            &__icon {
-                margin-right: 5vh;
-                font-size: 30px;
-            }
-        }
-        &__infor {
-            &__table {
-                &__item {
-                    margin-top: 2%;
+        flex-direction: column;
+
+        &__vehicle {
+            width: 70%;
+            height: 40vh;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 50% 50%;
+
+            &__image {
+                width: 100%;
+                height: 100%;
+                margin: auto;
+
+                img {
+                    width: 50vh;
+                    height: 40vh;
+                    margin-left: 2.3vw;
+                    border-radius: 20px;
+                }
+
+                &__button-upload {
+                    width: 4.5vh;
+                    height: 4.5vh;
+                    border-radius: 50%;
+                    background-color: #ddd;
+                    cursor: pointer;
                     display: flex;
-                    &__input {
-                        width: 20vw !important;
+                    position: absolute;
+                    top: 61%;
+                    left: 43%;
+                }
+
+                &__icon {
+                    color: #000;
+                    font-size: 3vh;
+                    margin: auto;
+                }
+            }
+
+            &__info {
+                width: 100%;
+                height: 100%;
+                margin: auto;
+
+                &__item {
+                    display: grid;
+                    padding: auto 0;
+                    grid-template-columns: 30% 70%;
+
+                    .span {
+                        font-weight: bold;
+                        text-align: right;
+                        margin-top: 5px;
+                        font-size: 1.1rem;
+                        width: 6vw;
+                    }
+                    .textarea {
+                        height: 15vh !important;
+                        font-size: 16px !important;
+                    }
+                    .text {
+                        font-size: 16px !important;
+                    }
+                    input {
+                        height: 5vh !important;
+                    }
+
+                    input:hover {
+                        box-shadow: 0 0 3px #41bc3f !important;
+                    }
+
+                    input:hover {
+                        box-shadow: 0 0 3px #41bc3f !important;
+                        border-color: #41bc3f !important;
                     }
                 }
             }
         }
-    }
-    &__cavet {
-        display: flex;
-        justify-content: center;
-        margin-top: 1vh;
-        &__font {
-            margin-left: 6vw;
-            &__lable {
-                display: block;
-                font-size: 1.1rem !important;
-                font-weight: bold;
-            }
-            &__upload {
-                margin-right: 10vw;
-                &__img {
-                    width: 20vw;
-                    height: 25vh;
-                    border-radius: 2%;
-                    margin-top: 1vh;
-                }
-                &__icon {
-                    margin-left: 1.6vw;
-                    font-size: 30px;
-                }
-            }
-        }
-        &__back {
-            &__img {
-                width: 20vw;
-                height: 25vh;
-                border-radius: 4%;
-                margin-right: 3vh;
-                margin-top: 1vh;
-            }
-            &__icon {
-                margin-right: 5vh;
-                font-size: 30px;
-            }
-        }
-    }
-    &__btn {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 3vh;
-        &__cancel {
-            height: 5vh;
-            width: 7vw;
-            background-color: #f57665;
-            border-radius: 50px;
-            margin: auto;
-            border: none;
-            color: #555;
-            margin-right: 2vw;
-            font-size: 1.1rem;
-        }
-        &__cancel:hover {
-            background-color: red;
-            color: #fff;
-        }
-        &__Ok {
-            height: 5vh;
-            width: 7vw;
-            background-color: #b4e2b3;
-            border-radius: 50px;
-            margin: auto;
-            border: none;
-            margin-right: 8vw;
-        }
-        &__Ok:hover {
-            background-color: #41bc3f;
-            color: #fff;
-        }
-    }
-}
-.add-vehicle-row-item {
-    width: 5vw;
-    font-weight: bold;
-    text-align: right;
-    margin-right: 2vw;
-}
 
-.ant-form-item-control-input-content {
-    display: flex;
+        &__cavet {
+            width: 70%;
+            height: 100%;
+            padding-top: 2vh;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 50% 50%;
+
+            &__item {
+                width: 100%;
+                height: 100%;
+                .span {
+                    font-weight: bold;
+                    font-size: 1.1rem;
+                    margin-left: 3vw;
+                }
+
+                &__image {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+
+                    &__button-upload-one {
+                        width: 4.5vh;
+                        height: 4.5vh;
+                        border-radius: 50%;
+                        background-color: #ddd;
+                        cursor: pointer;
+                        display: flex;
+                        position: absolute;
+                        top: 110%;
+                        left: 43%;
+                    }
+                    &__button-upload-two {
+                        width: 4.5vh;
+                        height: 4.5vh;
+                        border-radius: 50%;
+                        background-color: #ddd;
+                        cursor: pointer;
+                        display: flex;
+                        position: absolute;
+                        top: 110%;
+                        left: 76.4%;
+                    }
+
+                    &__icon {
+                        color: #000;
+                        font-size: 3vh;
+                        margin: auto;
+                    }
+
+                    img {
+                        width: 50vh;
+                        height: 40vh;
+                        margin: 0 auto;
+                        border-radius: 20px;
+                    }
+                }
+            }
+        }
+
+        &__button {
+            margin: auto;
+            padding: 7vh 0 5vh 0;
+            button {
+                margin: 0 20px;
+                width: 7vw;
+                height: 5vh;
+                border: none;
+                border-radius: 20px;
+                color: #000;
+                font-size: 1.1rem;
+                text-align: center;
+            }
+
+            .button-cancel {
+                background-color: #ff8080;
+            }
+
+            .button-cancel:hover {
+                background-color: red;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            .button-save {
+                background-color: #b4e2b3;
+            }
+
+            .button-save:hover {
+                background-color: #41bc3f;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 .ant-input-focused,
 .ant-input:focus {
-    border-color: #41bc3f;
     box-shadow: 0 0 3px #41bc3f;
+    border-color: #41bc3f;
 }
 
 .ant-input:hover {
