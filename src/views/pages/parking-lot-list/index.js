@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Table } from 'antd'
-import { Select } from 'antd'
-import { Input } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import { Table, Input } from 'antd'
 
 import './parking-lot-list.scss'
 
@@ -9,24 +8,24 @@ const { Search } = Input
 const numOfItem = [10, 15, 25]
 const columns = [
     {
-        title: 'Tên',
+        title: 'Tên bãi đỗ xe',
         dataIndex: 'name',
-        width: '20%',
+        width: '25%',
     },
     {
         title: 'Thời gian mở',
         dataIndex: 'time',
-        width: '15%',
+        width: '13%',
     },
     {
         title: 'Sức chứa',
         dataIndex: 'capacity',
-        width: '13%',
+        width: '10%',
     },
     {
         title: 'Trạng thái',
         dataIndex: 'status',
-        width: '15%',
+        width: '13%',
     },
     {
         title: 'Địa chỉ',
@@ -34,82 +33,113 @@ const columns = [
     },
 ]
 
-const data = []
-for (let i = 0; i < 46; i++) {
-    data.push({
-        key: i,
-        name: `Edward King ${i}`,
-        time: '7h - 21h30',
-        capacity: 200,
-        status: 'Đang mở cửa',
-        address: `30 Ngô Sĩ Liên, ${i} `,
-    })
-}
-
 function ParkingLots() {
-    const [item, setItem] = useState(20)
+    const [page, setPage] = useState(10)
+    const [filterState, setFilterState] = useState(0)
+    const navigate = useNavigate()
+
     const onSearch = (value) => console.log(value)
 
-    const handleChange = (value) => {
-        setItem(value)
-    }
-
-    console.log(item)
-
-    const data = []
-    for (let i = 0; i < 46; i++) {
-        data.push({
-            key: i,
-            name: `Edward King ${i}`,
-            time: '7h - 21h30',
-            capacity: 200,
-            status: 'Đang mở cửa',
-            address: `30 Ngô Sĩ Liên, ${i} `,
-        })
-    }
     const state = {
         pagination: {
-            pageSize: item,
+            pageSize: page,
         },
     }
 
+    const data = []
+    for (let i = 0; i < page; i++) {
+        data.push({
+            key: i,
+            name: 'Bãi đỗ xe KTX Bách Khoa',
+            time: '7h - 21h30',
+            capacity: 200,
+            status: 'Đang mở cửa',
+            address: '60 Ngô Sĩ Liên, Hòa Khánh Bắc, Liên Chiển, Đà Nẵng',
+        })
+    }
+
     return (
-        <div className="packing-lot-list-content">
-            <div className="packing-lot-list-content__action">
-                <div className="packing-lot-list-content__action__select">
+        <div className="parking-lot-list-content">
+            <div className="parking-lot-list-content__title">
+                Danh sách bãi đỗ xe
+            </div>
+            <div className="parking-lot-list-content__action">
+                <div className="parking-lot-list-content__action__select">
                     <span>Hiển thị </span>
-                    <Select
-                        className="select-box"
-                        defaultValue={{ value: item }}
-                        onChange={handleChange}
+                    <select
+                        defaultValue={{ value: page }}
+                        onChange={(e) => setPage(e.target.value)}
                     >
                         {numOfItem.map((numOfItem, index) => {
                             return (
-                                <Select.Option key={index} value={numOfItem}>
+                                <option key={index} value={numOfItem}>
                                     {numOfItem}
-                                </Select.Option>
+                                </option>
                             )
                         })}
-                    </Select>
+                    </select>
+                </div>
+                <div className="parking-lot-list-content__action__filter-state">
+                    <span className="span">Trạng thái</span>
+                    <button
+                        className={
+                            filterState === 0
+                                ? 'button-active__left'
+                                : 'button-unactive__left'
+                        }
+                        onClick={(e) => setFilterState(0)}
+                    >
+                        All
+                    </button>
+                    <button
+                        className={
+                            filterState === 1
+                                ? 'button-active'
+                                : 'button-unactive'
+                        }
+                        onClick={(e) => setFilterState(1)}
+                    >
+                        Mở cửa
+                    </button>
+                    <button
+                        className={
+                            filterState === 2
+                                ? 'button-active__right'
+                                : 'button-unactive__right'
+                        }
+                        onClick={(e) => setFilterState(2)}
+                    >
+                        Đóng cửa
+                    </button>
                 </div>
 
-                <div className="packing-lot-list-content__action__search">
+                <div className="parking-lot-list-content__action__search">
                     <Search
                         className="search-box"
                         placeholder="Tìm kiếm"
                         onSearch={onSearch}
-                        enterButton
+                        allowClear
+                        suffix
                     />
                 </div>
-
-                <div className="packing-lot-list-content__action__search"></div>
             </div>
 
-            <div className="packing-lot-list-content__sub">
+            <div className="parking-lot-list-content__sub">
                 <Table
+                    className="parking-lot-list-content__sub__table"
                     columns={columns}
                     dataSource={data}
                     pagination={state.pagination}
+                    rowClassName={(record, index) =>
+                        record.status === 'Đang mở cửa'
+                            ? 'parking-lot-list-content__sub__table__row-green'
+                            : 'parking-lot-list-content__sub__table__row-red'
+                    }
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: () => navigate('/parking-lots/detail'),
+                        }
+                    }}
                 />
             </div>
         </div>

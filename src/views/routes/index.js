@@ -21,7 +21,7 @@ const EditVehicle = loadableComponent(() =>
 const AddVehicle = loadableComponent(() =>
     import('views/pages/vehicle-list/add'),
 )
-const PackingLotsList = loadableComponent(() =>
+const ParkingLots = loadableComponent(() =>
     import('views/pages/parking-lot-list'),
 )
 
@@ -36,8 +36,23 @@ const EditParkingLot = loadableComponent(() =>
 const AddParkingLot = loadableComponent(() =>
     import('views/pages/parking-lot-list/add'),
 )
+const Feedbacks = loadableComponent(() => import('views/pages/feedback-list'))
+const AddFeedback = loadableComponent(() =>
+    import('views/pages/feedback-list/add'),
+)
+const ParkingHistories = loadableComponent(() =>
+    import('views/pages/parking-history-list'),
+)
 
-const availableRoles = [0, 1, 2]
+const WalletsList = loadableComponent(() => import('views/pages/wallet-list'))
+
+const Payment = loadableComponent(() =>
+    import('views/pages/wallet-list/payment'),
+)
+
+const QrCheckout = loadableComponent(() => import('views/pages/qr-checkout'))
+
+const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
 // const ADMIN_ROLE = 2;
@@ -78,16 +93,44 @@ function AllRoutes() {
                     element={<MainLayout component={AddVehicle} />}
                 />
                 <Route
-                    path="/parking-lot/detail"
+                    path="/parking-lots"
+                    element={<MainLayout component={ParkingLots} />}
+                />
+                <Route
+                    path="/parking-lots/detail"
                     element={<MainLayout component={DetailParkingLot} />}
                 />
                 <Route
-                    path="/parking-lot/edit"
+                    path="/parking-lots/edit"
                     element={<MainLayout component={EditParkingLot} />}
                 />
                 <Route
-                    path="/parking-lot/add"
+                    path="/parking-lots/add"
                     element={<MainLayout component={AddParkingLot} />}
+                />
+                <Route
+                    path="/feedbacks/add"
+                    element={<MainLayout component={AddFeedback} />}
+                />
+                <Route
+                    path="/feedbacks"
+                    element={<MainLayout component={Feedbacks} />}
+                />
+                <Route
+                    path="/qr-checkout"
+                    element={<MainLayout component={QrCheckout} />}
+                />
+                <Route
+                    path="/parking-histories"
+                    element={<MainLayout component={ParkingHistories} />}
+                />
+                <Route
+                    path="/wallets"
+                    element={<MainLayout component={WalletsList} />}
+                />
+                <Route
+                    path="/wallets/payment"
+                    element={<MainLayout component={Payment} />}
                 />
             </Route>
         </Routes>

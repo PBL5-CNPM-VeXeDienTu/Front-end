@@ -83,7 +83,7 @@
                     text-align: right;
                     margin-top: 5px;
                     font-size: 1.1rem;
-                    
+
                     color: #000;
                 }
 
@@ -92,14 +92,14 @@
                 }
 
                 input:hover {
-                    box-shadow: none !important;
+                    box-shadow: none;
                 }
             }
 
             &__button {
                 position: absolute;
-                right: 9%;
-                bottom: 5%;
+                right: 13%;
+                bottom: 10%;
                 margin-left: 13vw;
 
                 button {
@@ -153,11 +153,13 @@
     margin: 0;
     padding: 0;
 }
-
+.ant-picker-input {
+    height: 4vh;
+}
 .ant-picker-focused,
 .ant-picker:hover {
     border-color: #41bc3f;
-    box-shadow: none;
+    box-shadow: 0 0 3px #41bc3f;
 }
 
 .ant-input:hover,
@@ -167,7 +169,7 @@
 
 .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
     border-color: #41bc3f;
-    box-shadow: none;
+    box-shadow: 0 0 3px #41bc3f;
     border-right-width: 1px;
     z-index: 1;
 }
@@ -175,7 +177,7 @@
 .ant-input-affix-wrapper-focused,
 .ant-input-affix-wrapper:focus {
     border-color: #41bc3f;
-    box-shadow: none;
+    box-shadow: 0 0 3px #41bc3f;
     border-right-width: 1px;
     outline: 0;
 }

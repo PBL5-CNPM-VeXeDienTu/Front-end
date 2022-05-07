@@ -100,6 +100,7 @@
                 height: 5vh;
                 border-radius: 20px;
                 font-size: 14px;
+                margin: 0 1vw;
                 font-weight: bolder;
                 color: #222;
                 background-color: #d5d5d5;
@@ -197,14 +198,14 @@
 .input.password:hover,
 .input.password:focus {
     border-bottom: 2px solid #41bc3f;
-    box-shadow: none;
+    box-shadow: 0 0 3px #41bc3f;
     border-color: none;
     transition: 0.5s;
 }
 
 .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
     border-color: #41bc3f;
-    box-shadow: none;
+    box-shadow: 0 0 3px #41bc3f;
     border-right-width: 1px;
     z-index: 1;
 }
@@ -212,7 +213,7 @@
 .ant-input-affix-wrapper-focused,
 .ant-input-affix-wrapper:focus {
     border-color: #41bc3f;
-    box-shadow: none;
+    box-shadow: 0 0 3px #41bc3f;
     border-right-width: 1px;
     outline: 0;
 }

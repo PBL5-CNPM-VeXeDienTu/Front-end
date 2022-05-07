@@ -13,7 +13,7 @@ function DetailParkingLot() {
             <div className="detail-parking-lot-content__title">
                 <span>Thông tin nhà xe</span>
                 <Link
-                    to="/parking-lot/edit"
+                    to="/parking-lots/edit"
                     className="detail-parking-lot-content__button-edit"
                 >
                     <EditOutlined />
@@ -23,6 +23,7 @@ function DetailParkingLot() {
                 <img
                     className="detail-parking-lot-content__sub__image"
                     src={avatarURL}
+                    alt="avatar"
                 />
                 <div className="detail-parking-lot-content__sub__info">
                     <div>
@@ -45,7 +46,7 @@ function DetailParkingLot() {
                         <span className="properties">Sức chứa </span>
                         <span>1000</span>
                     </div>
-                   
+
                     <div>
                         <span className="properties">Địa chỉ </span>
                         <span>

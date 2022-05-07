@@ -5,60 +5,34 @@
     font-family: 'Poppins', sans-serif;
     // font-size: 1.1rem;
 }
+.ant-select-single .ant-select-selector {
+    border-radius: 0 !important;
+    background-color: #fff !important;
+}
 
-.add-parking-lot-content {
+.add-feedback-content {
     width: 100%;
     height: 100%;
     border-radius: 20px;
     background-color: #fff;
     display: grid;
-    grid-template-rows: 10% 90%;
-
+    grid-template-rows: 20% 80%;
     &__title {
+        width: 100%;
         font-size: 2.8rem;
+        text-align: center;
         margin: auto;
-        padding: 4%;
     }
 
     &__sub {
         width: 100%;
         height: 100%;
-        display: grid;
-        grid-template-columns: 45% 55%;
-
-        &__avatar {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            &__button-upload {
-                width: 4.5vh;
-                height: 4.5vh;
-                border-radius: 50%;
-                background-color: #ddd;
-                cursor: pointer;
-                display: flex;
-                position: absolute;
-                top: 78%;
-                left: 35%;
-            }
-            &__icon {
-                color: #000;
-                font-size: 3vh;
-                margin: auto;
-            }
-
-            img {
-                width: 60vh;
-                height: 60vh;
-                margin: auto;
-                border-radius: 20px;
-            }
-        }
+        display: flex;
+        flex-direction: column;
 
         &__info {
-            width: 100%;
-            margin: auto;
-            padding-right: 5vw;
+            width: 50%;
+            margin: 5% auto;
 
             &__item {
                 height: 8vh;
@@ -74,25 +48,25 @@
                     width: 9vw;
                     // color: #555;
                 }
-                input {
-                    height: 5vh !important;
+                .textarea {
+                    height: 15vh !important;
+                }
+                .text {
+                    border-color: #41bc3f !important;
                 }
 
-                input:hover {
+                .textarea:hover {
                     box-shadow: 0 0 3px #41bc3f !important;
                 }
 
-                input:hover {
+                .textarea:hover {
                     box-shadow: 0 0 3px #41bc3f !important;
                     border-color: #41bc3f !important;
                 }
             }
         }
         &__button {
-            position: absolute;
-            right: 13%;
-            bottom: 10%;
-            margin-left: 13vw;
+            margin: auto;
 
             button {
                 margin: 0 20px;
@@ -135,4 +109,22 @@
 .ant-input:hover {
     border-color: #41bc3f;
     box-shadow: 0 0 3px #41bc3f;
+}
+
+.ant-select-single .ant-select-selector {
+    border-radius: 0 !important;
+    background-color: #fff !important;
+}
+.ant-select-selector:hover {
+    border-radius: 0;
+    box-shadow: 0 0 3px #41bc3f !important;
+    border-color: #41bc3f !important;
+}
+.ant-select-selector:focus {
+    box-shadow: 0 0 3px #41bc3f !important;
+    border-color: #41bc3f !important;
+}
+.ant-select-focused:not(.ant-select-disabled) {
+    box-shadow: 0 0 3px #41bc3f !important;
+    border-color: #41bc3f !important;
 }

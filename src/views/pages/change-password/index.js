@@ -1,6 +1,6 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Form, Input, Button } from 'antd'
+import { useNavigate, Link } from 'react-router-dom'
+import { Form, Input } from 'antd'
 import auth from 'api/auth'
 import messages from 'assets/lang/messages'
 import './change-password.scss'
@@ -105,18 +105,20 @@ function ChangePassword() {
 
                 <div className="change-password-content__button">
                     <span>
-                        <Button className="change-password-content__button__cancel">
-                            Hủy
-                        </Button>
+                        <Link to="/profile">
+                            <button className="change-password-content__button__cancel">
+                                Hủy
+                            </button>
+                        </Link>
                     </span>
                     <span>
-                        <Button
+                        <button
                             className="change-password-content__button__save"
                             type="primary"
                             htmlType="submit"
                         >
                             Lưu
-                        </Button>
+                        </button>
                     </span>
                 </div>
             </Form>

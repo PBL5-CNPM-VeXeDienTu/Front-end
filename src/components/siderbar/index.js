@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Layout, Menu } from 'antd'
 import { Link } from 'react-router-dom'
 import {
@@ -12,6 +12,8 @@ import {
     LeftOutlined,
     RightOutlined,
 } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
+
 import 'antd/dist/antd.min.css'
 import 'components/siderbar/siderbar.scss'
 
@@ -19,8 +21,10 @@ const siderWidth = 200
 const minimizeSiderWidth = 80
 
 const RenderMenu = () => {
-    const [collapsed, setCollapsed] = useState(false)
+    const { collapsed, setCollapsed } = useAuth()
+
     const toggleCollapsed = () => {
+        localStorage.setItem('collapsed', !collapsed)
         setCollapsed(!collapsed)
     }
     const { Sider } = Layout
@@ -72,7 +76,7 @@ const RenderMenu = () => {
                             <OrderedListOutlined className="menu-item-icon" />
                         }
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/parking-lots">
                             Danh sách bãi đỗ xe
                         </Link>
                     </Menu.Item>
@@ -88,7 +92,7 @@ const RenderMenu = () => {
                         key="4"
                         icon={<WalletOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/wallets">
                             Ví cá nhân
                         </Link>
                     </Menu.Item>
@@ -96,7 +100,10 @@ const RenderMenu = () => {
                         key="5"
                         icon={<HistoryOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link
+                            className="sider-bar__link"
+                            to="/parking-histories"
+                        >
                             Lịch sử gửi xe
                         </Link>
                     </Menu.Item>
@@ -104,7 +111,7 @@ const RenderMenu = () => {
                         key="6"
                         icon={<QrcodeOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/qr-checkout">
                             QR checkout
                         </Link>
                     </Menu.Item>
@@ -112,7 +119,7 @@ const RenderMenu = () => {
                         key="7"
                         icon={<MessageOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/feedbacks">
                             Feedback
                         </Link>
                     </Menu.Item>

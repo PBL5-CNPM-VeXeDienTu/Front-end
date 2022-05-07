@@ -15,9 +15,8 @@ function AddParkingLot() {
             <Form
                 name="addprofile"
                 className="add-parking-lot-content__sub"
-            // onFinish={handleSubmit}
+                // onFinish={handleSubmit}
             >
-
                 <div className="add-parking-lot-content__sub__avatar">
                     <img src={avatarURL} alt="avatar" />
                     <div className="add-parking-lot-content__sub__avatar__button-upload">
@@ -138,12 +137,10 @@ function AddParkingLot() {
                             />
                         </Form.Item>
                     </div>
-
-
                 </div>
-                <div className="add-parking-lot-content__sub__info__button">
+                <div className="add-parking-lot-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to="/profile">Hủy</Link>
+                        <Link to="/parking-lots">Hủy</Link>
                     </Button>
                     <Button
                         className="button-save"

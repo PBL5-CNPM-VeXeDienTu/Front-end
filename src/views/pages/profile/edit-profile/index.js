@@ -10,7 +10,7 @@ import './edit-profile.scss'
 
 function EditProfile() {
     const { user } = useAuth()
-    const avatarURL = process.env.REACT_APP_API_URL + user.avatar
+    const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
     const gender = user.gender ? 1 : 0
     const navigate = useNavigate()
 
