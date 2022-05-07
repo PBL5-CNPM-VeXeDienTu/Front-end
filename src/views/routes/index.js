@@ -94,7 +94,7 @@ function AllRoutes() {
                 />
                 <Route
                     path="/parking-lots"
-                    element={<MainLayout component={ParkingHistories} />}
+                    element={<MainLayout component={ParkingLots} />}
                 />
                 <Route
                     path="/parking-lots/detail"

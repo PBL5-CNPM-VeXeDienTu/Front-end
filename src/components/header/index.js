@@ -17,7 +17,7 @@ const content = (
 
 function Header() {
     const { user, setToken } = useAuth()
-    const avatarURL = process.env.REACT_APP_API_URL + user.avatar
+    const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
 
     const handleLogout = () => {
         setToken(null)

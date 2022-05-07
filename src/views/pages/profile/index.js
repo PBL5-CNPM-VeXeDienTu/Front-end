@@ -9,13 +9,13 @@ import './profile.scss'
 function Profile() {
     const { user } = useAuth()
     // alert(user.birthday)
-    const avatarURL = process.env.REACT_APP_API_URL + user.avatar
+    const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
     const gender = user.gender ? 'Nam' : 'Nữ'
     const [birthday, setBirthday] = useState('01-01-2001')
     useEffect(() => {
         try {
             if (user) {
-                const [month, day, year] = moment(user.birthday)
+                const [month, day, year] = moment(user.UserInfo?.birthday)
                     .format('L')
                     .split('/')
                 setBirthday([day, month, year].join('/'))
@@ -59,11 +59,11 @@ function Profile() {
                     </div>
                     <div>
                         <span className="properties">Địa chỉ</span>
-                        <span>{user.address}</span>
+                        <span>{user.UserInfo?.address}</span>
                     </div>
                     <div>
                         <span className="properties">Số điện thoại</span>
-                        <span>{user.phone_number}</span>
+                        <span>{user.UserInfo?.phone_number}</span>
                     </div>
                 </div>
             </div>
