@@ -42,7 +42,7 @@ function AddFeedback() {
     }
     return (
         <div className="add-feedback-content">
-            <div className="add-feedback-content__title">Thêm nhà xe</div>
+            <div className="add-feedback-content__title">Thêm feedback</div>
             <Form
                 name="addprofile"
                 className="add-feedback-content__sub"
@@ -101,7 +101,7 @@ function AddFeedback() {
                 </div>
                 <div className="add-feedback-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to="/profile">Hủy</Link>
+                        <Link to="/feedbacks">Hủy</Link>
                     </Button>
                     <Button
                         className="button-save"

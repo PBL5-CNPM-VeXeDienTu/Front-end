@@ -1,102 +1,225 @@
 .parking-lot-list-content {
     width: 100%;
+    min-height: 84vh;
     height: fit-content;
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
     background-color: #fff;
     border-radius: 20px;
     font-size: 1.1rem;
     margin: auto;
+
+    &__title {
+        width: 100%;
+        font-size: 2.8rem;
+        text-align: center;
+        padding: 1.5% 0;
+    }
+
     &__action {
         width: 100%;
         height: 100%;
         display: grid;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: 40% 35% 25%;
+        padding: 0.5% 3%;
+
         &__select {
-            height: auto;
             width: 100%;
-            margin-top: 2%;
-            margin-left: 6%;
+
+            select {
+                width: 4vw;
+                height: 5.5vh;
+                background-color: #f0f0f0 !important;
+                border-radius: 20px;
+                border: none;
+                text-align: center;
+                font-size: 1rem;
+                cursor: pointer;
+            }
         }
+
+        &__filter-state{
+            width: fit-content;
+            margin: auto;
+            .span{
+                margin-right: 1vw;
+            }
+            button{
+                width: 5.5vw;
+                height: 5.5vh;
+                border: none;
+                text-align: center;
+                background-color: #f0f0f0;
+                font-size: 1rem;
+                cursor: pointer;
+            }
+            .button-active{
+                background-color: #b4e2b3;
+                transition: 0.5s;
+
+                &__left{
+                    background-color: #b4e2b3;
+                    border-radius: 20px 0 0 20px;
+                    transition: 0.5s;
+                }
+                &__right{
+                    background-color: #b4e2b3;
+                    border-radius:0 20px 20px 0;
+                    transition: 0.5s;
+                }
+            }
+            .button-unactive{
+                background-color: #f0f0f0;
+                &__left{
+                    background-color: #f0f0f0;
+                    border-radius: 20px 0 0 20px;
+                }
+                &__right{
+                    background-color: #f0f0f0;
+                    border-radius:0 20px 20px 0;
+                }
+            }
+            
+        }
+
         &__search {
-            height: auto;
-            width: 50%;
-            margin-left: 45%;
-            margin-top: auto;
+            width: 100%;
         }
     }
+
     &__sub {
         width: 95%;
-        margin-left: auto;
-        margin-right: auto;
+        margin: auto;
+        &__table {
+            table {
+                margin-top: 1%;
+                tr {
+                    height: 5px !important;
+                    cursor: pointer;
+                    th {
+                        padding: 1.5vh !important;
+                        font-size: 1.1rem;
+                    }
+                    td {
+                        font-size: 1rem !important;
+                        padding: 2vh 0 2vh 1.5vh;
+                        max-width: 10vw;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+
+            &__row-red {
+                td:nth-child(4) {
+                    color: red;
+                }
+            }
+
+            &__row-green {
+                td:nth-child(4) {
+                    color: #41bc3f;
+                }
+            }
+        }
     }
 }
 
-.ant-table-tbody > tr > td {
-    padding: 0%;
-    font-size: 1.1rem;
-}
-.ant-table-thead > tr > th {
-    padding: 10px !important;
-}
-.ant-table-tbody > tr > td {
-    padding-left: 10px !important;
-}
-.ant-table table {
-    width: 100%;
-    margin-top: 1%;
-}
-.ant-table-cell {
-    font-size: 1.1rem;
-}
-.packing-lots-list-toolbar {
-    display: grid;
-    grid-template-columns: 70% 30%;
-    &__select {
-        width: 10%;
+.parking-lot-list-modal {
+    width: 50vw !important;
+    height: fit-content !important;
+    margin: auto !important;
+
+    .h1 {
+        text-align: center;
+        margin-bottom: 5vh;
+        font-size: 2rem;
+    }
+
+    .div {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 40% 60%;
+        margin: 1vh 0;
+        font-size: 1rem;
+
+        .span1 {
+            width: 100%;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .span2 {
+            margin-left: 10%;
+            max-width: 80%;
+
+            &-red {
+                margin-left: 10%;
+                color: red;
+            }
+
+            &-green {
+                margin-left: 10%;
+                color: #41bc3f;
+            }
+            &-italic {
+                margin-left: 10%;
+                font-style: italic;
+                color: #888;
+            }
+        }
+    }
+
+    .ant-modal-content {
+        border-radius: 20px !important;
+
+        .ant-modal-header {
+            border-radius: 20px 20px 0 0;
+            background-color: #e9e9e9;
+        }
+
+        .ant-modal-body {
+            height: fit-content !important;
+        }
     }
 }
 
-.ant-btn-primary {
-    background: #41bc3f;
-    border-color: #41bc3f;
-}
-.ant-table-thead > tr > th {
-    background: #e8e8e8;
-    font-weight: bold;
-}
-.ant-pagination-item-active a {
-    color: #41bc3f;
-}
-.ant-pagination-item-active {
-    border-color: #41bc3f;
+.ant-input-search-button {
+    border: none !important;
+    cursor: auto;
+    position: absolute;
+    right: 16vw;
+    top: 0.5vh;
+    z-index: 1;
+    background-color: transparent;
 }
 
-.ant-pagination-item-active:hover {
-    border-color: #41bc3f !important;
+.ant-input-group .ant-input {
+    background-color: #f0f0f0;
 }
 
-.ant-pagination-item:hover {
-    a {
-        color: #41bc3f;
-    }
-    border-color: #41bc3f;
-}
-.ant-pagination-item-link:hover {
-    color: #41bc3f;
-    border-color: #41bc3f;
-}
-svg:hover {
-    color: #41bc3f;
-    border-color: #41bc3f;
+.ant-input-affix-wrapper {
+    height: 5.5vh;
+    padding-left: 3vw;
+    border-radius: 20px !important;
+    background-color: #f0f0f0;
 }
 
-.ant-input:hover {
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
     border-color: #41bc3f;
+    box-shadow: 0 0 3px #41bc3f;
+    border-right-width: 1px;
+    z-index: 1;
 }
-.ant-btn-primary:hover {
-    background: #41bc3f;
+
+.ant-input-affix-wrapper-focused,
+.ant-input-affix-wrapper:focus {
     border-color: #41bc3f;
-    svg {
-        color: #fff;
-    }
+    box-shadow: 0 0 3px #41bc3f;
+    border-right-width: 1px;
+    outline: 0;
+}
+
+.ant-input-search-button:hover {
+    background-color: transparent;
 }

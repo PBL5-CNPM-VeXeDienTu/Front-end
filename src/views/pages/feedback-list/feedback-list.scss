@@ -1,6 +1,7 @@
 .feedback-list-content {
     width: 100%;
     height: fit-content;
+    min-height: 84vh;
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
     background-color: #fff;
     border-radius: 20px;
@@ -107,7 +108,7 @@
                     }
                     td {
                         font-size: 1rem !important;
-                        padding: 2vh 0 2vh 1vh;
+                        padding: 2vh 0 2vh 1.5vh;
                         max-width: 10vw;
                         white-space: nowrap;
                         overflow: hidden;
