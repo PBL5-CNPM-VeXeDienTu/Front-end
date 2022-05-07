@@ -61,6 +61,17 @@
     &__sub {
         width: 95%;
         margin: auto;
+        &__row-red {
+            td:nth-child(5) {
+                color: red;
+            }
+        }
+
+        &__row-green {
+            td:nth-child(5) {
+                color: #41bc3f;
+            }
+        }
     }
 }
 .history-list-menu {

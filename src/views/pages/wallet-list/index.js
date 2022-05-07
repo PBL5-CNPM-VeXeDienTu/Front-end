@@ -22,17 +22,17 @@ const columns = [
         width: '20%',
     },
     {
-        title: 'Trước giao dịch',
+        title: 'Trước giao dịch (VND)',
         dataIndex: 'begin',
         width: '20%',
     },
     {
-        title: 'Số tiền',
+        title: 'Số tiền (VND)',
         dataIndex: 'money',
         width: '20%',
     },
     {
-        title: 'Sau giao dịch',
+        title: 'Sau giao dịch (VND)',
         dataIndex: 'after',
         width: '20%',
     },
@@ -49,9 +49,9 @@ function Wallets() {
         key: 0,
         type: '',
         time: '',
-        begin: '',
+        begin: 0,
         money: 0,
-        after: '',
+        after: 0,
     })
 
     const handleChange = (value) => {
@@ -92,17 +92,17 @@ function Wallets() {
             key: i,
             type: `Nạp tiền qua thẻ cào ${i}`,
             time: `25/4/2021 7:12`,
-            begin: `200000 VND`,
+            begin: 200000,
             money: 100000,
-            after: `300000 VND`,
+            after: 300000,
         })
         data.push({
             key: i + 1,
             type: `Nạp tiền qua thẻ cào ${i + 1}`,
             time: `25/4/2021 7:12`,
-            begin: `200000 VND`,
+            begin: 200000,
             money: -100000,
-            after: `300000 VND`,
+            after: 300000,
         })
     }
 
