@@ -111,7 +111,7 @@ const RenderMenu = () => {
                         key="6"
                         icon={<QrcodeOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/qr-checkout">
                             QR checkout
                         </Link>
                     </Menu.Item>
