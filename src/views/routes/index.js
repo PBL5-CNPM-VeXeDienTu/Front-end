@@ -50,6 +50,8 @@ const Payment = loadableComponent(() =>
     import('views/pages/wallet-list/payment'),
 )
 
+const QrCheckout = loadableComponent(() => import('views/pages/qr-checkout'))
+
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -113,6 +115,10 @@ function AllRoutes() {
                 <Route
                     path="/feedbacks"
                     element={<MainLayout component={Feedbacks} />}
+                />
+                <Route
+                    path="/qr-checkout"
+                    element={<MainLayout component={QrCheckout} />}
                 />
                 <Route
                     path="/parking-histories"
