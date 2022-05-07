@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown } from 'antd'
 import { FilterOutlined } from '@ant-design/icons'
-import './history-list.scss'
+import './parking-history-list.scss'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
@@ -32,17 +32,26 @@ const columns = [
         width: '20%',
     },
     {
-        title: 'Phí đỗ xe (vnd)',
+        title: 'Phí đỗ xe (VND)',
         dataIndex: 'cost',
         width: '20%',
     },
 ]
 
-function Histories() {
-    const [page, setPage] = useState(20)
+function ParkingHistories() {
+    const [page, setPage] = useState(10)
     const [historyType, setHistoryType] = useState('All')
     const [vehicleState, setVehicleState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
+    const [wallet, setWallet] = useState({
+        key: 0,
+        license_plates: '',
+        parking_lot_name: '',
+        checkin_time: '',
+        checkout_time: '',
+        status: '',
+        cost: 0,
+    })
 
     const state = {
         pagination: {
@@ -66,14 +75,23 @@ function Histories() {
     const historyTypeOfItem = ['All', 'Biển số xe', 'Tên bãi đỗ xe']
 
     const data = []
-    for (let i = 0; i < page; i++) {
+    for (let i = 0; i < page / 2; i++) {
         data.push({
             key: i,
             license_plates: '29C99999',
             parking_lot_name: 'Phu',
             checkin_time: '7h30',
-            checkout_time: '',
+            checkout_time: '14h30',
             status: 'Đang đỗ',
+            cost: '2000',
+        })
+        data.push({
+            key: i + 1,
+            license_plates: '29C99999',
+            parking_lot_name: 'Phu',
+            checkin_time: '7h30',
+            checkout_time: '14h30',
+            status: 'Không đỗ',
             cost: '2000',
         })
     }
@@ -179,10 +197,15 @@ function Histories() {
                     columns={columns}
                     dataSource={data}
                     pagination={state.pagination}
+                    rowClassName={(record, index) =>
+                        record.status === 'Đang đỗ'
+                            ? 'history-list-content__sub__row-green'
+                            : 'history-list-content__sub__row-red'
+                    }
                 />
             </div>
         </div>
     )
 }
 
-export default Histories
+export default ParkingHistories

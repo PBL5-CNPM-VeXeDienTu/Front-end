@@ -40,7 +40,9 @@ const Feedbacks = loadableComponent(() => import('views/pages/feedback-list'))
 const AddFeedback = loadableComponent(() =>
     import('views/pages/feedback-list/add'),
 )
-const History = loadableComponent(() => import('views/pages/history-list'))
+const ParkingHistories = loadableComponent(() =>
+    import('views/pages/parking-history-list'),
+)
 
 const WalletsList = loadableComponent(() => import('views/pages/wallet-list'))
 
@@ -90,7 +92,7 @@ function AllRoutes() {
                 />
                 <Route
                     path="/parking-lots"
-                    element={<MainLayout component={ParkingLots} />}
+                    element={<MainLayout component={ParkingHistories} />}
                 />
                 <Route
                     path="/parking-lots/detail"
@@ -113,8 +115,8 @@ function AllRoutes() {
                     element={<MainLayout component={Feedbacks} />}
                 />
                 <Route
-                    path="/history"
-                    element={<MainLayout component={History} />}
+                    path="/parking-histories"
+                    element={<MainLayout component={ParkingHistories} />}
                 />
                 <Route
                     path="/wallets"

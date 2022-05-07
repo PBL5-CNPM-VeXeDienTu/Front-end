@@ -71,7 +71,7 @@ function AddVehicle() {
                                 <Input type="string" className="text" />
                             </Form.Item>
                         </div>
-                        
+
                         <div className="add-vehicle-content__sub__vehicle__info__item">
                             <span className="span">Mô tả</span>
                             <Form.Item

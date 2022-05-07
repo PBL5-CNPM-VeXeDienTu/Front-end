@@ -23,7 +23,7 @@ function DetailParkingLot() {
                 <img
                     className="detail-parking-lot-content__sub__image"
                     src={avatarURL}
-                    alt="avatar" 
+                    alt="avatar"
                 />
                 <div className="detail-parking-lot-content__sub__info">
                     <div>

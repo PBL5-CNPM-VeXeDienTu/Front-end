@@ -37,13 +37,13 @@
             }
         }
 
-        &__filter-state{
+        &__filter-state {
             width: fit-content;
             margin: auto;
-            .span{
+            .span {
                 margin-right: 1vw;
             }
-            button{
+            button {
                 width: 5.5vw;
                 height: 5.5vh;
                 border: none;
@@ -52,33 +52,32 @@
                 font-size: 1rem;
                 cursor: pointer;
             }
-            .button-active{
+            .button-active {
                 background-color: #b4e2b3;
                 transition: 0.5s;
 
-                &__left{
+                &__left {
                     background-color: #b4e2b3;
                     border-radius: 20px 0 0 20px;
                     transition: 0.5s;
                 }
-                &__right{
+                &__right {
                     background-color: #b4e2b3;
-                    border-radius:0 20px 20px 0;
+                    border-radius: 0 20px 20px 0;
                     transition: 0.5s;
                 }
             }
-            .button-unactive{
+            .button-unactive {
                 background-color: #f0f0f0;
-                &__left{
+                &__left {
                     background-color: #f0f0f0;
                     border-radius: 20px 0 0 20px;
                 }
-                &__right{
+                &__right {
                     background-color: #f0f0f0;
-                    border-radius:0 20px 20px 0;
+                    border-radius: 0 20px 20px 0;
                 }
             }
-            
         }
 
         &__search {

@@ -35,7 +35,7 @@ const columns = [
 
 function ParkingLots() {
     const [page, setPage] = useState(10)
-    const [ filterState, setFilterState ] = useState(0)
+    const [filterState, setFilterState] = useState(0)
     const navigate = useNavigate()
 
     const onSearch = (value) => console.log(value)
@@ -81,35 +81,37 @@ function ParkingLots() {
                 </div>
                 <div className="parking-lot-list-content__action__filter-state">
                     <span className="span">Trạng thái</span>
-                    <button 
-                        className={ filterState === 0 
-                            ? "button-active__left" 
-                            : "button-unactive__left" 
-                        } 
-                        onClick={ (e) => setFilterState(0)}
+                    <button
+                        className={
+                            filterState === 0
+                                ? 'button-active__left'
+                                : 'button-unactive__left'
+                        }
+                        onClick={(e) => setFilterState(0)}
                     >
                         All
                     </button>
-                    <button 
-                        className={ filterState === 1 
-                            ? "button-active" 
-                            : "button-unactive" 
-                        } 
-                        onClick={ (e) => setFilterState(1)}
+                    <button
+                        className={
+                            filterState === 1
+                                ? 'button-active'
+                                : 'button-unactive'
+                        }
+                        onClick={(e) => setFilterState(1)}
                     >
                         Mở cửa
                     </button>
-                    <button 
-                        className={ filterState === 2 
-                            ? "button-active__right" 
-                            : "button-unactive__right" 
-                        } 
-                        onClick={ (e) => setFilterState(2)}
+                    <button
+                        className={
+                            filterState === 2
+                                ? 'button-active__right'
+                                : 'button-unactive__right'
+                        }
+                        onClick={(e) => setFilterState(2)}
                     >
                         Đóng cửa
                     </button>
                 </div>
-
 
                 <div className="parking-lot-list-content__action__search">
                     <Search
