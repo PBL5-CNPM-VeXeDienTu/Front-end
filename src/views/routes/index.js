@@ -36,21 +36,12 @@ const EditParkingLot = loadableComponent(() =>
 const AddParkingLot = loadableComponent(() =>
     import('views/pages/parking-lot-list/add'),
 )
+
+const QrCheckout = loadableComponent(() => import('views/pages/qr-checkout'))
+
 const Feedbacks = loadableComponent(() => import('views/pages/feedback-list'))
-const AddFeedback = loadableComponent(() =>
-    import('views/pages/feedback-list/add'),
-)
-const ParkingHistories = loadableComponent(() =>
-    import('views/pages/parking-history-list'),
-)
 
-const WalletsList = loadableComponent(() => import('views/pages/wallet-list'))
-
-const Payment = loadableComponent(() =>
-    import('views/pages/wallet-list/payment'),
-)
-
-const availableRoles = [1, 2, 3]
+const availableRoles = [0, 1, 2]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
 // const ADMIN_ROLE = 2;
@@ -64,7 +55,7 @@ function AllRoutes() {
             </Route>
 
             <Route
-                element={<AuthenticatedRoute acceptedRoles={availableRoles} />}
+            // element={<AuthenticatedRoute acceptedRoles={availableRoles} />}
             >
                 <Route
                     path="/change-password"
@@ -92,7 +83,7 @@ function AllRoutes() {
                 />
                 <Route
                     path="/parking-lots"
-                    element={<MainLayout component={ParkingHistories} />}
+                    element={<MainLayout component={ParkingLots} />}
                 />
                 <Route
                     path="/parking-lots/detail"
@@ -107,24 +98,12 @@ function AllRoutes() {
                     element={<MainLayout component={AddParkingLot} />}
                 />
                 <Route
-                    path="/feedbacks/add"
-                    element={<MainLayout component={AddFeedback} />}
+                    path="/qr-checkout"
+                    element={<MainLayout component={QrCheckout} />}
                 />
                 <Route
                     path="/feedbacks"
                     element={<MainLayout component={Feedbacks} />}
-                />
-                <Route
-                    path="/parking-histories"
-                    element={<MainLayout component={ParkingHistories} />}
-                />
-                <Route
-                    path="/wallets"
-                    element={<MainLayout component={WalletsList} />}
-                />
-                <Route
-                    path="/wallets/payment"
-                    element={<MainLayout component={Payment} />}
                 />
             </Route>
         </Routes>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Table, Input, Menu, Dropdown, Modal } from 'antd'
+import { Table, Input, Menu, Dropdown } from 'antd'
 import { FilterOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import './feedback-list.scss'
 
@@ -30,19 +30,11 @@ const columns = [
 ]
 
 function ParkingLots() {
-    const [page, setPage] = useState(10)
+    const [page, setPage] = useState(20)
     const [feedbackType, setFeedbackType] = useState('All')
     const [feature, setFeature] = useState('All')
     const [feedbackState, setFeedbackState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [isModalVisible, setIsModalVisible] = useState(false)
-    const [feedback, setFeedback] = useState({
-        key: 0,
-        type_name: '',
-        name: '',
-        is_processed: '',
-        content: '',
-    })
 
     const state = {
         pagination: {
@@ -80,7 +72,7 @@ function ParkingLots() {
     ]
 
     const data = []
-    for (let i = 0; i < page / 2; i++) {
+    for (let i = 0; i < page; i++) {
         data.push({
             key: i,
             type_name: 'Mong muốn thêm chức năng',
@@ -88,20 +80,6 @@ function ParkingLots() {
             is_processed: 'Chưa duyệt',
             content: 'Muốn có thêm chức năng nạp tiền bằng tài khoản ngân hàng',
         })
-        data.push({
-            key: i,
-            type_name: 'Mong muốn thêm chức năng',
-            name: 'Nạp tiền vào ví cá nhân',
-            is_processed: 'Đã duyệt',
-            content: 'Muốn có thêm chức năng nạp tiền bằng tài khoản ngân hàng',
-        })
-    }
-    const handleCancel = () => {
-        setIsModalVisible(false)
-    }
-    const onClickFeedbackItem = (record) => {
-        setIsModalVisible(true)
-        setFeedback(record)
     }
 
     const menu = () => {
@@ -221,67 +199,10 @@ function ParkingLots() {
 
             <div className="feedback-list-content__sub">
                 <Table
-                    className="feedback-list-content__sub__table"
                     columns={columns}
                     dataSource={data}
                     pagination={state.pagination}
-                    rowClassName={(record, index) =>
-                        record.is_processed === 'Đã duyệt'
-                            ? 'feedback-list-content__sub__table__row-green'
-                            : 'feedback-list-content__sub__table__row-red'
-                    }
-                    onRow={(record, rowIndex) => {
-                        return {
-                            onClick: () => onClickFeedbackItem(record),
-                        }
-                    }}
                 />
-                <Modal
-                    className="feedback-list-modal"
-                    visible={isModalVisible}
-                    onCancel={handleCancel}
-                    footer={null}
-                >
-                    <h1 className="h1">Chi tiết Feedback</h1>
-                    <div className="div">
-                        <span className="span1">Loại Feedback</span>
-                        <span className="span2">{feedback.type_name}</span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">Chức năng</span>
-                        <span className="span2">{feedback.name}</span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">Tình trạng</span>
-                        <span
-                            className={
-                                feedback.is_processed === 'Đã duyệt'
-                                    ? 'span2-green'
-                                    : 'span2-red'
-                            }
-                        >
-                            {feedback.is_processed}
-                        </span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">Nội dung</span>
-                        <span className="span2">{feedback.content}</span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">Phản hồi</span>
-                        <span
-                            className={
-                                feedback.is_processed === 'Đã duyệt'
-                                    ? 'span2'
-                                    : 'span2-italic'
-                            }
-                        >
-                            {feedback.is_processed === 'Đã duyệt'
-                                ? 'Đã phản hồi '
-                                : 'Chưa có phản hồi'}
-                        </span>
-                    </div>
-                </Modal>
             </div>
         </div>
     )

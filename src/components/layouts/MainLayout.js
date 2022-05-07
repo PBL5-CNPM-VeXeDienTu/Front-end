@@ -3,13 +3,9 @@ import 'components/layouts/main-layout.scss'
 import Header from 'components/header'
 import Siderbar from 'components/siderbar'
 
-import useAuth from 'hooks/useAuth'
-
 function MainLayout(props) {
-    const { collapsed } = useAuth()
-
     return (
-        <div className={collapsed ? 'main-layout collapsed' : 'main-layout'}>
+        <div className="main-layout">
             <Siderbar className="main-layout__siderbar" />
             <div className="main-layout__content">
                 <Header className="main-layout__content__header" />
