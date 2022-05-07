@@ -42,6 +42,12 @@ const AddFeedback = loadableComponent(() =>
 )
 const History = loadableComponent(() => import('views/pages/history-list'))
 
+const WalletsList = loadableComponent(() => import('views/pages/wallet-list'))
+
+const Payment = loadableComponent(() =>
+    import('views/pages/wallet-list/payment'),
+)
+
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -109,6 +115,14 @@ function AllRoutes() {
                 <Route
                     path="/history"
                     element={<MainLayout component={History} />}
+                />
+                <Route
+                    path="/wallets"
+                    element={<MainLayout component={WalletsList} />}
+                />
+                <Route
+                    path="/wallets/payment"
+                    element={<MainLayout component={Payment} />}
                 />
             </Route>
         </Routes>

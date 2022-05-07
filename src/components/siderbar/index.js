@@ -88,7 +88,7 @@ const RenderMenu = () => {
                         key="4"
                         icon={<WalletOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/wallets">
                             Ví cá nhân
                         </Link>
                     </Menu.Item>
