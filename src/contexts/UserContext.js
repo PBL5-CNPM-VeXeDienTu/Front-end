@@ -8,9 +8,13 @@ const UserContext = createContext({})
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token'))
     const [user, setUser] = useState({})
+    const [collapsed, setCollapsed] = useState(
+        localStorage.getItem('collapsed') === 'true',
+    )
+
     const providerValue = useMemo(
-        () => ({ user, setUser, token, setToken }),
-        [user, setUser, token, setToken],
+        () => ({ token, setToken, user, setUser, collapsed, setCollapsed }),
+        [token, setToken, user, setUser, collapsed, setCollapsed],
     )
 
     const navigate = useNavigate()

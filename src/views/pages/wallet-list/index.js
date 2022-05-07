@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Select, Table, Input, Button, DatePicker, Menu, Dropdown } from 'antd'
+import { Table, Input, DatePicker, Menu, Dropdown } from 'antd'
 import { Link } from 'react-router-dom'
-import {
-    SearchOutlined,
-    FilterOutlined,
-    PlusCircleOutlined,
-} from '@ant-design/icons'
-import useAuth from 'hooks/useAuth'
+import { FilterOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import './wallet-list.scss'
 const { Search } = Input
 const numOfItem = [10, 15, 25]
@@ -43,20 +38,8 @@ function Wallets() {
     const [feature, setFeature] = useState('All')
     const [walletState, setWalletState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [item, setItem] = useState(10)
     const [page, setPage] = useState(10)
-    const [wallet, setWallet] = useState({
-        key: 0,
-        type: '',
-        time: '',
-        begin: 0,
-        money: 0,
-        after: 0,
-    })
 
-    const handleChange = (value) => {
-        setItem(value)
-    }
     const onSearch = (value) => console.log(value)
     const state = {
         pagination: {
@@ -74,12 +57,6 @@ function Wallets() {
         else setActiveFilter(true)
     }, [walletType, feature, walletState])
 
-    const featureOfItem = [
-        'All',
-        '[Basic user] Đăng ký xe',
-        '[Basic user] Chỉnh sửa thông tin xe',
-        '[Basic user] Hủy đăng ký xe',
-    ]
     const walletTypeOfItem = [
         'All',
         'Nạp Card',

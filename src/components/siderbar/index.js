@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Layout, Menu } from 'antd'
 import { Link } from 'react-router-dom'
 import {
@@ -12,6 +12,8 @@ import {
     LeftOutlined,
     RightOutlined,
 } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
+
 import 'antd/dist/antd.min.css'
 import 'components/siderbar/siderbar.scss'
 
@@ -19,8 +21,10 @@ const siderWidth = 200
 const minimizeSiderWidth = 80
 
 const RenderMenu = () => {
-    const [collapsed, setCollapsed] = useState(false)
+    const { collapsed, setCollapsed } = useAuth()
+
     const toggleCollapsed = () => {
+        localStorage.setItem('collapsed', !collapsed)
         setCollapsed(!collapsed)
     }
     const { Sider } = Layout
