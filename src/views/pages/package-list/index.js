@@ -120,8 +120,8 @@ function Packages() {
             parking_lot_name: 'Bãi đỗ xe Bách Khoa',
             package_type: 'Gói quý',
             vehicle_type: 'Xe máy',
-            date_start: new Date('4-1-2022').toLocaleDateString("en-GB"),
-            date_end: new Date('5-1-2022').toLocaleDateString("en-GB"),
+            date_start: new Date('4-1-2022').toLocaleDateString('en-GB'),
+            date_end: new Date('5-1-2022').toLocaleDateString('en-GB'),
             price: 120000,
         })
         dataUser.push({
@@ -130,8 +130,8 @@ function Packages() {
             parking_lot_name: 'Bãi đỗ xe Bách Khoa',
             package_type: 'Gói quý',
             vehicle_type: 'Xe máy',
-            date_start: new Date('5-1-2022').toLocaleDateString("en-GB"),
-            date_end: new Date('6-1-2022').toLocaleDateString("en-GB"),
+            date_start: new Date('5-1-2022').toLocaleDateString('en-GB'),
+            date_end: new Date('6-1-2022').toLocaleDateString('en-GB'),
             price: 120000,
         })
     }
@@ -247,7 +247,8 @@ function Packages() {
                         dataSource={dataUser}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
-                            moment(record.date_end, "DD/MM/YYYY").toDate() > dateNow
+                            moment(record.date_end, 'DD/MM/YYYY').toDate() >
+                            dateNow
                                 ? 'package-list-content__sub__table__row-green'
                                 : 'package-list-content__sub__table__row-gray'
                         }
