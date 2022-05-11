@@ -1,10 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { useEffect, useState } from 'react'
 import Modal from './modal'
 import 'components/qr-code/qrcode.scss'
 import QRCode from 'qrcode'
 
 function QR(props) {
+    const [src, setSrc] = useState('')
+    const [clickedImg, setClickedImg] = useState(null)
+
     var data =
         'User_Id: ' +
         props.userid +
@@ -14,13 +17,13 @@ function QR(props) {
         '\n' +
         'QR_key: ' +
         props.qr_key
-    const [src, setSrc] = useState('')
+
     useEffect(() => {
         QRCode.toDataURL(data).then((data) => {
             setSrc(data)
         })
-    }, [])
-    const [clickedImg, setClickedImg] = useState(null)
+    }, [data])
+
     const handleClick = (src) => {
         setClickedImg(src)
     }
@@ -31,6 +34,7 @@ function QR(props) {
                 className="qr-checkout-container__content__item__qr"
                 src={src}
                 onClick={() => handleClick(src)}
+                alt=""
             />
             <div>
                 {clickedImg && (

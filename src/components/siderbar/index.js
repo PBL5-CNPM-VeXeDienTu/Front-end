@@ -40,7 +40,7 @@ const RenderMenu = () => {
         //     setRedirectUrl(url);
         // }
     }
-    console.log(user)
+
     return user.role === roles.BASIC_USER ? (
         // ------------------- BASIC USER -----------------------
         <Layout className="layout-container">
