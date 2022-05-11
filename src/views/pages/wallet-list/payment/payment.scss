@@ -12,15 +12,16 @@
     height: 100%;
     background-color: #fff;
     border-radius: 20px;
-    display: grid;
-    grid-template-rows: 10% 90%;
     font-size: 1.1rem;
 }
 
 .payment-title {
-    font-size: 2.8rem;
-    margin: auto;
-    padding: 4%;
+    width: 100%;
+    font-size: 2rem;
+    text-align: center;
+    padding: 2.5% 0;
+    color: #41bc3f;
+    font-weight: bold;
 }
 
 .payment-content__infor {

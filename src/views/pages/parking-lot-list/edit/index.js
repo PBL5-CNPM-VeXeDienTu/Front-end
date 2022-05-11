@@ -11,9 +11,7 @@ function EditParkingLot() {
         'public/images/avatars/parking-lot/default-avatar.png'
     return (
         <div className="edit-parking-lot-content">
-            <div className="edit-parking-lot-content__title">
-                Chỉnh sửa thông tin nhà xe
-            </div>
+            <div className="title">Chỉnh sửa thông tin bãi đỗ xe</div>
             <Form
                 name="form"
                 className="edit-parking-lot-content__sub"

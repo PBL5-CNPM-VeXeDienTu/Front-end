@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Table, Input, Menu, Dropdown, Modal } from 'antd'
-import { FilterOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import {
+    FilterOutlined,
+    PlusCircleOutlined,
+    SearchOutlined,
+} from '@ant-design/icons'
 import './feedback-list.scss'
 
 const { Search } = Input
@@ -169,9 +173,7 @@ function ParkingLots() {
 
     return (
         <div className="feedback-list-content">
-            <div className="feedback-list-content__title">
-                Danh sách Feedback
-            </div>
+            <div className="title">Danh sách Feedback</div>
             <div className="feedback-list-content__action">
                 <div className="feedback-list-content__action__select">
                     <span>Hiển thị </span>
@@ -208,14 +210,15 @@ function ParkingLots() {
                         allowClear
                         suffix
                     />
+                    <SearchOutlined className="feedback-list-content__action__search__icon" />
                 </div>
 
                 <Link
                     className="feedback-list-content__action__add"
                     to="/feedbacks/add"
                 >
-                    <span>Thêm feedback</span>
                     <PlusCircleOutlined className="feedback-list-content__action__add__icon" />
+                    <span>Thêm feedback</span>
                 </Link>
             </div>
 

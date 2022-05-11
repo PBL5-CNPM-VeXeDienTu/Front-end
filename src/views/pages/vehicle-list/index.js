@@ -33,8 +33,8 @@ function Vehicles() {
             <div className="vehicles-list-container__button-add">
                 <Link to="/vehicles/add">
                     <button>
-                        Đăng ký
                         <PlusCircleOutlined className="icon" />
+                        Đăng ký
                     </button>
                 </Link>
             </div>

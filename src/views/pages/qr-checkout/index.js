@@ -27,32 +27,37 @@ function QrCheckout() {
     ]
     const listQRs = QRList.map((value, index) => {
         return (
-            <div className="qr-checkout-container__content__sub" key={QRList.id}>
-            <div className="qr-checkout-container__content__sub__title">
-                        <span>QR Checkout</span>
-            </div>
-            <div className="qr-checkout-container__content__item">
-                
-                <div className="qr-checkout-container__content__item__info">
-                    <div>
-                        <span className="properties">Hình ảnh xe</span>
-                        <img src={avatarURL} alt=""/>
-                    </div>
-                    <div>
-                        <span className="properties">Tên bãi đang đỗ</span>
-                        <span>Bãi xe Nhật Hào</span>
-                    </div>
-                    <div>
-                        <span className="properties">Địa chỉ bãi xe</span>
-                        <span>142/20 Âu Cơ</span>
-                    </div>
-                    <div>
-                        <span className="properties">Thời gian checkin</span>
-                        <span>2022-03-22 07:12:37</span>
-                    </div>
-                    <div>
-                        <span className="properties">Memo</span>
-                        <span>gần cột màu đỏ, dưới cửa sổ, gần biển treo tường màu xanh</span>
+            <div
+                className="qr-checkout-container__content__sub"
+                key={QRList.id}
+            >
+                <div className="qr-checkout-container__content__item">
+                    <div className="qr-checkout-container__content__item__info">
+                        <div>
+                            <span className="properties">Hình ảnh xe</span>
+                            <img src={avatarURL} alt=""/>
+                        </div>
+                        <div>
+                            <span className="properties">Tên bãi đang đỗ</span>
+                            <span>Bãi xe Nhật Hào</span>
+                        </div>
+                        <div>
+                            <span className="properties">Địa chỉ bãi xe</span>
+                            <span>142/20 Âu Cơ</span>
+                        </div>
+                        <div>
+                            <span className="properties">
+                                Thời gian checkin
+                            </span>
+                            <span>2022-03-22 07:12:37</span>
+                        </div>
+                        <div>
+                            <span className="properties">Memo</span>
+                            <span>
+                                gần cột màu đỏ, dưới cửa sổ, gần biển treo tường
+                                màu xanh
+                            </span>
+                        </div>
                     </div>
 
                     <QR

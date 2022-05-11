@@ -8,7 +8,7 @@ const { Option } = Select
 function payment() {
     return (
         <div className="payment-content__card">
-            <div className="payment-title">Nạp thẻ cào</div>
+            <div className="title">Nạp thẻ cào</div>
             <Form className="payment-content__infor">
                 <div className="payment-content__infor__item">
                     <span>Nhà mạng</span>

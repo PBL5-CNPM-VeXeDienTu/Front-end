@@ -25,7 +25,7 @@ function EditProfile() {
 
     return (
         <div className="edit-profile-content">
-            <div className="edit-profile-content__title">Profile</div>
+            <div className="title">Profile</div>
             <Form
                 name="editprofile"
                 className="edit-profile-content__sub"

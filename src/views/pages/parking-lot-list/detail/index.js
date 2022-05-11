@@ -10,8 +10,8 @@ function DetailParkingLot() {
         'public/images/avatars/parking-lot/default-avatar.png'
     return (
         <div className="detail-parking-lot-content">
-            <div className="detail-parking-lot-content__title">
-                <span>Thông tin nhà xe</span>
+            <div className="title">
+                <span>Thông tin bãi đỗ xe</span>
                 <Link
                     to="/parking-lots/edit"
                     className="detail-parking-lot-content__button-edit"
@@ -52,6 +52,14 @@ function DetailParkingLot() {
                         <span>
                             Khu A đại học Bách Khoa , Đường Nguyễn Lương Bằng ,
                             Phường Hòa Khánh Bắc , Liên Chiều
+                        </span>
+                    </div>
+                    <div>
+                        <span className="properties">Gói ưu đãi </span>
+                        <span>
+                            <Link to="/packages">
+                                <button>Xem gói ưu đãi</button>
+                            </Link>
                         </span>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown } from 'antd'
-import { FilterOutlined } from '@ant-design/icons'
+import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import './package-list.scss'
 
@@ -120,8 +120,8 @@ function Packages() {
             parking_lot_name: 'Bãi đỗ xe Bách Khoa',
             package_type: 'Gói quý',
             vehicle_type: 'Xe máy',
-            date_start: new Date('4-1-2022').toLocaleDateString("en-GB"),
-            date_end: new Date('5-1-2022').toLocaleDateString("en-GB"),
+            date_start: new Date('4-1-2022').toLocaleDateString('en-GB'),
+            date_end: new Date('5-1-2022').toLocaleDateString('en-GB'),
             price: 120000,
         })
         dataUser.push({
@@ -130,8 +130,8 @@ function Packages() {
             parking_lot_name: 'Bãi đỗ xe Bách Khoa',
             package_type: 'Gói quý',
             vehicle_type: 'Xe máy',
-            date_start: new Date('5-1-2022').toLocaleDateString("en-GB"),
-            date_end: new Date('6-1-2022').toLocaleDateString("en-GB"),
+            date_start: new Date('5-1-2022').toLocaleDateString('en-GB'),
+            date_end: new Date('6-1-2022').toLocaleDateString('en-GB'),
             price: 120000,
         })
     }
@@ -189,18 +189,17 @@ function Packages() {
                         : 'package-list-content-unactive'
                 }
             >
+                <div className="title">Danh sách gói ưu đãi</div>
                 <div className="package-list-content__swap-page">
-                    <button className="button-active">Của tôi</button>
+                    <button className="button-active">Tất cả</button>
                     <button
                         className="button-unactive"
                         onClick={(e) => setSwapPage(false)}
                     >
-                        Tất cả
+                        Của tôi
                     </button>
                 </div>
-                <div className="package-list-content__title">
-                    Gói ưu đãi đã đăng ký
-                </div>
+
                 <div className="package-list-content__action">
                     <div className="package-list-content__action__select">
                         <span>Hiển thị </span>
@@ -237,6 +236,7 @@ function Packages() {
                             allowClear
                             suffix
                         />
+                        <SearchOutlined className="package-list-content__action__search__icon" />
                     </div>
                 </div>
 
@@ -247,7 +247,8 @@ function Packages() {
                         dataSource={dataUser}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
-                            moment(record.date_end, "DD/MM/YYYY").toDate() > dateNow
+                            moment(record.date_end, 'DD/MM/YYYY').toDate() >
+                            dateNow
                                 ? 'package-list-content__sub__table__row-green'
                                 : 'package-list-content__sub__table__row-gray'
                         }
@@ -267,17 +268,15 @@ function Packages() {
                         : 'package-list-content'
                 }
             >
+                <div className="title">Danh sách gói ưu đãi</div>
                 <div className="package-list-content__swap-page">
                     <button
                         className="button-unactive"
                         onClick={(e) => setSwapPage(true)}
                     >
-                        Của tôi
+                        Tất cả
                     </button>
-                    <button className="button-active">Tất cả</button>
-                </div>
-                <div className="package-list-content__title">
-                    Tất cả gói ưu đãi
+                    <button className="button-active">Của tôi</button>
                 </div>
                 <div className="package-list-content__action">
                     <div className="package-list-content__action__select">

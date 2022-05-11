@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown } from 'antd'
-import { FilterOutlined } from '@ant-design/icons'
+import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import './parking-history-list.scss'
 
@@ -165,7 +165,7 @@ function ParkingHistories() {
 
     return (
         <div className="history-list-content">
-            <div className="history-list-content__title">Lịch sử gửi xe</div>
+            <div className="title">Lịch sử gửi xe</div>
             <div className="history-list-content__action">
                 <div className="history-list-content__action__select">
                     <span>Hiển thị </span>
@@ -202,6 +202,7 @@ function ParkingHistories() {
                         allowClear
                         suffix
                     />
+                    <SearchOutlined className="history-list-content__action__search__icon" />
                 </div>
             </div>
 

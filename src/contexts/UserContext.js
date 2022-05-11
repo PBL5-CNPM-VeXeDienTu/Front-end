@@ -5,7 +5,7 @@ import auth from 'api/auth'
 
 const UserContext = createContext({})
 
-export const roles ={
+export const roles = {
     BASIC_USER: 1,
     PARKING_LOT_USER: 2,
     ADMIN: 3,

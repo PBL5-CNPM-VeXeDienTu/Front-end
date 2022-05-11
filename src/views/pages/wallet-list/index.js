@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, DatePicker, Menu, Dropdown } from 'antd'
 import { Link } from 'react-router-dom'
-import { FilterOutlined, PlusCircleOutlined } from '@ant-design/icons'
-
+import {
+    FilterOutlined,
+    PlusCircleOutlined,
+    SearchOutlined,
+} from '@ant-design/icons'
 import './wallet-list.scss'
 
 const { Search } = Input
@@ -156,85 +159,77 @@ function Wallets() {
     }
 
     return (
-        <div className="wallet-list">
-            <div className="wallet-list__content">
-                <div className="wallet-list__content__title">
-                    <span>Ví cá nhân</span>
+        <div className="wallet-list-content">
+            <div className="title">
+                <span>Ví cá nhân</span>
+            </div>
+            <div className="wallet-list-content__balance">
+                <div className="wallet-list-content__balance__title">
+                    Số dư khả dụng: 5000000 VND
                 </div>
-                <div className="wallet-list__content__balance">
-                    <div className="wallet-list__content__balance__title">
-                        Số dư khả dụng : 5000000 VND
-                    </div>
-                    {/* <Link to="/wallets/payment">
-                            <button>Nạp tiền qua thẻ cào</button>
-                    </Link> */}
-                    <Link
-                        to="/wallets/payment"
-                        className="wallet-list__content__balance__btn"
-                    >
-                        <PlusCircleOutlined className="wallet-list__content__balance__btn__icon" />
-                        <span className="wallet-list__content__balance__btn__char">
-                            Nạp tiền qua thẻ cào
-                        </span>
-                    </Link>
+                <Link
+                    to="/wallets/payment"
+                    className="wallet-list-content__balance__btn"
+                >
+                    <PlusCircleOutlined className="wallet-list-content__balance__btn__icon" />
+                    <span className="wallet-list-content__balance__btn__char">
+                        Nạp tiền
+                    </span>
+                </Link>
+            </div>
+            <div className="wallet-list-content__history">
+                <div className="wallet-list-content__history__title">
+                    Lịch sử thay đổi số dư
                 </div>
-                <div className="wallet-list__content__history">
-                    <div className="wallet-list__content__history__title">
-                        Lịch sử thay đổi số dư :
+                <div className="wallet-list-content__history__action">
+                    <div className="wallet-list-content__history__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: page }}
+                            onChange={(e) => setPage(e.target.value)}
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
                     </div>
-                    <div className="wallet-list__content__history__action">
-                        <div className="wallet-list__content__history__action__select">
-                            <span>Hiển thị</span>
-                            <select
-                                defaultValue={{ value: page }}
-                                onChange={(e) => setPage(e.target.value)}
-                            >
-                                {numOfItem.map((numOfItem, index) => {
-                                    return (
-                                        <option key={index} value={numOfItem}>
-                                            {numOfItem}
-                                        </option>
-                                    )
-                                })}
-                            </select>
-                        </div>
-                        <div className="wallet-list__content__history__action__search">
-                            <Dropdown
-                                overlay={menu}
-                                trigger="click"
-                                placement="bottom"
-                            >
-                                <div
-                                    className={
-                                        activeFilter
-                                            ? 'wallet-list__content__history__action__search__filter-active'
-                                            : 'wallet-list__content__history__action__search__filter-unactive'
-                                    }
-                                >
-                                    <FilterOutlined />
-                                </div>
-                            </Dropdown>
-                            <Search
-                                className="search-box"
-                                placeholder="Tìm kiếm"
-                                onSearch={onSearch}
-                                allowClear
-                                suffix
-                            />
-                        </div>
-                    </div>
-                    <div className="wallet-list__content__history__table">
-                        <Table
-                            columns={columns}
-                            dataSource={data}
-                            pagination={state.pagination}
-                            rowClassName={(record, index) =>
-                                record.money >= 0
-                                    ? 'wallet-list__content__history__table__row-green'
-                                    : 'wallet-list__content__history__table__row-red'
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                activeFilter
+                                    ? 'wallet-list-content__history__action__filter-active'
+                                    : 'wallet-list-content__history__action__filter-unactive'
                             }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
+                    <div className="wallet-list-content__history__action__search">
+                        <Search
+                            className="search-box"
+                            placeholder="Tìm kiếm"
+                            onSearch={onSearch}
+                            allowClear
+                            suffix
                         />
+                        <SearchOutlined className="wallet-list-content__history__action__search__icon" />
                     </div>
+                </div>
+                <div className="wallet-list-content__history__table">
+                    <Table
+                        columns={columns}
+                        dataSource={data}
+                        pagination={state.pagination}
+                        rowClassName={(record, index) =>
+                            record.money >= 0
+                                ? 'wallet-list-content__history__table__row-green'
+                                : 'wallet-list-content__history__table__row-red'
+                        }
+                    />
                 </div>
             </div>
         </div>
