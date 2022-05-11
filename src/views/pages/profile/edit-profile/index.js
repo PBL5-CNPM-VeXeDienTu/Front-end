@@ -11,7 +11,6 @@ import './edit-profile.scss'
 function EditProfile() {
     const { user } = useAuth()
     const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
-    const gender = user.gender ? 1 : 0
     const navigate = useNavigate()
 
     const handleSubmit = async (values) => {
@@ -88,7 +87,9 @@ function EditProfile() {
                     <div className="edit-profile-content__sub__info__item">
                         <span className="span">Giới tính</span>
                         <Form.Item name="gender">
-                            <Radio.Group defaultValue={gender}>
+                            <Radio.Group
+                                defaultValue={user.UserInfo?.gender ? 1 : 0}
+                            >
                                 <Radio value={1}>Nam</Radio>
                                 <Radio value={0}>Nữ</Radio>
                             </Radio.Group>
@@ -109,7 +110,7 @@ function EditProfile() {
                             <DatePicker
                                 size="medium"
                                 defaultValue={moment(
-                                    user.birthday,
+                                    user.UserInfo?.birthday,
                                     'YYYY/MM/DD',
                                 )}
                                 format="DD/MM/YYYY"
@@ -121,7 +122,7 @@ function EditProfile() {
                         <span className="span">Địa chỉ</span>
                         <Form.Item
                             name="address"
-                            initialValue={user.address}
+                            initialValue={user.UserInfo?.address}
                             rules={[
                                 {
                                     required: true,
@@ -141,7 +142,7 @@ function EditProfile() {
                         <span className="span">Số điện thoại</span>
                         <Form.Item
                             name="phone_number"
-                            initialValue={user.phone_number}
+                            initialValue={user.UserInfo?.phone_number}
                             rules={[
                                 {
                                     required: true,

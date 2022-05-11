@@ -52,6 +52,8 @@ const Payment = loadableComponent(() =>
 
 const QrCheckout = loadableComponent(() => import('views/pages/qr-checkout'))
 
+const Packages = loadableComponent(() => import('views/pages/package-list'))
+
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -97,6 +99,10 @@ function AllRoutes() {
                     element={<MainLayout component={ParkingLots} />}
                 />
                 <Route
+                    path="/parking-lots/add"
+                    element={<MainLayout component={AddParkingLot} />}
+                />
+                <Route
                     path="/parking-lots/detail"
                     element={<MainLayout component={DetailParkingLot} />}
                 />
@@ -105,16 +111,12 @@ function AllRoutes() {
                     element={<MainLayout component={EditParkingLot} />}
                 />
                 <Route
-                    path="/parking-lots/add"
-                    element={<MainLayout component={AddParkingLot} />}
+                    path="/feedbacks"
+                    element={<MainLayout component={Feedbacks} />}
                 />
                 <Route
                     path="/feedbacks/add"
                     element={<MainLayout component={AddFeedback} />}
-                />
-                <Route
-                    path="/feedbacks"
-                    element={<MainLayout component={Feedbacks} />}
                 />
                 <Route
                     path="/qr-checkout"
@@ -131,6 +133,10 @@ function AllRoutes() {
                 <Route
                     path="/wallets/payment"
                     element={<MainLayout component={Payment} />}
+                />
+                <Route
+                    path="/packages"
+                    element={<MainLayout component={Packages} />}
                 />
             </Route>
         </Routes>

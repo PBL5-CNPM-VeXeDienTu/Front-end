@@ -84,7 +84,7 @@ const RenderMenu = () => {
                         key="3"
                         icon={<GiftOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/packages">
                             Các gói ưu đãi
                         </Link>
                     </Menu.Item>
