@@ -11,7 +11,7 @@ function AddParkingLot() {
         'public/images/avatars/parking-lot/default-avatar.png'
     return (
         <div className="add-parking-lot-content">
-            <div className="add-parking-lot-content__title">Thêm nhà xe</div>
+            <div className="title">Thêm bãi đỗ xe</div>
             <Form
                 name="addprofile"
                 className="add-parking-lot-content__sub"

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import './qr-checkout.scss'
+import React from 'react'
 import QR from 'components/qr-code/index'
+
+import './qr-checkout.scss'
 
 function QrCheckout() {
     const avatarURL =
@@ -30,14 +31,11 @@ function QrCheckout() {
                 className="qr-checkout-container__content__sub"
                 key={QRList.id}
             >
-                <div className="qr-checkout-container__content__sub__title">
-                    <span>QR Checkout</span>
-                </div>
                 <div className="qr-checkout-container__content__item">
                     <div className="qr-checkout-container__content__item__info">
                         <div>
                             <span className="properties">Hình ảnh xe</span>
-                            <img src={avatarURL} />
+                            <img src={avatarURL} alt=""/>
                         </div>
                         <div>
                             <span className="properties">Tên bãi đang đỗ</span>

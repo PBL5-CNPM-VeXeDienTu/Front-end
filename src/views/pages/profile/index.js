@@ -25,7 +25,7 @@ function Profile() {
 
     return (
         <div className="profile-content">
-            <div className="profile-content__title">
+            <div className="title">
                 <span>Profile</span>
                 <Link
                     to="/profile/edit"

@@ -15,7 +15,7 @@ function AddVehicle() {
         process.env.REACT_APP_API_URL + 'public/images/cavet/default.png'
     return (
         <div className="add-vehicle-content">
-            <div className="add-vehicle-content__title">Đăng kí xe</div>
+            <div className="title">Đăng kí xe</div>
             <Form className="add-vehicle-content__sub">
                 <div className="add-vehicle-content__sub__vehicle">
                     <div className="add-vehicle-content__sub__vehicle__image">

@@ -42,7 +42,7 @@ function AddFeedback() {
     }
     return (
         <div className="add-feedback-content">
-            <div className="add-feedback-content__title">Thêm feedback</div>
+            <div className="title">Thêm feedback</div>
             <Form
                 name="addprofile"
                 className="add-feedback-content__sub"

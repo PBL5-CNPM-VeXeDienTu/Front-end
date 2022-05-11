@@ -6,7 +6,9 @@ import {
     EditOutlined,
     CloseOutlined,
 } from '@ant-design/icons'
+
 import './vehicle-list.scss'
+
 function Vehicles() {
     const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -31,8 +33,8 @@ function Vehicles() {
             <div className="vehicles-list-container__button-add">
                 <Link to="/vehicles/add">
                     <button>
-                        Đăng ký
                         <PlusCircleOutlined className="icon" />
+                        Đăng ký
                     </button>
                 </Link>
             </div>
@@ -42,6 +44,7 @@ function Vehicles() {
                         <img
                             className="vehicles-list-container__content__item__image"
                             src={avatarURL}
+                            alt=""
                         />
                         <div className="vehicles-list-container__content__item__info">
                             <div>
@@ -99,6 +102,7 @@ function Vehicles() {
                         <img
                             className="vehicles-list-container__content__item__image"
                             src={avatarURL}
+                            alt=""
                         />
                         <div className="vehicles-list-container__content__item__info">
                             <div>
@@ -154,6 +158,7 @@ function Vehicles() {
                         <img
                             className="vehicles-list-container__content__item__image"
                             src={avatarURL}
+                            alt=""
                         />
                         <div className="vehicles-list-container__content__item__info">
                             <div>
@@ -202,7 +207,7 @@ function Vehicles() {
                         onOk={handleOk}
                         onCancel={handleCancel}
                     >
-                        <p>Bạn có chắn chắn muốn hủy đăng ký xe hay không ?</p>
+                        <p>Bạn có chắn chắn muốn hủy đăng ký xe hay không?</p>
                     </Modal>
                 </div>
             </div>
