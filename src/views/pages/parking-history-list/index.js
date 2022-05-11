@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown } from 'antd'
 import { FilterOutlined } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
 import './parking-history-list.scss'
 
 const { Search } = Input
@@ -39,19 +40,11 @@ const columns = [
 ]
 
 function ParkingHistories() {
+    const { user } = useAuth()
     const [page, setPage] = useState(10)
     const [historyType, setHistoryType] = useState('All')
     const [vehicleState, setVehicleState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [wallet, setWallet] = useState({
-        key: 0,
-        license_plates: '',
-        parking_lot_name: '',
-        checkin_time: '',
-        checkout_time: '',
-        status: '',
-        cost: 0,
-    })
 
     const state = {
         pagination: {
@@ -73,27 +66,47 @@ function ParkingHistories() {
 
     const vehicleStateOfItem = ['All', 'Đang đỗ', 'Không đỗ']
     const historyTypeOfItem = ['All', 'Biển số xe', 'Tên bãi đỗ xe']
-
     const data = []
-    for (let i = 0; i < page / 2; i++) {
-        data.push({
-            key: i,
-            license_plates: '29C99999',
-            parking_lot_name: 'Phu',
-            checkin_time: '7h30',
-            checkout_time: '14h30',
-            status: 'Đang đỗ',
-            cost: '2000',
-        })
-        data.push({
-            key: i + 1,
-            license_plates: '29C99999',
-            parking_lot_name: 'Phu',
-            checkin_time: '7h30',
-            checkout_time: '14h30',
-            status: 'Không đỗ',
-            cost: '2000',
-        })
+    if (user.role == 1) {
+        for (let i = 0; i < page / 2; i++) {
+            data.push({
+                key: i,
+                license_plates: '29C99999',
+                parking_lot_name: i,
+                checkin_time: '7h30',
+                checkout_time: '14h30',
+                status: 'Đang đỗ',
+                cost: '2000',
+            })
+            data.push({
+                key: i + 1,
+                license_plates: '29C99999',
+                parking_lot_name: i,
+                checkin_time: '7h30',
+                status: 'Không đỗ',
+                cost: '2000',
+            })
+        }
+    } else if (user.role == 2) {
+        for (let i = 0; i < page / 2; i++) {
+            data.push({
+                key: i,
+                license_plates: '29C99999',
+                parking_lot_name: 'Phu',
+                checkin_time: '8h30',
+                status: 'Đang đỗ',
+                cost: '2000',
+            })
+            data.push({
+                key: i + 1,
+                license_plates: '29C99999',
+                parking_lot_name: 'Phu',
+                checkin_time: '7h30',
+                checkout_time: '14h30',
+                status: 'Không đỗ',
+                cost: '2000',
+            })
+        }
     }
 
     const menu = () => {
