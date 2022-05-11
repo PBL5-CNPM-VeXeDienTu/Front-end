@@ -8,12 +8,13 @@
     position: fixed;
     background: #fff;
     flex: 1;
-    transition: 0.5s;
+    transition: 0.1s;
     &__logo {
         height: 7vh;
         z-index: 1;
         padding: 4px 10px 4px 10px;
-        box-shadow: 0 0 0 1px rgba($color: #555, $alpha: 0.3);
+        box-shadow: 0 0 8px 0px rgba($color: rgb(0, 0, 0), $alpha: 0.3);
+        padding: 9px 10px;
     }
     &__link {
         font-size: medium;

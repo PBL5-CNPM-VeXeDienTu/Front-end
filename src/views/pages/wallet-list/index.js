@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Table, Input, DatePicker, Menu, Dropdown } from 'antd'
 import { Link } from 'react-router-dom'
 import { FilterOutlined, PlusCircleOutlined } from '@ant-design/icons'
+
 import './wallet-list.scss'
+
 const { Search } = Input
 const numOfItem = [10, 15, 25]
 const columns = [
