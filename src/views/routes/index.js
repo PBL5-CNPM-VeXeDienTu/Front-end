@@ -54,6 +54,8 @@ const QrCheckout = loadableComponent(() => import('views/pages/qr-checkout'))
 
 const Packages = loadableComponent(() => import('views/pages/package-list'))
 
+const Accounts = loadableComponent(() => import('views/pages/account-list'))
+
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -137,6 +139,10 @@ function AllRoutes() {
                 <Route
                     path="/packages"
                     element={<MainLayout component={Packages} />}
+                />
+                <Route
+                    path="/accounts"
+                    element={<MainLayout component={Accounts} />}
                 />
             </Route>
         </Routes>

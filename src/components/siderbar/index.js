@@ -40,7 +40,7 @@ const RenderMenu = () => {
         //     setRedirectUrl(url);
         // }
     }
- 
+
     return user.role === roles.BASIC_USER ? (
         // ------------------- BASIC USER -----------------------
         <Layout className="layout-container">
@@ -263,7 +263,7 @@ const RenderMenu = () => {
                         key="1"
                         icon={<HomeOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/accounts">
                             Quản lí tài khoản user
                         </Link>
                     </Menu.Item>
