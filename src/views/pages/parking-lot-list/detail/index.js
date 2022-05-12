@@ -2,19 +2,26 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Form } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
+import { roles } from 'contexts/UserContext'
 import './detail-parking-lot.scss'
 
 function DetailParkingLot() {
     const avatarURL =
         process.env.REACT_APP_API_URL +
         'public/images/avatars/parking-lot/default-avatar.png'
+    const { user } = useAuth()
     return (
         <div className="detail-parking-lot-content">
             <div className="title">
                 <span>Thông tin bãi đỗ xe</span>
                 <Link
                     to="/parking-lots/edit"
-                    className="detail-parking-lot-content__button-edit"
+                    className={
+                        user.role === roles.BASIC_USER
+                            ? 'detail-parking-lot-content__button-edit-unactive'
+                            : 'detail-parking-lot-content__button-edit-active'
+                    }
                 >
                     <EditOutlined />
                 </Link>
