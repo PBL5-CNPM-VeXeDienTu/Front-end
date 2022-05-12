@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Menu, Dropdown } from 'antd'
+import { Table, Input, Menu, Dropdown, Modal } from 'antd'
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import './package-list.scss'
@@ -83,6 +83,24 @@ function Packages() {
     const [packageType, setPackageType] = useState('All')
     const [vehicleType, setVehicleType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(false)
+
+    const [packageItem, setPackageItem] = useState({
+        name: '',
+        parking_lot_name: '',
+        package_type: '',
+        vehicle_type: '',
+        price: '',
+    })
+
+    const handleCancel = () => {
+        setIsModalVisible(false)
+    }
+
+    const onClickPackageItem = (record) => {
+        setIsModalVisible(true)
+        setPackageItem(record)
+    }
 
     const state = {
         pagination: {
@@ -243,21 +261,57 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsUser}
-                        dataSource={dataUser}
+                        columns={columnsAll}
+                        dataSource={dataAll}
                         pagination={state.pagination}
-                        rowClassName={(record, index) =>
-                            moment(record.date_end, 'DD/MM/YYYY').toDate() >
-                            dateNow
-                                ? 'package-list-content__sub__table__row-green'
-                                : 'package-list-content__sub__table__row-gray'
-                        }
                         onRow={(record, rowIndex) => {
                             return {
-                                onClick: () => {},
+                                onClick: () => {
+                                    onClickPackageItem(record)
+                                },
                             }
                         }}
                     />
+                    <Modal
+                        className="package-list-modal"
+                        visible={isModalVisible}
+                        onCancel={handleCancel}
+                        footer={null}
+                    >
+                        <h1 className="h1">Thông tin gói ưu đãi</h1>
+                        <div className="div">
+                            <span className="span1">Tên gói ưu đãi</span>
+                            <span className="span2">{packageItem.name}</span>
+                        </div>
+                        <div className="div">
+                            <span className="span1">tên bãi đỗ xe</span>
+                            <span className="span2">
+                                {packageItem.parking_lot_name}
+                            </span>
+                        </div>
+                        <div className="div">
+                            <span className="span1">Loại gói ưu đãi</span>
+                            <span className="span2">
+                                {packageItem.package_type}
+                            </span>
+                        </div>
+                        <div className="div">
+                            <span className="span1">Phương tiện</span>
+                            <span className="span2">
+                                {packageItem.vehicle_type}
+                            </span>
+                        </div>
+                        <div className="div">
+                            <span className="span1">Giá</span>
+                            <span className="span2">
+                                {packageItem.price} VND
+                            </span>
+                        </div>
+                        <div className="button">
+                            <button className="button__cancel">Hủy</button>
+                            <button className="button__ok">Đăng ký</button>
+                        </div>
+                    </Modal>
                 </div>
             </div>
 
@@ -314,15 +368,22 @@ function Packages() {
                             allowClear
                             suffix
                         />
+                        <SearchOutlined className="package-list-content__action__search__icon" />
                     </div>
                 </div>
 
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsAll}
-                        dataSource={dataAll}
+                        columns={columnsUser}
+                        dataSource={dataUser}
                         pagination={state.pagination}
+                        rowClassName={(record, index) =>
+                            moment(record.date_end, 'DD/MM/YYYY').toDate() >
+                            dateNow
+                                ? 'package-list-content__sub__table__row-green'
+                                : 'package-list-content__sub__table__row-gray'
+                        }
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {},

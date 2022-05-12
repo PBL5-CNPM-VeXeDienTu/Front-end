@@ -57,8 +57,7 @@
             }
         }
         &__button {
-            margin: 5% auto;
-
+            margin: 7% auto;
             button {
                 margin: 0 20px;
                 width: 7vw;
@@ -68,16 +67,17 @@
                 color: #000;
                 font-size: 1.1rem;
                 text-align: center;
+                cursor: pointer;
             }
 
             .button-cancel {
-                background-color: #ff8080;
+                background-color: #c0c0c0;
             }
 
             .button-cancel:hover {
-                background-color: red;
+                box-shadow: 0 0 5px #777;
+                background-color: #777;
                 color: #fff;
-                cursor: pointer;
             }
 
             .button-save {
@@ -85,8 +85,8 @@
             }
 
             .button-save:hover {
+                box-shadow: 0 0 5px #41bc3f;
                 background-color: #41bc3f;
-                cursor: pointer;
             }
         }
     }

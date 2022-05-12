@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Menu, Dropdown, Space ,Modal} from 'antd'
+import { Table, Input, Menu, Dropdown, Space, Modal } from 'antd'
 import {
     FilterOutlined,
     SearchOutlined,

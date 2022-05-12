@@ -12,7 +12,10 @@
     border-radius: 20px;
     background-color: #fff;
 
-    &__button-edit {
+    &__button-edit-unactive {
+        display: none;
+    }
+    &__button-edit-active {
         font-size: 30px;
         position: absolute;
         right: 6%;

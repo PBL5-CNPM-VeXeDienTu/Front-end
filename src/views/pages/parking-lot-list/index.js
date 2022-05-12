@@ -86,9 +86,7 @@ function ParkingLots() {
     return user.role === roles.BASIC_USER ? (
         //--------------------------------Basic User--------------------------------------
         <div className="parking-lot-list-content">
-            <div className="title">
-                Danh sách bãi đỗ xe
-            </div>
+            <div className="title">Danh sách bãi đỗ xe</div>
             <div className="parking-lot-list-content__action">
                 <div className="parking-lot-list-content__action__select">
                     <span>Hiển thị </span>
@@ -186,6 +184,7 @@ function ParkingLots() {
                         <img
                             className="parking-lot-list-container__content__item__image"
                             src={avatarURL}
+                            alt=""
                         />
                         <div className="parking-lot-list-container__content__item__info">
                             <div>
@@ -223,7 +222,7 @@ function ParkingLots() {
                     </div>
                     <div className="parking-lot-list-container__content__icon">
                         <Link to="/parking-lots/edit">
-                            <span className="edit-vehicle">
+                            <span className="edit-parking-lot">
                                 <EditOutlined />
                             </span>
                         </Link>
@@ -250,6 +249,7 @@ function ParkingLots() {
                         <img
                             className="parking-lot-list-container__content__item__image"
                             src={avatarURL}
+                            alt=""
                         />
                         <div className="parking-lot-list-container__content__item__info">
                             <div>
@@ -287,7 +287,7 @@ function ParkingLots() {
                     </div>
                     <div className="parking-lot-list-container__content__icon">
                         <Link to="/parking-lots/edit">
-                            <span className="edit-vehicle">
+                            <span className="edit-parking-lot">
                                 <EditOutlined />
                             </span>
                         </Link>

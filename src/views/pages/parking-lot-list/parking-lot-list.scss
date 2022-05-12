@@ -284,16 +284,18 @@
                 font-size: 20px;
                 margin: 5px;
             }
-
-            .delete-vehicle:hover {
+            .delete-parking-lot {
+                color: 555;
+            }
+            .delete-parking-lot:hover {
                 color: red;
             }
 
-            .edit-vehicle {
+            .edit-parking-lot {
                 color: #555;
             }
 
-            .edit-vehicle:hover {
+            .edit-parking-lot:hover {
                 color: #41bc3f;
             }
         }
