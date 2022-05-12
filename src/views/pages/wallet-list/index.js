@@ -75,7 +75,7 @@ function Wallets() {
             type: `Nạp tiền qua thẻ cào ${i}`,
             time: `25/4/2021 7:12`,
             begin: 200000,
-            money: 100000,
+            money: `+100000`,
             after: 300000,
         })
         data.push({

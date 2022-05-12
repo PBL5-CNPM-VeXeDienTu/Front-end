@@ -10,9 +10,13 @@ function MainLayout(props) {
     const { collapsed } = useAuth()
 
     return (
-        <div className='body-wrapper'>
-            <div className='content-wrapper'>
-                <Layout className={collapsed ? 'main-layout collapsed' : 'main-layout'}>
+        <div className="body-wrapper">
+            <div className="content-wrapper">
+                <Layout
+                    className={
+                        collapsed ? 'main-layout collapsed' : 'main-layout'
+                    }
+                >
                     <SiderBar className="main-layout__siderbar" />
                     <Layout className="main-layout__content">
                         <Header className="main-layout__content__header" />

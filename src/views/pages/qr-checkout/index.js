@@ -35,7 +35,7 @@ function QrCheckout() {
                     <div className="qr-checkout-container__content__item__info">
                         <div>
                             <span className="properties">Hình ảnh xe</span>
-                            <img src={avatarURL} alt=""/>
+                            <img src={avatarURL} alt="" />
                         </div>
                         <div>
                             <span className="properties">Tên bãi đang đỗ</span>

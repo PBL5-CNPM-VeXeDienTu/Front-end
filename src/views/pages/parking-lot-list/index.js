@@ -5,12 +5,11 @@ import {
     PlusCircleOutlined,
     EditOutlined,
     CloseOutlined,
-    SearchOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
+import { roles } from 'contexts/UserContext'
 
 import './parking-lot-list.scss'
-import { roles } from 'contexts/UserContext'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
@@ -87,7 +86,9 @@ function ParkingLots() {
     return user.role === roles.BASIC_USER ? (
         //--------------------------------Basic User--------------------------------------
         <div className="parking-lot-list-content">
-            <div className="title">Danh sách bãi đỗ xe</div>
+            <div className="title">
+                Danh sách bãi đỗ xe
+            </div>
             <div className="parking-lot-list-content__action">
                 <div className="parking-lot-list-content__action__select">
                     <span>Hiển thị </span>
@@ -146,7 +147,6 @@ function ParkingLots() {
                         allowClear
                         suffix
                     />
-                    <SearchOutlined className="parking-lot-list-content__action__search__icon" />
                 </div>
             </div>
 
