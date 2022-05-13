@@ -96,7 +96,13 @@ const RenderMenu = () => {
                         key="4"
                         icon={<WalletOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="/wallets">
+                        <Link 
+                            className="sider-bar__link" 
+                            to={user.role === roles.ADMIN 
+                                ? "/wallets"
+                                : "/wallets/detail"
+                            }
+                        >
                             Ví cá nhân
                         </Link>
                     </Menu.Item>
@@ -192,7 +198,13 @@ const RenderMenu = () => {
                         key="4"
                         icon={<WalletOutlined className="menu-item-icon" />}
                     >
-                        <Link className="sider-bar__link" to="/wallets">
+                        <Link 
+                            className="sider-bar__link" 
+                            to={user.role === roles.ADMIN 
+                                ? "/wallets"
+                                : "/wallets/detail"
+                            }
+                        >
                             Ví cá nhân
                         </Link>
                     </Menu.Item>

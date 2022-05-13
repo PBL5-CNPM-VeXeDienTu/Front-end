@@ -13,7 +13,7 @@ import './package-list.scss'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
-const columnsUser = [
+const columnsBasicUser = [
     {
         title: 'Tên gói ưu đãi',
         dataIndex: 'name',
@@ -51,7 +51,7 @@ const columnsUser = [
     },
 ]
 
-const columnsAll = [
+const columnsParkingLot = [
     {
         title: 'Tên gói ưu đãi',
         dataIndex: 'name',
@@ -91,7 +91,8 @@ function Packages() {
     const [packageType, setPackageType] = useState('All')
     const [vehicleType, setVehicleType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [modalAll, setModlAll] = useState(false)
+    const [modalParkingLot, setModalParkingLot] = useState(false)
 
     const [packageItem, setPackageItem] = useState({
         name: '',
@@ -102,11 +103,17 @@ function Packages() {
     })
 
     const handleCancel = () => {
-        setIsModalVisible(false)
+        setModlAll(false)
+        setModalParkingLot(false)
     }
 
-    const onClickPackageItem = (record) => {
-        setIsModalVisible(true)
+    const showModalAll = (record) => {
+        setModlAll(true)
+        setPackageItem(record)
+    }
+
+    const showModalParkingLot = (record) => {
+        setModalParkingLot(true)
         setPackageItem(record)
     }
 
@@ -138,9 +145,29 @@ function Packages() {
         })
     }
 
-    const dataUser = []
+    const dataParkingLot = []
+    for (let i = 0; i < page/2; i++) {
+        dataParkingLot.push({
+            key: i,
+            name: 'Ưu đãi 1000 năm có một',
+            parking_lot_name: 'Bãi đỗ xe Bách Khoa',
+            package_type: 'Gói quý',
+            vehicle_type: 'Xe máy',
+            price: 120000,
+        })
+        dataParkingLot.push({
+            key: i,
+            name: 'Ưu đãi 1000 năm có một',
+            parking_lot_name: 'Bãi đỗ xe Bách Khoa',
+            package_type: 'Gói năm',
+            vehicle_type: 'Xe máy',
+            price: 500000,
+        })
+    }
+
+    const dataBasicUser = []
     for (let i = 0; i < page / 2; i++) {
-        dataUser.push({
+        dataBasicUser.push({
             key: i,
             name: 'Ưu đãi 1000 năm có một',
             parking_lot_name: 'Bãi đỗ xe Bách Khoa',
@@ -150,7 +177,7 @@ function Packages() {
             date_end: new Date('5-1-2022').toLocaleDateString('en-GB'),
             price: 120000,
         })
-        dataUser.push({
+        dataBasicUser.push({
             key: i,
             name: 'Ưu đãi 1000 năm có một',
             parking_lot_name: 'Bãi đỗ xe Bách Khoa',
@@ -270,7 +297,7 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsAll}
+                        columns={columnsParkingLot}
                         dataSource={dataAll}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
@@ -281,14 +308,16 @@ function Packages() {
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    onClickPackageItem(record)
+                                    user.role === roles.BASIC_USER
+                                        ? showModalAll(record)
+                                        : handleCancel()
                                 },
                             }
                         }}
                     />
                     <Modal
                         className="package-list-modal"
-                        visible={isModalVisible}
+                        visible={modalAll}
                         onCancel={handleCancel}
                         footer={null}
                     >
@@ -322,7 +351,7 @@ function Packages() {
                             </span>
                         </div>
                         <div className="button">
-                            <button className="button__cancel">Hủy</button>
+                            <button className="button__cancel" onClick={(e) => setModlAll(false)}>Thoát</button>
                             <button className="button__ok">Đăng ký</button>
                         </div>
                     </Modal>
@@ -388,7 +417,7 @@ function Packages() {
                     </div>
                     <Link
                         className="package-list-content__action__add"
-                        to="/feedbacks/add"
+                        to="/packages/add"
                     >
                         <PlusCircleOutlined className="package-list-content__action__add__icon" />
                         <span>Thêm gói ưu đãi</span>
@@ -398,21 +427,21 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsAll}
-                        dataSource={dataAll}
+                        columns={columnsParkingLot}
+                        dataSource={dataParkingLot}
                         pagination={state.pagination}
                         rowClassName="package-list-content__sub__table__row-action"
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    onClickPackageItem(record)
+                                    showModalParkingLot(record)
                                 },
                             }
                         }}
                     />
                     <Modal
                         className="package-list-modal"
-                        visible={isModalVisible}
+                        visible={modalParkingLot}
                         onCancel={handleCancel}
                         footer={null}
                     >
@@ -445,9 +474,17 @@ function Packages() {
                                 {packageItem.price} VND
                             </span>
                         </div>
+                        <div className="div">
+                            <span className="span1">Đang sử dụng</span>
+                            <span className="span2">
+                                1000 Người
+                            </span>
+                        </div>
                         <div className="button">
-                            <button className="button__cancel">Hủy</button>
-                            <button className="button__ok">Đăng ký</button>
+                            <button className="button__cancel" onClick={(e) => setModlAll(false)}>Thoát</button>
+                            <Link to="/packages/edit">
+                                <button className="button__ok"> Chỉnh sửa</button>
+                            </Link>
                         </div>
                     </Modal>
                 </div>
@@ -514,8 +551,8 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsUser}
-                        dataSource={dataUser}
+                        columns={columnsBasicUser}
+                        dataSource={dataBasicUser}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
                             moment(record.date_end, 'DD/MM/YYYY').toDate() >

@@ -40,7 +40,6 @@ const columns = [
 
 function DetailWallet() {
     const [walletType, setWalletType] = useState('All')
-    const [feature, setFeature] = useState('All')
     const [walletState, setWalletState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
     const [page, setPage] = useState(10)
@@ -57,10 +56,10 @@ function DetailWallet() {
     }, [activeFilter])
 
     useEffect(() => {
-        if (walletType === 'All' && feature === 'All' && walletState === 'All')
+        if (walletType === 'All'  && walletState === 'All')
             setActiveFilter(false)
         else setActiveFilter(true)
-    }, [walletType, feature, walletState])
+    }, [walletType, walletState])
 
     const walletTypeOfItem = [
         'All',

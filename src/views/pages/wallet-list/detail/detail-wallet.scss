@@ -172,7 +172,7 @@
     }
 }
 
-.wallet-list-menu {
+.detail-wallet-menu {
     width: 25vw;
     height: fit-content;
     background-color: #fff;
@@ -184,7 +184,7 @@
         &__row {
             height: 5vh;
             display: grid;
-            grid-template-columns: 30% 70%;
+            grid-template-columns: 40% 60%;
             margin-top: 2%;
 
             &__span {

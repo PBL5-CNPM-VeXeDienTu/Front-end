@@ -1,5 +1,6 @@
 const messages = {
     text_required: 'Không được để trống',
+    invalid_number: 'Mời nhập số',
 
     email_required: 'Bạn chưa nhập email',
     invalid_email: 'Email không hợp lệ (VD: ex@gmail.com)',
