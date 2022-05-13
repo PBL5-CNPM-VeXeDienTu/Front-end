@@ -55,7 +55,7 @@
         &__cancel {
             height: 5vh;
             width: 7vw;
-            background-color: #c0c0c0;
+            background-color: #f57665;
             border-radius: 50px;
             margin: auto;
             border: none;
@@ -64,8 +64,7 @@
             font-size: 1.1rem;
         }
         &__cancel:hover {
-            box-shadow: 0 0 5px #777;
-            background-color: #777;
+            background-color: red;
             color: #fff;
         }
         &__Ok {
@@ -78,7 +77,6 @@
             margin-right: 8vw;
         }
         &__Ok:hover {
-            box-shadow: 0 0 5px #41bc3f;
             background-color: #41bc3f;
             color: #fff;
         }
