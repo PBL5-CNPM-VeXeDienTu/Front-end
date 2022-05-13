@@ -56,7 +56,7 @@ function DetailWallet() {
     }, [activeFilter])
 
     useEffect(() => {
-        if (walletType === 'All'  && walletState === 'All')
+        if (walletType === 'All' && walletState === 'All')
             setActiveFilter(false)
         else setActiveFilter(true)
     }, [walletType, walletState])

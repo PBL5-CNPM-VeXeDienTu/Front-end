@@ -2,11 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Input, Button, Select } from 'antd'
 import messages from 'assets/lang/messages'
-import './add-package.scss'
+import './edit-package.scss'
 
 const { Option } = Select
 
-function AddPackage() {
+function EditPackage() {
     const PackageTypes = []
     for (let i = 0; i < 1; i++) {
         PackageTypes.push(
@@ -33,18 +33,19 @@ function AddPackage() {
         vehicleType.push(<Option key={i.toString(36) + i + 2}>Xe ô tô</Option>)
     }
     return (
-        <div className="add-package-content">
-            <div className="title">Thêm gói ưu đãi</div>
+        <div className="edit-package-content">
+            <div className="title">Chỉnh sửa gói ưu đãi</div>
             <Form
-                name="addprofile"
-                className="add-package-content__sub"
+                name="editprofile"
+                className="edit-package-content__sub"
                 // onFinish={handleSubmit}
             >
-                <div className="add-package-content__sub__info">
-                    <div className="add-package-content__sub__info__item">
+                <div className="edit-package-content__sub__info">
+                    <div className="edit-package-content__sub__info__item">
                         <span className="span">Tên gói ưu đãi</span>
                         <Form.Item
                             name="name"
+                            initialValue={'Ưu đãi nghìn năm có một'}
                             rules={[
                                 {
                                     required: true,
@@ -56,10 +57,11 @@ function AddPackage() {
                         </Form.Item>
                     </div>
 
-                    <div className="add-package-content__sub__info__item">
+                    <div className="edit-package-content__sub__info__item">
                         <span className="span">Loại gói ưu đãi</span>
                         <Form.Item
                             name="package_type"
+                            initialValue={'Gói ưu đãi tháng'}
                             rules={[
                                 {
                                     required: true,
@@ -67,14 +69,15 @@ function AddPackage() {
                                 },
                             ]}
                         >
-                            <Select classname="text">{PackageTypes}</Select>
+                            <Select className="textbox">{PackageTypes}</Select>
                         </Form.Item>
                     </div>
 
-                    <div className="add-package-content__sub__info__item">
+                    <div className="edit-package-content__sub__info__item">
                         <span className="span">Phương tiện</span>
                         <Form.Item
                             name="vehicle_type"
+                            initialValue={'Xe máy'}
                             rules={[
                                 {
                                     required: true,
@@ -82,13 +85,14 @@ function AddPackage() {
                                 },
                             ]}
                         >
-                            <Select className="text">{vehicleType}</Select>
+                            <Select className="textbox">{vehicleType}</Select>
                         </Form.Item>
                     </div>
-                    <div className="add-package-content__sub__info__item">
+                    <div className="edit-package-content__sub__info__item">
                         <span className="span">Giá (VND)</span>
                         <Form.Item
                             name="price"
+                            initialValue={'120000'}
                             rules={[
                                 {
                                     required: true,
@@ -104,7 +108,7 @@ function AddPackage() {
                         </Form.Item>
                     </div>
                 </div>
-                <div className="add-package-content__sub__button">
+                <div className="edit-package-content__sub__button">
                     <Button className="button-cancel">
                         <Link to="/packages">Hủy</Link>
                     </Button>
@@ -121,4 +125,4 @@ function AddPackage() {
     )
 }
 
-export default AddPackage
+export default EditPackage

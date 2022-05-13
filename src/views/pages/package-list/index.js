@@ -146,7 +146,7 @@ function Packages() {
     }
 
     const dataParkingLot = []
-    for (let i = 0; i < page/2; i++) {
+    for (let i = 0; i < page / 2; i++) {
         dataParkingLot.push({
             key: i,
             name: 'Ưu đãi 1000 năm có một',
@@ -351,7 +351,12 @@ function Packages() {
                             </span>
                         </div>
                         <div className="button">
-                            <button className="button__cancel" onClick={(e) => setModlAll(false)}>Thoát</button>
+                            <button
+                                className="button__cancel"
+                                onClick={(e) => setModlAll(false)}
+                            >
+                                Thoát
+                            </button>
                             <button className="button__ok">Đăng ký</button>
                         </div>
                     </Modal>
@@ -476,14 +481,20 @@ function Packages() {
                         </div>
                         <div className="div">
                             <span className="span1">Đang sử dụng</span>
-                            <span className="span2">
-                                1000 Người
-                            </span>
+                            <span className="span2">1000 Người</span>
                         </div>
                         <div className="button">
-                            <button className="button__cancel" onClick={(e) => setModlAll(false)}>Thoát</button>
+                            <button
+                                className="button__cancel"
+                                onClick={(e) => setModalParkingLot(false)}
+                            >
+                                Thoát
+                            </button>
                             <Link to="/packages/edit">
-                                <button className="button__ok"> Chỉnh sửa</button>
+                                <button className="button__ok">
+                                    {' '}
+                                    Chỉnh sửa
+                                </button>
                             </Link>
                         </div>
                     </Modal>

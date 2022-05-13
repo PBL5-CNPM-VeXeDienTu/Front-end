@@ -167,9 +167,7 @@ function ParkingLots() {
                 />
             </div>
         </div>
-    ) 
-
-    : //-------------------------------- Parking-lot User ----------------------------------
+    ) : //-------------------------------- Parking-lot User ----------------------------------
     user.role === roles.PARKING_LOT_USER ? (
         <div className="parking-lot-list-container">
             <div className="parking-lot-list-container__button-add">
@@ -312,9 +310,7 @@ function ParkingLots() {
                 </div>
             </div>
         </div>
-    ) 
-    
-    : (
+    ) : (
         //------------------------------------ Admin --------------------------------------
         <div className="parking-lot-list-content">Admin</div>
     )
