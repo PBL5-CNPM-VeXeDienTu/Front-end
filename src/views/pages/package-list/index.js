@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { Table, Input, Menu, Dropdown, Modal } from 'antd'
-import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
+import {
+    FilterOutlined,
+    SearchOutlined,
+    PlusCircleOutlined,
+} from '@ant-design/icons'
 import moment from 'moment'
+import useAuth from 'hooks/useAuth'
+import { roles } from 'contexts/UserContext'
 import './package-list.scss'
 
 const { Search } = Input
@@ -77,9 +84,10 @@ const packageTypeItem = ['All', 'Gói tuần', 'Gói tháng', 'Gói quý']
 const vehicleTypeItem = ['All', 'Xe đạp', 'Xe máy', 'Xe ô tô']
 
 function Packages() {
+    const { user } = useAuth()
     const dateNow = new Date()
     const [page, setPage] = useState(10)
-    const [swapPage, setSwapPage] = useState(true)
+    const [swapPage, setSwapPage] = useState(false)
     const [packageType, setPackageType] = useState('All')
     const [vehicleType, setVehicleType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
@@ -200,25 +208,26 @@ function Packages() {
 
     return (
         <div>
+            {/* ------------------------------------------ TAB TẤT CẢ ------------------------------------------ */}
             <div
                 className={
                     swapPage
-                        ? 'package-list-content'
-                        : 'package-list-content-unactive'
+                        ? 'package-list-content-unactive'
+                        : 'package-list-content'
                 }
             >
-                <div className="title">Danh sách gói ưu đãi</div>
+                <div className="title">Tất cả gói ưu đãi</div>
                 <div className="package-list-content__swap-page">
                     <button className="button-active">Tất cả</button>
                     <button
                         className="button-unactive"
-                        onClick={(e) => setSwapPage(false)}
+                        onClick={(e) => setSwapPage(true)}
                     >
                         Của tôi
                     </button>
                 </div>
 
-                <div className="package-list-content__action">
+                <div className="package-list-content__action__state-one">
                     <div className="package-list-content__action__select">
                         <span>Hiển thị </span>
                         <select
@@ -264,6 +273,11 @@ function Packages() {
                         columns={columnsAll}
                         dataSource={dataAll}
                         pagination={state.pagination}
+                        rowClassName={(record, index) =>
+                            user.role === roles.BASIC_USER
+                                ? 'package-list-content__sub__table__row-action'
+                                : 'package-list-content__sub__table__row-noaction'
+                        }
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
@@ -315,24 +329,149 @@ function Packages() {
                 </div>
             </div>
 
+            {/* -------------------------------- TAB CỦA TÔI - PARKING-LOT USER -------------------------------- */}
             <div
                 className={
-                    swapPage
-                        ? 'package-list-content-unactive'
-                        : 'package-list-content'
+                    swapPage && user.role === roles.PARKING_LOT_USER
+                        ? 'package-list-content'
+                        : 'package-list-content-unactive'
                 }
             >
-                <div className="title">Danh sách gói ưu đãi</div>
+                <div className="title">Các gói ưu đãi của tôi</div>
                 <div className="package-list-content__swap-page">
                     <button
                         className="button-unactive"
-                        onClick={(e) => setSwapPage(true)}
+                        onClick={(e) => setSwapPage(false)}
                     >
                         Tất cả
                     </button>
                     <button className="button-active">Của tôi</button>
                 </div>
-                <div className="package-list-content__action">
+
+                <div className="package-list-content__action__state-two">
+                    <div className="package-list-content__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: page }}
+                            onChange={(e) => setPage(e.target.value)}
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                activeFilter
+                                    ? 'package-list-content__action__filter-active'
+                                    : 'package-list-content__action__filter-unactive'
+                            }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
+
+                    <div className="package-list-content__action__search">
+                        <Search
+                            className="search-box"
+                            placeholder="Tìm kiếm"
+                            onSearch={onSearch}
+                            allowClear
+                            suffix
+                        />
+                        <SearchOutlined className="package-list-content__action__search__icon" />
+                    </div>
+                    <Link
+                        className="package-list-content__action__add"
+                        to="/feedbacks/add"
+                    >
+                        <PlusCircleOutlined className="package-list-content__action__add__icon" />
+                        <span>Thêm gói ưu đãi</span>
+                    </Link>
+                </div>
+
+                <div className="package-list-content__sub">
+                    <Table
+                        className="package-list-content__sub__table"
+                        columns={columnsAll}
+                        dataSource={dataAll}
+                        pagination={state.pagination}
+                        rowClassName="package-list-content__sub__table__row-action"
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => {
+                                    onClickPackageItem(record)
+                                },
+                            }
+                        }}
+                    />
+                    <Modal
+                        className="package-list-modal"
+                        visible={isModalVisible}
+                        onCancel={handleCancel}
+                        footer={null}
+                    >
+                        <h1 className="h1">Thông tin gói ưu đãi</h1>
+                        <div className="div">
+                            <span className="span1">Tên gói ưu đãi</span>
+                            <span className="span2">{packageItem.name}</span>
+                        </div>
+                        <div className="div">
+                            <span className="span1">tên bãi đỗ xe</span>
+                            <span className="span2">
+                                {packageItem.parking_lot_name}
+                            </span>
+                        </div>
+                        <div className="div">
+                            <span className="span1">Loại gói ưu đãi</span>
+                            <span className="span2">
+                                {packageItem.package_type}
+                            </span>
+                        </div>
+                        <div className="div">
+                            <span className="span1">Phương tiện</span>
+                            <span className="span2">
+                                {packageItem.vehicle_type}
+                            </span>
+                        </div>
+                        <div className="div">
+                            <span className="span1">Giá</span>
+                            <span className="span2">
+                                {packageItem.price} VND
+                            </span>
+                        </div>
+                        <div className="button">
+                            <button className="button__cancel">Hủy</button>
+                            <button className="button__ok">Đăng ký</button>
+                        </div>
+                    </Modal>
+                </div>
+            </div>
+
+            {/* ----------------------------------- TAB CỦA TÔI - BASIC USER ----------------------------------- */}
+            <div
+                className={
+                    swapPage && user.role === roles.BASIC_USER
+                        ? 'package-list-content'
+                        : 'package-list-content-unactive'
+                }
+            >
+                <div className="title">Các gói ưu đãi của tôi</div>
+                <div className="package-list-content__swap-page">
+                    <button
+                        className="button-unactive"
+                        onClick={(e) => setSwapPage(false)}
+                    >
+                        Tất cả
+                    </button>
+                    <button className="button-active">Của tôi</button>
+                </div>
+                <div className="package-list-content__action__state-one">
                     <div className="package-list-content__action__select">
                         <span>Hiển thị </span>
                         <select

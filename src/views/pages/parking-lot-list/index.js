@@ -84,7 +84,7 @@ function ParkingLots() {
     }
 
     return user.role === roles.BASIC_USER ? (
-        //--------------------------------Basic User--------------------------------------
+        //-------------------------------- Basic User --------------------------------------
         <div className="parking-lot-list-content">
             <div className="title">Danh sách bãi đỗ xe</div>
             <div className="parking-lot-list-content__action">
@@ -167,7 +167,9 @@ function ParkingLots() {
                 />
             </div>
         </div>
-    ) : //--------------------------------Parking-lot User----------------------------------
+    ) 
+
+    : //-------------------------------- Parking-lot User ----------------------------------
     user.role === roles.PARKING_LOT_USER ? (
         <div className="parking-lot-list-container">
             <div className="parking-lot-list-container__button-add">
@@ -310,8 +312,10 @@ function ParkingLots() {
                 </div>
             </div>
         </div>
-    ) : (
-        //--------------------------------Admin----------------------------------
+    ) 
+    
+    : (
+        //------------------------------------ Admin --------------------------------------
         <div className="parking-lot-list-content">Admin</div>
     )
 }

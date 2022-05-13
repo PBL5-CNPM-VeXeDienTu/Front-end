@@ -19,6 +19,7 @@
             height: 5vh;
             border: none;
             background-color: transparent;
+            cursor: pointer;
         }
 
         .button-unactive {
@@ -33,12 +34,23 @@
     }
 
     &__action {
-        width: 100%;
-        height: 100%;
-        margin-top: 1%;
-        display: grid;
-        grid-template-columns: 70% 5.5% 25%;
-        padding: 0.5% 3%;
+        &__state-one {
+            width: 100%;
+            height: 100%;
+            margin-top: 1%;
+            display: grid;
+            grid-template-columns: 70% 5.5% 25%;
+            padding: 0.5% 3%;
+        }
+
+        &__state-two {
+            width: 100%;
+            height: 100%;
+            margin-top: 1%;
+            display: grid;
+            grid-template-columns: 52% 5.5% 24% 20%;
+            padding: 0.5% 3%;
+        }
 
         &__select {
             width: 100%;
@@ -82,7 +94,6 @@
         &__search {
             width: 100%;
             position: relative;
-
             button {
                 display: none;
             }
@@ -97,7 +108,7 @@
         }
 
         &__add {
-            width: 9vw;
+            width: 12vw;
             height: 5.5vh;
             display: flex;
             justify-content: center;
@@ -120,6 +131,7 @@
 
         &__add:hover {
             color: #fff;
+            box-shadow: 0 0 5px #41bc3f;
             background-color: #41bc3f;
         }
     }
@@ -134,7 +146,6 @@
 
                 tr {
                     height: 5px !important;
-                    cursor: pointer;
 
                     th {
                         padding: 1.5vh !important;
@@ -150,6 +161,10 @@
                         text-overflow: ellipsis;
                     }
                 }
+            }
+
+            &__row-action {
+                cursor: pointer;
             }
 
             &__row-gray {
@@ -253,6 +268,7 @@
         justify-content: center;
         align-items: center;
         margin-top: 5%;
+
         button {
             width: 5.5vw;
             height: 5vh;
@@ -271,6 +287,7 @@
             color: #fff;
             background-color: #41bc3f;
         }
+
         &__cancel {
             background-color: #c0c0c0;
         }
