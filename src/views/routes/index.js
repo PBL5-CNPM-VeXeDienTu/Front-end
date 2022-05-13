@@ -44,7 +44,9 @@ const ParkingHistories = loadableComponent(() =>
     import('views/pages/parking-history-list'),
 )
 
-const WalletsList = loadableComponent(() => import('views/pages/wallet-list'))
+const Wallets = loadableComponent(() => import('views/pages/wallet-list'))
+
+const DetailWallet = loadableComponent(() => import('views/pages/wallet-list/detail'))
 
 const Payment = loadableComponent(() =>
     import('views/pages/wallet-list/payment'),
@@ -130,7 +132,11 @@ function AllRoutes() {
                 />
                 <Route
                     path="/wallets"
-                    element={<MainLayout component={WalletsList} />}
+                    element={<MainLayout component={Wallets} />}
+                />
+                 <Route
+                    path="/wallets/detail"
+                    element={<MainLayout component={DetailWallet} />}
                 />
                 <Route
                     path="/wallets/payment"
