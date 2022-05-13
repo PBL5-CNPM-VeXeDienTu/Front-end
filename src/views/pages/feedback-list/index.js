@@ -245,7 +245,7 @@ function ParkingLots() {
                     onCancel={handleCancel}
                     footer={null}
                 >
-                    <h1 className="h1">Chi tiết Feedback</h1>
+                    <h1 className="title">Chi tiết Feedback</h1>
                     <div className="div">
                         <span className="span1">Loại Feedback</span>
                         <span className="span2">{feedback.type_name}</span>

@@ -59,7 +59,9 @@ function Accounts() {
             title: 'Avatar',
             dataIndex: 'avatar',
             width: '5%',
-            render: () => <img src={avatarURL} className="avatar-user" />,
+            render: () => (
+                <img src={avatarURL} className="avatar-user" alt="" />
+            ),
         },
         {
             title: 'Tên tài khoản',
@@ -90,7 +92,7 @@ function Accounts() {
                     <a href="/profile/edit">
                         <EditOutlined className="icon-edit" />
                     </a>
-                    <a>
+                    <a href>
                         <DeleteOutlined
                             onClick={showModal}
                             className="icon-delete"
@@ -106,7 +108,9 @@ function Accounts() {
             title: 'Avatar',
             dataIndex: 'avatar',
             width: '5%',
-            render: () => <img src={avatarURL} className="avatar-user" />,
+            render: () => (
+                <img src={avatarURL} className="avatar-user" alt="" />
+            ),
         },
         {
             title: 'Tên tài khoản',
@@ -134,10 +138,10 @@ function Accounts() {
             width: '15%',
             render: () => (
                 <Space size="middle">
-                    <a>
+                    <a href>
                         <EditOutlined className="icon-edit" />
                     </a>
-                    <a>
+                    <a href>
                         <DeleteOutlined
                             onClick={showModal}
                             className="icon-delete"
@@ -210,12 +214,12 @@ function Accounts() {
                 <div className="title">Danh sách tài khoản</div>
 
                 <div className="account-list-content__swap-page">
-                    <button className="button-active">Basic</button>
+                    <button className="button-active">Parking-lot</button>
                     <button
                         className="button-unactive"
                         onClick={(e) => setSwapPage(false)}
                     >
-                        Parking-lot
+                        Basic
                     </button>
                 </div>
 
@@ -292,9 +296,9 @@ function Accounts() {
                         className="button-unactive"
                         onClick={(e) => setSwapPage(true)}
                     >
-                        Basic
+                        Parking-lot
                     </button>
-                    <button className="button-active">Parking-lot</button>
+                    <button className="button-active">Basic</button>
                 </div>
                 <div className="account-list-content__action">
                     <div className="account-list-content__action__select">
@@ -332,6 +336,7 @@ function Accounts() {
                             allowClear
                             suffix
                         />
+                        <SearchOutlined className="account-list-content__action__search__icon" />
                     </div>
                 </div>
 
@@ -354,7 +359,7 @@ function Accounts() {
                         onOk={handleOk}
                         onCancel={handleCancel}
                     >
-                        <p>Bạn có chắn chắn muốn hủy user hay không ?</p>
+                        <p>Bạn có chắn chắn muốn xóa user hay không ?</p>
                     </Modal>
                 </div>
             </div>
