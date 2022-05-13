@@ -46,7 +46,9 @@ const ParkingHistories = loadableComponent(() =>
 
 const Wallets = loadableComponent(() => import('views/pages/wallet-list'))
 
-const DetailWallet = loadableComponent(() => import('views/pages/wallet-list/detail'))
+const DetailWallet = loadableComponent(() =>
+    import('views/pages/wallet-list/detail'),
+)
 
 const Payment = loadableComponent(() =>
     import('views/pages/wallet-list/payment'),
@@ -55,7 +57,14 @@ const Payment = loadableComponent(() =>
 const QrCheckout = loadableComponent(() => import('views/pages/qr-checkout'))
 
 const Packages = loadableComponent(() => import('views/pages/package-list'))
-const AddPackage = loadableComponent(() => import('views/pages/package-list/add'))
+
+const AddPackage = loadableComponent(() =>
+    import('views/pages/package-list/add'),
+)
+
+const EditPackage = loadableComponent(() =>
+    import('views/pages/package-list/edit'),
+)
 
 const Accounts = loadableComponent(() => import('views/pages/account-list'))
 
@@ -135,7 +144,7 @@ function AllRoutes() {
                     path="/wallets"
                     element={<MainLayout component={Wallets} />}
                 />
-                 <Route
+                <Route
                     path="/wallets/detail"
                     element={<MainLayout component={DetailWallet} />}
                 />
@@ -150,6 +159,10 @@ function AllRoutes() {
                 <Route
                     path="/packages/add"
                     element={<MainLayout component={AddPackage} />}
+                />
+                <Route
+                    path="/packages/edit"
+                    element={<MainLayout component={EditPackage} />}
                 />
                 <Route
                     path="/accounts"

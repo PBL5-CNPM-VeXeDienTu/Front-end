@@ -46,11 +46,11 @@ function Wallets() {
     const onSearch = (value) => console.log(value)
 
     useEffect(() => {
-       // TODO
+        // TODO
     }, [activeFilter])
 
     useEffect(() => {
-        if (walletType === 'All'  && walletState === 'All')
+        if (walletType === 'All' && walletState === 'All')
             setActiveFilter(false)
         else setActiveFilter(true)
     }, [walletType, walletState])
@@ -67,7 +67,9 @@ function Wallets() {
             title: 'Avatar',
             dataIndex: 'avatar',
             width: '10%',
-            render: () => <img src={avatarURL} className="avatar-user" alt=""/>,
+            render: () => (
+                <img src={avatarURL} className="avatar-user" alt="" />
+            ),
         },
         {
             title: 'Tên tài khoản',
@@ -111,7 +113,9 @@ function Wallets() {
             title: 'Avatar',
             dataIndex: 'avatar',
             width: '10%',
-            render: () => <img src={avatarURL} className="avatar-user" alt=""/>,
+            render: () => (
+                <img src={avatarURL} className="avatar-user" alt="" />
+            ),
         },
         {
             title: 'Tên tài khoản',
