@@ -55,6 +55,7 @@ const Payment = loadableComponent(() =>
 const QrCheckout = loadableComponent(() => import('views/pages/qr-checkout'))
 
 const Packages = loadableComponent(() => import('views/pages/package-list'))
+const AddPackage = loadableComponent(() => import('views/pages/package-list/add'))
 
 const Accounts = loadableComponent(() => import('views/pages/account-list'))
 
@@ -145,6 +146,10 @@ function AllRoutes() {
                 <Route
                     path="/packages"
                     element={<MainLayout component={Packages} />}
+                />
+                <Route
+                    path="/packages/add"
+                    element={<MainLayout component={AddPackage} />}
                 />
                 <Route
                     path="/accounts"

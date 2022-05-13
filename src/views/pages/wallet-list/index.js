@@ -4,7 +4,6 @@ import {
     FilterOutlined,
     SearchOutlined,
     DeleteOutlined,
-    EditOutlined,
     PlusCircleOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
@@ -21,7 +20,6 @@ function Wallets() {
     const [activeFilter, setActiveFilter] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [walletType, setWalletType] = useState('All')
-    const [feature, setFeature] = useState('All')
     const [walletState, setWalletState] = useState('All')
     let navigate = useNavigate()
 
@@ -52,10 +50,10 @@ function Wallets() {
     }, [activeFilter])
 
     useEffect(() => {
-        if (walletType === 'All' && feature === 'All' && walletState === 'All')
+        if (walletType === 'All'  && walletState === 'All')
             setActiveFilter(false)
         else setActiveFilter(true)
-    }, [walletType, feature, walletState])
+    }, [walletType, walletState])
 
     const walletTypeOfItem = [
         'All',
@@ -69,7 +67,7 @@ function Wallets() {
             title: 'Avatar',
             dataIndex: 'avatar',
             width: '10%',
-            render: () => <img src={avatarURL} className="avatar-user" />,
+            render: () => <img src={avatarURL} className="avatar-user" alt=""/>,
         },
         {
             title: 'Tên tài khoản',
@@ -113,7 +111,7 @@ function Wallets() {
             title: 'Avatar',
             dataIndex: 'avatar',
             width: '10%',
-            render: () => <img src={avatarURL} className="avatar-user" />,
+            render: () => <img src={avatarURL} className="avatar-user" alt=""/>,
         },
         {
             title: 'Tên tài khoản',
@@ -270,12 +268,12 @@ function Wallets() {
                 <div className="title">Danh sách ví</div>
 
                 <div className="wallet-list-content__swap-page">
-                    <button className="button-active">Basic</button>
+                    <button className="button-active">Parking-lot</button>
                     <button
                         className="button-unactive"
                         onClick={(e) => setSwapPage(false)}
                     >
-                        Parking-lot
+                        Basic
                     </button>
                 </div>
 
@@ -348,9 +346,9 @@ function Wallets() {
                         className="button-unactive"
                         onClick={(e) => setSwapPage(true)}
                     >
-                        Basic
+                        Parking-lot
                     </button>
-                    <button className="button-active">Parking-lot</button>
+                    <button className="button-active">Basic</button>
                 </div>
                 <div className="wallet-list-content__action">
                     <div className="wallet-list-content__action__select">
@@ -388,6 +386,7 @@ function Wallets() {
                             allowClear
                             suffix
                         />
+                        <SearchOutlined className="wallet-list-content__action__search__icon" />
                     </div>
                 </div>
 

@@ -125,7 +125,6 @@
 
             &__icon {
                 margin: auto;
-                padding-top: 0.5vh;
             }
         }
 
@@ -168,7 +167,7 @@
             }
 
             &__row-gray {
-                // background-color: #f0f0f0;
+                background-color: #f0f0f0;
             }
 
             &__row-green {
@@ -269,13 +268,18 @@
         align-items: center;
         margin-top: 5%;
 
+        a{
+            color: #000;
+        }
+
         button {
-            width: 5.5vw;
+            width: 6.5vw;
             height: 5vh;
             border: none;
             border-radius: 20px;
             margin: auto;
             margin: 0 3%;
+            font-weight: bold;
             cursor: pointer;
         }
 

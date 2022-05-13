@@ -10,7 +10,7 @@
     background-color: #fff !important;
 }
 
-.add-feedback-content {
+.add-package-content {
     width: 100%;
     height: 100%;
     border-radius: 20px;
@@ -37,7 +37,6 @@
                     margin-top: 5px;
                     font-size: 1.1rem;
                     width: 9vw;
-                    // color: #555;
                 }
                 .textarea {
                     height: 15vh !important;
@@ -57,7 +56,7 @@
             }
         }
         &__button {
-            margin: 10% auto 0 auto;
+            margin: 6% auto;
             button {
                 margin: 0 20px;
                 width: 7vw;
