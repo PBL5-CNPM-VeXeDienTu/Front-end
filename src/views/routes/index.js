@@ -68,6 +68,10 @@ const EditPackage = loadableComponent(() =>
 
 const Accounts = loadableComponent(() => import('views/pages/account-list'))
 
+const VerifyRequest = loadableComponent(() =>
+    import('views/pages/verify-request'),
+)
+
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -167,6 +171,10 @@ function AllRoutes() {
                 <Route
                     path="/accounts"
                     element={<MainLayout component={Accounts} />}
+                />
+                <Route
+                    path="/verify-request"
+                    element={<MainLayout component={VerifyRequest} />}
                 />
             </Route>
         </Routes>
