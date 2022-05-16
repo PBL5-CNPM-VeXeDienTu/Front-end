@@ -287,7 +287,7 @@ const RenderMenu = () => {
                             <OrderedListOutlined className="menu-item-icon" />
                         }
                     >
-                        <Link className="sider-bar__link" to="#">
+                        <Link className="sider-bar__link" to="/verify-request">
                             Quản lí yêu cầu đăng kí
                         </Link>
                     </Menu.Item>
