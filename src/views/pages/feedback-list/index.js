@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Table, Input, Menu, Dropdown, Modal } from 'antd'
+import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
 import {
     FilterOutlined,
     PlusCircleOutlined,
     SearchOutlined,
 } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
+import { roles } from 'contexts/UserContext'
 import './feedback-list.scss'
 
 const { Search } = Input
@@ -13,12 +15,12 @@ const numOfItem = [10, 15, 25]
 const columns = [
     {
         title: 'Loại phản hồi',
-        dataIndex: 'type_name',
+        dataIndex: 'feedback_type',
         width: '20%',
     },
     {
         title: 'Chức năng',
-        dataIndex: 'name',
+        dataIndex: 'feature',
         width: '20%',
     },
     {
@@ -34,16 +36,18 @@ const columns = [
 ]
 
 function ParkingLots() {
+    const { user } = useAuth()
     const [page, setPage] = useState(10)
     const [feedbackType, setFeedbackType] = useState('All')
     const [feature, setFeature] = useState('All')
     const [feedbackState, setFeedbackState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [showBasicUserModal, setShowBasicUserModal] = useState(false)
+    const [showAdminModal, setShowAdminModal] = useState(false)
     const [feedback, setFeedback] = useState({
         key: 0,
         type_name: '',
-        name: '',
+        feedback_name: '',
         is_processed: '',
         content: '',
     })
@@ -87,24 +91,30 @@ function ParkingLots() {
     for (let i = 0; i < page / 2; i++) {
         data.push({
             key: i,
-            type_name: 'Mong muốn thêm chức năng',
-            name: 'Nạp tiền vào ví cá nhân',
+            feedback_type: 'Mong muốn thêm chức năng',
+            feature: 'Nạp tiền vào ví cá nhân',
             is_processed: 'Chưa duyệt',
             content: 'Muốn có thêm chức năng nạp tiền bằng tài khoản ngân hàng',
         })
         data.push({
             key: i,
-            type_name: 'Mong muốn thêm chức năng',
-            name: 'Nạp tiền vào ví cá nhân',
+            feedback_type: 'Mong muốn thêm chức năng',
+            feature: 'Nạp tiền vào ví cá nhân',
             is_processed: 'Đã duyệt',
             content: 'Muốn có thêm chức năng nạp tiền bằng tài khoản ngân hàng',
         })
     }
     const handleCancel = () => {
-        setIsModalVisible(false)
+        setShowBasicUserModal(false)
+        setShowAdminModal(false)
     }
-    const onClickFeedbackItem = (record) => {
-        setIsModalVisible(true)
+    const showFeedbackItem = (record) => {
+        setShowBasicUserModal(true)
+        setFeedback(record)
+    }
+
+    const replyFeedbackItem = (record) => {
+        setShowAdminModal(true)
         setFeedback(record)
     }
 
@@ -174,7 +184,12 @@ function ParkingLots() {
     return (
         <div className="feedback-list-content">
             <div className="title">Danh sách Feedback</div>
-            <div className="feedback-list-content__action">
+            <div className={
+                        user.role === roles.ADMIN
+                            ? "feedback-list-content__action__state-one"
+                            : "feedback-list-content__action__state-two"
+                    }
+                >
                 <div className="feedback-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
@@ -214,7 +229,11 @@ function ParkingLots() {
                 </div>
 
                 <Link
-                    className="feedback-list-content__action__add"
+                    className={
+                        user.role === roles.ADMIN
+                            ? "feedback-list-content__action__add-unactive"
+                            : "feedback-list-content__action__add-active"
+                    }
                     to="/feedbacks/add"
                 >
                     <PlusCircleOutlined className="feedback-list-content__action__add__icon" />
@@ -235,24 +254,30 @@ function ParkingLots() {
                     }
                     onRow={(record, rowIndex) => {
                         return {
-                            onClick: () => onClickFeedbackItem(record),
+                            onClick: () => {
+                                user.role === roles.ADMIN
+                                    ? record.is_processed === 'Chưa duyệt'
+                                        ? replyFeedbackItem(record)
+                                        : showFeedbackItem(record)
+                                    : showFeedbackItem(record)
+                            },
                         }
                     }}
                 />
                 <Modal
                     className="feedback-list-modal"
-                    visible={isModalVisible}
+                    visible={showBasicUserModal}
                     onCancel={handleCancel}
                     footer={null}
                 >
                     <h1 className="title">Chi tiết Feedback</h1>
                     <div className="div">
                         <span className="span1">Loại Feedback</span>
-                        <span className="span2">{feedback.type_name}</span>
+                        <span className="span2">{feedback.feedback_type}</span>
                     </div>
                     <div className="div">
                         <span className="span1">Chức năng</span>
-                        <span className="span2">{feedback.name}</span>
+                        <span className="span2">{feedback.feature}</span>
                     </div>
                     <div className="div">
                         <span className="span1">Tình trạng</span>
@@ -284,6 +309,89 @@ function ParkingLots() {
                                 : 'Chưa có phản hồi'}
                         </span>
                     </div>
+                </Modal>
+
+                <Modal
+                    className="feedback-list-modal"
+                    visible={showAdminModal}
+                    onCancel={handleCancel}
+                    footer={null}
+                >
+                    <h1 className="title">Phản hồi Feedback</h1>
+                    <Form
+                        name="reply_feedback"
+                        className="feedback-list-modal__sub"
+                        // onFinish={handleSubmit}
+                    >
+                        <div className="feedback-list-modal__sub__info">
+                            <div className="feedback-list-modal__sub__info__item">
+                                <span className="span">Loại phản hồi</span>
+                                <Form.Item
+                                    name="feedback_type"
+                                    initialValue={feedback.feedback_type}
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="feedback-list-modal__sub__info__item">
+                                <span className="span">Chức năng</span>
+                                <Form.Item
+                                    name="feature"
+                                    initialValue={feedback.feature}
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="feedback-list-modal__sub__info__item">
+                                <span className="span">Nội dung</span>
+                                <Form.Item
+                                    name="content"
+                                    initialValue={feedback.content}
+                                >
+                                    <Input.TextArea
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="feedback-list-modal__sub__info__item">
+                                <span className="span__textarea">Phản hồi</span>
+                                <Form.Item name="response">
+                                    <Input.TextArea
+                                        className="textarea"
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+                        </div>
+                        <div className="feedback-list-modal__sub__button">
+                            <button
+                                className="button-cancel"
+                                onClick={(e) => setShowAdminModal(false)}
+                            >
+                                Thoát
+                            </button>
+                            <button
+                                className="button-save"
+                                type="primary"
+                                htmlType="submit"
+                            >
+                                Lưu
+                            </button>
+                        </div>
+                    </Form>
                 </Modal>
             </div>
         </div>

@@ -162,7 +162,7 @@ function EditProfile() {
 
                     <div className="edit-profile-content__sub__info__button">
                         <Button className="button-cancel">
-                            <Link to="/profile">Hủy</Link>
+                            <Link to="/profile">Thoát</Link>
                         </Button>
                         <Button
                             className="button-save"

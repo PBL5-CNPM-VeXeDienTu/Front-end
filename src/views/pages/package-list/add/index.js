@@ -106,7 +106,7 @@ function AddPackage() {
                 </div>
                 <div className="add-package-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to="/packages">Hủy</Link>
+                        <Link to="/packages">Thoát</Link>
                     </Button>
                     <Button
                         className="button-save"

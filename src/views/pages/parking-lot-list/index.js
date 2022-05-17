@@ -5,6 +5,7 @@ import {
     PlusCircleOutlined,
     EditOutlined,
     CloseOutlined,
+    SearchOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import { roles } from 'contexts/UserContext'
@@ -145,6 +146,7 @@ function ParkingLots() {
                         allowClear
                         suffix
                     />
+                    <SearchOutlined className="feedback-list-content__action__search__icon" />
                 </div>
             </div>
 

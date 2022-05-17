@@ -62,7 +62,7 @@ function Wallets() {
         'Nạp tiền trực tiếp với chủ nhà xe',
     ]
 
-    const columnsBasic = [
+    const columns = [
         {
             title: 'Avatar',
             dataIndex: 'avatar',
@@ -72,8 +72,8 @@ function Wallets() {
             ),
         },
         {
-            title: 'Tên tài khoản',
-            dataIndex: 'basic_name',
+            title: 'Chủ tài khoản',
+            dataIndex: 'name',
             width: '20%',
         },
         {
@@ -82,14 +82,14 @@ function Wallets() {
             width: '20%',
         },
         {
-            title: 'Giao dịch gần nhất lúc',
+            title: 'Giao dịch gần nhất',
             dataIndex: 'updated_at',
-            width: '20%',
+            width: '15%',
         },
         {
             title: 'Số tiền giao dịch (VND)',
             dataIndex: 'amount_trans',
-            width: '15%',
+            width: '20%',
         },
         {
             title: 'Action',
@@ -108,61 +108,13 @@ function Wallets() {
         },
     ]
 
-    const columnsParkinglot = [
-        {
-            title: 'Avatar',
-            dataIndex: 'avatar',
-            width: '10%',
-            render: () => (
-                <img src={avatarURL} className="avatar-user" alt="" />
-            ),
-        },
-        {
-            title: 'Tên tài khoản',
-            dataIndex: 'basic_name',
-            width: '20%',
-        },
-        {
-            title: 'Số dư (VND)',
-            dataIndex: 'balance',
-            width: '20%',
-        },
-        {
-            title: 'Giao dịch gần nhất lúc',
-            dataIndex: 'updated_at',
-            width: '20%',
-        },
-        {
-            title: 'Số tiền giao dịch (VND)',
-            dataIndex: 'amount_trans',
-            width: '15%',
-        },
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            width: '15%',
-            render: () => (
-                <Space size="middle">
-                    <a href="/wallets/payment">
-                        <PlusCircleOutlined className="icon-edit" />
-                    </a>
-                    <div>
-                        <DeleteOutlined
-                            onClick={showModal}
-                            className="icon-delete"
-                        />
-                    </div>
-                </Space>
-            ),
-        },
-    ]
 
     const dataBasic = []
     for (let i = 0; i < page; i++) {
         dataBasic.push({
             key: i,
             avatar: avatarURL,
-            basic_name: 'Phạm Văn Thọ',
+            name: 'Phạm Văn Thọ',
             balance: '1200000',
             updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
             amount_trans: '-100000',
@@ -170,7 +122,7 @@ function Wallets() {
         dataBasic.push({
             key: i + 1,
             avatar: avatarURL,
-            basic_name: 'Phạm Văn Thọ',
+            name: 'Phạm Văn Thọ',
             balance: '1200000',
             updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
             amount_trans: '+100000',
@@ -182,7 +134,7 @@ function Wallets() {
         dataParkinglot.push({
             key: i,
             avatar: avatarURL,
-            basic_name: 'Phạm Văn Thọ',
+            name: 'Phạm Văn Thọ',
             balance: '1200000',
             updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
             amount_trans: '+100000',
@@ -190,7 +142,7 @@ function Wallets() {
         dataParkinglot.push({
             key: i + 1,
             avatar: avatarURL,
-            basic_name: 'Phạm Văn Thọ',
+            name: 'Phạm Văn Thọ',
             balance: '1200000',
             updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
             amount_trans: '-100000',
@@ -237,8 +189,8 @@ function Wallets() {
                             onChange={(e) => setWalletState(e.target.value)}
                         >
                             <option value="All">All</option>
-                            <option value="Chưa duyệt">Nạp tiền</option>
-                            <option value="Đã duyệt">Rút tiền</option>
+                            <option value="Nạp tiền">Nạp tiền</option>
+                            <option value="Rút tiền">Rút tiền</option>
                         </select>
                     </div>
 
@@ -324,7 +276,7 @@ function Wallets() {
                 <div className="wallet-list-content__sub">
                     <Table
                         className="wallet-list-content__sub__table"
-                        columns={columnsBasic}
+                        columns={columns}
                         dataSource={dataBasic}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
@@ -397,7 +349,7 @@ function Wallets() {
                 <div className="wallet-list-content__sub">
                     <Table
                         className="wallet-list-content__sub__table"
-                        columns={columnsParkinglot}
+                        columns={columns}
                         dataSource={dataParkinglot}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>

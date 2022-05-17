@@ -101,7 +101,7 @@ function AddFeedback() {
                 </div>
                 <div className="add-feedback-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to="/feedbacks">Hủy</Link>
+                        <Link to="/feedbacks">Thoát</Link>
                     </Button>
                     <Button
                         className="button-save"

@@ -120,8 +120,8 @@ function DetailWallet() {
                             onChange={(e) => setWalletState(e.target.value)}
                         >
                             <option value="All">All</option>
-                            <option value="Chưa duyệt">Nạp tiền</option>
-                            <option value="Đã duyệt">Rút tiền</option>
+                            <option value="Nạp tiền">Nạp tiền</option>
+                            <option value="Rút tiền">Rút tiền</option>
                         </select>
                     </div>
 
