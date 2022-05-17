@@ -73,7 +73,9 @@
                         cursor: pointer;
                     }
                     button:hover {
+                        box-shadow: 0 0 5px #41bc3f;
                         background-color: #41bc3f;
+                        color: #fff;
                     }
                 }
             }

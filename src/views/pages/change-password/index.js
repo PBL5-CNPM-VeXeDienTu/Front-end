@@ -111,7 +111,7 @@ function ChangePassword() {
                 </div>
                 <div className="change-password-content__sub__button">
                     <button className="button-cancel">
-                        <Link to="/profile">Hủy</Link>
+                        <Link to="/profile">Thoát</Link>
                     </button>
                     <button
                         className="button-save"

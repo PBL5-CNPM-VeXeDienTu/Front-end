@@ -78,7 +78,7 @@ function EditVehicle() {
                 </div>
                 <div className="edit-vehicle-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to="/vehicles">Hủy</Link>
+                        <Link to="/vehicles">Thoát</Link>
                     </Button>
                     <Button
                         className="button-save"

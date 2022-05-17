@@ -91,6 +91,11 @@
         }
     }
 }
+.ant-select-arrow {
+    position: absolute;
+    top: 50%;
+    right: 10px !important;
+}
 .ant-input-focused,
 .ant-input:focus {
     box-shadow: 0 0 3px #41bc3f;

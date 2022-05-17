@@ -62,7 +62,7 @@ function DetailParkingLot() {
                         </span>
                     </div>
                     <div>
-                        <span className="properties">Gói ưu đãi </span>
+                        <span className="properties">Gói ưu đãi</span>
                         <span>
                             <Link to="/packages">
                                 <button>Xem gói ưu đãi</button>
