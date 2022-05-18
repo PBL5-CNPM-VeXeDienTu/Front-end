@@ -146,7 +146,7 @@ function ParkingLots() {
                         allowClear
                         suffix
                     />
-                    <SearchOutlined className="feedback-list-content__action__search__icon" />
+                    <SearchOutlined className="parking-lot-list-content__action__search__icon" />
                 </div>
             </div>
 

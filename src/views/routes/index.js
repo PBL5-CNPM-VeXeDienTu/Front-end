@@ -15,6 +15,11 @@ const ChangePassword = loadableComponent(() =>
     import('views/pages/change-password'),
 )
 const Vehicles = loadableComponent(() => import('views/pages/vehicle-list'))
+
+const DetailVehicle = loadableComponent(() =>
+    import('views/pages/vehicle-list/detail'),
+)
+
 const EditVehicle = loadableComponent(() =>
     import('views/pages/vehicle-list/edit'),
 )
@@ -109,6 +114,10 @@ function AllRoutes() {
                 <Route
                     path="/vehicles"
                     element={<MainLayout component={Vehicles} />}
+                />
+                <Route
+                    path="/vehicles/detail"
+                    element={<MainLayout component={DetailVehicle} />}
                 />
                 <Route
                     path="/vehicles/edit"
