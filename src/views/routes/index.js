@@ -77,6 +77,7 @@ const VerifyRequest = loadableComponent(() =>
     import('views/pages/verify-request'),
 )
 
+const NotFound = loadableComponent(() => import('views/pages/404-not-found'))
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -186,6 +187,7 @@ function AllRoutes() {
                     element={<MainLayout component={VerifyRequest} />}
                 />
             </Route>
+            <Route path='*' element={<NotFound />} />
         </Routes>
     )
 }
