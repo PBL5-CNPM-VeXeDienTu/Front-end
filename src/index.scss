@@ -19,7 +19,7 @@ code {
     color: #41bc3f;
     font-weight: bold;
 }
-.button-save {
+.button-green{
     margin: 0 20px;
     width: 7vw;
     height: 5vh;
@@ -29,14 +29,14 @@ code {
     font-size: 1.1rem;
     text-align: center;
     cursor: pointer;
-    background-color: #41bc3f;
+    background-color: #b4e2b3;
 }
-.button-save:hover {
+.button-green:hover {
     box-shadow: 0 0 5px #41bc3f;
     background-color: #41bc3f;
     color: #fff;
 }
-.button-cancel {
+.button-gray{
     margin: 0 20px;
     width: 7vw;
     height: 5vh;
@@ -48,7 +48,7 @@ code {
     cursor: pointer;
     background-color: #c0c0c0;
 }
-.button-cancel:hover {
+.button-gray:hover {
     box-shadow: 0 0 5px #777;
     background-color: #777;
     color: #fff;

@@ -89,7 +89,7 @@
         }
     }
 
-    &__button {
+    &__button-active {
         margin: auto;
         padding: 7vh 0 5vh 0;
         button {
@@ -127,6 +127,9 @@
             background-color: #41bc3f;
             color: #fff;
         }
+    }
+    &__button-unactive{
+        display: none;
     }
 
     &__sub {
