@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Modal, Button } from 'antd'
+import useAuth from 'hooks/useAuth'
+import { roles } from 'contexts/UserContext'
 import './detail-vehicle.scss'
 
 function EditVehicle() {
+    const { user } = useAuth()
     const [isModalVisible, setIsModalVisible] = useState(false)
 
     const avatarVehicleURL =
@@ -72,7 +75,12 @@ function EditVehicle() {
                     </div>
                 </div>
             </div>
-            <div className="detail-vehicle-content__button">
+            <div
+                className={ user.role === roles.ADMIN
+                            ? "detail-vehicle-content__button-unactive"
+                            : "detail-vehicle-content__button-active"
+                        }
+            >
                 <Button className="button-delete" onClick={showModal}>
                     Hủy đăng ký
                 </Button>
@@ -80,6 +88,21 @@ function EditVehicle() {
                     <Link to="/vehicles/edit">Chỉnh sửa</Link>
                 </Button>
             </div>
+
+            <div
+                className={ user.role === roles.ADMIN
+                            ? "detail-vehicle-content__button-active"
+                            : "detail-vehicle-content__button-unactive"
+                        }
+            >
+                <Button className="button-gray" onClick={showModal}>
+                    <Link to="/verify-request">Thoát</Link>
+                </Button>
+                <Button className="button-green">
+                    <Link to="/verify-request">Xác thực</Link>
+                </Button>
+            </div>
+
             <Modal
                 className="delete-vehicle-modal"
                 title="Hủy đăng ký xe"
