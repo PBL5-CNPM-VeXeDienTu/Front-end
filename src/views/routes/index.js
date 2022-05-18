@@ -71,6 +71,12 @@ const Accounts = loadableComponent(() => import('views/pages/account-list'))
 const VerifyRequest = loadableComponent(() =>
     import('views/pages/verify-request'),
 )
+const VerifyVehicleRequest = loadableComponent(() =>
+    import('views/pages/verify-request/vehicle-detail'),
+)
+const VerifyParkingLotRequest = loadableComponent(() =>
+    import('views/pages/verify-request/parking-lot-detail'),
+)
 
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
@@ -175,6 +181,14 @@ function AllRoutes() {
                 <Route
                     path="/verify-request"
                     element={<MainLayout component={VerifyRequest} />}
+                />
+                <Route
+                    path="/verify-request/vehicle-detail"
+                    element={<MainLayout component={VerifyVehicleRequest} />}
+                />
+                <Route
+                    path="/verify-request/parking-lot-detail"
+                    element={<MainLayout component={VerifyParkingLotRequest} />}
                 />
             </Route>
         </Routes>

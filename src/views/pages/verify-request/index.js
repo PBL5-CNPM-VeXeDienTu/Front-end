@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown } from 'antd'
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 import './verify-request.scss'
 
 const { Search } = Input
@@ -104,7 +105,12 @@ function VerifyRequest() {
             pageSize: page,
         },
     }
-
+    let navigate = useNavigate()
+    const handleRow = (record) => ({
+        onClick: () => {
+            navigate(`vehicle-detail`)
+        },
+    })
     const onSearch = (value) => console.log(value)
 
     useEffect(() => {}, [activeFilter])
@@ -148,6 +154,7 @@ function VerifyRequest() {
     }
     const onClickVehicleItem = (record) => {
         setVehicle(record)
+        handleRow(record)
     }
 
     const menu = () => {
@@ -335,11 +342,12 @@ function VerifyRequest() {
                         columns={columVehicle}
                         dataSource={vehicleData}
                         pagination={state.pagination}
-                        onRow={(record, rowIndex) => {
-                            return {
-                                onClick: () => onClickVehicleItem(record),
-                            }
-                        }}
+                        // onRow={(record, rowIndex) => {
+                        //     return {
+                        //         onClick: () => onClickVehicleItem(record),
+                        //     }
+                        // }}
+                        onRow={handleRow}
                         rowClassName={(record, index) =>
                             record.status === 'Đã xác thực'
                                 ? 'verify-request-content__sub__table__row-green'
