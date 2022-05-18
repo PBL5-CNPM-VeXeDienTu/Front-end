@@ -22,7 +22,7 @@ function payment() {
                                 },
                             ]}
                         >
-                            <Select                            >
+                            <Select>
                                 <Option value="1">Mobile</Option>
                                 <Option value="2">Viettel</Option>
                                 <Option value="3">Vinaphone</Option>
@@ -80,8 +80,8 @@ function payment() {
                     </div>
                     <div className="payment-content__sub__info__note">
                         <span>
-                            Lưu ý: Chọn sai mệnh giá sẽ không được cộng tiền. Hãy
-                            kiểm tra kỹ trước khi nạp
+                            Lưu ý: Chọn sai mệnh giá sẽ không được cộng tiền.
+                            Hãy kiểm tra kỹ trước khi nạp
                         </span>
                     </div>
                 </div>
