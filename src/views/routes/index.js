@@ -82,9 +82,6 @@ const VerifyVehicleRequest = loadableComponent(() =>
 const VerifyParkingLotRequest = loadableComponent(() =>
     import('views/pages/verify-request/parking-lot-detail'),
 )
-const CheckinCheckout = loadableComponent(() =>
-    import('views/pages/checkin-checkout'),
-)
 
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
@@ -201,10 +198,6 @@ function AllRoutes() {
                 <Route
                     path="/verify-request/parking-lot-detail"
                     element={<MainLayout component={VerifyParkingLotRequest} />}
-                />
-                <Route
-                    path="/checkin-checkout"
-                    element={<MainLayout component={CheckinCheckout} />}
                 />
             </Route>
         </Routes>
