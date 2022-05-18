@@ -77,13 +77,14 @@ const verifyParkingLotTypeItem = [
 const verifyStatusItem = ['All', 'Đã xác thực', 'Chưa xác thực']
 
 function VerifyRequest() {
+    const navigate = useNavigate()
     const [page, setPage] = useState(10)
-    const [swapPage, setSwapPage] = useState(true)
+    const [swapPage, setSwapPage] = useState(false)
     const [verifyVehicleType, setVerifyVehicleType] = useState('All')
     const [verifyParkingLotType, setVerifyParkingLotType] = useState('All')
     const [verifyStatusType, setVerifyStatusType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [parkingLot, setkParkingLot] = useState({
+    const [parkingLot, setParkingLot] = useState({
         key: 0,
         name: '',
         address: '',
@@ -105,12 +106,6 @@ function VerifyRequest() {
             pageSize: page,
         },
     }
-    let navigate = useNavigate()
-    const handleRow = (record) => ({
-        onClick: () => {
-            navigate(`vehicle-detail`)
-        },
-    })
     const onSearch = (value) => console.log(value)
 
     useEffect(() => {}, [activeFilter])
@@ -148,13 +143,6 @@ function VerifyRequest() {
             type_of_vehicle: 'Xe máy',
             status: 'Chưa xác thực',
         })
-    }
-    const onClickParkingLotItem = (record) => {
-        setkParkingLot(record)
-    }
-    const onClickVehicleItem = (record) => {
-        setVehicle(record)
-        handleRow(record)
     }
 
     const menu = () => {
@@ -342,12 +330,14 @@ function VerifyRequest() {
                         columns={columVehicle}
                         dataSource={vehicleData}
                         pagination={state.pagination}
-                        // onRow={(record, rowIndex) => {
-                        //     return {
-                        //         onClick: () => onClickVehicleItem(record),
-                        //     }
-                        // }}
-                        onRow={handleRow}
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => {
+                                    setVehicle(record)
+                                    navigate('/vehicles/detail')
+                                },
+                            }
+                        }}
                         rowClassName={(record, index) =>
                             record.status === 'Đã xác thực'
                                 ? 'verify-request-content__sub__table__row-green'
@@ -429,7 +419,10 @@ function VerifyRequest() {
                         pagination={state.pagination}
                         onRow={(record, rowIndex) => {
                             return {
-                                onClick: () => onClickParkingLotItem(record),
+                                onClick: () => {
+                                    setParkingLot(record)
+                                    navigate('/parking-lots/detail')
+                                },
                             }
                         }}
                         rowClassName={(record, index) =>
