@@ -46,6 +46,10 @@
             margin: auto;
             padding-right: 5vw;
 
+            .div-unactive{
+                display: none;
+            }
+
             div {
                 height: 8vh;
                 display: grid;
@@ -79,6 +83,14 @@
                     }
                 }
             }
+        }
+        &__button-active{
+            position: relative;
+            left: 130%;
+            top:-30%;
+        }
+        &__button-unactive{
+            display: none;
         }
     }
 }
