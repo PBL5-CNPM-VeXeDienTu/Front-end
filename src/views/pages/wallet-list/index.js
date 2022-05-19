@@ -108,7 +108,6 @@ function Wallets() {
         },
     ]
 
-
     const dataBasic = []
     for (let i = 0; i < page; i++) {
         dataBasic.push({

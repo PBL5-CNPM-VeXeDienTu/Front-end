@@ -1,0 +1,223 @@
+.checkin-checkout-content {
+    width: 100%;
+    height: fit-content;
+    min-height: 84vh;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
+    background-color: #fff;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    margin: auto;
+
+    &__title {
+        width: 100%;
+        font-size: 2rem;
+        text-align: center;
+        font-weight: bold;
+    }
+    &__swap-page {
+        margin-left: 2%;
+        padding-top: 1.5%;
+        button {
+            width: 8vw;
+            height: 5vh;
+            border: none;
+            margin-right: 1.5%;
+            border-radius: 20px;
+        }
+        .button-active {
+            background-color: #41bc3f;
+            color: #fff;
+        }
+    }
+
+    &__app {
+        width: 95%;
+        margin: auto;
+        height: 70vh;
+
+        &__item {
+            display: flex;
+            flex-direction: column;
+            margin-top: 5vh;
+            &__camera {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                &__video {
+                    width: 40%;
+                    height: 40%;
+                    background-color: #000;
+                    margin: auto;
+                }
+            }
+            &__form {
+                display: grid;
+                grid-template-columns: 50% 50%;
+                margin-top: 5vh;
+                &__license-plates {
+                    display: flex;
+                    width: 80%;
+                    margin: auto;
+                    border: 1px solid #b4e2b3;
+                }
+                &__license-plates:hover {
+                    display: flex;
+                    width: 80%;
+                    margin: auto;
+                    border: 1px solid #41bc3f;
+                }
+
+                &__btn {
+                    display: flex;
+                    justify-content: space-around;
+                    &__takephoto {
+                        height: 5vh;
+                        width: 10vw;
+                        background-color: #b4e2b3;
+                        border-radius: 50px;
+                        border: none;
+                    }
+                    &__takephoto:hover {
+                        height: 5vh;
+                        width: 10vw;
+                        background-color: #41bc3f;
+                        color: #fff;
+                        border-radius: 50px;
+                        box-shadow: 0 0 5px #41bc3f;
+                        border: none;
+                    }
+                    &__closephoto {
+                        height: 5vh;
+                        width: 10vw;
+                        background-color: #c0c0c0;
+                        border-radius: 50px;
+                        border: none;
+                    }
+                    &__closephoto:hover {
+                        height: 5vh;
+                        width: 10vw;
+                        background-color: #777;
+                        color: #fff;
+                        box-shadow: 0 0 5px #41bc3f;
+                        border-radius: 50px;
+                        border: none;
+                    }
+                }
+            }
+            &__btn-checkin {
+                display: flex;
+                justify-content: center;
+                margin-top: 5vh;
+                .button-checkin {
+                    height: 5vh;
+                    width: 10vw;
+                    background-color: #b4e2b3;
+                    border-radius: 50px;
+                    border: none;
+                }
+                .button-checkin:hover {
+                    height: 5vh;
+                    width: 10vw;
+                    background-color: #41bc3f;
+                    color: #fff;
+                    border-radius: 50px;
+                    box-shadow: 0 0 5px #41bc3f;
+                    border: none;
+                }
+            }
+        }
+    }
+
+    &__sub {
+        width: 95%;
+        margin: auto;
+
+        &__item {
+            height: 75vh;
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 20px;
+            display: grid;
+            grid-template-columns: 50% 50%;
+            background-color: #fff;
+
+            &__camera {
+                &__video {
+                    width: 75%;
+                    height: 75%;
+                    margin: auto;
+                    border-radius: 20px;
+                }
+            }
+
+            &__info {
+                width: 100%;
+                margin: auto 0;
+                div {
+                    height: 8vh;
+                    margin-right: 2vw;
+                    display: grid;
+                    grid-template-columns: 30% 70%;
+
+                    .properties {
+                        font-weight: bold;
+                        text-align: right;
+                        width: 8vw;
+                    }
+
+                    span {
+                        font-size: 1.1rem;
+                    }
+                }
+                div:last-child {
+                    display: flex;
+                }
+
+                &__button {
+                    margin: 7% auto 0 auto;
+                    float: right;
+                    display: flex;
+                    justify-content: space-between;
+                    button {
+                        margin: 0 20px;
+                        width: 8.5 vw;
+                        height: 5vh;
+                        border: none;
+                        border-radius: 20px;
+                        color: #000;
+                        font-size: 1.1rem;
+                        text-align: center;
+                        cursor: pointer;
+                    }
+
+                    .button-cancel {
+                        background-color: #c0c0c0;
+                    }
+
+                    .button-cancel:hover {
+                        box-shadow: 0 0 5px #777;
+                        background-color: #777;
+                        color: #fff;
+                    }
+
+                    .button-success {
+                        background-color: #b4e2b3;
+                    }
+
+                    .button-success:hover {
+                        box-shadow: 0 0 5px #41bc3f;
+                        background-color: #41bc3f;
+                    }
+                }
+            }
+        }
+    }
+}
+.checkin-checkout-content-unactive {
+    display: none;
+}
+
+.ant-input-focused,
+.ant-input:focus {
+    border-color: none;
+}

@@ -184,12 +184,13 @@ function ParkingLots() {
     return (
         <div className="feedback-list-content">
             <div className="title">Danh sách Feedback</div>
-            <div className={
-                        user.role === roles.ADMIN
-                            ? "feedback-list-content__action__state-one"
-                            : "feedback-list-content__action__state-two"
-                    }
-                >
+            <div
+                className={
+                    user.role === roles.ADMIN
+                        ? 'feedback-list-content__action__state-one'
+                        : 'feedback-list-content__action__state-two'
+                }
+            >
                 <div className="feedback-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
@@ -231,8 +232,8 @@ function ParkingLots() {
                 <Link
                     className={
                         user.role === roles.ADMIN
-                            ? "feedback-list-content__action__add-unactive"
-                            : "feedback-list-content__action__add-active"
+                            ? 'feedback-list-content__action__add-unactive'
+                            : 'feedback-list-content__action__add-active'
                     }
                     to="/feedbacks/add"
                 >
