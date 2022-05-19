@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Form } from 'antd'
+import { Form, Button } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import { roles } from 'contexts/UserContext'
@@ -18,9 +18,9 @@ function DetailParkingLot() {
                 <Link
                     to="/parking-lots/edit"
                     className={
-                        user.role === roles.BASIC_USER
-                            ? 'detail-parking-lot-content__button-edit-unactive'
-                            : 'detail-parking-lot-content__button-edit-active'
+                        user.role === roles.PARKING_LOT_USER
+                            ? 'detail-parking-lot-content__button-edit-active'
+                            : 'detail-parking-lot-content__button-edit-unactive'
                     }
                 >
                     <EditOutlined />
@@ -61,7 +61,14 @@ function DetailParkingLot() {
                             Phường Hòa Khánh Bắc , Liên Chiều
                         </span>
                     </div>
-                    <div>
+                    <div
+                        className={
+                            user.role === roles.ADMIN
+                                ? "div-unactive"
+                                : "div-active"
+
+                        }
+                    >
                         <span className="properties">Gói ưu đãi</span>
                         <span>
                             <Link to="/packages">
@@ -69,6 +76,22 @@ function DetailParkingLot() {
                             </Link>
                         </span>
                     </div>
+
+                </div>
+                <div
+                    className={
+                        user.role === roles.ADMIN
+                            ? "detail-parking-lot-content__sub__button-active"
+                            : "detail-parking-lot-content__sub__button-unactive"
+
+                    }
+                >
+                    <Button className="button-gray">
+                        <Link to="/verify-request">Thoát</Link>
+                    </Button>
+                    <Button className="button-green">
+                        <Link to="/verify-request">Xác thực</Link>
+                    </Button>
                 </div>
             </Form>
         </div>

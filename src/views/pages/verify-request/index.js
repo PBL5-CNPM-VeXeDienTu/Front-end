@@ -77,13 +77,11 @@ const verifyParkingLotTypeItem = [
 const verifyStatusItem = ['All', 'Đã xác thực', 'Chưa xác thực']
 
 function VerifyRequest() {
+    const navigate = useNavigate()
     const [page, setPage] = useState(10)
-    const [swapPage, setSwapPage] = useState(true)
-    const [verifyVehicleType, setVerifyVehicleType] = useState('All')
-    const [verifyParkingLotType, setVerifyParkingLotType] = useState('All')
-    const [verifyStatusType, setVerifyStatusType] = useState('All')
-    const [activeFilter, setActiveFilter] = useState(false)
-    const [parkingLot, setkParkingLot] = useState({
+    const [swapPage, setSwapPage] = useState(false)
+    const [filterState, setFilterState] = useState(0)
+    const [parkingLot, setParkingLot] = useState({
         key: 0,
         name: '',
         address: '',
@@ -105,25 +103,7 @@ function VerifyRequest() {
             pageSize: page,
         },
     }
-    let navigate = useNavigate()
-    const handleRow = (record) => ({
-        onClick: () => {
-            navigate(`vehicle-detail`)
-        },
-    })
     const onSearch = (value) => console.log(value)
-
-    useEffect(() => {}, [activeFilter])
-
-    useEffect(() => {
-        if (
-            verifyVehicleType === 'All' &&
-            verifyParkingLotType === 'All' &&
-            verifyStatusType === 'All'
-        )
-            setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [verifyVehicleType, verifyParkingLotType, verifyStatusType])
 
     const parkingLotData = []
     for (let i = 0; i < page; i++) {
@@ -149,129 +129,119 @@ function VerifyRequest() {
             status: 'Chưa xác thực',
         })
     }
-    const onClickParkingLotItem = (record) => {
-        setkParkingLot(record)
-    }
-    const onClickVehicleItem = (record) => {
-        setVehicle(record)
-        handleRow(record)
-    }
 
-    const menu = () => {
-        if (swapPage) {
-            return (
-                <Menu class="verify-request-menu">
-                    <div className="verify-request-menu__item">
-                        <div className="verify-request-menu__item__row">
-                            <span className="verify-request-menu__item__row__span">
-                                Tìm theo
-                            </span>
-                            <select
-                                className="verify-request-menu__item__row__select"
-                                onChange={(e) =>
-                                    setVerifyVehicleType(e.target.value)
-                                }
-                            >
-                                {verifyVehicleTypeItem.map(
-                                    (verifyVehicleTypeItem, index) => {
-                                        return (
-                                            <option
-                                                key={index}
-                                                value={verifyVehicleTypeItem}
-                                            >
-                                                {verifyVehicleTypeItem}
-                                            </option>
-                                        )
-                                    },
-                                )}
-                            </select>
-                        </div>
-                        <div className="verify-request-menu__item__row">
-                            <span className="verify-request-menu__item__row__span">
-                                Trạng thái
-                            </span>
-                            <select
-                                className="verify-request-menu__item__row__select"
-                                onChange={(e) =>
-                                    setVerifyStatusType(e.target.value)
-                                }
-                            >
-                                {verifyStatusItem.map(
-                                    (verifyStatusItem, index) => {
-                                        return (
-                                            <option
-                                                key={index}
-                                                value={verifyStatusItem}
-                                            >
-                                                {verifyStatusItem}
-                                            </option>
-                                        )
-                                    },
-                                )}
-                            </select>
-                        </div>
-                    </div>
-                </Menu>
-            )
-        } else {
-            return (
-                <Menu class="verify-request-menu">
-                    <div className="verify-request-menu__item">
-                        <div className="verify-request-menu__item__row">
-                            <span className="verify-request-menu__item__row__span">
-                                Tìm theo
-                            </span>
-                            <select
-                                className="verify-request-menu__item__row__select"
-                                onChange={(e) =>
-                                    setVerifyParkingLotType(e.target.value)
-                                }
-                            >
-                                {verifyParkingLotTypeItem.map(
-                                    (verifyParkingLotTypeItem, index) => {
-                                        return (
-                                            <option
-                                                key={index}
-                                                value={verifyParkingLotTypeItem}
-                                            >
-                                                {verifyParkingLotTypeItem}
-                                            </option>
-                                        )
-                                    },
-                                )}
-                            </select>
-                        </div>
-                        <div className="verify-request-menu__item__row">
-                            <span className="verify-request-menu__item__row__span">
-                                Trạng thái
-                            </span>
-                            <select
-                                className="verify-request-menu__item__row__select"
-                                onChange={(e) =>
-                                    setVerifyStatusType(e.target.value)
-                                }
-                            >
-                                {verifyStatusItem.map(
-                                    (verifyStatusItem, index) => {
-                                        return (
-                                            <option
-                                                key={index}
-                                                value={verifyStatusItem}
-                                            >
-                                                {verifyStatusItem}
-                                            </option>
-                                        )
-                                    },
-                                )}
-                            </select>
-                        </div>
-                    </div>
-                </Menu>
-            )
-        }
-    }
     return (
         <div>
+            {/* ----------------------------------- TAB PARKING-LOT  ----------------------------------- */}
+            <div
+                className={
+                    swapPage
+                        ? 'verify-request-content-unactive'
+                        : 'verify-request-content'
+                }
+            >
+                <div className="verify-request-content__title">
+                    Danh sách đăng ký bãi đỗ xe
+                </div>
+                <div className="verify-request-content__swap-page">
+                    <button className="button-active">Nhà xe</button>
+                    <button
+                        className="button-unactive"
+                        onClick={(e) => {
+                            setSwapPage(true)
+                        }}
+                    >
+                        Xe
+                    </button>
+                </div>
+
+                <div className="verify-request-content__action">
+                    <div className="verify-request-content__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: page }}
+                            onChange={(e) => setPage(e.target.value)}
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+
+                    <div className="verify-request-content__action__filter-state">
+                        <span className="span">Trạng thái</span>
+                        <button
+                            className={
+                                filterState === 0
+                                    ? 'button-active__left'
+                                    : 'button-unactive__left'
+                            }
+                            onClick={(e) => setFilterState(0)}
+                        >
+                            All
+                        </button>
+                        <button
+                            className={
+                                filterState === 1
+                                    ? 'button-active'
+                                    : 'button-unactive'
+                            }
+                            onClick={(e) => setFilterState(1)}
+                        >
+                            Đã xác thực
+                        </button>
+                        <button
+                            className={
+                                filterState === 2
+                                    ? 'button-active__right'
+                                    : 'button-unactive__right'
+                            }
+                            onClick={(e) => setFilterState(2)}
+                        >
+                            Chưa xác thực
+                        </button>
+                    </div>
+
+                    <div className="verify-request-content__action__search">
+                        <Search
+                            className="search-box"
+                            placeholder="Tìm kiếm"
+                            onSearch={onSearch}
+                            allowClear
+                            suffix
+                        />
+                        <SearchOutlined className="verify-request-content__action__search__icon" />
+                    </div>
+                </div>
+
+                <div className="verify-request-content__sub">
+                    <Table
+                        className="verify-request-content__sub__table"
+                        columns={columParkingLot}
+                        dataSource={parkingLotData}
+                        pagination={state.pagination}
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => {
+                                    setParkingLot(record)
+                                    navigate('/parking-lots/detail')
+                                },
+                            }
+                        }}
+                        rowClassName={(record, index) =>
+                            record.status === 'Đã xác thực'
+                                ? 'verify-request-content__sub__row-green'
+                                : 'verify-request-content__sub__row-red'
+                        }
+                    />
+                </div>
+            </div>
+
+            {/* ------------------------------------- TAB VEHICLE -------------------------------------- */}
             <div
                 className={
                     swapPage
@@ -287,8 +257,6 @@ function VerifyRequest() {
                         className="button-unactive"
                         onClick={(e) => {
                             setSwapPage(false)
-                            setVerifyVehicleType('All')
-                            setVerifyStatusType('All')
                         }}
                     >
                         Nhà xe
@@ -312,17 +280,40 @@ function VerifyRequest() {
                             })}
                         </select>
                     </div>
-                    <Dropdown overlay={menu} trigger="click" placement="bottom">
-                        <div
+
+                    <div className="verify-request-content__action__filter-state">
+                        <span className="span">Trạng thái</span>
+                        <button
                             className={
-                                activeFilter
-                                    ? 'verify-request-content__action__filter-active'
-                                    : 'verify-request-content__action__filter-unactive'
+                                filterState === 0
+                                    ? 'button-active__left'
+                                    : 'button-unactive__left'
                             }
+                            onClick={(e) => setFilterState(0)}
                         >
-                            <FilterOutlined />
-                        </div>
-                    </Dropdown>
+                            All
+                        </button>
+                        <button
+                            className={
+                                filterState === 1
+                                    ? 'button-active'
+                                    : 'button-unactive'
+                            }
+                            onClick={(e) => setFilterState(1)}
+                        >
+                            Đã xác thực
+                        </button>
+                        <button
+                            className={
+                                filterState === 2
+                                    ? 'button-active__right'
+                                    : 'button-unactive__right'
+                            }
+                            onClick={(e) => setFilterState(2)}
+                        >
+                            Chưa xác thực
+                        </button>
+                    </div>
 
                     <div className="verify-request-content__action__search">
                         <Search
@@ -342,100 +333,18 @@ function VerifyRequest() {
                         columns={columVehicle}
                         dataSource={vehicleData}
                         pagination={state.pagination}
-                        // onRow={(record, rowIndex) => {
-                        //     return {
-                        //         onClick: () => onClickVehicleItem(record),
-                        //     }
-                        // }}
-                        onRow={handleRow}
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => {
+                                    setVehicle(record)
+                                    navigate('/vehicles/detail')
+                                },
+                            }
+                        }}
                         rowClassName={(record, index) =>
                             record.status === 'Đã xác thực'
                                 ? 'verify-request-content__sub__table__row-green'
                                 : 'verify-request-content__sub__table__row-red'
-                        }
-                    />
-                </div>
-            </div>
-
-            <div
-                className={
-                    swapPage
-                        ? 'verify-request-content-unactive'
-                        : 'verify-request-content'
-                }
-            >
-                <div className="verify-request-content__title">
-                    Danh sách đăng ký bãi đỗ xe
-                </div>
-                <div className="verify-request-content__swap-page">
-                    <button className="button-active">Nhà xe</button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => {
-                            setSwapPage(true)
-                            setVerifyParkingLotType('All')
-                            setVerifyStatusType('All')
-                        }}
-                    >
-                        Xe
-                    </button>
-                </div>
-
-                <div className="verify-request-content__action">
-                    <div className="verify-request-content__action__select">
-                        <span>Hiển thị </span>
-                        <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
-                        >
-                            {numOfItem.map((numOfItem, index) => {
-                                return (
-                                    <option key={index} value={numOfItem}>
-                                        {numOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-                    <Dropdown overlay={menu} trigger="click" placement="bottom">
-                        <div
-                            className={
-                                activeFilter
-                                    ? 'verify-request-content__action__filter-active'
-                                    : 'verify-request-content__action__filter-unactive'
-                            }
-                        >
-                            <FilterOutlined />
-                        </div>
-                    </Dropdown>
-
-                    <div className="verify-request-content__action__search">
-                        <Search
-                            className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
-                            allowClear
-                            suffix
-                        />
-                        <SearchOutlined className="verify-request-content__action__search__icon" />
-                    </div>
-                </div>
-
-                <div className="verify-request-content__sub">
-                    <Table
-                        className="verify-request-content__sub__table"
-                        columns={columParkingLot}
-                        dataSource={parkingLotData}
-                        pagination={state.pagination}
-                        onRow={(record, rowIndex) => {
-                            return {
-                                onClick: () => onClickParkingLotItem(record),
-                            }
-                        }}
-                        rowClassName={(record, index) =>
-                            record.status === 'Đã xác thực'
-                                ? 'verify-request-content__sub__row-green'
-                                : 'verify-request-content__sub__row-red'
                         }
                     />
                 </div>

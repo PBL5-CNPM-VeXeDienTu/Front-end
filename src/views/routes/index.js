@@ -15,6 +15,11 @@ const ChangePassword = loadableComponent(() =>
     import('views/pages/change-password'),
 )
 const Vehicles = loadableComponent(() => import('views/pages/vehicle-list'))
+
+const DetailVehicle = loadableComponent(() =>
+    import('views/pages/vehicle-list/detail'),
+)
+
 const EditVehicle = loadableComponent(() =>
     import('views/pages/vehicle-list/edit'),
 )
@@ -81,6 +86,7 @@ const CheckinCheckout = loadableComponent(() =>
     import('views/pages/checkin-checkout'),
 )
 
+const NotFound = loadableComponent(() => import('views/pages/404-not-found'))
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -112,6 +118,10 @@ function AllRoutes() {
                 <Route
                     path="/vehicles"
                     element={<MainLayout component={Vehicles} />}
+                />
+                <Route
+                    path="/vehicles/detail"
+                    element={<MainLayout component={DetailVehicle} />}
                 />
                 <Route
                     path="/vehicles/edit"
@@ -198,6 +208,7 @@ function AllRoutes() {
                     element={<MainLayout component={CheckinCheckout} />}
                 />
             </Route>
+            <Route path='*' element={<NotFound />} />
         </Routes>
     )
 }
