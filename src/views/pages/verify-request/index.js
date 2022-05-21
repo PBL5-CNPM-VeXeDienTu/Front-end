@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Table, Input, Menu, Dropdown } from 'antd'
-import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
+import React, { useState } from 'react'
+import { Table, Input } from 'antd'
+import { SearchOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import './verify-request.scss'
 
@@ -66,15 +66,6 @@ const columParkingLot = [
         width: '15%',
     },
 ]
-
-const verifyVehicleTypeItem = ['All', 'Tên chủ sở hữu', 'Biển số']
-const verifyParkingLotTypeItem = [
-    'All',
-    'Tên chủ sở hữu',
-    'Tên bãi đỗ xe',
-    'Địa chỉ bãi đỗ xe',
-]
-const verifyStatusItem = ['All', 'Đã xác thực', 'Chưa xác thực']
 
 function VerifyRequest() {
     const navigate = useNavigate()

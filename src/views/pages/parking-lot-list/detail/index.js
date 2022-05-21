@@ -64,9 +64,8 @@ function DetailParkingLot() {
                     <div
                         className={
                             user.role === roles.ADMIN
-                                ? "div-unactive"
-                                : "div-active"
-
+                                ? 'div-unactive'
+                                : 'div-active'
                         }
                     >
                         <span className="properties">Gói ưu đãi</span>
@@ -76,14 +75,12 @@ function DetailParkingLot() {
                             </Link>
                         </span>
                     </div>
-
                 </div>
                 <div
                     className={
                         user.role === roles.ADMIN
-                            ? "detail-parking-lot-content__sub__button-active"
-                            : "detail-parking-lot-content__sub__button-unactive"
-
+                            ? 'detail-parking-lot-content__sub__button-active'
+                            : 'detail-parking-lot-content__sub__button-unactive'
                     }
                 >
                     <Button className="button-gray">
