@@ -15,7 +15,7 @@ function AddVehicle() {
         process.env.REACT_APP_API_URL + 'public/images/cavet/default.png'
     return (
         <div className="add-vehicle-content">
-            <div className="add-vehicle-content__title">Đăng kí xe</div>
+            <div className="title">Đăng kí xe</div>
             <Form className="add-vehicle-content__sub">
                 <div className="add-vehicle-content__sub__vehicle">
                     <div className="add-vehicle-content__sub__vehicle__image">
@@ -113,7 +113,7 @@ function AddVehicle() {
                 </div>
                 <div className="add-vehicle-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to="/vehicles">Hủy</Link>
+                        <Link to="/vehicles">Thoát</Link>
                     </Button>
                     <Button
                         className="button-save"

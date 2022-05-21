@@ -2,8 +2,6 @@
     width: 100%;
     height: 100%;
     margin: auto;
-    display: grid;
-    grid-template-rows: 7% 93%;
 
     &__content::-webkit-scrollbar {
         display: none;
@@ -21,17 +19,6 @@
             width: 100%;
             height: 80vh;
             margin-bottom: 20px;
-            display: grid;
-            grid-template-rows: 1% 99%;
-            &__title {
-                font-size: 2.8rem;
-                margin: auto;
-                padding: 2%;
-                z-index: 1;
-                a {
-                    color: #555;
-                }
-            }
         }
 
         &__item {

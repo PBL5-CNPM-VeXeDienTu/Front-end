@@ -5,6 +5,12 @@ import auth from 'api/auth'
 
 const UserContext = createContext({})
 
+export const roles = {
+    BASIC_USER: 1,
+    PARKING_LOT_USER: 2,
+    ADMIN: 3,
+}
+
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token'))
     const [user, setUser] = useState({})

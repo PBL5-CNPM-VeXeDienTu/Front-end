@@ -23,7 +23,7 @@
             color: black;
 
             .icon {
-                margin-left: 0.5vw;
+                margin-right: 0.5vw;
                 margin-top: 0.5vh;
             }
         }
@@ -50,32 +50,7 @@
             width: 100%;
             height: 80vh;
             margin-bottom: 20px;
-            display: grid;
-            grid-template-rows: 1% 99%;
-        }
-
-        &__icon {
-            width: 100%;
-            margin-left: 90%;
-            margin-top: 5vh;
-            justify-content: flex-end;
-
-            span {
-                font-size: 20px;
-                margin: 5px;
-            }
-
-            .delete-vehicle:hover {
-                color: red;
-            }
-
-            .edit-vehicle {
-                color: #555;
-            }
-
-            .edit-vehicle:hover {
-                color: #41bc3f;
-            }
+            cursor: pointer;
         }
 
         &__item {
@@ -99,59 +74,21 @@
                 margin: auto 0;
 
                 div {
-                    margin: 30px 20px 0 20px;
+                    height: 8vh;
+                    margin-right: 2vw;
                     display: grid;
-                    grid-template-columns: 30% 70%;
+                    grid-template-columns: 40% 60%;
 
                     .properties {
                         font-weight: bold;
                         text-align: right;
-                        width: 8vw;
+                        margin-right: 3vw;
                     }
 
                     span {
                         font-size: 1.1rem;
                     }
                 }
-            }
-        }
-    }
-}
-
-.delete-vehicle-modal {
-    width: 30vw !important;
-    top: 30% !important;
-
-    .ant-modal-content {
-        border-radius: 20px !important;
-
-        .ant-modal-header {
-            border-radius: 20px 20px 0 0;
-            background-color: #e9e9e9;
-        }
-
-        .ant-modal-body {
-            height: 10vh !important;
-        }
-
-        .ant-modal-footer {
-            text-align: center;
-
-            .ant-btn {
-                width: 7vw;
-                height: 5vh;
-                border-radius: 20px;
-                font-size: 14px;
-                font-weight: bolder;
-                margin: 0 1vw;
-                color: #222;
-                background-color: #d5d5d5;
-                border: none;
-            }
-
-            .ant-btn-primary {
-                background: #41bc3f;
-                color: #fff;
             }
         }
     }

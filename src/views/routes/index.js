@@ -15,6 +15,11 @@ const ChangePassword = loadableComponent(() =>
     import('views/pages/change-password'),
 )
 const Vehicles = loadableComponent(() => import('views/pages/vehicle-list'))
+
+const DetailVehicle = loadableComponent(() =>
+    import('views/pages/vehicle-list/detail'),
+)
+
 const EditVehicle = loadableComponent(() =>
     import('views/pages/vehicle-list/edit'),
 )
@@ -44,7 +49,11 @@ const ParkingHistories = loadableComponent(() =>
     import('views/pages/parking-history-list'),
 )
 
-const WalletsList = loadableComponent(() => import('views/pages/wallet-list'))
+const Wallets = loadableComponent(() => import('views/pages/wallet-list'))
+
+const DetailWallet = loadableComponent(() =>
+    import('views/pages/wallet-list/detail'),
+)
 
 const Payment = loadableComponent(() =>
     import('views/pages/wallet-list/payment'),
@@ -52,6 +61,26 @@ const Payment = loadableComponent(() =>
 
 const QrCheckout = loadableComponent(() => import('views/pages/qr-checkout'))
 
+const Packages = loadableComponent(() => import('views/pages/package-list'))
+
+const AddPackage = loadableComponent(() =>
+    import('views/pages/package-list/add'),
+)
+
+const EditPackage = loadableComponent(() =>
+    import('views/pages/package-list/edit'),
+)
+
+const Accounts = loadableComponent(() => import('views/pages/account-list'))
+
+const VerifyRequest = loadableComponent(() =>
+    import('views/pages/verify-request'),
+)
+const CheckinCheckout = loadableComponent(() =>
+    import('views/pages/checkin-checkout'),
+)
+
+const NotFound = loadableComponent(() => import('views/pages/404-not-found'))
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
 // const PARKING_LOT_USER_ROLE = 1;
@@ -85,6 +114,10 @@ function AllRoutes() {
                     element={<MainLayout component={Vehicles} />}
                 />
                 <Route
+                    path="/vehicles/detail"
+                    element={<MainLayout component={DetailVehicle} />}
+                />
+                <Route
                     path="/vehicles/edit"
                     element={<MainLayout component={EditVehicle} />}
                 />
@@ -97,6 +130,10 @@ function AllRoutes() {
                     element={<MainLayout component={ParkingLots} />}
                 />
                 <Route
+                    path="/parking-lots/add"
+                    element={<MainLayout component={AddParkingLot} />}
+                />
+                <Route
                     path="/parking-lots/detail"
                     element={<MainLayout component={DetailParkingLot} />}
                 />
@@ -105,16 +142,12 @@ function AllRoutes() {
                     element={<MainLayout component={EditParkingLot} />}
                 />
                 <Route
-                    path="/parking-lots/add"
-                    element={<MainLayout component={AddParkingLot} />}
+                    path="/feedbacks"
+                    element={<MainLayout component={Feedbacks} />}
                 />
                 <Route
                     path="/feedbacks/add"
                     element={<MainLayout component={AddFeedback} />}
-                />
-                <Route
-                    path="/feedbacks"
-                    element={<MainLayout component={Feedbacks} />}
                 />
                 <Route
                     path="/qr-checkout"
@@ -126,13 +159,42 @@ function AllRoutes() {
                 />
                 <Route
                     path="/wallets"
-                    element={<MainLayout component={WalletsList} />}
+                    element={<MainLayout component={Wallets} />}
+                />
+                <Route
+                    path="/wallets/detail"
+                    element={<MainLayout component={DetailWallet} />}
                 />
                 <Route
                     path="/wallets/payment"
                     element={<MainLayout component={Payment} />}
                 />
+                <Route
+                    path="/packages"
+                    element={<MainLayout component={Packages} />}
+                />
+                <Route
+                    path="/packages/add"
+                    element={<MainLayout component={AddPackage} />}
+                />
+                <Route
+                    path="/packages/edit"
+                    element={<MainLayout component={EditPackage} />}
+                />
+                <Route
+                    path="/accounts"
+                    element={<MainLayout component={Accounts} />}
+                />
+                <Route
+                    path="/verify-request"
+                    element={<MainLayout component={VerifyRequest} />}
+                />
+                <Route
+                    path="/checkin-checkout"
+                    element={<MainLayout component={CheckinCheckout} />}
+                />
             </Route>
+            <Route path="*" element={<NotFound />} />
         </Routes>
     )
 }

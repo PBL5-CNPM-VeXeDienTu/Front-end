@@ -11,9 +11,7 @@ function EditVehicle() {
         'public/images/avatars/vehicle/default-avatar.png'
     return (
         <div className="edit-vehicle-content">
-            <div className="edit-vehicle-content__title">
-                Chỉnh sửa thông tin xe
-            </div>
+            <div className="title">Chỉnh sửa thông tin xe</div>
             <Form
                 name="form"
                 className="edit-vehicle-content__sub"
@@ -80,7 +78,7 @@ function EditVehicle() {
                 </div>
                 <div className="edit-vehicle-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to="/vehicles">Hủy</Link>
+                        <Link to="/vehicles/detail">Thoát</Link>
                     </Button>
                     <Button
                         className="button-save"

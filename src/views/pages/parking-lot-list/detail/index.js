@@ -1,20 +1,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Form } from 'antd'
+import { Form, Button } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
+import { roles } from 'contexts/UserContext'
 import './detail-parking-lot.scss'
 
 function DetailParkingLot() {
     const avatarURL =
         process.env.REACT_APP_API_URL +
         'public/images/avatars/parking-lot/default-avatar.png'
+    const { user } = useAuth()
     return (
         <div className="detail-parking-lot-content">
-            <div className="detail-parking-lot-content__title">
-                <span>Thông tin nhà xe</span>
+            <div className="title">
+                <span>Thông tin bãi đỗ xe</span>
                 <Link
                     to="/parking-lots/edit"
-                    className="detail-parking-lot-content__button-edit"
+                    className={
+                        user.role === roles.PARKING_LOT_USER
+                            ? 'detail-parking-lot-content__button-edit-active'
+                            : 'detail-parking-lot-content__button-edit-unactive'
+                    }
                 >
                     <EditOutlined />
                 </Link>
@@ -54,6 +61,34 @@ function DetailParkingLot() {
                             Phường Hòa Khánh Bắc , Liên Chiều
                         </span>
                     </div>
+                    <div
+                        className={
+                            user.role === roles.ADMIN
+                                ? 'div-unactive'
+                                : 'div-active'
+                        }
+                    >
+                        <span className="properties">Gói ưu đãi</span>
+                        <span>
+                            <Link to="/packages">
+                                <button>Xem gói ưu đãi</button>
+                            </Link>
+                        </span>
+                    </div>
+                </div>
+                <div
+                    className={
+                        user.role === roles.ADMIN
+                            ? 'detail-parking-lot-content__sub__button-active'
+                            : 'detail-parking-lot-content__sub__button-unactive'
+                    }
+                >
+                    <Button className="button-gray">
+                        <Link to="/verify-request">Thoát</Link>
+                    </Button>
+                    <Button className="button-green">
+                        <Link to="/verify-request">Xác thực</Link>
+                    </Button>
                 </div>
             </Form>
         </div>

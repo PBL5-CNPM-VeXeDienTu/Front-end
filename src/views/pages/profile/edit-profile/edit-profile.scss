@@ -19,12 +19,6 @@
     grid-template-rows: 10% 90%;
     font-size: 1.1rem !important;
 
-    &__title {
-        font-size: 2.8rem;
-        margin: auto;
-        padding: 4%;
-    }
-
     &__sub {
         width: 100%;
         height: 100%;
@@ -48,7 +42,7 @@
                 cursor: pointer;
                 display: flex;
                 position: absolute;
-                top: 62%;
+                top: 60%;
                 left: 24%;
             }
 
@@ -111,16 +105,17 @@
                     color: #000;
                     font-size: 1.1rem;
                     text-align: center;
+                    cursor: pointer;
                 }
 
                 .button-cancel {
-                    background-color: #ff8080;
+                    background-color: #c0c0c0;
                 }
 
                 .button-cancel:hover {
-                    background-color: red;
+                    box-shadow: 0 0 5px #777;
+                    background-color: #777777;
                     color: #fff;
-                    cursor: pointer;
                 }
 
                 .button-save {
@@ -128,8 +123,8 @@
                 }
 
                 .button-save:hover {
+                    box-shadow: 0 0 5px #41bc3f;
                     background-color: #41bc3f;
-                    cursor: pointer;
                 }
             }
         }
