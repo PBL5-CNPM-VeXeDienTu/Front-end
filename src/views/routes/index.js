@@ -76,6 +76,15 @@ const Accounts = loadableComponent(() => import('views/pages/account-list'))
 const VerifyRequest = loadableComponent(() =>
     import('views/pages/verify-request'),
 )
+const VerifyVehicleRequest = loadableComponent(() =>
+    import('views/pages/verify-request/vehicle-detail'),
+)
+const VerifyParkingLotRequest = loadableComponent(() =>
+    import('views/pages/verify-request/parking-lot-detail'),
+)
+const CheckinCheckout = loadableComponent(() =>
+    import('views/pages/checkin-checkout'),
+)
 
 const NotFound = loadableComponent(() => import('views/pages/404-not-found'))
 const availableRoles = [1, 2, 3]
@@ -185,6 +194,18 @@ function AllRoutes() {
                 <Route
                     path="/verify-request"
                     element={<MainLayout component={VerifyRequest} />}
+                />
+                <Route
+                    path="/verify-request/vehicle-detail"
+                    element={<MainLayout component={VerifyVehicleRequest} />}
+                />
+                <Route
+                    path="/verify-request/parking-lot-detail"
+                    element={<MainLayout component={VerifyParkingLotRequest} />}
+                />
+                <Route
+                    path="/checkin-checkout"
+                    element={<MainLayout component={CheckinCheckout} />}
                 />
             </Route>
             <Route path='*' element={<NotFound />} />
