@@ -46,7 +46,7 @@
             margin: auto;
             padding-right: 5vw;
 
-            .div-unactive{
+            .div-unactive {
                 display: none;
             }
 
@@ -84,12 +84,12 @@
                 }
             }
         }
-        &__button-active{
+        &__button-active {
             position: relative;
             left: 130%;
-            top:-30%;
+            top: -30%;
         }
-        &__button-unactive{
+        &__button-unactive {
             display: none;
         }
     }

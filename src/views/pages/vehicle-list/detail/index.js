@@ -76,10 +76,11 @@ function EditVehicle() {
                 </div>
             </div>
             <div
-                className={ user.role === roles.ADMIN
-                            ? "detail-vehicle-content__button-unactive"
-                            : "detail-vehicle-content__button-active"
-                        }
+                className={
+                    user.role === roles.ADMIN
+                        ? 'detail-vehicle-content__button-unactive'
+                        : 'detail-vehicle-content__button-active'
+                }
             >
                 <Button className="button-delete" onClick={showModal}>
                     Hủy đăng ký
@@ -90,10 +91,11 @@ function EditVehicle() {
             </div>
 
             <div
-                className={ user.role === roles.ADMIN
-                            ? "detail-vehicle-content__button-active"
-                            : "detail-vehicle-content__button-unactive"
-                        }
+                className={
+                    user.role === roles.ADMIN
+                        ? 'detail-vehicle-content__button-active'
+                        : 'detail-vehicle-content__button-unactive'
+                }
             >
                 <Button className="button-gray" onClick={showModal}>
                     <Link to="/verify-request">Thoát</Link>
