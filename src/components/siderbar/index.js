@@ -183,7 +183,10 @@ const RenderMenu = () => {
                             <OrderedListOutlined className="menu-item-icon" />
                         }
                     >
-                        <Link className="sider-bar__link" to="/checkin-checkout">
+                        <Link
+                            className="sider-bar__link"
+                            to="/checkin-checkout"
+                        >
                             Quản lí ra vào bãi
                         </Link>
                     </Menu.Item>

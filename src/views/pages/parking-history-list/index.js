@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown } from 'antd'
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
+import { roles } from 'contexts/UserContext'
+
 import './parking-history-list.scss'
 
 const { Search } = Input
@@ -67,7 +69,7 @@ function ParkingHistories() {
     const vehicleStateOfItem = ['All', 'Đang đỗ', 'Không đỗ']
     const historyTypeOfItem = ['All', 'Biển số xe', 'Tên bãi đỗ xe']
     const data = []
-    if (user.role == 1) {
+    if (user.role === roles.BASIC_USER) {
         for (let i = 0; i < page / 2; i++) {
             data.push({
                 key: i,
@@ -87,7 +89,7 @@ function ParkingHistories() {
                 cost: '2000',
             })
         }
-    } else if (user.role == 2) {
+    } else if (user.role === roles.PARKING_LOT_USER) {
         for (let i = 0; i < page / 2; i++) {
             data.push({
                 key: i,
