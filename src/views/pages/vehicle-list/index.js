@@ -19,7 +19,8 @@ function Vehicles() {
     }, [user])
 
     const navigate = useNavigate()
-    const onClickHandler = () => navigate('/vehicles/detail')
+    const onClickHandler = (vehicleId) =>
+        navigate(`/vehicles/detail/${vehicleId}`)
 
     return (
         <div className="vehicles-list-container">
@@ -35,7 +36,7 @@ function Vehicles() {
                 {vehicleList?.map((vehicle) => (
                     <div
                         className="vehicles-list-container__content__sub"
-                        onClick={onClickHandler}
+                        onClick={() => onClickHandler(vehicle.id)}
                     >
                         <div className="vehicles-list-container__content__item">
                             <img
