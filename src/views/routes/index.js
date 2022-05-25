@@ -114,7 +114,7 @@ function AllRoutes() {
                     element={<MainLayout component={Vehicles} />}
                 />
                 <Route
-                    path="/vehicles/detail"
+                    path="/vehicles/detail/:id"
                     element={<MainLayout component={DetailVehicle} />}
                 />
                 <Route

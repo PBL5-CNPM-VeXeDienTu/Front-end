@@ -1,21 +1,32 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { Modal, Button } from 'antd'
 import useAuth from 'hooks/useAuth'
+import vehicleApi from 'api/vehicleApi'
 import { roles } from 'contexts/UserContext'
 import './detail-vehicle.scss'
 
-function EditVehicle() {
+function DetailVehicle() {
     const { user } = useAuth()
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const { id } = useParams()
+    const [vehicle, setVehicle] = useState({
+        key: 0,
+        user_name: '',
+        brand: '',
+        license_plate: '',
+        created_at: '',
+        type_of_vehicle: '',
+        status: '',
+    })
 
-    const avatarVehicleURL =
-        process.env.REACT_APP_API_URL +
-        'public/images/avatars/vehicle/default-avatar.png'
-    const cavetFrontURL =
-        process.env.REACT_APP_API_URL + 'public/images/cavet/default.png'
-    const cavetBackURL =
-        process.env.REACT_APP_API_URL + 'public/images/cavet/default.png'
+    useEffect(() => {
+        if (!!user) {
+            vehicleApi.getById(id).then((response) => {
+                setVehicle(response.data)
+            })
+        }
+    }, [user])
 
     const showModal = () => {
         setIsModalVisible(true)
@@ -31,47 +42,74 @@ function EditVehicle() {
     return (
         <div className="detail-vehicle-content">
             <div className="title">Thông tin xe</div>
-            <div className="detail-vehicle-content__vehicle">
-                <div className="detail-vehicle-content__vehicle__image">
-                    <img className="img" src={avatarVehicleURL} alt="avatar" />
-                </div>
-                <div className="detail-vehicle-content__vehicle__info">
-                    <div className="detail-vehicle-content__vehicle__info__item">
-                        <span className="span-title">Biển số</span>
-                        <span className="span-content">123456</span>
+            <div>
+                <div className="detail-vehicle-content__vehicle">
+                    <div className="detail-vehicle-content__vehicle__image">
+                        <img
+                            className="img"
+                            src={process.env.REACT_APP_API_URL + vehicle.avatar}
+                            alt="avatar"
+                        />
                     </div>
-                    <div className="detail-vehicle-content__vehicle__info__item">
-                        <span className="span-title">Hãng xe</span>
-                        <span className="span-content">Suzuki</span>
-                    </div>
-                    <div className="detail-vehicle-content__vehicle__info__item">
-                        <span className="span-title">Màu</span>
-                        <span className="span-content">Xanh đen</span>
-                    </div>
-                    <div className="detail-vehicle-content__vehicle__info__item">
-                        <span className="span-title">Ngày đăng ký</span>
-                        <span className="span-content">01/01/2022</span>
-                    </div>
+                    <div className="detail-vehicle-content__vehicle__info">
+                        <div className="detail-vehicle-content__vehicle__info__item">
+                            <span className="span-title">Biển số</span>
+                            <span className="span-content">
+                                {vehicle.license_plate}
+                            </span>
+                        </div>
+                        <div className="detail-vehicle-content__vehicle__info__item">
+                            <span className="span-title">Hãng xe</span>
+                            <span className="span-content">
+                                {vehicle.brand}
+                            </span>
+                        </div>
+                        <div className="detail-vehicle-content__vehicle__info__item">
+                            <span className="span-title">Màu</span>
+                            <span className="span-content">
+                                {vehicle.color}
+                            </span>
+                        </div>
+                        <div className="detail-vehicle-content__vehicle__info__item">
+                            <span className="span-title">Ngày đăng ký</span>
+                            <span className="span-content">
+                                {vehicle.createdAt}
+                            </span>
+                        </div>
 
-                    <div className="detail-vehicle-content__vehicle__info__item">
-                        <span className="span-title">Mô tả</span>
-                        <span className="span-content">
-                            Xe không kính, không phải là vì xe không có kính
-                        </span>
+                        <div className="detail-vehicle-content__vehicle__info__item">
+                            <span className="span-title">Mô tả</span>
+                            <span className="span-content">
+                                {vehicle.detail}
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="detail-vehicle-content__cavet">
-                <div className="detail-vehicle-content__cavet__item">
-                    <span className="span">Hình ảnh caver trước</span>
-                    <div className="detail-vehicle-content__cavet__item__image">
-                        <img src={cavetFrontURL} alt="avatar" />
+
+                <div className="detail-vehicle-content__cavet">
+                    <div className="detail-vehicle-content__cavet__item">
+                        <span className="span">Hình ảnh caver trước</span>
+                        <div className="detail-vehicle-content__cavet__item__image">
+                            <img
+                                src={
+                                    process.env.REACT_APP_API_URL +
+                                    vehicle.cavet_front
+                                }
+                                alt="avatar"
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="detail-vehicle-content__cavet__item">
-                    <span className="span">Hình ảnh caver sau</span>
-                    <div className="detail-vehicle-content__cavet__item__image">
-                        <img src={cavetBackURL} alt="avatar" />
+                    <div className="detail-vehicle-content__cavet__item">
+                        <span className="span">Hình ảnh caver sau</span>
+                        <div className="detail-vehicle-content__cavet__item__image">
+                            <img
+                                src={
+                                    process.env.REACT_APP_API_URL +
+                                    vehicle.cavet_back
+                                }
+                                alt="avatar"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -118,4 +156,4 @@ function EditVehicle() {
     )
 }
 
-export default EditVehicle
+export default DetailVehicle
