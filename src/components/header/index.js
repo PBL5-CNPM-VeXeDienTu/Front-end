@@ -20,7 +20,7 @@ function Header() {
     const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
 
     const handleLogout = () => {
-        setToken(null)
+        setToken('null')
     }
 
     const menu = () => {
