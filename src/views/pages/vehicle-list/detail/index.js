@@ -26,7 +26,7 @@ function DetailVehicle() {
                 setVehicle(response.data)
             })
         }
-    }, [user])
+    }, [user, id])
 
     const showModal = () => {
         setIsModalVisible(true)

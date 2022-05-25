@@ -8,12 +8,12 @@ import './vehicle-list.scss'
 
 function Vehicles() {
     const { user } = useAuth()
-    const [vehicleList, setVehicalList] = useState([])
+    const [vehicleList, setVehicleList] = useState([])
 
     useEffect(() => {
         if (!!user) {
             vehicleApi.getByUserId(user.id).then((response) => {
-                setVehicalList(response.data)
+                setVehicleList(response.data)
             })
         }
     }, [user])
