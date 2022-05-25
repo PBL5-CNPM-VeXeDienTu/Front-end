@@ -1,11 +1,12 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
+import useAuth from 'hooks/useAuth'
 
 const AuthenticatedRoute = ({ ...rest }) => {
-    const userRole = parseInt(localStorage.getItem('role'))
+    const { user } = useAuth()
 
-    if (userRole) {
-        return rest.acceptedRoles.includes(userRole) ? (
+    if (user) {
+        return rest.acceptedRoles.includes(user.role) ? (
             <Outlet />
         ) : (
             <Navigate to="/404" />

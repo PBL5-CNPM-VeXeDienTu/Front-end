@@ -13,7 +13,7 @@ export const roles = {
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token'))
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
     const [collapsed, setCollapsed] = useState(
         localStorage.getItem('collapsed') === 'true',
     )
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (token) {
+        if (token !== 'null') {
             // Set authenticate token to axios
             axiosClient.defaults.headers.common[
                 'Authorization'
@@ -36,15 +36,18 @@ export const AuthProvider = ({ children }) => {
             auth.getAuthenticatedUser()
                 .then((response) => {
                     setUser(response.data)
+                    localStorage.setItem('token', token)
+                    localStorage.setItem('user', JSON.stringify(response.data))
                     localStorage.setItem('role', response.data.role)
                 })
                 .catch((error) => {
                     console.log(error)
                 })
-        } else {
+        }
+        else {
             // User logout
-            setUser({})
             localStorage.setItem('token', null)
+            localStorage.setItem('user', null)
             localStorage.setItem('role', null)
             navigate('/login')
         }

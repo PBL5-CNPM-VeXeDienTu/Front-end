@@ -30,7 +30,6 @@ function Login() {
             const response = await auth.login(values)
             if (response.request.status === 200) {
                 setToken(response.data.token)
-                localStorage.setItem('token', response.data.token)
                 navigate('/profile')
                 alert(response.data.message)
             }
