@@ -7,4 +7,4 @@ const feedbackApi = {
     },
 }
 
-export default feedbackApi;
+export default feedbackApi

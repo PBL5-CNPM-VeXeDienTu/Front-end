@@ -1,44 +1,55 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Form, Input, Button, Select } from 'antd'
 import messages from 'assets/lang/messages'
+import packageApi from 'api/packageApi'
+import useAuth from 'hooks/useAuth'
 import './add-package.scss'
 
 const { Option } = Select
 
 function AddPackage() {
+    const navigate = useNavigate()
+    const { user } = useAuth()
     const PackageTypes = []
     for (let i = 0; i < 1; i++) {
-        PackageTypes.push(
-            <Option key={i.toString(36) + i}>Gói ưu đãi tuần</Option>,
-        )
-        PackageTypes.push(
-            <Option key={i.toString(36) + i + 1}>Gói ưu đãi tháng</Option>,
-        )
-        PackageTypes.push(
-            <Option key={i.toString(36) + i + 2}>Gói ưu đãi quý</Option>,
-        )
-        PackageTypes.push(
-            <Option key={i.toString(36) + i + 2}>Gói ưu đãi năm</Option>,
-        )
+        PackageTypes.push(<Option key={i + 1}>Gói ưu đãi tuần</Option>)
+        PackageTypes.push(<Option key={i + 2}>Gói ưu đãi tháng</Option>)
+        PackageTypes.push(<Option key={i + 3}>Gói ưu đãi quý</Option>)
+        PackageTypes.push(<Option key={i + 4}>Gói ưu đãi năm</Option>)
     }
 
     const vehicleType = []
     for (let i = 0; i < 1; i++) {
-        vehicleType.push(<Option key={i.toString(36) + i}>Xe đạp</Option>)
-        vehicleType.push(
-            <Option key={i.toString(36) + i}>Xe đạp điện / Xe máy điện</Option>,
-        )
-        vehicleType.push(<Option key={i.toString(36) + i + 2}>Xe máy</Option>)
-        vehicleType.push(<Option key={i.toString(36) + i + 2}>Xe ô tô</Option>)
+        vehicleType.push(<Option key={i + 1}>Xe đạp điện / Xe máy điện</Option>)
+        vehicleType.push(<Option key={i + 2}>Xe đạp</Option>)
+        vehicleType.push(<Option key={i + 3}>Xe ô tô</Option>)
     }
+
+    const handleSubmit = async (values) => {
+        try {
+            const newPackage = {
+                parking_lot_id: user.id,
+                name: values.name,
+                type_id: parseInt(values.type_id),
+                vehicle_type_id: parseInt(values.vehicle_type_id),
+                price: parseInt(values.price),
+            }
+            const response = await packageApi.create(newPackage)
+            alert(response.data.message)
+            navigate('/packages')
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
     return (
         <div className="add-package-content">
             <div className="title">Thêm gói ưu đãi</div>
             <Form
                 name="addprofile"
                 className="add-package-content__sub"
-                // onFinish={handleSubmit}
+                onFinish={handleSubmit}
             >
                 <div className="add-package-content__sub__info">
                     <div className="add-package-content__sub__info__item">
@@ -59,7 +70,7 @@ function AddPackage() {
                     <div className="add-package-content__sub__info__item">
                         <span className="span">Loại gói ưu đãi</span>
                         <Form.Item
-                            name="package_type"
+                            name="type_id"
                             rules={[
                                 {
                                     required: true,
@@ -74,7 +85,7 @@ function AddPackage() {
                     <div className="add-package-content__sub__info__item">
                         <span className="span">Phương tiện</span>
                         <Form.Item
-                            name="vehicle_type"
+                            name="vehicle_type_id"
                             rules={[
                                 {
                                     required: true,
