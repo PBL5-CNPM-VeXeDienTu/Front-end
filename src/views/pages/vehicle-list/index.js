@@ -12,7 +12,7 @@ function Vehicles() {
 
     useEffect(() => {
         if (!!user) {
-            vehicleApi.getByUserId(user.id).then((response) => {
+            vehicleApi.getListByUserId(user.id).then((response) => {
                 setVehicleList(response.data)
             })
         }

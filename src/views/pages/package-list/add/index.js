@@ -35,7 +35,7 @@ function AddPackage() {
                 vehicle_type_id: parseInt(values.vehicle_type_id),
                 price: parseInt(values.price),
             }
-            const response = await packageApi.create(newPackage)
+            const response = await packageApi.createNew(newPackage)
             alert(response.data.message)
             navigate('/packages')
         } catch (error) {

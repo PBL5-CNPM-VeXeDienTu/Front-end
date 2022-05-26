@@ -1,27 +1,27 @@
 import axiosClient from './axiosClient'
 
 const vehicleApi = {
-    getAll: (params) => {
-        const url = '/api/vehicles/'
-        return axiosClient.get(url, { params })
+    getListByParams : (params) => {
+        const url = `/api/vehicles?limit=${params.limit}&page=${params.page}`
+        return axiosClient.get(url)
     },
-    getByUserId: (id) => {
+    getListByUserId: (id) => {
         const url = `api/vehicles/get-by-owner/${id}`
         return axiosClient.get(url)
     },
-    getById: (id) => {
+    getOneById: (id) => {
         const url = `api/vehicles/${id}`
         return axiosClient.get(url)
     },
-    add: (credentials) => {
+    createNew: (credentials) => {
         const url = `api/vehicles`
         return axiosClient.post(url, credentials)
     },
-    update: (id, credentials) => {
+    updateById: (id, credentials) => {
         const url = `/api/vehicles/${id}`
         return axiosClient.patch(url, credentials)
     },
-    delete: (id) => {
+    deleteById: (id) => {
         const url = `/api/vehicles/${id}`
         return axiosClient.delete(url)
     },

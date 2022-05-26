@@ -15,7 +15,7 @@ function EditProfile() {
 
     const handleSubmit = async (values) => {
         try {
-            const response = await userApi.update(user.id, values)
+            const response = await userApi.updateById(user.id, values)
             alert(response.data.message)
             navigate('/profile')
         } catch (error) {
