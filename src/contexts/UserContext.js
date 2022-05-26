@@ -43,8 +43,7 @@ export const AuthProvider = ({ children }) => {
                 .catch((error) => {
                     console.log(error)
                 })
-        }
-        else {
+        } else {
             // User logout
             localStorage.setItem('token', null)
             localStorage.setItem('user', null)

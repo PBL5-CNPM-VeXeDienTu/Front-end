@@ -16,33 +16,17 @@ function AddFeedback() {
             <Option key={i + 1}>Mong muốn thêm chức năng</Option>,
         )
         FeedbackTypes.push(
-            <Option key={i + 2}>
-                Liên lạc về lỗi của hệ thống
-            </Option>,
+            <Option key={i + 2}>Liên lạc về lỗi của hệ thống</Option>,
         )
-        FeedbackTypes.push(
-            <Option key={i + 3}>Câu hỏi</Option>,
-        )
+        FeedbackTypes.push(<Option key={i + 3}>Câu hỏi</Option>)
     }
 
     const Features = []
     for (let i = 0; i < 1; i++) {
-        Features.push(
-            <Option key={i + 1}>Nạp tiền vào ví cá nhân</Option>,
-        )
-        Features.push(
-            <Option key={i + 2}>
-                Quản lý lịch sử gửi xe
-            </Option>,
-        )
-        Features.push(
-            <Option key={i + 3}>Hủy đăng ký xe</Option>,
-        )
-        Features.push(
-            <Option key={i + 4}>
-                Chỉnh sửa thông tin xe
-            </Option>,
-        )
+        Features.push(<Option key={i + 1}>Nạp tiền vào ví cá nhân</Option>)
+        Features.push(<Option key={i + 2}>Quản lý lịch sử gửi xe</Option>)
+        Features.push(<Option key={i + 3}>Hủy đăng ký xe</Option>)
+        Features.push(<Option key={i + 4}>Chỉnh sửa thông tin xe</Option>)
     }
 
     const handleSubmit = async (values) => {
