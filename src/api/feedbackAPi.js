@@ -1,13 +1,17 @@
 import axiosClient from './axiosClient'
 
 const feedbackApi = {
-    getAll: (params) => {
+    getListByParams: (params) => {
         const url = `/api/feedbacks?limit=${params.limit}&page=${params.page}`
         return axiosClient.get(url)
     },
-    create: (credentials) => {
+    createNew: (credentials) => {
         const url = '/api/feedbacks'
         return axiosClient.post(url, credentials)
+    },
+    updateById: (id, credentials) => {
+        const url = `/api/feedbacks/${id}`
+        return axiosClient.patch(url, credentials)
     },
 }
 
