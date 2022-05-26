@@ -118,16 +118,16 @@ function Packages() {
                     limit: pageSize,
                     page: page,
                 }
-                packageApi.getListByParams(params).then((res) => {
-                    setAllPackageList(
-                        res.data.rows.map((obj) => ({
-                            name: obj.name,
-                            parking_lot_name: obj.ParkingLot.name,
-                            package_type: obj.PackageType.type_name,
-                            vehicle_type: obj.VehicleType.type_name,
-                            price: obj.price,
-                        })),
-                    )
+                packageApi.getListByParams(params).then((response) => {
+                        setAllPackageList(
+                            response.data.rows.map((packageItem) => ({
+                                name: packageItem.name,
+                                parking_lot_name: packageItem.ParkingLot.name,
+                                package_type: packageItem.PackageType.type_name,
+                                vehicle_type: packageItem.VehicleType.type_name,
+                                price: packageItem.price,
+                            })),
+                        )
                 })
             },
         },
@@ -140,18 +140,17 @@ function Packages() {
         }
         packageApi
             .getListByParams(params)
-            .then((res) => {
-                setTotal(res.data.count)
+            .then((response) => {
+                setTotal(response.data.count)
                 setAllPackageList(
-                    res.data.rows.map((obj) => ({
-                        name: obj.name,
-                        parking_lot_name: obj.ParkingLot.name,
-                        package_type: obj.PackageType.type_name,
-                        vehicle_type: obj.VehicleType.type_name,
-                        price: obj.price,
+                    response.data.rows.map((packageItem) => ({
+                        name: packageItem.name,
+                        parking_lot_name: packageItem.ParkingLot.name,
+                        package_type: packageItem.PackageType.type_name,
+                        vehicle_type: packageItem.VehicleType.type_name,
+                        price: packageItem.price,
                     })),
                 )
-                console.log('getAll' + res.data)
             })
             .catch((error) => {
                 alert(error.response.data.message)
@@ -162,23 +161,22 @@ function Packages() {
         if (!!user) {
             userPackageApi
                 .getPackageByOwner(user.id)
-                .then((res) => {
+                .then((response) => {
                     setPackageOfOwnerList(
-                        res.data.rows.map((obj) => ({
-                            name: obj.name,
-                            parking_lot_name: obj.ParkingLot.name,
-                            package_type: obj.PackageType.type_name,
-                            vehicle_type: obj.VehicleType.type_name,
+                        response.data.rows.map((packageItem) => ({
+                            name: packageItem.name,
+                            parking_lot_name: packageItem.ParkingLot.name,
+                            package_type: packageItem.PackageType.type_name,
+                            vehicle_type: packageItem.VehicleType.type_name,
                             date_start: new Date(
-                                obj.createdAt,
+                                packageItem.createdAt,
                             ).toLocaleDateString('en-GB'),
-                            date_end: new Date(obj.expireAt).toLocaleDateString(
+                            date_end: new Date(packageItem.expireAt).toLocaleDateString(
                                 'en-GB',
                             ),
-                            price: obj.price,
+                            price: packageItem.price,
                         })),
                     )
-                    console.log('getPackageByOwner' + res.data)
                 })
                 .catch((error) => {
                     alert(error.response.data.message)
@@ -292,7 +290,7 @@ function Packages() {
             <div className="package-list-content__sub">
                 <Table
                     className="package-list-content__sub__table"
-                    columns={columnsOfAdminAndBasic}
+                    columns={columnsForAdminAndBasicRole}
                     dataSource={allPackageList}
                     pagination={state.pagination}
                     rowClassName="package-list-content__sub__table__row-action"
@@ -420,7 +418,7 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsOfAdminAndBasic}
+                        columns={columnsForAdminAndBasicRole}
                         dataSource={allPackageList}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
@@ -548,7 +546,7 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsOfBacicAndParkinglot}
+                        columns={columnsForBacicAndParkinglotRole}
                         dataSource={packageOfOwnerList}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
@@ -621,7 +619,7 @@ function Packages() {
             <div className="package-list-content__sub">
                 <Table
                     className="package-list-content__sub__table"
-                    columns={columnsOfBacicAndParkinglot}
+                    columns={columnsForBacicAndParkinglotRole}
                     dataSource={packageOfParkinglotList}
                     pagination={state.pagination}
                     rowClassName="package-list-content__sub__table__row-action"
