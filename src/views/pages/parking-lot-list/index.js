@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Table, Input, Modal } from 'antd'
 import {
@@ -9,8 +9,12 @@ import {
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import { roles } from 'contexts/UserContext'
+import parkingLotApi from 'api/parkingLotApi'
 
 import './parking-lot-list.scss'
+
+const VERIFIED_STATE = 'Đã được kiểm duyệt'
+const VERIFYING_STATE = 'Đang chờ xử lý'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
@@ -43,6 +47,7 @@ const columns = [
 
 function ParkingLots() {
     const { user } = useAuth()
+    const [parkingLotList, setParkingLotList] = useState([])
     const [page, setPage] = useState(10)
     const [filterState, setFilterState] = useState(0)
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -83,6 +88,14 @@ function ParkingLots() {
     const handleOk = () => {
         setIsModalVisible(false)
     }
+
+    useEffect(() => {
+        if (!!user) {
+            parkingLotApi.getListByUserId(user.id).then((response) => {
+                setParkingLotList(response.data.rows)
+            })
+        }
+    }, [user])
 
     return user.role === roles.BASIC_USER ? (
         //-------------------------------- Basic User --------------------------------------
@@ -181,135 +194,92 @@ function ParkingLots() {
                 </Link>
             </div>
             <div className="parking-lot-list-container__content">
-                <div className="parking-lot-list-container__content__sub">
-                    <div className="parking-lot-list-container__content__item">
-                        <img
-                            className="parking-lot-list-container__content__item__image"
-                            src={avatarURL}
-                            alt=""
-                        />
-                        <div className="parking-lot-list-container__content__item__info">
-                            <div>
-                                <span className="properties">Tên nhà xe</span>
-                                <span>Bãi xe khu A đại học Bách Khoa</span>
-                            </div>
-                            <div>
-                                <span className="properties">Chủ nhà xe</span>
-                                <span>Nguyễn Hoàng Phú</span>
-                            </div>
-                            <div>
-                                <span className="properties">Thời gian mở</span>
-                                <span>7h - 22h</span>
-                            </div>
-                            <div>
-                                <span className="properties">Tình trạng</span>
-                                <span>Đang mở</span>
-                            </div>
-                            <div>
-                                <span className="properties">Sức chứa</span>
-                                <span>1000</span>
-                            </div>
-                            <div>
-                                <span className="properties">Xác thực</span>
-                                <span>Đã xác thực</span>
-                            </div>
-                            <div>
-                                <span className="properties">Mô tả</span>
-                                <span>
-                                    xe có đầy đủ 2 kính , bánh xe có vành màu
-                                    cam , ống bô độ vip.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="parking-lot-list-container__content__icon">
-                        <Link to="/parking-lots/edit">
-                            <span className="edit-parking-lot">
-                                <EditOutlined />
-                            </span>
-                        </Link>
-                        <span className="delete-parking-lot">
-                            <CloseOutlined onClick={showModal} />
-                        </span>
-                    </div>
-                    <Modal
-                        className="delete-parking-lot-modal"
-                        title="Hủy đăng ký bãi đỗ xe"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                    >
-                        <p>
-                            Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay
-                            không ?
-                        </p>
-                    </Modal>
-                </div>
-
-                <div className="parking-lot-list-container__content__sub">
-                    <div className="parking-lot-list-container__content__item">
-                        <img
-                            className="parking-lot-list-container__content__item__image"
-                            src={avatarURL}
-                            alt=""
-                        />
-                        <div className="parking-lot-list-container__content__item__info">
-                            <div>
-                                <span className="properties">Tên nhà xe</span>
-                                <span>Bãi xe khu A đại học Bách Khoa</span>
-                            </div>
-                            <div>
-                                <span className="properties">Chủ nhà xe</span>
-                                <span>Nguyễn Hoàng Phú</span>
-                            </div>
-                            <div>
-                                <span className="properties">Thời gian mở</span>
-                                <span>7h - 22h</span>
-                            </div>
-                            <div>
-                                <span className="properties">Tình trạng</span>
-                                <span>Đang mở</span>
-                            </div>
-                            <div>
-                                <span className="properties">Sức chứa</span>
-                                <span>1000</span>
-                            </div>
-                            <div>
-                                <span className="properties">Xác thực</span>
-                                <span>Đã xác thực</span>
-                            </div>
-                            <div>
-                                <span className="properties">Mô tả</span>
-                                <span>
-                                    xe có đầy đủ 2 kính , bánh xe có vành màu
-                                    cam , ống bô độ vip.
-                                </span>
+                {parkingLotList?.map((parkingLot) => (
+                    <div className="parking-lot-list-container__content__sub">
+                        <div className="parking-lot-list-container__content__item">
+                            <img
+                                className="parking-lot-list-container__content__item__image"
+                                src={
+                                    process.env.REACT_APP_API_URL +
+                                    parkingLot.avatar
+                                }
+                                alt=""
+                            />
+                            <div className="parking-lot-list-container__content__item__info">
+                                <div>
+                                    <span className="span1">Tên nhà xe</span>
+                                    <span className="span2">
+                                        {parkingLot.name}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Thời gian mở</span>
+                                    <span className="span2">
+                                        {parkingLot.time_slot}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Tình trạng</span>
+                                    <span className="span2">
+                                        {parkingLot.is_open
+                                            ? 'Đang mở'
+                                            : 'Đang đóng'}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Sức chứa</span>
+                                    <span className="span2">
+                                        {parkingLot.capacity}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Xác thực</span>
+                                    <span
+                                        className={
+                                            parkingLot.VerifyState.state ===
+                                            VERIFIED_STATE
+                                                ? 'span2-green'
+                                                : parkingLot.VerifyState
+                                                      .state === VERIFYING_STATE
+                                                ? 'span2-yellow'
+                                                : 'span2-red'
+                                        }
+                                    >
+                                        {parkingLot.VerifyState.state}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Địa chỉ</span>
+                                    <span className="span2">
+                                        {parkingLot.address}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="parking-lot-list-container__content__icon">
-                        <Link to="/parking-lots/edit">
-                            <span className="edit-parking-lot">
-                                <EditOutlined />
+                        <div className="parking-lot-list-container__content__icon">
+                            <Link to="/parking-lots/edit">
+                                <span className="edit-parking-lot">
+                                    <EditOutlined />
+                                </span>
+                            </Link>
+                            <span className="delete-parking-lot">
+                                <CloseOutlined onClick={showModal} />
                             </span>
-                        </Link>
-                        <span className="delete-parking-lot">
-                            <CloseOutlined onClick={showModal} />
-                        </span>
+                        </div>
+                        <Modal
+                            className="delete-parking-lot-modal"
+                            title="Hủy đăng ký bãi đỗ xe"
+                            visible={isModalVisible}
+                            onOk={handleOk}
+                            onCancel={handleCancel}
+                        >
+                            <p>
+                                Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay
+                                không ?
+                            </p>
+                        </Modal>
                     </div>
-                    <Modal
-                        className="delete-parking-lot-modal"
-                        title="Hủy đăng ký bãi đỗ xe"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                    >
-                        <p>
-                            Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay
-                            không ?
-                        </p>
-                    </Modal>
-                </div>
+                ))}
             </div>
         </div>
     ) : (

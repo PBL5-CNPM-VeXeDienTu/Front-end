@@ -318,22 +318,41 @@
             }
 
             &__info {
-                width: 100%;
+                width: 95%;
                 margin: auto 0;
 
                 div {
                     height: 7vh;
                     display: grid;
-                    grid-template-columns: 30% 70%;
-
-                    .properties {
-                        font-weight: bold;
-                        text-align: right;
-                        width: 8vw;
-                    }
+                    grid-template-columns: 25% 75%;
 
                     span {
                         font-size: 1.1rem;
+                    }
+
+                    .span1 {
+                        width: 100%;
+                        text-align: right;
+                        font-weight: bold;
+                    }
+
+                    .span2 {
+                        margin-left: 10%;
+
+                        &-red {
+                            margin-left: 10%;
+                            color: red;
+                        }
+
+                        &-green {
+                            margin-left: 10%;
+                            color: #41bc3f;
+                        }
+
+                        &-yellow {
+                            margin-left: 10%;
+                            color: orange;
+                        }
                     }
                 }
             }

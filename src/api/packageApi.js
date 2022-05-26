@@ -1,7 +1,7 @@
 import axiosClient from './axiosClient'
 
 const packageApi = {
-    getListByParams : (params) => {
+    getListByParams: (params) => {
         const url = `/api/packages?limit=${params.limit}&page=${params.page}`
         return axiosClient.get(url)
     },

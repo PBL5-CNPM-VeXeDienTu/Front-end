@@ -44,25 +44,6 @@ function AddParkingLot() {
                     </div>
 
                     <div className="add-parking-lot-content__sub__info__item">
-                        <span className="span">Chủ nhà xe</span>
-                        <Form.Item
-                            name="owner_name"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: messages['text_required'],
-                                },
-                            ]}
-                        >
-                            <Input
-                                type="name"
-                                size="large"
-                                className="textbox"
-                            />
-                        </Form.Item>
-                    </div>
-
-                    <div className="add-parking-lot-content__sub__info__item">
                         <span className="span">Thời gian mở</span>
                         <Form.Item
                             name="time_slot"
