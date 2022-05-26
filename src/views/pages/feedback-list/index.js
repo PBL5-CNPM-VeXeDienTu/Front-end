@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
+import { Table, Input, Menu, Dropdown, Modal, Form, Radio } from 'antd'
 import {
     FilterOutlined,
     PlusCircleOutlined,
@@ -52,14 +52,15 @@ const feedbackTypeOfItem = [
 function ParkingLots() {
     const { user } = useAuth()
     const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
     const [feedbackType, setFeedbackType] = useState('All')
     const [feature, setFeature] = useState('All')
     const [feedbackState, setFeedbackState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
     const [showBasicUserModal, setShowBasicUserModal] = useState(false)
     const [showAdminModal, setShowAdminModal] = useState(false)
-    const [total, setTotal] = useState(0)
     const [dataComlumns, setDataComlumns] = useState([{}])
+    const [radioValue, setRadioValue] = useState(0)
     const [feedback, setFeedback] = useState({
         key: 0,
         type_name: '',
@@ -93,17 +94,17 @@ function ParkingLots() {
                     limit: pageSize,
                     page: page,
                 }
-                feedbackApi.getAll(params).then((response) => {
+                feedbackApi.getListByParams(params).then((response) => {
                     setDataComlumns(
-                        response.data.rows.map((obj) => ({
-                            key: obj.id,
-                            feedback_type: obj.Feature.name,
-                            feature: obj.FeedbackType.type_name,
-                            is_processed: obj.is_processed
+                        response.data.rows.map((feedback) => ({
+                            id: feedback.id,
+                            feedback_type: feedback.Feature.name,
+                            feature: feedback.FeedbackType.type_name,
+                            is_processed: feedback.is_processed
                                 ? 'Đã duyệt'
                                 : 'Chưa duyệt',
-                            content: obj.content,
-                            response: obj.response,
+                            content: feedback.content,
+                            response: feedback.response,
                         })),
                     )
                 })
@@ -117,18 +118,18 @@ function ParkingLots() {
                 limit: pageSize,
                 page: 1,
             }
-            feedbackApi.getAll(params).then((response) => {
+            feedbackApi.getListByParams(params).then((response) => {
                 setTotal(response.data.count)
                 setDataComlumns(
-                    response.data.rows.map((obj) => ({
-                        key: obj.id,
-                        feedback_type: obj.Feature.name,
-                        feature: obj.FeedbackType.type_name,
-                        is_processed: obj.is_processed
+                    response.data.rows.map((feedback) => ({
+                        id: feedback.id,
+                        feedback_type: feedback.Feature.name,
+                        feature: feedback.FeedbackType.type_name,
+                        is_processed: feedback.is_processed
                             ? 'Đã duyệt'
                             : 'Chưa duyệt',
-                        content: obj.content,
-                        response: obj.response,
+                        content: feedback.content,
+                        response: feedback.response,
                     })),
                 )
             })
@@ -139,6 +140,7 @@ function ParkingLots() {
         setShowBasicUserModal(false)
         setShowAdminModal(false)
     }
+
     const showFeedbackItem = (record) => {
         setShowBasicUserModal(true)
         setFeedback(record)
@@ -147,6 +149,23 @@ function ParkingLots() {
     const replyFeedbackItem = (record) => {
         setShowAdminModal(true)
         setFeedback(record)
+    }
+
+    const handleSubmit = async (values) => {
+        try {
+            const updateFeedback = {
+                is_processed: radioValue ? true : false,
+                response: values.response,
+            }
+            const response = await feedbackApi.updateById(
+                feedback.id,
+                updateFeedback,
+            )
+            alert(response.data.message)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
     const menu = () => {
@@ -353,7 +372,7 @@ function ParkingLots() {
                     <Form
                         name="reply_feedback"
                         className="feedback-list-modal__sub"
-                        // onFinish={handleSubmit}
+                        onFinish={handleSubmit}
                     >
                         <div className="feedback-list-modal__sub__info">
                             <div className="feedback-list-modal__sub__info__item">
@@ -361,6 +380,7 @@ function ParkingLots() {
                                 <Form.Item
                                     name="type_id"
                                     initialValue={feedback.feedback_type}
+                                    className="form-item"
                                 >
                                     <Input
                                         className="text"
@@ -375,6 +395,7 @@ function ParkingLots() {
                                 <Form.Item
                                     name="feature_id"
                                     initialValue={feedback.feature}
+                                    className="form-item"
                                 >
                                     <Input
                                         className="text"
@@ -389,6 +410,7 @@ function ParkingLots() {
                                 <Form.Item
                                     name="content"
                                     initialValue={feedback.content}
+                                    className="form-item"
                                 >
                                     <Input.TextArea
                                         className="text"
@@ -399,8 +421,27 @@ function ParkingLots() {
                             </div>
 
                             <div className="feedback-list-modal__sub__info__item">
+                                <span className="span__textarea">
+                                    Trạng thái
+                                </span>
+                                <Radio.Group
+                                    className="radio-group"
+                                    value={radioValue}
+                                    onChange={(e) => {
+                                        setRadioValue(e.target.value)
+                                    }}
+                                >
+                                    <Radio value={0}>Chưa duyệt</Radio>
+                                    <Radio value={1}>Đã duyệt</Radio>
+                                </Radio.Group>
+                            </div>
+
+                            <div className="feedback-list-modal__sub__info__item">
                                 <span className="span__textarea">Phản hồi</span>
-                                <Form.Item name="response">
+                                <Form.Item
+                                    name="response"
+                                    className="form-item"
+                                >
                                     <Input.TextArea
                                         className="textarea"
                                         size="medium"

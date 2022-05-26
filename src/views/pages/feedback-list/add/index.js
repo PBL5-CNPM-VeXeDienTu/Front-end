@@ -36,7 +36,7 @@ function AddFeedback() {
                 feature_id: parseInt(values.feature_id),
                 content: values.content,
             }
-            const response = await feedbackApi.create(newFeedback)
+            const response = await feedbackApi.createNew(newFeedback)
             alert(response.data.message)
             navigate('/feedbacks')
         } catch (error) {
