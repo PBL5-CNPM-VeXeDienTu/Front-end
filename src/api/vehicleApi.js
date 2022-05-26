@@ -1,7 +1,7 @@
 import axiosClient from './axiosClient'
 
 const vehicleApi = {
-    getListByParams : (params) => {
+    getListByParams: (params) => {
         const url = `/api/vehicles?limit=${params.limit}&page=${params.page}`
         return axiosClient.get(url)
     },

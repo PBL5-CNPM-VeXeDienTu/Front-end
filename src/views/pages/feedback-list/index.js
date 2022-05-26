@@ -94,20 +94,39 @@ function ParkingLots() {
                     limit: pageSize,
                     page: page,
                 }
-                feedbackApi.getListByParams(params).then((response) => {
-                    setDataComlumns(
-                        response.data.rows.map((feedback) => ({
-                            id: feedback.id,
-                            feedback_type: feedback.Feature.name,
-                            feature: feedback.FeedbackType.type_name,
-                            is_processed: feedback.is_processed
-                                ? 'Đã duyệt'
-                                : 'Chưa duyệt',
-                            content: feedback.content,
-                            response: feedback.response,
-                        })),
-                    )
-                })
+                user.role === roles.ADMIN
+                    ? feedbackApi.getListByParams(params).then((response) => {
+                          setTotal(response.data.count)
+                          setDataComlumns(
+                              response.data.rows.map((feedback) => ({
+                                  id: feedback.id,
+                                  feedback_type: feedback.Feature.name,
+                                  feature: feedback.FeedbackType.type_name,
+                                  is_processed: feedback.is_processed
+                                      ? 'Đã duyệt'
+                                      : 'Chưa duyệt',
+                                  content: feedback.content,
+                                  response: feedback.response,
+                              })),
+                          )
+                      })
+                    : feedbackApi
+                          .getListByUserId(user.id, params)
+                          .then((response) => {
+                              setTotal(response.data.count)
+                              setDataComlumns(
+                                  response.data.rows.map((feedback) => ({
+                                      id: feedback.id,
+                                      feedback_type: feedback.Feature.name,
+                                      feature: feedback.FeedbackType.type_name,
+                                      is_processed: feedback.is_processed
+                                          ? 'Đã duyệt'
+                                          : 'Chưa duyệt',
+                                      content: feedback.content,
+                                      response: feedback.response,
+                                  })),
+                              )
+                          })
             },
         },
     }
@@ -118,21 +137,39 @@ function ParkingLots() {
                 limit: pageSize,
                 page: 1,
             }
-            feedbackApi.getListByParams(params).then((response) => {
-                setTotal(response.data.count)
-                setDataComlumns(
-                    response.data.rows.map((feedback) => ({
-                        id: feedback.id,
-                        feedback_type: feedback.Feature.name,
-                        feature: feedback.FeedbackType.type_name,
-                        is_processed: feedback.is_processed
-                            ? 'Đã duyệt'
-                            : 'Chưa duyệt',
-                        content: feedback.content,
-                        response: feedback.response,
-                    })),
-                )
-            })
+            user.role === roles.ADMIN
+                ? feedbackApi.getListByParams(params).then((response) => {
+                      setTotal(response.data.count)
+                      setDataComlumns(
+                          response.data.rows.map((feedback) => ({
+                              id: feedback.id,
+                              feedback_type: feedback.Feature.name,
+                              feature: feedback.FeedbackType.type_name,
+                              is_processed: feedback.is_processed
+                                  ? 'Đã duyệt'
+                                  : 'Chưa duyệt',
+                              content: feedback.content,
+                              response: feedback.response,
+                          })),
+                      )
+                  })
+                : feedbackApi
+                      .getListByUserId(user.id, params)
+                      .then((response) => {
+                          setTotal(response.data.count)
+                          setDataComlumns(
+                              response.data.rows.map((feedback) => ({
+                                  id: feedback.id,
+                                  feedback_type: feedback.Feature.name,
+                                  feature: feedback.FeedbackType.type_name,
+                                  is_processed: feedback.is_processed
+                                      ? 'Đã duyệt'
+                                      : 'Chưa duyệt',
+                                  content: feedback.content,
+                                  response: feedback.response,
+                              })),
+                          )
+                      })
         } catch (error) {}
     }, [pageSize])
 
