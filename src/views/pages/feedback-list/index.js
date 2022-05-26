@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import { roles } from 'contexts/UserContext'
+import feedbackApi from 'api/feedbackAPi'
 import './feedback-list.scss'
 
 const { Search } = Input
@@ -35,15 +36,30 @@ const columns = [
     },
 ]
 
+const featureOfItem = [
+    'All',
+    '[Basic user] Đăng ký xe',
+    '[Basic user] Chỉnh sửa thông tin xe',
+    '[Basic user] Hủy đăng ký xe',
+]
+const feedbackTypeOfItem = [
+    'All',
+    'Câu hỏi',
+    'Liên lạc về lỗi của hệ thống',
+    'Mong muốn thêm chức năng',
+]
+
 function ParkingLots() {
     const { user } = useAuth()
-    const [page, setPage] = useState(10)
+    const [pageSize, setPageSize] = useState(10)
     const [feedbackType, setFeedbackType] = useState('All')
     const [feature, setFeature] = useState('All')
     const [feedbackState, setFeedbackState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
     const [showBasicUserModal, setShowBasicUserModal] = useState(false)
     const [showAdminModal, setShowAdminModal] = useState(false)
+    const [total, setTotal] = useState(0)
+    const [dataComlumns, setDataComlumns] = useState([{}])
     const [feedback, setFeedback] = useState({
         key: 0,
         type_name: '',
@@ -51,12 +67,6 @@ function ParkingLots() {
         is_processed: '',
         content: '',
     })
-
-    const state = {
-        pagination: {
-            pageSize: page,
-        },
-    }
 
     const onSearch = (value) => console.log(value)
 
@@ -74,36 +84,57 @@ function ParkingLots() {
         else setActiveFilter(true)
     }, [feedbackType, feature, feedbackState])
 
-    const featureOfItem = [
-        'All',
-        '[Basic user] Đăng ký xe',
-        '[Basic user] Chỉnh sửa thông tin xe',
-        '[Basic user] Hủy đăng ký xe',
-    ]
-    const feedbackTypeOfItem = [
-        'All',
-        'Câu hỏi',
-        'Liên lạc về lỗi của hệ thống',
-        'Mong muốn thêm chức năng',
-    ]
-
-    const data = []
-    for (let i = 0; i < page / 2; i++) {
-        data.push({
-            key: i,
-            feedback_type: 'Mong muốn thêm chức năng',
-            feature: 'Nạp tiền vào ví cá nhân',
-            is_processed: 'Chưa duyệt',
-            content: 'Muốn có thêm chức năng nạp tiền bằng tài khoản ngân hàng',
-        })
-        data.push({
-            key: i,
-            feedback_type: 'Mong muốn thêm chức năng',
-            feature: 'Nạp tiền vào ví cá nhân',
-            is_processed: 'Đã duyệt',
-            content: 'Muốn có thêm chức năng nạp tiền bằng tài khoản ngân hàng',
-        })
+    const state = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                feedbackApi.getAll(params).then((response) => {
+                    setDataComlumns(
+                        response.data.rows.map((obj) => ({
+                            key: obj.id,
+                            feedback_type: obj.Feature.name,
+                            feature: obj.FeedbackType.type_name,
+                            is_processed: obj.is_processed
+                                ? 'Đã duyệt'
+                                : 'Chưa duyệt',
+                            content: obj.content,
+                            response: obj.response,
+                        })),
+                    )
+                })
+            },
+        },
     }
+
+    useEffect(() => {
+        try {
+            const params = {
+                limit: pageSize,
+                page: 1,
+            }
+            feedbackApi.getAll(params).then((response) => {
+                setTotal(response.data.count)
+                setDataComlumns(
+                    response.data.rows.map((obj) => ({
+                        key: obj.id,
+                        feedback_type: obj.Feature.name,
+                        feature: obj.FeedbackType.type_name,
+                        is_processed: obj.is_processed
+                            ? 'Đã duyệt'
+                            : 'Chưa duyệt',
+                        content: obj.content,
+                        response: obj.response,
+                    })),
+                )
+            })
+        } catch (error) {}
+    }, [pageSize])
+
     const handleCancel = () => {
         setShowBasicUserModal(false)
         setShowAdminModal(false)
@@ -194,8 +225,8 @@ function ParkingLots() {
                 <div className="feedback-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
-                        defaultValue={{ value: page }}
-                        onChange={(e) => setPage(e.target.value)}
+                        defaultValue={{ value: pageSize }}
+                        onChange={(e) => setPageSize(e.target.value)}
                     >
                         {numOfItem.map((numOfItem, index) => {
                             return (
@@ -246,7 +277,7 @@ function ParkingLots() {
                 <Table
                     className="feedback-list-content__sub__table"
                     columns={columns}
-                    dataSource={data}
+                    dataSource={dataComlumns}
                     pagination={state.pagination}
                     rowClassName={(record, index) =>
                         record.is_processed === 'Đã duyệt'
@@ -265,6 +296,7 @@ function ParkingLots() {
                         }
                     }}
                 />
+                {/* -------------------------------------- MODAL BASIC USER & PARKING-LOT USER -------------------------------------- */}
                 <Modal
                     className="feedback-list-modal"
                     visible={showBasicUserModal}
@@ -305,13 +337,12 @@ function ParkingLots() {
                                     : 'span2-italic'
                             }
                         >
-                            {feedback.is_processed === 'Đã duyệt'
-                                ? 'Đã phản hồi '
-                                : 'Chưa có phản hồi'}
+                            {feedback.response}
                         </span>
                     </div>
                 </Modal>
 
+                {/* -------------------------------------------------- MODAL ADMIN -------------------------------------------------- */}
                 <Modal
                     className="feedback-list-modal"
                     visible={showAdminModal}
@@ -326,9 +357,9 @@ function ParkingLots() {
                     >
                         <div className="feedback-list-modal__sub__info">
                             <div className="feedback-list-modal__sub__info__item">
-                                <span className="span">Loại phản hồi</span>
+                                <span className="span">Loại Feedback</span>
                                 <Form.Item
-                                    name="feedback_type"
+                                    name="type_id"
                                     initialValue={feedback.feedback_type}
                                 >
                                     <Input
@@ -342,7 +373,7 @@ function ParkingLots() {
                             <div className="feedback-list-modal__sub__info__item">
                                 <span className="span">Chức năng</span>
                                 <Form.Item
-                                    name="feature"
+                                    name="feature_id"
                                     initialValue={feedback.feature}
                                 >
                                     <Input
