@@ -22,7 +22,7 @@ function DetailVehicle() {
 
     useEffect(() => {
         if (!!user) {
-            vehicleApi.getById(id).then((response) => {
+            vehicleApi.getOneById(id).then((response) => {
                 setVehicle(response.data)
             })
         }
