@@ -7,6 +7,7 @@ import {
     CloseOutlined,
     SearchOutlined,
 } from '@ant-design/icons'
+import NotFound from 'views/pages/404-not-found'
 import useAuth from 'hooks/useAuth'
 import { roles } from 'contexts/UserContext'
 import parkingLotApi from 'api/parkingLotApi'
@@ -22,22 +23,22 @@ const columns = [
     {
         title: 'Tên bãi đỗ xe',
         dataIndex: 'name',
-        width: '25%',
+        width: '20%',
+    },
+    {
+        title: 'Chủ sở hữu',
+        dataIndex: 'owner_name',
+        width: '20%',
     },
     {
         title: 'Thời gian mở',
-        dataIndex: 'time',
+        dataIndex: 'time_slot',
         width: '13%',
     },
     {
         title: 'Sức chứa',
         dataIndex: 'capacity',
         width: '10%',
-    },
-    {
-        title: 'Trạng thái',
-        dataIndex: 'status',
-        width: '13%',
     },
     {
         title: 'Địa chỉ',
@@ -47,35 +48,14 @@ const columns = [
 
 function ParkingLots() {
     const { user } = useAuth()
-    const [parkingLotList, setParkingLotList] = useState([])
-    const [page, setPage] = useState(10)
+    const navigate = useNavigate()
     const [filterState, setFilterState] = useState(0)
     const [isModalVisible, setIsModalVisible] = useState(false)
-    const navigate = useNavigate()
-
-    const avatarURL =
-        process.env.REACT_APP_API_URL +
-        'public/images/avatars/parking-lot/default-avatar.png'
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const [parkingLotList, setParkingLotList] = useState([])
 
     const onSearch = (value) => console.log(value)
-
-    const state = {
-        pagination: {
-            pageSize: page,
-        },
-    }
-
-    const data = []
-    for (let i = 0; i < page; i++) {
-        data.push({
-            key: i,
-            name: 'Bãi đỗ xe KTX Bách Khoa',
-            time: '7h - 21h30',
-            capacity: 200,
-            status: 'Đang mở cửa',
-            address: '60 Ngô Sĩ Liên, Hòa Khánh Bắc, Liên Chiển, Đà Nẵng',
-        })
-    }
 
     const showModal = () => {
         setIsModalVisible(true)
@@ -89,11 +69,52 @@ function ParkingLots() {
         setIsModalVisible(false)
     }
 
+    const state = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                parkingLotApi.getListByParams(params).then((response) => {
+                    setParkingLotList(
+                        response.data.rows.map((parkingLot) => ({
+                            name: parkingLot.name,
+                            owner_name: parkingLot.Owner.name,
+                            time_slot: parkingLot.time_slot,
+                            capacity: parkingLot.capacity,
+                            address: parkingLot.address,
+                        })),
+                    )
+                })
+            },
+        },
+    }
+
     useEffect(() => {
         if (!!user) {
-            parkingLotApi.getListByUserId(user.id).then((response) => {
-                setParkingLotList(response.data.rows)
-            })
+            const params = {
+                limit: pageSize,
+                page: 1,
+            }
+            user.role === roles.PARKING_LOT_USER
+                ? parkingLotApi.getListByUserId(user.id).then((response) => {
+                      setParkingLotList(response.data.rows)
+                  })
+                : parkingLotApi.getListByParams(params).then((response) => {
+                      setTotal(response.data.count)
+                      setParkingLotList(
+                          response.data.rows.map((parkingLot) => ({
+                              name: parkingLot.name,
+                              owner_name: parkingLot.Owner.name,
+                              time_slot: parkingLot.time_slot,
+                              capacity: parkingLot.capacity,
+                              address: parkingLot.address,
+                          })),
+                      )
+                  })
         }
     }, [user])
 
@@ -105,8 +126,8 @@ function ParkingLots() {
                 <div className="parking-lot-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
-                        defaultValue={{ value: page }}
-                        onChange={(e) => setPage(e.target.value)}
+                        defaultValue={{ value: pageSize }}
+                        onChange={(e) => setPageSize(e.target.value)}
                     >
                         {numOfItem.map((numOfItem, index) => {
                             return (
@@ -167,7 +188,7 @@ function ParkingLots() {
                 <Table
                     className="parking-lot-list-content__sub__table"
                     columns={columns}
-                    dataSource={data}
+                    dataSource={parkingLotList}
                     pagination={state.pagination}
                     rowClassName={(record, index) =>
                         record.status === 'Đang mở cửa'
@@ -284,7 +305,7 @@ function ParkingLots() {
         </div>
     ) : (
         //------------------------------------ Admin --------------------------------------
-        <div className="parking-lot-list-content">Admin</div>
+        <NotFound />
     )
 }
 

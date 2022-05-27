@@ -119,15 +119,15 @@ function Packages() {
                     page: page,
                 }
                 packageApi.getListByParams(params).then((response) => {
-                        setAllPackageList(
-                            response.data.rows.map((packageItem) => ({
-                                name: packageItem.name,
-                                parking_lot_name: packageItem.ParkingLot.name,
-                                package_type: packageItem.PackageType.type_name,
-                                vehicle_type: packageItem.VehicleType.type_name,
-                                price: packageItem.price,
-                            })),
-                        )
+                    setAllPackageList(
+                        response.data.rows.map((packageItem) => ({
+                            name: packageItem.name,
+                            parking_lot_name: packageItem.ParkingLot.name,
+                            package_type: packageItem.PackageType.type_name,
+                            vehicle_type: packageItem.VehicleType.type_name,
+                            price: packageItem.price,
+                        })),
+                    )
                 })
             },
         },
@@ -171,9 +171,9 @@ function Packages() {
                             date_start: new Date(
                                 packageItem.createdAt,
                             ).toLocaleDateString('en-GB'),
-                            date_end: new Date(packageItem.expireAt).toLocaleDateString(
-                                'en-GB',
-                            ),
+                            date_end: new Date(
+                                packageItem.expireAt,
+                            ).toLocaleDateString('en-GB'),
                             price: packageItem.price,
                         })),
                     )
