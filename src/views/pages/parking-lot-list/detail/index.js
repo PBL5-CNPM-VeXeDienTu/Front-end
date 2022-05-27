@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Form, Button } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
 import './detail-parking-lot.scss'
 
 function DetailParkingLot() {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Menu, Dropdown, Popover } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
@@ -19,8 +19,10 @@ function Header() {
     const { user, setToken } = useAuth()
     const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
 
+    const navigate = useNavigate()
     const handleLogout = () => {
         setToken('null')
+        navigate('/login')
     }
 
     const menu = () => {

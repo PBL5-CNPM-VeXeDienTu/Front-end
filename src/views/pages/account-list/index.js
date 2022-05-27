@@ -46,10 +46,6 @@ function Accounts() {
     const onSearch = (value) => console.log(value)
 
     useEffect(() => {
-        console.log(activeFilter)
-    }, [activeFilter])
-
-    useEffect(() => {
         if (addressType === 'All') setActiveFilter(false)
         else setActiveFilter(true)
     }, [addressType])

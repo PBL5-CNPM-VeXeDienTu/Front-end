@@ -8,13 +8,11 @@ import {
     SearchOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
+import * as verifyState from 'shared/constants/verifyState'
 import parkingLotApi from 'api/parkingLotApi'
 
 import './parking-lot-list.scss'
-
-const VERIFIED_STATE = 'Đã được kiểm duyệt'
-const VERIFYING_STATE = 'Đang chờ xử lý'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
@@ -237,11 +235,12 @@ function ParkingLots() {
                                     <span
                                         className={
                                             parkingLot.VerifyState.state ===
-                                            VERIFIED_STATE
+                                            verifyState.VERIFIED
                                                 ? 'span2-green'
                                                 : parkingLot.VerifyState
-                                                      .state === VERIFYING_STATE
-                                                ? 'span2-yellow'
+                                                      .state ===
+                                                  verifyState.PENDING
+                                                ? 'span2-orange'
                                                 : 'span2-red'
                                         }
                                     >

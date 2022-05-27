@@ -3,11 +3,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { PlusCircleOutlined } from '@ant-design/icons'
 
 import useAuth from 'hooks/useAuth'
+import * as verifyStates from 'shared/constants/verifyState'
 import vehicleApi from 'api/vehicleApi'
 import './vehicle-list.scss'
-
-const VERIFIED_STATE = 'Đã được kiểm duyệt'
-const VERIFYING_STATE = 'Đang chờ xử lý'
 
 function Vehicles() {
     const { user } = useAuth()
@@ -80,10 +78,10 @@ function Vehicles() {
                                     <span
                                         className={
                                             vehicle.VerifyState.state ===
-                                            VERIFIED_STATE
+                                            verifyStates.VERIFIED
                                                 ? 'span2-green'
                                                 : vehicle.VerifyState.state ===
-                                                  VERIFYING_STATE
+                                                  verifyStates.PENDING
                                                 ? 'span2-yellow'
                                                 : 'span2-red'
                                         }
