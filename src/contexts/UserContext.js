@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('user', null)
             localStorage.setItem('role', null)
         }
-    }, [token, navigate])
+    }, [token])
 
     return (
         <UserContext.Provider value={providerValue}>
