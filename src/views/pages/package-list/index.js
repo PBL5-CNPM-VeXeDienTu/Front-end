@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons'
 import moment from 'moment'
 import useAuth from 'hooks/useAuth'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
 import packageApi from 'api/packageApi'
 import userPackageApi from 'api/userPackageApi'
 import './package-list.scss'

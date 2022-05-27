@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown } from 'antd'
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
 
 import './parking-history-list.scss'
 
@@ -55,10 +55,6 @@ function ParkingHistories() {
     }
 
     const onSearch = (value) => console.log(value)
-
-    useEffect(() => {
-        console.log(activeFilter)
-    }, [activeFilter])
 
     useEffect(() => {
         if (historyType === 'All' && vehicleState === 'All')

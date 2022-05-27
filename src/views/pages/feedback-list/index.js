@@ -7,7 +7,7 @@ import {
     SearchOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
 import feedbackApi from 'api/feedbackAPi'
 import './feedback-list.scss'
 
@@ -71,9 +71,15 @@ function ParkingLots() {
 
     const onSearch = (value) => console.log(value)
 
-    useEffect(() => {
-        console.log(activeFilter)
-    }, [activeFilter])
+    const showFeedbackItem = (record) => {
+        setShowBasicUserModal(true)
+        setFeedback(record)
+    }
+
+    const replyFeedbackItem = (record) => {
+        setShowAdminModal(true)
+        setFeedback(record)
+    }
 
     useEffect(() => {
         if (
@@ -176,16 +182,6 @@ function ParkingLots() {
     const handleCancel = () => {
         setShowBasicUserModal(false)
         setShowAdminModal(false)
-    }
-
-    const showFeedbackItem = (record) => {
-        setShowBasicUserModal(true)
-        setFeedback(record)
-    }
-
-    const replyFeedbackItem = (record) => {
-        setShowAdminModal(true)
-        setFeedback(record)
     }
 
     const handleSubmit = async (values) => {

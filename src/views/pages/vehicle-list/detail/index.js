@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Modal, Button } from 'antd'
 import useAuth from 'hooks/useAuth'
 import vehicleApi from 'api/vehicleApi'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
 import './detail-vehicle.scss'
 
 function DetailVehicle() {
