@@ -1,16 +1,26 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { Form, Button } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
-import useAuth from 'hooks/useAuth'
 import * as roles from 'shared/constants/role'
+import * as verifyStates from 'shared/constants/verifyState'
+import * as openState from 'shared/constants/openState'
+import useAuth from 'hooks/useAuth'
+import parkingLotApi from 'api/parkingLotApi'
 import './detail-parking-lot.scss'
 
 function DetailParkingLot() {
-    const avatarURL =
-        process.env.REACT_APP_API_URL +
-        'public/images/avatars/parking-lot/default-avatar.png'
     const { user } = useAuth()
+    const { id } = useParams()
+    const [parkingLot, SetParkingLot] = useState({})
+
+    useEffect(() => {
+        if (!!id) {
+            parkingLotApi.getOneById(id).then((response) => {
+                SetParkingLot(response.data)
+            })
+        }
+    }, [])
     return (
         <div className="detail-parking-lot-content">
             <div className="title">
@@ -29,47 +39,77 @@ function DetailParkingLot() {
             <Form className="detail-parking-lot-content__sub">
                 <img
                     className="detail-parking-lot-content__sub__image"
-                    src={avatarURL}
+                    src={process.env.REACT_APP_API_URL + parkingLot.avatar}
                     alt="avatar"
                 />
                 <div className="detail-parking-lot-content__sub__info">
                     <div>
-                        <span className="properties">Tên nhà xe</span>
-                        <span>Bãi xe khu A đại học Bách Khoa</span>
+                        <span className="span1">Tên nhà xe</span>
+                        <span className="span2">{parkingLot.name}</span>
                     </div>
                     <div>
-                        <span className="properties">Chủ nhà xe </span>
-                        <span>Phạm Văn Thọ</span>
+                        <span className="span1">Chủ nhà xe </span>
+                        <span className="span2">{parkingLot.Owner?.name}</span>
                     </div>
                     <div>
-                        <span className="properties">Thời gian mở </span>
-                        <span>7h - 22h</span>
+                        <span className="span1">Thời gian mở </span>
+                        <span className="span2">{parkingLot.time_slot}</span>
                     </div>
                     <div>
-                        <span className="properties">Tình trạng</span>
-                        <span>Đang mở </span>
+                        <span className="span1">Sức chứa </span>
+                        <span className="span2">{parkingLot.capacity}</span>
                     </div>
                     <div>
-                        <span className="properties">Sức chứa </span>
-                        <span>1000</span>
-                    </div>
-
-                    <div>
-                        <span className="properties">Địa chỉ </span>
-                        <span>
-                            Khu A đại học Bách Khoa , Đường Nguyễn Lương Bằng ,
-                            Phường Hòa Khánh Bắc , Liên Chiều
+                        <span className="span1">Tình trạng</span>
+                        <span
+                            className={
+                                parkingLot.is_open ? 'span2-green' : 'span2-red'
+                            }
+                        >
+                            {parkingLot.is_open
+                                ? openState.OPENING
+                                : openState.CLOSED}
                         </span>
                     </div>
                     <div
                         className={
-                            user.role === roles.ADMIN
+                            user.role === roles.BASIC_USER
                                 ? 'div-unactive'
                                 : 'div-active'
                         }
                     >
-                        <span className="properties">Gói ưu đãi</span>
-                        <span>
+                        <span className="span1">Xác thực</span>
+                        <span
+                            className={
+                                parkingLot.VerifyState?.state
+                                    ? parkingLot.VerifyState?.state ===
+                                      verifyStates.VERIFIED
+                                        ? 'span2-green'
+                                        : parkingLot.VerifyState.state ===
+                                          verifyStates.PENDING
+                                        ? 'span2-orange'
+                                        : 'span2-red'
+                                    : 'span2'
+                            }
+                        >
+                            {parkingLot.VerifyState?.state}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span className="span1">Địa chỉ </span>
+                        <span className="span2">{parkingLot.address}</span>
+                    </div>
+                    <div
+                        className={
+                            parkingLot.VerifyState?.state ===
+                            verifyStates.VERIFIED
+                                ? 'div-active'
+                                : 'div-unactive'
+                        }
+                    >
+                        <span className="span1">Gói ưu đãi</span>
+                        <span className="span2">
                             <Link to="/packages">
                                 <button>Xem gói ưu đãi</button>
                             </Link>
@@ -78,7 +118,8 @@ function DetailParkingLot() {
                 </div>
                 <div
                     className={
-                        user.role === roles.ADMIN
+                        user.role === roles.ADMIN &&
+                        parkingLot.VerifyState?.state !== verifyStates.VERIFIED
                             ? 'detail-parking-lot-content__sub__button-active'
                             : 'detail-parking-lot-content__sub__button-unactive'
                     }

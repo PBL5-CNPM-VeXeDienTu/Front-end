@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Table, Input, Modal } from 'antd'
+import { Table, Input, Modal, Menu, Dropdown } from 'antd'
 import {
     PlusCircleOutlined,
     EditOutlined,
     CloseOutlined,
     SearchOutlined,
+    FilterOutlined,
 } from '@ant-design/icons'
 import NotFound from 'views/pages/404-not-found'
 import useAuth from 'hooks/useAuth'
 import * as roles from 'shared/constants/role'
-import * as verifyState from 'shared/constants/verifyState'
+import * as verifyStates from 'shared/constants/verifyState'
+import * as openStates from 'shared/constants/openState'
 import parkingLotApi from 'api/parkingLotApi'
 
 import './parking-lot-list.scss'
@@ -34,8 +36,8 @@ const columns = [
         width: '13%',
     },
     {
-        title: 'Sức chứa',
-        dataIndex: 'capacity',
+        title: 'Trạng thái',
+        dataIndex: 'is_open',
         width: '10%',
     },
     {
@@ -47,7 +49,9 @@ const columns = [
 function ParkingLots() {
     const { user } = useAuth()
     const navigate = useNavigate()
-    const [filterState, setFilterState] = useState(0)
+
+    const [activeFilter, setActiveFilter] = useState(false)
+    const [openStateFilter, setOpenStateFilter] = useState('All')
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
@@ -67,6 +71,11 @@ function ParkingLots() {
         setIsModalVisible(false)
     }
 
+    useEffect(() => {
+        if (openStateFilter === 'All') setActiveFilter(false)
+        else setActiveFilter(true)
+    }, [openStateFilter])
+
     const state = {
         pagination: {
             pageSize: pageSize,
@@ -82,7 +91,9 @@ function ParkingLots() {
                             name: parkingLot.name,
                             owner_name: parkingLot.Owner.name,
                             time_slot: parkingLot.time_slot,
-                            capacity: parkingLot.capacity,
+                            is_open: parkingLot.is_open
+                                ? openStates.OPENING
+                                : openStates.CLOSED,
                             address: parkingLot.address,
                         })),
                     )
@@ -105,16 +116,47 @@ function ParkingLots() {
                       setTotal(response.data.count)
                       setParkingLotList(
                           response.data.rows.map((parkingLot) => ({
+                              id: parkingLot.id,
                               name: parkingLot.name,
                               owner_name: parkingLot.Owner.name,
                               time_slot: parkingLot.time_slot,
-                              capacity: parkingLot.capacity,
+                              is_open: parkingLot.is_open
+                                  ? openStates.OPENING
+                                  : openStates.CLOSED,
                               address: parkingLot.address,
                           })),
                       )
                   })
         }
     }, [user])
+
+    const menu = () => {
+        return (
+            <Menu class="parking-lot-menu">
+                <div className="parking-lot-menu__item">
+                    <div className="parking-lot-menu__item__row">
+                        <span className="parking-lot-menu__item__row__span">
+                            Trạng thái
+                        </span>
+                        <select
+                            className="parking-lot-menu__item__row__select"
+                            onChange={(e) => setOpenStateFilter(e.target.value)}
+                        >
+                            <option key={1} value="All">
+                                All
+                            </option>
+                            <option key={2} value={openStates.OPENING}>
+                                {openStates.OPENING}
+                            </option>
+                            <option key={3} value={openStates.CLOSED}>
+                                {openStates.CLOSED}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </Menu>
+        )
+    }
 
     return user.role === roles.BASIC_USER ? (
         //-------------------------------- Basic User --------------------------------------
@@ -136,39 +178,17 @@ function ParkingLots() {
                         })}
                     </select>
                 </div>
-                <div className="parking-lot-list-content__action__filter-state">
-                    <span className="span">Trạng thái</span>
-                    <button
+                <Dropdown overlay={menu} trigger="click" placement="bottom">
+                    <div
                         className={
-                            filterState === 0
-                                ? 'button-active__left'
-                                : 'button-unactive__left'
+                            activeFilter
+                                ? 'parking-lot-list-content__action__filter-active'
+                                : 'parking-lot-list-content__action__filter-unactive'
                         }
-                        onClick={(e) => setFilterState(0)}
                     >
-                        All
-                    </button>
-                    <button
-                        className={
-                            filterState === 1
-                                ? 'button-active'
-                                : 'button-unactive'
-                        }
-                        onClick={(e) => setFilterState(1)}
-                    >
-                        Mở cửa
-                    </button>
-                    <button
-                        className={
-                            filterState === 2
-                                ? 'button-active__right'
-                                : 'button-unactive__right'
-                        }
-                        onClick={(e) => setFilterState(2)}
-                    >
-                        Đóng cửa
-                    </button>
-                </div>
+                        <FilterOutlined />
+                    </div>
+                </Dropdown>
 
                 <div className="parking-lot-list-content__action__search">
                     <Search
@@ -189,13 +209,14 @@ function ParkingLots() {
                     dataSource={parkingLotList}
                     pagination={state.pagination}
                     rowClassName={(record, index) =>
-                        record.status === 'Đang mở cửa'
+                        record.status === openStates.OPENING
                             ? 'parking-lot-list-content__sub__table__row-green'
                             : 'parking-lot-list-content__sub__table__row-red'
                     }
                     onRow={(record, rowIndex) => {
                         return {
-                            onClick: () => navigate('/parking-lots/detail'),
+                            onClick: () =>
+                                navigate(`/parking-lots/${record.id}`),
                         }
                     }}
                 />
@@ -237,14 +258,7 @@ function ParkingLots() {
                                         {parkingLot.time_slot}
                                     </span>
                                 </div>
-                                <div>
-                                    <span className="span1">Tình trạng</span>
-                                    <span className="span2">
-                                        {parkingLot.is_open
-                                            ? 'Đang mở'
-                                            : 'Đang đóng'}
-                                    </span>
-                                </div>
+
                                 <div>
                                     <span className="span1">Sức chứa</span>
                                     <span className="span2">
@@ -252,15 +266,29 @@ function ParkingLots() {
                                     </span>
                                 </div>
                                 <div>
+                                    <span className="span1">Tình trạng</span>
+                                    <span
+                                        className={
+                                            parkingLot.is_open
+                                                ? 'span2-green'
+                                                : 'span2-red'
+                                        }
+                                    >
+                                        {parkingLot.is_open
+                                            ? openStates.OPENING
+                                            : openStates.CLOSED}
+                                    </span>
+                                </div>
+                                <div>
                                     <span className="span1">Xác thực</span>
                                     <span
                                         className={
                                             parkingLot.VerifyState.state ===
-                                            verifyState.VERIFIED
+                                            verifyStates.VERIFIED
                                                 ? 'span2-green'
                                                 : parkingLot.VerifyState
                                                       .state ===
-                                                  verifyState.PENDING
+                                                  verifyStates.PENDING
                                                 ? 'span2-orange'
                                                 : 'span2-red'
                                         }
@@ -272,6 +300,21 @@ function ParkingLots() {
                                     <span className="span1">Địa chỉ</span>
                                     <span className="span2">
                                         {parkingLot.address}
+                                    </span>
+                                </div>
+                                <div
+                                    className={
+                                        parkingLot.VerifyState.state ===
+                                        verifyStates.VERIFIED
+                                            ? 'div-active'
+                                            : 'div-unactive'
+                                    }
+                                >
+                                    <span className="span1">Gói ưu đãi</span>
+                                    <span className="span2">
+                                        <Link to="/packages">
+                                            <button>Xem gói ưu đãi</button>
+                                        </Link>
                                     </span>
                                 </div>
                             </div>
