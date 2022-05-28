@@ -54,12 +54,32 @@
                 height: 8vh;
                 display: grid;
                 padding: auto 0;
-                grid-template-columns: 30% 70%;
+                grid-template-columns: 20% 80%;
 
-                .properties {
-                    font-weight: bold;
+                .span1 {
+                    width: 100%;
                     text-align: right;
-                    width: 8vw;
+                    font-weight: bold;
+                }
+
+                .span2 {
+                    margin-left: 10%;
+                    max-width: 80%;
+                    text-align: justify;
+
+                    &-red {
+                        margin-left: 10%;
+                        color: red;
+                    }
+
+                    &-green {
+                        margin-left: 10%;
+                        color: #41bc3f;
+                    }
+                    &-orange {
+                        margin-left: 10%;
+                        color: orange;
+                    }
                 }
 
                 span {

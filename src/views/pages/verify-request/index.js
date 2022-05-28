@@ -100,6 +100,7 @@ function VerifyRequest() {
                     setTotal(response.data.count)
                     setParkingLotList(
                         response.data.rows.map((parkingLot) => ({
+                            id: parkingLot.id,
                             name: parkingLot.name,
                             owner_name: parkingLot.Owner.name,
                             address: parkingLot.address,
@@ -147,6 +148,7 @@ function VerifyRequest() {
             setTotal(response.data.count)
             setParkingLotList(
                 response.data.rows.map((parkingLot) => ({
+                    id: parkingLot.id,
                     name: parkingLot.name,
                     owner_name: parkingLot.Owner.name,
                     address: parkingLot.address,
@@ -285,7 +287,7 @@ function VerifyRequest() {
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    navigate('/parking-lots/detail')
+                                    navigate(`/parking-lots/${record.id}`)
                                 },
                             }
                         }}
