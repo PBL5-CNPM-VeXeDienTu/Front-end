@@ -129,7 +129,7 @@ function ParkingLots() {
                       )
                   })
         }
-    }, [user])
+    }, [user, pageSize])
 
     const handleNavigation = (parkingLotId) => {
         navigate(`/packages/${parkingLotId}`)

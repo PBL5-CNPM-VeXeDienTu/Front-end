@@ -239,7 +239,7 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [pageSize])
+    }, [user, pageSize])
 
     const stateParkinglot = {
         pagination: {
