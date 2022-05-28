@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Table, Input, Menu, Dropdown, Modal } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
+import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
 import {
     FilterOutlined,
     SearchOutlined,
@@ -88,6 +88,7 @@ const vehicleTypeItem = ['All', 'Xe đạp', 'Xe máy', 'Xe ô tô']
 
 function Packages() {
     const { user } = useAuth()
+    const navigate = useNavigate()
     const dateNow = new Date()
     const [swapPage, setSwapPage] = useState(false)
     const [packageType, setPackageType] = useState('All')
@@ -95,11 +96,16 @@ function Packages() {
     const [activeFilter, setActiveFilter] = useState(false)
     const [showModalAll, setShowModalAll] = useState(false)
     const [showModalParkingLot, setShowModalParkingLot] = useState(false)
-    const [allPackageList, setAllPackageList] = useState([])
+    const [allPackageList, setAllPackageList] = useState([{}])
     const [packageOfParkinglotList, setPackageOfParkinglotList] = useState([])
     const [packageOfOwnerList, setPackageOfOwnerList] = useState([])
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
+    const [pageSizeOfOwner, setPageSizeOfOwner] = useState(10)
+    const [totalOfOwner, setTotalOfOwner] = useState(0)
+    const [userPackage, setUserPackage] = useState({
+        key: 0,
+    })
 
     const [packageItem, setPackageItem] = useState({
         name: '',
@@ -119,8 +125,10 @@ function Packages() {
                     page: page,
                 }
                 packageApi.getListByParams(params).then((response) => {
+                    setTotal(response.data.count)
                     setAllPackageList(
                         response.data.rows.map((packageItem) => ({
+                            id: packageItem.id,
                             name: packageItem.name,
                             parking_lot_name: packageItem.ParkingLot.name,
                             package_type: packageItem.PackageType.type_name,
@@ -144,6 +152,7 @@ function Packages() {
                 setTotal(response.data.count)
                 setAllPackageList(
                     response.data.rows.map((packageItem) => ({
+                        id: packageItem.id,
                         name: packageItem.name,
                         parking_lot_name: packageItem.ParkingLot.name,
                         package_type: packageItem.PackageType.type_name,
@@ -157,13 +166,58 @@ function Packages() {
             })
     }, [pageSize])
 
+    const stateOwner = {
+        pagination: {
+            pageSize: pageSizeOfOwner,
+            total: totalOfOwner,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                if (!!user) {
+                    userPackageApi
+                        .getPackageByOwner(user.id,params)
+                        .then((response) => {
+                            setTotalOfOwner(response.data.count)
+                            setPackageOfOwnerList(
+                                response.data.rows.map((packageItem) => ({
+                                    id:packageItem.id,
+                                    name: packageItem.name,
+                                    parking_lot_name: packageItem.ParkingLot.name,
+                                    package_type: packageItem.PackageType.type_name,
+                                    vehicle_type: packageItem.VehicleType.type_name,
+                                    date_start: new Date(
+                                        packageItem.createdAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    date_end: new Date(
+                                        packageItem.expireAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    price: packageItem.price,
+                                })),
+                            )
+                        })
+                        .catch((error) => {
+                            alert(error.response.data.message)
+                        })
+                }
+            }
+        }
+    }
+
     useEffect(() => {
+        const params = {
+            limit: pageSizeOfOwner,
+            page: 1,
+        }
         if (!!user) {
             userPackageApi
-                .getPackageByOwner(user.id)
+                .getPackageByOwner(user.id,params)
                 .then((response) => {
+                    setTotalOfOwner(response.data.count)
                     setPackageOfOwnerList(
                         response.data.rows.map((packageItem) => ({
+                            id:packageItem.id,
                             name: packageItem.name,
                             parking_lot_name: packageItem.ParkingLot.name,
                             package_type: packageItem.PackageType.type_name,
@@ -182,7 +236,7 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [])
+    }, [pageSizeOfOwner])
 
     const handleCancel = () => {
         setShowModalAll(false)
@@ -199,6 +253,18 @@ function Packages() {
         else setActiveFilter(true)
     }, [packageType, vehicleType])
 
+    const handleSubmitAddUserPackage = async (values) => {
+        try {
+            const newUserPackage = {
+                package_id: userPackage.id,
+            }
+            const response = await userPackageApi.createNew(newUserPackage)
+            alert(response.data.message)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
     const menu = () => {
         return (
             <Menu class="package-list-menu">
@@ -429,7 +495,9 @@ function Packages() {
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
+                                    // console.log(record.id)
                                     setPackageItem(record)
+                                    setUserPackage(record)
                                     user.role === roles.BASIC_USER
                                         ? setShowModalAll(true)
                                         : handleCancel()
@@ -444,43 +512,93 @@ function Packages() {
                         footer={null}
                     >
                         <h1 className="h1">Thông tin gói ưu đãi</h1>
-                        <div className="div">
-                            <span className="span1">Tên gói ưu đãi</span>
-                            <span className="span2">{packageItem.name}</span>
-                        </div>
-                        <div className="div">
-                            <span className="span1">tên bãi đỗ xe</span>
-                            <span className="span2">
-                                {packageItem.parking_lot_name}
-                            </span>
-                        </div>
-                        <div className="div">
-                            <span className="span1">Loại gói ưu đãi</span>
-                            <span className="span2">
-                                {packageItem.package_type}
-                            </span>
-                        </div>
-                        <div className="div">
-                            <span className="span1">Phương tiện</span>
-                            <span className="span2">
-                                {packageItem.vehicle_type}
-                            </span>
-                        </div>
-                        <div className="div">
-                            <span className="span1">Giá</span>
-                            <span className="span2">
-                                {packageItem.price} VND
-                            </span>
-                        </div>
-                        <div className="button">
-                            <button
-                                className="button__cancel"
-                                onClick={(e) => setShowModalAll(false)}
-                            >
-                                Thoát
-                            </button>
-                            <button className="button__ok">Đăng ký</button>
-                        </div>
+                        <Form onFinish={handleSubmitAddUserPackage}>
+                            <div className="div">
+                                <span className="span1">Tên gói ưu đãi</span>
+                                <Form.Item
+                                    name="name"
+                                    className="span2"
+                                    initialValue={packageItem.name}
+                                >
+                                    <Input.TextArea
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+                            <div className="div">
+                                <span className="span1">Tên bãi đỗ xe</span>
+                                <Form.Item
+                                    name="parking_lot_name"
+                                    className="span2"
+                                    initialValue={packageItem.parking_lot_name}
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    ></Input>
+                                </Form.Item>
+                            </div>
+                            <div className="div">
+                                <span className="span1">Loại gói ưu đãi</span>
+                                <Form.Item
+                                    name="package_type"
+                                    className="span2"
+                                    initialValue={packageItem.package_type}
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    ></Input>
+                                </Form.Item>
+                            </div>
+                            <div className="div">
+                                <span className="span1">Phương tiện</span>
+                                <Form.Item
+                                    name="vehicle_type"
+                                    className="span2"
+                                    initialValue={packageItem.vehicle_type}
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    ></Input>
+                                </Form.Item>
+                            </div>
+                            <div className="div">
+                                <span className="span1">Giá</span>
+                                <Form.Item
+                                    name="price"
+                                    className="span2"
+                                    initialValue={packageItem.price}
+                                    VND
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    ></Input>
+                                </Form.Item>
+                            </div>
+                            <div className="button">
+                                <button
+                                    className="button__cancel"
+                                    onClick={(e) => setShowModalAll(false)}
+                                >
+                                    Thoát
+                                </button>
+                                <button
+                                    className="button__ok"
+                                    htmlType="submit"
+                                >
+                                    Đăng ký
+                                </button>
+                            </div>
+                        </Form>
                     </Modal>
                 </div>
             </div>
@@ -507,8 +625,8 @@ function Packages() {
                     <div className="package-list-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: pageSize }}
-                            onChange={(e) => setPageSize(e.target.value)}
+                            defaultValue={{ value: pageSizeOfOwner }}
+                            onChange={(e) => setPageSizeOfOwner(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -548,12 +666,12 @@ function Packages() {
                         className="package-list-content__sub__table"
                         columns={columnsForBacicAndParkinglotRole}
                         dataSource={packageOfOwnerList}
-                        pagination={state.pagination}
+                        pagination={stateOwner.pagination}
                         rowClassName={(record, index) =>
                             moment(record.date_end, 'DD/MM/YYYY').toDate() >
                             dateNow
                                 ? 'package-list-content__sub__table__row-green'
-                                : 'package-list-content__sub__table__row-gray'
+                                : 'package-list-content__sub__table__row-red'
                         }
                         onRow={(record, rowIndex) => {
                             return {
