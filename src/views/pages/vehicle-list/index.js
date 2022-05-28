@@ -18,7 +18,6 @@ function Vehicles() {
             })
         }
     }, [user])
-    console.log(vehicleList)
     const navigate = useNavigate()
     const onClickHandler = (vehicleId) =>
         navigate(`/vehicles/detail/${vehicleId}`)
