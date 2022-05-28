@@ -177,16 +177,19 @@ function Packages() {
                 }
                 if (!!user) {
                     userPackageApi
-                        .getPackageByOwner(user.id,params)
+                        .getPackageByOwner(user.id, params)
                         .then((response) => {
                             setTotalOfOwner(response.data.count)
                             setPackageOfOwnerList(
                                 response.data.rows.map((packageItem) => ({
-                                    id:packageItem.id,
+                                    id: packageItem.id,
                                     name: packageItem.name,
-                                    parking_lot_name: packageItem.ParkingLot.name,
-                                    package_type: packageItem.PackageType.type_name,
-                                    vehicle_type: packageItem.VehicleType.type_name,
+                                    parking_lot_name:
+                                        packageItem.ParkingLot.name,
+                                    package_type:
+                                        packageItem.PackageType.type_name,
+                                    vehicle_type:
+                                        packageItem.VehicleType.type_name,
                                     date_start: new Date(
                                         packageItem.createdAt,
                                     ).toLocaleDateString('en-GB'),
@@ -201,8 +204,8 @@ function Packages() {
                             alert(error.response.data.message)
                         })
                 }
-            }
-        }
+            },
+        },
     }
 
     useEffect(() => {
@@ -212,12 +215,12 @@ function Packages() {
         }
         if (!!user) {
             userPackageApi
-                .getPackageByOwner(user.id,params)
+                .getPackageByOwner(user.id, params)
                 .then((response) => {
                     setTotalOfOwner(response.data.count)
                     setPackageOfOwnerList(
                         response.data.rows.map((packageItem) => ({
-                            id:packageItem.id,
+                            id: packageItem.id,
                             name: packageItem.name,
                             parking_lot_name: packageItem.ParkingLot.name,
                             package_type: packageItem.PackageType.type_name,

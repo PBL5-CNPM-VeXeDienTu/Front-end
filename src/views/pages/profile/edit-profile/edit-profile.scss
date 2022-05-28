@@ -42,14 +42,19 @@
                 cursor: pointer;
                 display: flex;
                 position: absolute;
-                top: 60%;
-                left: 24%;
+                top: 61%;
+                left: 26%;
+                border: 1px solid rgba(0, 0, 0, 0.5);
             }
 
             &__icon {
                 color: #000;
                 font-size: 3vh;
-                margin: auto;
+                margin: 23% 23%;
+            }
+
+            &__icon:hover {
+                cursor: pointer;
             }
 
             img {
@@ -58,6 +63,12 @@
                 height: 30vh;
                 border-radius: 50%;
                 margin: auto;
+            }
+
+            input {
+                visibility: hidden;
+                width: 0;
+                height: 0;
             }
         }
 
