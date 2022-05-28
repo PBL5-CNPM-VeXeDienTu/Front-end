@@ -415,11 +415,11 @@ function ParkingLots() {
                                     initialValue={feedback.feedback_type}
                                     className="form-item"
                                 >
-                                    <Input
+                                    {/* <Input
                                         className="text"
                                         disabled
                                         size="medium"
-                                    />
+                                    /> */}
                                 </Form.Item>
                             </div>
 

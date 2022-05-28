@@ -167,12 +167,18 @@
                 cursor: pointer;
             }
 
-            &__row-gray {
+            &__row-red {
                 background-color: #f0f0f0;
+                td:nth-child(6) {
+                    color: red;
+                }
             }
 
             &__row-green {
                 color: #41bc3f;
+                td:nth-child(6) {
+                    color: #41bc3f;
+                }
             }
         }
     }

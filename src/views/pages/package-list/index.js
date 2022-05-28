@@ -101,6 +101,8 @@ function Packages() {
     const [packageOfOwnerList, setPackageOfOwnerList] = useState([])
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
+    const [pageSizeOfOwner, setPageSizeOfOwner] = useState(10)
+    const [totalOfOwner, setTotalOfOwner] = useState(0)
     const [userPackage, setUserPackage] = useState({
         key: 0,
     })
@@ -164,13 +166,58 @@ function Packages() {
             })
     }, [pageSize])
 
+    const stateOwner = {
+        pagination: {
+            pageSize: pageSizeOfOwner,
+            total: totalOfOwner,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                if (!!user) {
+                    userPackageApi
+                        .getPackageByOwner(user.id,params)
+                        .then((response) => {
+                            setTotalOfOwner(response.data.count)
+                            setPackageOfOwnerList(
+                                response.data.rows.map((packageItem) => ({
+                                    id:packageItem.id,
+                                    name: packageItem.name,
+                                    parking_lot_name: packageItem.ParkingLot.name,
+                                    package_type: packageItem.PackageType.type_name,
+                                    vehicle_type: packageItem.VehicleType.type_name,
+                                    date_start: new Date(
+                                        packageItem.createdAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    date_end: new Date(
+                                        packageItem.expireAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    price: packageItem.price,
+                                })),
+                            )
+                        })
+                        .catch((error) => {
+                            alert(error.response.data.message)
+                        })
+                }
+            }
+        }
+    }
+
     useEffect(() => {
+        const params = {
+            limit: pageSizeOfOwner,
+            page: 1,
+        }
         if (!!user) {
             userPackageApi
-                .getPackageByOwner(user.id)
+                .getPackageByOwner(user.id,params)
                 .then((response) => {
+                    setTotalOfOwner(response.data.count)
                     setPackageOfOwnerList(
                         response.data.rows.map((packageItem) => ({
+                            id:packageItem.id,
                             name: packageItem.name,
                             parking_lot_name: packageItem.ParkingLot.name,
                             package_type: packageItem.PackageType.type_name,
@@ -189,7 +236,7 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [])
+    }, [pageSizeOfOwner])
 
     const handleCancel = () => {
         setShowModalAll(false)
@@ -211,7 +258,6 @@ function Packages() {
             const newUserPackage = {
                 package_id: userPackage.id,
             }
-            console.log(userPackage.id)
             const response = await userPackageApi.createNew(newUserPackage)
             alert(response.data.message)
             window.location.reload()
@@ -474,11 +520,11 @@ function Packages() {
                                     className="span2"
                                     initialValue={packageItem.name}
                                 >
-                                    <Input
+                                    <Input.TextArea
                                         className="text"
                                         disabled
                                         size="medium"
-                                    ></Input>
+                                    />
                                 </Form.Item>
                             </div>
                             <div className="div">
@@ -579,8 +625,8 @@ function Packages() {
                     <div className="package-list-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: pageSize }}
-                            onChange={(e) => setPageSize(e.target.value)}
+                            defaultValue={{ value: pageSizeOfOwner }}
+                            onChange={(e) => setPageSizeOfOwner(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -620,12 +666,12 @@ function Packages() {
                         className="package-list-content__sub__table"
                         columns={columnsForBacicAndParkinglotRole}
                         dataSource={packageOfOwnerList}
-                        pagination={state.pagination}
+                        pagination={stateOwner.pagination}
                         rowClassName={(record, index) =>
                             moment(record.date_end, 'DD/MM/YYYY').toDate() >
                             dateNow
                                 ? 'package-list-content__sub__table__row-green'
-                                : 'package-list-content__sub__table__row-gray'
+                                : 'package-list-content__sub__table__row-red'
                         }
                         onRow={(record, rowIndex) => {
                             return {
