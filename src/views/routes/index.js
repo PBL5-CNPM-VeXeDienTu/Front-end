@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route } from 'react-router-dom'
 import MainLayout from 'components/layouts/MainLayout'
 import loadableComponent from 'components/loadable-component'
 import AuthenticatedRoute from './authenticated-route'
@@ -89,6 +89,8 @@ const availableRoles = [1, 2, 3]
 function AllRoutes() {
     return (
         <Routes>
+            <Route path='/' element={<Navigate to={'/profile'} />}/>
+
             <Route element={<GuestRoute />}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />

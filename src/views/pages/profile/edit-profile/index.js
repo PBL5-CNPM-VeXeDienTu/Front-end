@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Input, Radio, Form, Button, DatePicker } from 'antd'
 import { CameraOutlined } from '@ant-design/icons'
@@ -6,17 +6,39 @@ import moment from 'moment'
 import useAuth from 'hooks/useAuth'
 import messages from 'assets/lang/messages'
 import userApi from 'api/userApi'
+import uploadImageApi from 'api/uploadImageApi'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './edit-profile.scss'
 
 function EditProfile() {
     const { user } = useAuth()
     const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
+    const [uploadAvatar, setUploadAvatar] = useState()
+
     const navigate = useNavigate()
+
+    const handleUploadImage = (e) => {
+        const userAvatar = document.getElementById('user-avatar')
+        userAvatar.src = URL.createObjectURL(e.target.files[0])
+        setUploadAvatar(e.target.files[0])
+    }
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.USER_AVATAR
+    }
 
     const handleSubmit = async (values) => {
         try {
             const response = await userApi.updateById(user.id, values)
+
+            if (uploadAvatar) {
+                const postData = new FormData()
+                postData.append('user-avatar', uploadAvatar)
+                uploadImageApi.uploadUserAvatar(user?.id, postData)
+            }
+
             alert(response.data.message)
+            window.location.reload()
             navigate('/profile')
         } catch (error) {
             alert(error.response.data.message)
@@ -27,14 +49,27 @@ function EditProfile() {
         <div className="edit-profile-content">
             <div className="title">Profile</div>
             <Form
-                name="editprofile"
+                name="edit-profile"
                 className="edit-profile-content__sub"
                 onFinish={handleSubmit}
             >
                 <div className="edit-profile-content__sub__avatar">
-                    <img src={avatarURL} alt="avatar" />
+                    <img
+                        id="user-avatar"
+                        src={avatarURL}
+                        alt="avatar"
+                        onError={handleGetImageError}
+                    />
                     <div className="edit-profile-content__sub__avatar__button-upload">
-                        <CameraOutlined className="edit-profile-content__sub__avatar__icon" />
+                        <label for="image-input">
+                            <CameraOutlined className="edit-profile-content__sub__avatar__icon" />
+                        </label>
+                        <input
+                            id="image-input"
+                            accept="image/png, image/jpeg"
+                            type="file"
+                            onChange={handleUploadImage}
+                        />
                     </div>
                 </div>
                 <div className="edit-profile-content__sub__info">
