@@ -3,6 +3,7 @@ import { Table, Input, Menu, Dropdown } from 'antd'
 import { SearchOutlined, FilterOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import parkingLotApi from 'api/parkingLotApi'
+import vehicleApi from 'api/vehicleApi'
 import * as verifyStates from 'shared/constants/verifyState'
 import './verify-request.scss'
 
@@ -36,7 +37,7 @@ const columVehicle = [
     },
     {
         title: 'Trạng thái ',
-        dataIndex: 'status',
+        dataIndex: 'verify_state',
         width: '15%',
     },
 ]
@@ -77,28 +78,16 @@ function VerifyRequest() {
     const [activeFilter, setActiveFilter] = useState(false)
     const [verifyStateFilter, setVerifyStateFilter] = useState('All')
     const [parkingLotList, setParkingLotList] = useState()
+    const [vehicleList, setVehicleList] = useState()
 
     const onSearch = (value) => console.log(value)
-
-    const vehicleData = []
-    for (let i = 0; i < pageSize; i++) {
-        vehicleData.push({
-            key: i,
-            user_name: 'Nguyễn Phạm Nhật Hào',
-            brand: 'Ferrari SF90 Spider',
-            license_plate: '29C-99999',
-            created_at: '7.30.23 11/5/2022',
-            type_of_vehicle: 'Xe máy',
-            status: 'Chưa xác thực',
-        })
-    }
 
     useEffect(() => {
         if (verifyStateFilter === 'All') setActiveFilter(false)
         else setActiveFilter(true)
     }, [verifyStateFilter])
 
-    const state = {
+    const parkingLotState = {
         pagination: {
             pageSize: pageSize,
             total: total,
@@ -123,6 +112,32 @@ function VerifyRequest() {
         },
     }
 
+    const vehicleState = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                vehicleApi.getListByParams(params).then((response) => {
+                    setTotal(response.data.count)
+                    setVehicleList(
+                        response.data.rows.map((vehicle) => ({
+                            user_name: vehicle.Owner.name,
+                            brand: vehicle.brand,
+                            license_plate: vehicle.license_plate,
+                            created_at: vehicle.createdAt,
+                            type_of_vehicle: vehicle.VehicleType.type_name,
+                            verify_state: vehicle.VerifyState.state,
+                        })),
+                    )
+                })
+            },
+        },
+    }
+
     useEffect(() => {
         const params = {
             limit: pageSize,
@@ -137,6 +152,27 @@ function VerifyRequest() {
                     address: parkingLot.address,
                     created_at: parkingLot.createdAt,
                     verify_state: parkingLot.VerifyState.state,
+                })),
+            )
+        })
+    }, [pageSize])
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        vehicleApi.getListByParams(params).then((response) => {
+            setTotal(response.data.count)
+            setVehicleList(
+                response.data.rows.map((vehicle) => ({
+                    id: vehicle.id,
+                    user_name: vehicle.Owner.name,
+                    brand: vehicle.brand,
+                    license_plate: vehicle.license_plate,
+                    created_at: vehicle.createdAt,
+                    type_of_vehicle: vehicle.VehicleType.type_name,
+                    verify_state: vehicle.VerifyState.state,
                 })),
             )
         })
@@ -245,7 +281,7 @@ function VerifyRequest() {
                         className="verify-request-content__sub__table"
                         columns={columParkingLot}
                         dataSource={parkingLotList}
-                        pagination={state.pagination}
+                        pagination={parkingLotState.pagination}
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
@@ -332,18 +368,20 @@ function VerifyRequest() {
                     <Table
                         className="verify-request-content__sub__table"
                         columns={columVehicle}
-                        dataSource={vehicleData}
-                        pagination={state.pagination}
+                        dataSource={vehicleList}
+                        pagination={vehicleState.pagination}
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    navigate('/vehicles/detail')
+                                    navigate('/vehicles/detail/' + record.id)
                                 },
                             }
                         }}
                         rowClassName={(record, index) =>
-                            record.status === 'Đã xác thực'
+                            record.verify_state === verifyStates.VERIFIED
                                 ? 'verify-request-content__sub__table__row-green'
+                                : record.verify_state === verifyStates.PENDING
+                                ? 'verify-request-content__sub__table__row-orange'
                                 : 'verify-request-content__sub__table__row-red'
                         }
                     />

@@ -126,12 +126,18 @@
                 }
             }
             &__row-green {
-                td:nth-child() {
+                td:nth-child(6) {
                     color: #41bc3f;
                 }
             }
+
+            &__row-orange {
+                td:nth-child(6) {
+                    color: orange;
+                }
+            }
             &__row-red {
-                td:nth-child() {
+                td:nth-child(6) {
                     color: red;
                 }
             }
