@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useParams } from 'react-router-dom'
 import { Table, Input, Modal, Menu, Dropdown } from 'antd'
 import {
     PlusCircleOutlined,
@@ -49,7 +49,7 @@ const columns = [
 function ParkingLots() {
     const { user } = useAuth()
     const navigate = useNavigate()
-
+    const { parkingLotId } = useParams()
     const [activeFilter, setActiveFilter] = useState(false)
     const [openStateFilter, setOpenStateFilter] = useState('All')
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -88,6 +88,7 @@ function ParkingLots() {
                 parkingLotApi.getListByParams(params).then((response) => {
                     setParkingLotList(
                         response.data.rows.map((parkingLot) => ({
+                            id: parkingLot.id,
                             name: parkingLot.name,
                             owner_name: parkingLot.Owner.name,
                             time_slot: parkingLot.time_slot,
@@ -129,6 +130,10 @@ function ParkingLots() {
                   })
         }
     }, [user])
+
+    const handleNavigation = (parkingLotId) => {
+        navigate(`/packages/${parkingLotId}`)
+    }
 
     const menu = () => {
         return (
@@ -312,9 +317,13 @@ function ParkingLots() {
                                 >
                                     <span className="span1">Gói ưu đãi</span>
                                     <span className="span2">
-                                        <Link to="/packages">
-                                            <button>Xem gói ưu đãi</button>
-                                        </Link>
+                                        <button
+                                            onClick={() =>
+                                                handleNavigation(parkingLot.id)
+                                            }
+                                        >
+                                            Xem gói ưu đãi
+                                        </button>
                                     </span>
                                 </div>
                             </div>
