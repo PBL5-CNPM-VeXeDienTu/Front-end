@@ -89,7 +89,7 @@ const availableRoles = [1, 2, 3]
 function AllRoutes() {
     return (
         <Routes>
-            <Route path='/' element={<Navigate to={'/profile'} />}/>
+            <Route path="/" element={<Navigate to={'/profile'} />} />
 
             <Route element={<GuestRoute />}>
                 <Route path="/login" element={<Login />} />
@@ -176,7 +176,11 @@ function AllRoutes() {
                     element={<MainLayout component={Packages} />}
                 />
                 <Route
-                    path="/packages/add"
+                    path="/packages/:id"
+                    element={<MainLayout component={Packages} />}
+                />
+                <Route
+                    path="/packages/add/:id"
                     element={<MainLayout component={AddPackage} />}
                 />
                 <Route

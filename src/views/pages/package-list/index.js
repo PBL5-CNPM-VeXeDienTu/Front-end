@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate ,useParams} from 'react-router-dom'
 import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
 import {
     FilterOutlined,
@@ -89,6 +89,7 @@ const vehicleTypeItem = ['All', 'Xe đạp', 'Xe máy', 'Xe ô tô']
 function Packages() {
     const { user } = useAuth()
     const navigate = useNavigate()
+    const { id } = useParams()
     const dateNow = new Date()
     const [swapPage, setSwapPage] = useState(false)
     const [packageType, setPackageType] = useState('All')
@@ -97,12 +98,11 @@ function Packages() {
     const [showModalAll, setShowModalAll] = useState(false)
     const [showModalParkingLot, setShowModalParkingLot] = useState(false)
     const [allPackageList, setAllPackageList] = useState([{}])
-    const [packageOfParkinglotList, setPackageOfParkinglotList] = useState([])
-    const [packageOfOwnerList, setPackageOfOwnerList] = useState([])
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [pageSizeOfOwner, setPageSizeOfOwner] = useState(10)
-    const [totalOfOwner, setTotalOfOwner] = useState(0)
+    const [packageOfOwnerList, setPackageOfOwnerList] = useState([])
+    const [packageOfParkinglotList, setPackageOfParkinglotList] = useState([])
+
     const [userPackage, setUserPackage] = useState({
         key: 0,
     })
@@ -115,7 +115,7 @@ function Packages() {
         price: '',
     })
 
-    const state = {
+    const stateAllPackage = {
         pagination: {
             pageSize: pageSize,
             total: total,
@@ -168,8 +168,8 @@ function Packages() {
 
     const stateOwner = {
         pagination: {
-            pageSize: pageSizeOfOwner,
-            total: totalOfOwner,
+            pageSize: pageSize,
+            total: total,
             onChange: (page, pageSize) => {
                 const params = {
                     limit: pageSize,
@@ -179,7 +179,7 @@ function Packages() {
                     userPackageApi
                         .getPackageByOwner(user.id, params)
                         .then((response) => {
-                            setTotalOfOwner(response.data.count)
+                            setTotal(response.data.count)
                             setPackageOfOwnerList(
                                 response.data.rows.map((packageItem) => ({
                                     id: packageItem.id,
@@ -210,14 +210,14 @@ function Packages() {
 
     useEffect(() => {
         const params = {
-            limit: pageSizeOfOwner,
+            limit: pageSize,
             page: 1,
         }
         if (!!user) {
             userPackageApi
                 .getPackageByOwner(user.id, params)
                 .then((response) => {
-                    setTotalOfOwner(response.data.count)
+                    setTotal(response.data.count)
                     setPackageOfOwnerList(
                         response.data.rows.map((packageItem) => ({
                             id: packageItem.id,
@@ -239,7 +239,82 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [pageSizeOfOwner])
+    }, [pageSize])
+
+    const stateParkinglot = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                if (!!id) {
+                    packageApi
+                        .getListByParkinglotId(id, params)
+                        .then((response) => {
+                            setTotal(response.data.count)
+                            setPackageOfParkinglotList(
+                                response.data.rows.map((packageItem) => ({
+                                    id: packageItem.id,
+                                    name: packageItem.name,
+                                    parking_lot_name:
+                                        packageItem.ParkingLot.name,
+                                    package_type:
+                                        packageItem.PackageType.type_name,
+                                    vehicle_type:
+                                        packageItem.VehicleType.type_name,
+                                    date_start: new Date(
+                                        packageItem.createdAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    date_end: new Date(
+                                        packageItem.expireAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    price: packageItem.price,
+                                })),
+                            )
+                        })
+                        .catch((error) => {
+                            alert(error.response.data.message)
+                        })
+                }
+            },
+        },
+    }
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        if (!!id) {
+            packageApi
+                .getListByParkinglotId(id, params)
+                .then((response) => {
+                    setTotal(response.data.count)
+                    setPackageOfParkinglotList(
+                        response.data.rows.map((packageItem) => ({
+                            id: packageItem.id,
+                            name: packageItem.name,
+                            parking_lot_name: packageItem.ParkingLot.name,
+                            package_type: packageItem.PackageType.type_name,
+                            vehicle_type: packageItem.VehicleType.type_name,
+                            date_start: new Date(
+                                packageItem.createdAt,
+                            ).toLocaleDateString('en-GB'),
+                            date_end: new Date(
+                                packageItem.expireAt,
+                            ).toLocaleDateString('en-GB'),
+                            price: packageItem.price,
+                        })),
+                    )
+                })
+                .catch((error) => {
+                    alert(error.response.data.message)
+                })
+        }
+    }, [pageSize,id])
 
     const handleCancel = () => {
         setShowModalAll(false)
@@ -267,6 +342,10 @@ function Packages() {
         } catch (error) {
             alert(error.response.data.message)
         }
+    }
+
+    const handleNavigation = (parkingLotId) => {
+        navigate(`/packages/add/${parkingLotId}`)
     }
     const menu = () => {
         return (
@@ -361,7 +440,7 @@ function Packages() {
                     className="package-list-content__sub__table"
                     columns={columnsForAdminAndBasicRole}
                     dataSource={allPackageList}
-                    pagination={state.pagination}
+                    pagination={stateAllPackage.pagination}
                     rowClassName="package-list-content__sub__table__row-action"
                     onRow={(record, rowIndex) => {
                         return {
@@ -489,7 +568,7 @@ function Packages() {
                         className="package-list-content__sub__table"
                         columns={columnsForAdminAndBasicRole}
                         dataSource={allPackageList}
-                        pagination={state.pagination}
+                        pagination={stateAllPackage.pagination}
                         rowClassName={(record, index) =>
                             user.role === roles.BASIC_USER
                                 ? 'package-list-content__sub__table__row-action'
@@ -628,8 +707,8 @@ function Packages() {
                     <div className="package-list-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: pageSizeOfOwner }}
-                            onChange={(e) => setPageSizeOfOwner(e.target.value)}
+                            defaultValue={{ value: pageSize }}
+                            onChange={(e) => setPageSize(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -728,13 +807,13 @@ function Packages() {
                     />
                     <SearchOutlined className="package-list-content__action__search__icon" />
                 </div>
-                <Link
+                <button
                     className="package-list-content__action__add"
-                    to="/packages/add"
+                    onClick={() => handleNavigation(id)}
                 >
                     <PlusCircleOutlined className="package-list-content__action__add__icon" />
                     <span>Thêm gói ưu đãi</span>
-                </Link>
+                </button>
             </div>
 
             <div className="package-list-content__sub">
@@ -742,7 +821,7 @@ function Packages() {
                     className="package-list-content__sub__table"
                     columns={columnsForBacicAndParkinglotRole}
                     dataSource={packageOfParkinglotList}
-                    pagination={state.pagination}
+                    pagination={stateParkinglot.pagination}
                     rowClassName="package-list-content__sub__table__row-action"
                     onRow={(record, rowIndex) => {
                         return {

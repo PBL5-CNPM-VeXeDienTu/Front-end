@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Form, Input, Button, Select } from 'antd'
 import messages from 'assets/lang/messages'
 import packageApi from 'api/packageApi'
@@ -11,6 +11,7 @@ const { Option } = Select
 function AddPackage() {
     const navigate = useNavigate()
     const { user } = useAuth()
+    const { id } = useParams()
     const PackageTypes = []
     for (let i = 0; i < 1; i++) {
         PackageTypes.push(<Option key={i + 1}>Gói ưu đãi tuần</Option>)
@@ -29,7 +30,7 @@ function AddPackage() {
     const handleSubmit = async (values) => {
         try {
             const newPackage = {
-                parking_lot_id: user.id,
+                parking_lot_id: parseInt(id),
                 name: values.name,
                 type_id: parseInt(values.type_id),
                 vehicle_type_id: parseInt(values.vehicle_type_id),
@@ -37,7 +38,7 @@ function AddPackage() {
             }
             const response = await packageApi.createNew(newPackage)
             alert(response.data.message)
-            navigate('/packages')
+            navigate(`/packages/${id}`)
         } catch (error) {
             alert(error.response.data.message)
         }
