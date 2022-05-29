@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate ,useParams} from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
 import {
     FilterOutlined,
@@ -314,7 +314,7 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [pageSize,id])
+    }, [pageSize, id])
 
     const handleCancel = () => {
         setShowModalAll(false)
