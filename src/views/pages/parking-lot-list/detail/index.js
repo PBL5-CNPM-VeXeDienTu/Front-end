@@ -20,17 +20,17 @@ function DetailParkingLot() {
                 SetParkingLot(response.data)
             })
         }
-    }, [])
+    }, [id])
     return (
         <div className="detail-parking-lot-content">
             <div className="title">
                 <span>Thông tin bãi đỗ xe</span>
                 <Link
-                    to="/parking-lots/edit"
+                    to={`/parking-lots/edit/${parkingLot.id}`}
                     className={
-                        user.role === roles.PARKING_LOT_USER
-                            ? 'detail-parking-lot-content__button-edit-active'
-                            : 'detail-parking-lot-content__button-edit-unactive'
+                        user.role === roles.BASIC_USER
+                            ? 'detail-parking-lot-content__button-edit-unactive'
+                            : 'detail-parking-lot-content__button-edit-active'
                     }
                 >
                     <EditOutlined />
@@ -125,7 +125,15 @@ function DetailParkingLot() {
                     }
                 >
                     <Button className="button-gray">
-                        <Link to="/verify-request">Thoát</Link>
+                        <Link
+                            to={
+                                user.role === roles.ADMIN
+                                    ? '/verify-request'
+                                    : '/parking-lots'
+                            }
+                        >
+                            Thoát
+                        </Link>
                     </Button>
                     <Button className="button-green">
                         <Link to="/verify-request">Xác thực</Link>
