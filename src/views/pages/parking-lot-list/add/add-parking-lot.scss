@@ -35,7 +35,7 @@
             &__icon {
                 color: #000;
                 font-size: 3vh;
-                margin: auto;
+                margin: 23% 23%;
             }
 
             img {
@@ -43,6 +43,11 @@
                 height: 60vh;
                 margin: auto;
                 border-radius: 20px;
+            }
+            input {
+                visibility: hidden;
+                width: 0;
+                height: 0;
             }
         }
 
@@ -64,6 +69,9 @@
                     font-size: 1.1rem;
                     width: 9vw;
                     // color: #555;
+                }
+                .input-unactive {
+                    display: none;
                 }
                 input {
                     height: 5vh !important;
