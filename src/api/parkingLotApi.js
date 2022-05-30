@@ -21,6 +21,10 @@ const parkingLotApi = {
         const url = `/api/parking-lots/${id}`
         return axiosClient.patch(url, credentials)
     },
+    verifyById: (id, credentials) => {
+        const url = `/api/parking-lots/${id}/verify`
+        return axiosClient.patch(url, credentials)
+    },
     softDeleteById: (id) => {
         const url = `/api/parking-lots/${id}`
         return axiosClient.delete(url)

@@ -87,6 +87,12 @@
                     box-shadow: 0 0 3px #41bc3f !important;
                     border-color: #41bc3f !important;
                 }
+                .radio-group {
+                    width: 30vw;
+                }
+            }
+            &__item-unactive {
+                display: none;
             }
         }
         &__button {

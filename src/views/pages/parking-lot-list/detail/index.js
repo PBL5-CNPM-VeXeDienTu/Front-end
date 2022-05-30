@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Form, Button, Modal } from 'antd'
+import { Form, Input, Button, Modal, Radio } from 'antd'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import * as roles from 'shared/constants/role'
 import * as verifyStates from 'shared/constants/verifyState'
@@ -13,18 +13,25 @@ function DetailParkingLot() {
     const { user } = useAuth()
     const { id } = useParams()
     const navigate = useNavigate()
-    const [parkingLot, SetParkingLot] = useState({})
-    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [parkingLot, setParkingLot] = useState({})
+    const [showModalSoftDelete, setShowModalSoftDelete] = useState(false)
+    const [showModalVerify, setShowModalVerify] = useState(false)
+    const [radioValue, setRadioValue] = useState()
 
-    const showModal = () => {
-        setIsModalVisible(true)
-    }
+    useEffect(() => {
+        if (!!id) {
+            parkingLotApi.getOneById(id).then((response) => {
+                setParkingLot(response.data)
+            })
+        }
+    }, [id])
 
     const handleCancel = () => {
-        setIsModalVisible(false)
+        setShowModalSoftDelete(false)
+        setShowModalVerify(false)
     }
 
-    const handleOk = async () => {
+    const softDeleteHandle = async () => {
         try {
             const response = await parkingLotApi.softDeleteById(parkingLot.id)
             alert(response.data.message)
@@ -33,14 +40,23 @@ function DetailParkingLot() {
             alert(error.response.data.message)
         }
     }
-
-    useEffect(() => {
-        if (!!id) {
-            parkingLotApi.getOneById(id).then((response) => {
-                SetParkingLot(response.data)
-            })
+    const verifyHandle = async () => {
+        try {
+            const updateVerifyState = {
+                state: radioValue ? verifyStates.VERIFIED : verifyStates.DENIED,
+                note: document.getElementById('note').value,
+            }
+            const response = await parkingLotApi.verifyById(
+                parkingLot.id,
+                updateVerifyState,
+            )
+            alert(response.data.message)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
         }
-    }, [id])
+    }
+
     return (
         <div className="detail-parking-lot-content">
             <div className="title">
@@ -59,7 +75,9 @@ function DetailParkingLot() {
                     </span>
                 </Link>
                 <span className="delete-parking-lot">
-                    <CloseOutlined onClick={showModal} />
+                    <CloseOutlined
+                        onClick={(e) => setShowModalSoftDelete(true)}
+                    />
                 </span>
             </div>
             <Form className="detail-parking-lot-content__sub">
@@ -151,26 +169,77 @@ function DetailParkingLot() {
                     }
                 >
                     <Button className="button-gray">
-                        <Link
-                            to={
-                                user.role === roles.ADMIN
-                                    ? '/verify-request'
-                                    : '/parking-lots'
-                            }
-                        >
-                            Thoát
-                        </Link>
+                        <Link to="/verify-request">Thoát</Link>
                     </Button>
-                    <Button className="button-green">
-                        <Link to="/verify-request">Xác thực</Link>
+                    <Button
+                        className="button-green"
+                        onClick={() => setShowModalVerify(true)}
+                    >
+                        Xác thực
                     </Button>
                 </div>
             </Form>
             <Modal
                 className="delete-parking-lot-modal"
+                title="Xác thực bãi đỗ xe"
+                visible={showModalVerify}
+                onCancel={handleCancel}
+                footer={null}
+            >
+                <Form
+                    className="delete-parking-lot-modal__form"
+                    name="verify_parkingLot"
+                >
+                    <div className="delete-parking-lot-modal__form__item">
+                        <span className="span">Trạng thái</span>
+                        <Form.Item name="state">
+                            <Radio.Group
+                                className="text"
+                                value={radioValue}
+                                defaultValue={radioValue}
+                                onChange={(e) => {
+                                    setRadioValue(e.target.value)
+                                }}
+                            >
+                                <Radio value={1}>{verifyStates.VERIFIED}</Radio>
+                                <Radio value={0}>{verifyStates.DENIED}</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </div>
+                    <div className="delete-parking-lot-modal__form__item">
+                        <span className="span">Ghi chú</span>
+                        <Form.Item name="note" className="form-item">
+                            <Input.TextArea
+                                id="note"
+                                className="textarea"
+                                size="medium"
+                            />
+                        </Form.Item>
+                    </div>
+
+                    <div className="delete-parking-lot-modal__button">
+                        <button
+                            className="button-gray"
+                            onClick={(e) => setShowModalVerify(false)}
+                        >
+                            Thoát
+                        </button>
+                        <button
+                            className="button-green"
+                            type="primary"
+                            htmlType="submit"
+                            onClick={verifyHandle}
+                        >
+                            Lưu
+                        </button>
+                    </div>
+                </Form>
+            </Modal>
+            <Modal
+                className="delete-parking-lot-modal"
                 title="Hủy đăng ký bãi đỗ xe"
-                visible={isModalVisible}
-                onOk={handleOk}
+                visible={showModalSoftDelete}
+                onOk={softDeleteHandle}
                 onCancel={handleCancel}
             >
                 <p>

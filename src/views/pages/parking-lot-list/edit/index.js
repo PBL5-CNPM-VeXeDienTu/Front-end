@@ -4,8 +4,9 @@ import { Form, Input, Button, Select } from 'antd'
 import { CameraOutlined } from '@ant-design/icons'
 import messages from 'assets/lang/messages'
 import parkingLotApi from 'api/parkingLotApi'
-import * as openStates from 'shared/constants/openState'
 import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
+import * as verifyStates from 'shared/constants/verifyState'
+import * as openStates from 'shared/constants/openState'
 import * as roles from 'shared/constants/role'
 import useAuth from 'hooks/useAuth'
 import uploadImageApi from 'api/uploadImageApi'
@@ -20,6 +21,7 @@ function EditParkingLot() {
     const [form] = Form.useForm()
     const [parkingLot, setParkingLot] = useState({})
     const [uploadAvatar, setUploadAvatar] = useState()
+
     const avatarURL = process.env.REACT_APP_API_URL + parkingLot.avatar
 
     const handleUploadImage = (e) => {
@@ -45,14 +47,15 @@ function EditParkingLot() {
                         is_open: response.data.is_open
                             ? openStates.OPENING
                             : openStates.CLOSED,
+                        state: response.data.VerifyState.state,
                         capacity: response.data.capacity,
                         address: response.data.address,
                     })
-
                     setParkingLot(response.data)
                 })
         }
     }, [id, form])
+
     const handleSubmit = async (values) => {
         try {
             values.is_open =
@@ -65,6 +68,12 @@ function EditParkingLot() {
                 postData.append('parking-lot-avatar', uploadAvatar)
                 uploadImageApi.uploadParkingLotAvatar(id, postData)
             }
+
+            const updateVerifyState = {
+                state: values.state,
+                note: '',
+            }
+            parkingLotApi.verifyById(parkingLot.id, updateVerifyState)
 
             alert(response.data.message)
             window.location.reload()
@@ -176,6 +185,36 @@ function EditParkingLot() {
                                 </Option>
                                 <Option key={openStates.CLOSED}>
                                     {openStates.CLOSED}
+                                </Option>
+                            </Select>
+                        </Form.Item>
+                    </div>
+                    <div
+                        className={
+                            user.role === roles.ADMIN
+                                ? 'edit-parking-lot-content__sub__info__item'
+                                : 'edit-parking-lot-content__sub__info__item-unactive'
+                        }
+                    >
+                        <span className="span">Xác thực</span>
+                        <Form.Item
+                            name="state"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: messages['text_required'],
+                                },
+                            ]}
+                        >
+                            <Select>
+                                <Option key={verifyStates.VERIFIED}>
+                                    {verifyStates.VERIFIED}
+                                </Option>
+                                <Option key={verifyStates.PENDING}>
+                                    {verifyStates.PENDING}
+                                </Option>
+                                <Option key={verifyStates.DENIED}>
+                                    {verifyStates.DENIED}
                                 </Option>
                             </Select>
                         </Form.Item>
