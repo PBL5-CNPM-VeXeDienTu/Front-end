@@ -177,7 +177,7 @@ function ParkingLots() {
                           )
                       })
         } catch (error) {}
-    }, [pageSize])
+    }, [pageSize, user.id, user.role])
 
     const handleCancel = () => {
         setShowBasicUserModal(false)
@@ -405,7 +405,6 @@ function ParkingLots() {
                     <Form
                         name="reply_feedback"
                         className="feedback-list-modal__sub"
-                        onFinish={handleSubmit}
                     >
                         <div className="feedback-list-modal__sub__info">
                             <div className="feedback-list-modal__sub__info__item">
@@ -415,11 +414,11 @@ function ParkingLots() {
                                     initialValue={feedback.feedback_type}
                                     className="form-item"
                                 >
-                                    {/* <Input
+                                    <Input
                                         className="text"
                                         disabled
                                         size="medium"
-                                    /> */}
+                                    />
                                 </Form.Item>
                             </div>
 
@@ -493,6 +492,7 @@ function ParkingLots() {
                                 className="button-save"
                                 type="primary"
                                 htmlType="submit"
+                                onClick={handleSubmit}
                             >
                                 Lưu
                             </button>

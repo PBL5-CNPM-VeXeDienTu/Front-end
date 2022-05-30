@@ -21,7 +21,7 @@ const parkingLotApi = {
         const url = `/api/parking-lots/${id}`
         return axiosClient.patch(url, credentials)
     },
-    deleteById: (id) => {
+    softDeleteById: (id) => {
         const url = `/api/parking-lots/${id}`
         return axiosClient.delete(url)
     },

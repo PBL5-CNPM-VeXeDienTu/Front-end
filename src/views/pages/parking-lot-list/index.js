@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, Link, useParams } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Table, Input, Modal, Menu, Dropdown } from 'antd'
 import {
     PlusCircleOutlined,
@@ -49,26 +49,33 @@ const columns = [
 function ParkingLots() {
     const { user } = useAuth()
     const navigate = useNavigate()
-    const { parkingLotId } = useParams()
     const [activeFilter, setActiveFilter] = useState(false)
     const [openStateFilter, setOpenStateFilter] = useState('All')
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
+    const [parkingLotId, setParkingLotId] = useState()
     const [parkingLotList, setParkingLotList] = useState([])
 
     const onSearch = (value) => console.log(value)
 
-    const showModal = () => {
+    const showModal = (parkingLotId) => {
         setIsModalVisible(true)
+        setParkingLotId(parkingLotId)
     }
 
     const handleCancel = () => {
         setIsModalVisible(false)
     }
 
-    const handleOk = () => {
-        setIsModalVisible(false)
+    const handleOk = async () => {
+        try {
+            const response = await parkingLotApi.softDeleteById(parkingLotId)
+            alert(response.data.message)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
     useEffect(() => {
@@ -335,7 +342,9 @@ function ParkingLots() {
                                 </span>
                             </Link>
                             <span className="delete-parking-lot">
-                                <CloseOutlined onClick={showModal} />
+                                <CloseOutlined
+                                    onClick={(e) => showModal(parkingLot.id)}
+                                />
                             </span>
                         </div>
                         <Modal

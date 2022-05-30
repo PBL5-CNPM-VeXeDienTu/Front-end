@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { Table, Input, Menu, Dropdown } from 'antd'
 import {
     SearchOutlined,
@@ -220,7 +220,7 @@ function VerifyRequest() {
         )
     }
 
-    return (
+    return user.role === roles.ADMIN ? (
         <div>
             {/* ----------------------------------- TAB PARKING-LOT  ----------------------------------- */}
             <div
@@ -405,6 +405,8 @@ function VerifyRequest() {
                 </div>
             </div>
         </div>
+    ) : (
+        <Navigate to="/404" />
     )
 }
 
