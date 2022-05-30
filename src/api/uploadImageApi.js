@@ -9,6 +9,10 @@ const uploadImageApi = {
         const url = `/api/upload/avatar/vehicle/${vehicleId}`
         return axiosClient.post(url, image)
     },
+    uploadParkingLotAvatar: (parkingLotId, image) => {
+        const url = `/api/upload/avatar/parking-lot/${parkingLotId}`
+        return axiosClient.post(url, image)
+    },
     uploadCavetFrontImage: (vehicleId, image) => {
         const url = `/api/upload/cavet/front/${vehicleId}`
         return axiosClient.post(url, image)

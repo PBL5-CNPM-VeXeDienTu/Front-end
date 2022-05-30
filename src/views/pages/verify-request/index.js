@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import { Table, Input, Menu, Dropdown } from 'antd'
-import { SearchOutlined, FilterOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import {
+    SearchOutlined,
+    FilterOutlined,
+    PlusCircleOutlined,
+} from '@ant-design/icons'
 import parkingLotApi from 'api/parkingLotApi'
 import vehicleApi from 'api/vehicleApi'
+import useAuth from 'hooks/useAuth'
+import * as roles from 'shared/constants/role'
 import * as verifyStates from 'shared/constants/verifyState'
 import './verify-request.scss'
 
@@ -72,6 +78,7 @@ const columParkingLot = [
 
 function VerifyRequest() {
     const navigate = useNavigate()
+    const { user } = useAuth()
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
     const [swapPage, setSwapPage] = useState(false)
@@ -276,6 +283,14 @@ function VerifyRequest() {
                         />
                         <SearchOutlined className="verify-request-content__action__search__icon" />
                     </div>
+
+                    <Link
+                        className={'verify-request-content__action__add'}
+                        to="/parking-lots/add"
+                    >
+                        <PlusCircleOutlined className="verify-request-content__action__add__icon" />
+                        <span>Thêm</span>
+                    </Link>
                 </div>
 
                 <div className="verify-request-content__sub">
