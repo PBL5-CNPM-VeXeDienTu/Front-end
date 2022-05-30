@@ -49,7 +49,6 @@ const columns = [
 function ParkingLots() {
     const { user } = useAuth()
     const navigate = useNavigate()
-    const { parkingLotId } = useParams()
     const [activeFilter, setActiveFilter] = useState(false)
     const [openStateFilter, setOpenStateFilter] = useState('All')
     const [isModalVisible, setIsModalVisible] = useState(false)

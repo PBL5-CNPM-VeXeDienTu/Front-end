@@ -9,6 +9,10 @@ const packageApi = {
         const url = `/api/packages/get-by-parking-lot/${id}?limit=${params.limit}&page=${params.page}`
         return axiosClient.get(url)
     },
+    getListByOwnerId: (id, params) => {
+        const url = `/api/packages/get-by-owner/${id}?limit=${params.limit}&page=${params.page}`
+        return axiosClient.get(url)
+    },
     getOneById: (id) => {
         const url = `/api/packages/${id}`
         return axiosClient.get(url)

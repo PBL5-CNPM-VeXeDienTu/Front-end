@@ -97,11 +97,12 @@ function Packages() {
     const [activeFilter, setActiveFilter] = useState(false)
     const [showModalAll, setShowModalAll] = useState(false)
     const [showModalParkingLot, setShowModalParkingLot] = useState(false)
-    const [allPackageList, setAllPackageList] = useState([{}])
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [packageOfOwnerList, setPackageOfOwnerList] = useState([])
+    const [allPackageList, setAllPackageList] = useState([])
+    const [userPackageOfOwnerList, setUserPackageOfOwnerList] = useState([])
     const [packageOfParkinglotList, setPackageOfParkinglotList] = useState([])
+    const [packageOfOwnerList, setPackageOfOwnerList] = useState([])
 
     const [userPackage, setUserPackage] = useState({
         key: 0,
@@ -166,7 +167,7 @@ function Packages() {
             })
     }, [pageSize])
 
-    const stateOwner = {
+    const stateOwnerOfUserPackage = {
         pagination: {
             pageSize: pageSize,
             total: total,
@@ -177,10 +178,10 @@ function Packages() {
                 }
                 if (!!user) {
                     userPackageApi
-                        .getPackageByOwner(user.id, params)
+                        .getUserPackageByOwner(user.id, params)
                         .then((response) => {
                             setTotal(response.data.count)
-                            setPackageOfOwnerList(
+                            setUserPackageOfOwnerList(
                                 response.data.rows.map((packageItem) => ({
                                     id: packageItem.id,
                                     name: packageItem.name,
@@ -215,10 +216,10 @@ function Packages() {
         }
         if (!!user) {
             userPackageApi
-                .getPackageByOwner(user.id, params)
+                .getUserPackageByOwner(user.id, params)
                 .then((response) => {
                     setTotal(response.data.count)
-                    setPackageOfOwnerList(
+                    setUserPackageOfOwnerList(
                         response.data.rows.map((packageItem) => ({
                             id: packageItem.id,
                             name: packageItem.name,
@@ -239,7 +240,7 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [user, pageSize])
+    }, [pageSize, user])
 
     const stateParkinglot = {
         pagination: {
@@ -315,6 +316,81 @@ function Packages() {
                 })
         }
     }, [pageSize, id])
+
+    const stateOwnerOfPackage = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                if (!!user) {
+                    packageApi
+                        .getListByOwnerId(user.id, params)
+                        .then((response) => {
+                            setTotal(response.data.count)
+                            setPackageOfOwnerList(
+                                response.data.rows.map((packageItem) => ({
+                                    id: packageItem.id,
+                                    name: packageItem.name,
+                                    parking_lot_name:
+                                        packageItem.ParkingLot.name,
+                                    package_type:
+                                        packageItem.PackageType.type_name,
+                                    vehicle_type:
+                                        packageItem.VehicleType.type_name,
+                                    date_start: new Date(
+                                        packageItem.createdAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    date_end: new Date(
+                                        packageItem.expireAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    price: packageItem.price,
+                                })),
+                            )
+                        })
+                        .catch((error) => {
+                            alert(error.response.data.message)
+                        })
+                }
+            },
+        },
+    }
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        if (!!user) {
+            packageApi
+                .getListByOwnerId(user.id, params)
+                .then((response) => {
+                    setTotal(response.data.count)
+                    setPackageOfOwnerList(
+                        response.data.rows.map((packageItem) => ({
+                            id: packageItem.id,
+                            name: packageItem.name,
+                            parking_lot_name: packageItem.ParkingLot.name,
+                            package_type: packageItem.PackageType.type_name,
+                            vehicle_type: packageItem.VehicleType.type_name,
+                            date_start: new Date(
+                                packageItem.createdAt,
+                            ).toLocaleDateString('en-GB'),
+                            date_end: new Date(
+                                packageItem.expireAt,
+                            ).toLocaleDateString('en-GB'),
+                            price: packageItem.price,
+                        })),
+                    )
+                })
+                .catch((error) => {
+                    alert(error.response.data.message)
+                })
+        }
+    }, [pageSize, user])
 
     const handleCancel = () => {
         setShowModalAll(false)
@@ -747,8 +823,8 @@ function Packages() {
                     <Table
                         className="package-list-content__sub__table"
                         columns={columnsForBacicAndParkinglotRole}
-                        dataSource={packageOfOwnerList}
-                        pagination={stateOwner.pagination}
+                        dataSource={userPackageOfOwnerList}
+                        pagination={stateOwnerOfUserPackage.pagination}
                         rowClassName={(record, index) =>
                             moment(record.date_end, 'DD/MM/YYYY').toDate() >
                             dateNow
@@ -764,8 +840,8 @@ function Packages() {
                 </div>
             </div>
         </div>
-    ) : (
-        // ----------------------------------ParkingLot---------------------------------
+    ) : // ----------------------------------ParkingLot---------------------------------
+    id ? (
         <div className={'package-list-content'}>
             <div className="title">Các gói ưu đãi của tôi</div>
 
@@ -822,6 +898,120 @@ function Packages() {
                     columns={columnsForBacicAndParkinglotRole}
                     dataSource={packageOfParkinglotList}
                     pagination={stateParkinglot.pagination}
+                    rowClassName="package-list-content__sub__table__row-action"
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: () => {
+                                setShowModalParkingLot(true)
+                                setPackageItem(record)
+                            },
+                        }
+                    }}
+                />
+            </div>
+            <Modal
+                className="package-list-modal"
+                visible={showModalParkingLot}
+                onCancel={handleCancel}
+                footer={null}
+            >
+                <h1 className="h1">Thông tin gói ưu đãi</h1>
+                <div className="div">
+                    <span className="span1">Tên gói ưu đãi</span>
+                    <span className="span2">{packageItem.name}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">tên bãi đỗ xe</span>
+                    <span className="span2">
+                        {packageItem.parking_lot_name}
+                    </span>
+                </div>
+                <div className="div">
+                    <span className="span1">Loại gói ưu đãi</span>
+                    <span className="span2">{packageItem.package_type}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Phương tiện</span>
+                    <span className="span2">{packageItem.vehicle_type}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Giá</span>
+                    <span className="span2">{packageItem.price} VND</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Đang sử dụng</span>
+                    <span className="span2">1000 Người</span>
+                </div>
+                <div className="button">
+                    <button
+                        className="button__cancel"
+                        onClick={(e) => setShowModalParkingLot(false)}
+                    >
+                        Thoát
+                    </button>
+                    <Link to="/packages/edit">
+                        <button className="button__ok"> Chỉnh sửa</button>
+                    </Link>
+                </div>
+            </Modal>
+        </div>
+    ) : (
+        <div className={'package-list-content'}>
+            <div className="title">Các gói ưu đãi của tôi</div>
+
+            <div className="package-list-content__action__state-two">
+                <div className="package-list-content__action__select">
+                    <span>Hiển thị </span>
+                    <select
+                        defaultValue={{ value: pageSize }}
+                        onChange={(e) => setPageSize(e.target.value)}
+                    >
+                        {numOfItem.map((numOfItem, index) => {
+                            return (
+                                <option key={index} value={numOfItem}>
+                                    {numOfItem}
+                                </option>
+                            )
+                        })}
+                    </select>
+                </div>
+                <Dropdown overlay={menu} trigger="click" placement="bottom">
+                    <div
+                        className={
+                            activeFilter
+                                ? 'package-list-content__action__filter-active'
+                                : 'package-list-content__action__filter-unactive'
+                        }
+                    >
+                        <FilterOutlined />
+                    </div>
+                </Dropdown>
+
+                <div className="package-list-content__action__search">
+                    <Search
+                        className="search-box"
+                        placeholder="Tìm kiếm"
+                        onSearch={onSearch}
+                        allowClear
+                        suffix
+                    />
+                    <SearchOutlined className="package-list-content__action__search__icon" />
+                </div>
+                <button
+                    className="package-list-content__action__add"
+                    onClick={() => handleNavigation(id)}
+                >
+                    <PlusCircleOutlined className="package-list-content__action__add__icon" />
+                    <span>Thêm gói ưu đãi</span>
+                </button>
+            </div>
+
+            <div className="package-list-content__sub">
+                <Table
+                    className="package-list-content__sub__table"
+                    columns={columnsForBacicAndParkinglotRole}
+                    dataSource={packageOfOwnerList}
+                    pagination={stateOwnerOfPackage.pagination}
                     rowClassName="package-list-content__sub__table__row-action"
                     onRow={(record, rowIndex) => {
                         return {
