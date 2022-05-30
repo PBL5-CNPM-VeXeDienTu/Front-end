@@ -5,7 +5,7 @@ const userPackageApi = {
         const url = '/api/user-packages'
         return axiosClient.get(url, { params })
     },
-    getPackageByOwner: (id, params) => {
+    getUserPackageByOwner: (id, params) => {
         const url = `/api/user-packages/get-by-owner/${id}?limit=${params.limit}&page=${params.page}`
         return axiosClient.get(url)
     },
