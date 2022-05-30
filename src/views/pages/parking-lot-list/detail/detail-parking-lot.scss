@@ -11,21 +11,34 @@
     height: 100%;
     border-radius: 20px;
     background-color: #fff;
-
-    &__button-edit-unactive {
+    position: relative;
+    &__no-icon {
         display: none;
     }
-    &__button-edit-active {
-        font-size: 30px;
+    &__icon {
+        width: 100%;
         position: absolute;
-        right: 6%;
-        top: 8%;
-        color: #555;
-    }
+        top: 4%;
+        left: 90%;
 
-    &__button-edit:hover {
-        color: #41bc3f;
-        cursor: pointer;
+        span {
+            font-size: 25px;
+            margin: 5px;
+        }
+        .delete-parking-lot {
+            color: 555;
+        }
+        .delete-parking-lot:hover {
+            color: red;
+        }
+
+        .edit-parking-lot {
+            color: #555;
+        }
+
+        .edit-parking-lot:hover {
+            color: #41bc3f;
+        }
     }
 
     &__sub {
@@ -111,6 +124,44 @@
         }
         &__button-unactive {
             display: none;
+        }
+    }
+}
+.delete-parking-lot-modal {
+    width: 30vw !important;
+    top: 30% !important;
+
+    .ant-modal-content {
+        border-radius: 20px !important;
+
+        .ant-modal-header {
+            border-radius: 20px 20px 0 0;
+            background-color: #e9e9e9;
+        }
+
+        .ant-modal-body {
+            height: 10vh !important;
+        }
+
+        .ant-modal-footer {
+            text-align: center;
+
+            .ant-btn {
+                width: 7vw;
+                height: 5vh;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: bolder;
+                margin: 0 1vw;
+                color: #222;
+                background-color: #d5d5d5;
+                border: none;
+            }
+
+            .ant-btn-primary {
+                background: #41bc3f;
+                color: #fff;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { Form, Button } from 'antd'
-import { EditOutlined } from '@ant-design/icons'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Form, Button, Modal } from 'antd'
+import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import * as roles from 'shared/constants/role'
 import * as verifyStates from 'shared/constants/verifyState'
 import * as openState from 'shared/constants/openState'
@@ -12,7 +12,27 @@ import './detail-parking-lot.scss'
 function DetailParkingLot() {
     const { user } = useAuth()
     const { id } = useParams()
+    const navigate = useNavigate()
     const [parkingLot, SetParkingLot] = useState({})
+    const [isModalVisible, setIsModalVisible] = useState(false)
+
+    const showModal = () => {
+        setIsModalVisible(true)
+    }
+
+    const handleCancel = () => {
+        setIsModalVisible(false)
+    }
+
+    const handleOk = async () => {
+        try {
+            const response = await parkingLotApi.softDeleteById(parkingLot.id)
+            alert(response.data.message)
+            navigate('/verify-request')
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
 
     useEffect(() => {
         if (!!id) {
@@ -25,16 +45,22 @@ function DetailParkingLot() {
         <div className="detail-parking-lot-content">
             <div className="title">
                 <span>Thông tin bãi đỗ xe</span>
-                <Link
-                    to={`/parking-lots/edit/${parkingLot.id}`}
-                    className={
-                        user.role === roles.BASIC_USER
-                            ? 'detail-parking-lot-content__button-edit-unactive'
-                            : 'detail-parking-lot-content__button-edit-active'
-                    }
-                >
-                    <EditOutlined />
+            </div>
+            <div
+                className={
+                    user.role === roles.BASIC_USER
+                        ? 'detail-parking-lot-content__no-icon'
+                        : 'detail-parking-lot-content__icon'
+                }
+            >
+                <Link to={`/parking-lots/edit/${parkingLot.id}`}>
+                    <span className="edit-parking-lot">
+                        <EditOutlined />
+                    </span>
                 </Link>
+                <span className="delete-parking-lot">
+                    <CloseOutlined onClick={showModal} />
+                </span>
             </div>
             <Form className="detail-parking-lot-content__sub">
                 <img
@@ -140,6 +166,19 @@ function DetailParkingLot() {
                     </Button>
                 </div>
             </Form>
+            <Modal
+                className="delete-parking-lot-modal"
+                title="Hủy đăng ký bãi đỗ xe"
+                visible={isModalVisible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <p>
+                    {user.role === roles.ADMIN
+                        ? 'Bạn có chắn chắn muốn xóa bãi đỗ xe hay không ?'
+                        : 'Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay không ?'}
+                </p>
+            </Modal>
         </div>
     )
 }
