@@ -19,8 +19,7 @@ function Vehicles() {
         }
     }, [user])
     const navigate = useNavigate()
-    const onClickHandler = (vehicleId) =>
-        navigate(`/vehicles/detail/${vehicleId}`)
+    const onClickHandler = (vehicleId) => navigate(`/vehicles/${vehicleId}`)
 
     return (
         <div className="vehicles-list-container">

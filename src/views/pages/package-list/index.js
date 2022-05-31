@@ -455,7 +455,7 @@ function Packages() {
     }
 
     const handleNavigation = (parkingLotId) => {
-        navigate(`/packages/add/${parkingLotId}`)
+        navigate(`/packages/add`)
     }
     const menu = () => {
         return (
@@ -605,7 +605,7 @@ function Packages() {
                         >
                             Thoát
                         </button>
-                        <Link to="/packages/edit">
+                        <Link to={`/packages/${packageItem.id}/edit`}>
                             <button className="button__ok"> Chỉnh sửa</button>
                         </Link>
                     </div>
@@ -983,7 +983,7 @@ function Packages() {
                     >
                         Thoát
                     </button>
-                    <Link to={`/packages/edit/${packageItem.id}`}>
+                    <Link to={`/packages/${packageItem.id}/edit`}>
                         <button className="button__ok"> Chỉnh sửa</button>
                     </Link>
                 </div>
@@ -1097,7 +1097,7 @@ function Packages() {
                     >
                         Thoát
                     </button>
-                    <Link to={`/packages/edit/${packageItem.id}`}>
+                    <Link to={`/packages/${packageItem.id}/edit`}>
                         <button className="button__ok"> Chỉnh sửa</button>
                     </Link>
                 </div>

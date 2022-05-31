@@ -69,7 +69,7 @@ function DetailParkingLot() {
                         : 'detail-parking-lot-content__icon'
                 }
             >
-                <Link to={`/parking-lots/edit/${parkingLot.id}`}>
+                <Link to={`/parking-lots/${parkingLot.id}/edit`}>
                     <span className="edit-parking-lot">
                         <EditOutlined />
                     </span>

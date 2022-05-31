@@ -116,11 +116,11 @@ function AllRoutes() {
                     element={<MainLayout component={Vehicles} />}
                 />
                 <Route
-                    path="/vehicles/detail/:id"
+                    path="/vehicles/:id"
                     element={<MainLayout component={DetailVehicle} />}
                 />
                 <Route
-                    path="/vehicles/edit/:id"
+                    path="/vehicles/:id/edit"
                     element={<MainLayout component={EditVehicle} />}
                 />
                 <Route
@@ -140,7 +140,7 @@ function AllRoutes() {
                     element={<MainLayout component={DetailParkingLot} />}
                 />
                 <Route
-                    path="/parking-lots/edit/:id"
+                    path="/parking-lots/:id/edit"
                     element={<MainLayout component={EditParkingLot} />}
                 />
                 <Route
@@ -180,11 +180,11 @@ function AllRoutes() {
                     element={<MainLayout component={Packages} />}
                 />
                 <Route
-                    path="/packages/add/:id"
+                    path="/packages/add"
                     element={<MainLayout component={AddPackage} />}
                 />
                 <Route
-                    path="/packages/edit/:id"
+                    path="/packages/:id/edit"
                     element={<MainLayout component={EditPackage} />}
                 />
                 <Route
