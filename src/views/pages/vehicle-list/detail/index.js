@@ -39,7 +39,6 @@ function DetailVehicle() {
     const handleOk = () => {
         setIsModalVisible(false)
     }
-    
 
     return (
         <div className="detail-vehicle-content">
@@ -125,8 +124,8 @@ function DetailVehicle() {
                 <Button className="button-delete" onClick={showModal}>
                     Hủy đăng ký
                 </Button>
-                <Button className="button-edit" >
-                    <Link to={`/vehicles/edit/${id}`}>Chỉnh sửa</Link>
+                <Button className="button-edit">
+                    <Link to={`/vehicles/${id}/edit`}>Chỉnh sửa</Link>
                 </Button>
             </div>
 

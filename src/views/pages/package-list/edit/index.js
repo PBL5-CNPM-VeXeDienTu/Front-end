@@ -36,8 +36,6 @@ function EditPackage() {
             })
         })
     }, [id])
-    console.log('packageItem')
-    console.log(packageItem)
 
     useEffect(() => {
         packageTypeApi.getListPackageType().then((response) => {

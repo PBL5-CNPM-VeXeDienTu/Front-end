@@ -336,7 +336,7 @@ function ParkingLots() {
                             </div>
                         </div>
                         <div className="parking-lot-list-container__content__icon">
-                            <Link to={`/parking-lots/edit/${parkingLot.id}`}>
+                            <Link to={`/parking-lots/${parkingLot.id}/edit`}>
                                 <span className="edit-parking-lot">
                                     <EditOutlined />
                                 </span>

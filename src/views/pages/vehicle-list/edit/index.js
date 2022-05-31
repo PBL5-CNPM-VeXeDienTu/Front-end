@@ -44,7 +44,7 @@ function EditVehicle() {
                 uploadImageApi.uploadVehicleAvatar(id, postData)
             }
             alert(response.data.message)
-            navigate(`/vehicles/detail/${id}`)
+            navigate(`/vehicles/${id}`)
         } catch (error) {
             alert(error.response.data.message)
         }
@@ -55,8 +55,6 @@ function EditVehicle() {
         vehicleAvatar.src = URL.createObjectURL(e.target.files[0])
         setUploadAvatar(e.target.files[0])
     }
-    
-
 
     return user.role !== roles.PARKING_LOT_USER ? (
         <div className="edit-vehicle-content">
@@ -146,7 +144,7 @@ function EditVehicle() {
                 </div>
                 <div className="edit-vehicle-content__sub__button">
                     <Button className="button-cancel">
-                        <Link to={`/vehicles/detail/${id}`}>Thoát</Link>
+                        <Link to={`/vehicles/${id}`}>Thoát</Link>
                     </Button>
                     <Button
                         className="button-save"

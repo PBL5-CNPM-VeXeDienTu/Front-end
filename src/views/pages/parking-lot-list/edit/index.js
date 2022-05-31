@@ -76,8 +76,7 @@ function EditParkingLot() {
             parkingLotApi.verifyById(parkingLot.id, updateVerifyState)
 
             alert(response.data.message)
-            window.location.reload()
-            navigate(`/parking-lots/edit/${id}`)
+            navigate(`/parking-lots/${id}`)
         } catch (error) {
             alert(error.response.data.message)
         }
