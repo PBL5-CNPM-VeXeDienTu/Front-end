@@ -184,7 +184,7 @@ function AllRoutes() {
                     element={<MainLayout component={AddPackage} />}
                 />
                 <Route
-                    path="/packages/edit"
+                    path="/packages/edit/:id"
                     element={<MainLayout component={EditPackage} />}
                 />
                 <Route

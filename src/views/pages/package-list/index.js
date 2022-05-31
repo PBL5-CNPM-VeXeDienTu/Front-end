@@ -82,6 +82,40 @@ const columnsForAdminAndBasicRole = [
     },
 ]
 
+const columnsForParkinglotRole = [
+    {
+        title: 'Tên gói ưu đãi',
+        dataIndex: 'name',
+        width: '20%',
+    },
+    {
+        title: 'Tên bãi đỗ xe',
+        dataIndex: 'parking_lot_name',
+        width: '20%',
+    },
+    {
+        title: 'Loại gói ưu đãi',
+        dataIndex: 'package_type',
+        width: '12%',
+    },
+
+    {
+        title: 'Phương tiện',
+        dataIndex: 'vehicle_type',
+        width: '12%',
+    },
+    {
+        title: 'Ngày bắt đầu',
+        dataIndex: 'date_start',
+        width: '12%',
+    },
+    {
+        title: 'Giá (VND)',
+        dataIndex: 'price',
+        width: '10%',
+    },
+]
+
 const packageTypeItem = ['All', 'Gói tuần', 'Gói tháng', 'Gói quý']
 
 const vehicleTypeItem = ['All', 'Xe đạp', 'Xe máy', 'Xe ô tô']
@@ -949,7 +983,7 @@ function Packages() {
                     >
                         Thoát
                     </button>
-                    <Link to="/packages/edit">
+                    <Link to={`/packages/edit/${packageItem.id}`}>
                         <button className="button__ok"> Chỉnh sửa</button>
                     </Link>
                 </div>
@@ -1009,7 +1043,7 @@ function Packages() {
             <div className="package-list-content__sub">
                 <Table
                     className="package-list-content__sub__table"
-                    columns={columnsForBacicAndParkinglotRole}
+                    columns={columnsForParkinglotRole}
                     dataSource={packageOfOwnerList}
                     pagination={stateOwnerOfPackage.pagination}
                     rowClassName="package-list-content__sub__table__row-action"
@@ -1063,7 +1097,7 @@ function Packages() {
                     >
                         Thoát
                     </button>
-                    <Link to="/packages/edit">
+                    <Link to={`/packages/edit/${packageItem.id}`}>
                         <button className="button__ok"> Chỉnh sửa</button>
                     </Link>
                 </div>
