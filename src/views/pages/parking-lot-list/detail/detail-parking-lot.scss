@@ -128,8 +128,38 @@
     }
 }
 .delete-parking-lot-modal {
-    width: 30vw !important;
+    width: 40vw !important;
     top: 30% !important;
+
+    &__form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        &__item {
+            height: 8.5vh;
+            display: grid;
+            padding: auto 0;
+            grid-template-columns: 20% 80%;
+            .span {
+                font-weight: bold;
+                text-align: right;
+                margin-top: 5px;
+                font-size: 1rem;
+                // color: #555;
+            }
+            .text {
+                margin-left: 5%;
+            }
+            .textarea {
+                height: 12vh;
+                margin-left: 5%;
+                width: 25vw;
+            }
+        }
+    }
+    &__button {
+        margin: 10% auto 0 auto;
+    }
 
     .ant-modal-content {
         border-radius: 20px !important;
@@ -140,7 +170,8 @@
         }
 
         .ant-modal-body {
-            height: 10vh !important;
+            height: fit-content !important;
+            min-height: 10vh;
         }
 
         .ant-modal-footer {
@@ -159,7 +190,7 @@
             }
 
             .ant-btn-primary {
-                background: #41bc3f;
+                background: #41bc3f !important;
                 color: #fff;
             }
         }
