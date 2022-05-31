@@ -120,7 +120,7 @@ function AllRoutes() {
                     element={<MainLayout component={DetailVehicle} />}
                 />
                 <Route
-                    path="/vehicles/edit"
+                    path="/vehicles/edit/:id"
                     element={<MainLayout component={EditVehicle} />}
                 />
                 <Route
