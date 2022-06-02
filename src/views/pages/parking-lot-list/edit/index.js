@@ -31,7 +31,7 @@ function EditParkingLot() {
     }
 
     const handleGetImageError = (e) => {
-        e.target.src = defaultImageUrl.PARKING_AVATAR
+        e.target.src = defaultImageUrl.PARKING_LOT_AVATAR
     }
 
     useEffect(() => {

@@ -20,28 +20,32 @@ const addressTypeItem = ['All', 'Đà Nẵng', 'Quảng Nam', 'Huế']
 
 function Accounts() {
     const { user } = useAuth()
-    const [swapPage, setSwapPage] = useState(true)
+    const [swapPage, setSwapPage] = useState(1)
     const [addressType, setAddressType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [showDeleteUserModal, setShowDeleteUserModal] = useState(false)
     const [parkingLotUserList, setParkingLotUserList] = useState([])
     const [basicUserList, setBasicUserList] = useState([])
+    const [AdminList, setAdminList] = useState([])
+    const [deleteUser, setDeleteUser] = useState()
     const [total, setTotal] = useState(0)
     const [params, setParams] = useState({
         limit: 10,
         page: 1,
     })
 
-    const showModal = () => {
-        setIsModalVisible(true)
-    }
-
     const handleCancel = () => {
-        setIsModalVisible(false)
+        setShowDeleteUserModal(false)
     }
 
-    const handleOk = () => {
-        setIsModalVisible(false)
+    const handleSubmit = async () => {
+        try {
+            const response = await userApi.softDeleteById(deleteUser.id)
+            alert(response.data.message)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
     const onSearch = (value) => console.log(value)
@@ -72,28 +76,46 @@ function Accounts() {
         if (!!user) {
             userApi.getListByParams(params).then((response) => {
                 setTotal(response.data.count)
-                setParkingLotUserList(
-                    response.data.rows
-                        .filter((user) => user.role === roles.PARKING_LOT_USER)
-                        .map((user) => ({
-                            id: user.id,
-                            avatar: user.UserInfo?.avatar,
-                            name: user.name,
-                            email: user.email,
-                            phone_number: user.UserInfo?.phone_number,
-                            address: user.UserInfo?.address,
-                        })),
-                )
                 setBasicUserList(
                     response.data.rows
                         .filter((user) => user.role === roles.BASIC_USER)
                         .map((user) => ({
                             id: user.id,
+                            role: user.role,
                             avatar: user.UserInfo?.avatar,
                             name: user.name,
                             email: user.email,
                             phone_number: user.UserInfo?.phone_number,
                             address: user.UserInfo?.address,
+                            deletedAt: user.deletedAt ? 'Đã xóa' : 'Chưa xóa',
+                        })),
+                )
+                setParkingLotUserList(
+                    response.data.rows
+                        .filter((user) => user.role === roles.PARKING_LOT_USER)
+                        .map((user) => ({
+                            id: user.id,
+                            role: user.role,
+                            avatar: user.UserInfo?.avatar,
+                            name: user.name,
+                            email: user.email,
+                            phone_number: user.UserInfo?.phone_number,
+                            address: user.UserInfo?.address,
+                            deletedAt: user.deletedAt ? 'Đã xóa' : 'Chưa xóa',
+                        })),
+                )
+                setAdminList(
+                    response.data.rows
+                        .filter((user) => user.role === roles.ADMIN)
+                        .map((user) => ({
+                            id: user.id,
+                            role: user.role,
+                            avatar: user.UserInfo?.avatar,
+                            name: user.name,
+                            email: user.email,
+                            phone_number: user.UserInfo?.phone_number,
+                            address: user.UserInfo?.address,
+                            deletedAt: user.deletedAt ? 'Đã xóa' : 'Chưa xóa',
                         })),
                 )
             })
@@ -130,7 +152,7 @@ function Accounts() {
         {
             title: 'Số điện thoại',
             dataIndex: 'phone_number',
-            width: '15%',
+            width: '10%',
         },
         {
             title: 'Địa chỉ',
@@ -138,16 +160,35 @@ function Accounts() {
             width: '35%',
         },
         {
+            title: 'Trạng thái',
+            dataIndex: 'deletedAt',
+            width: '15%',
+            render: (text, record) => (
+                <span
+                    className={
+                        record.deletedAt === 'Đã xóa'
+                            ? 'span-red'
+                            : 'span-green'
+                    }
+                >
+                    {record.deletedAt}
+                </span>
+            ),
+        },
+        {
             title: 'Action',
             dataIndex: 'action',
-            width: '15%',
+            width: '5%',
             render: (text, record) => (
                 <Space size="middle">
                     <Link to={`/profile/${record.id}/edit`}>
                         <EditOutlined className="icon-edit" />
                     </Link>
                     <DeleteOutlined
-                        onClick={showModal}
+                        onClick={() => {
+                            setShowDeleteUserModal(true)
+                            setDeleteUser(record)
+                        }}
                         className="icon-delete"
                     />
                 </Space>
@@ -183,10 +224,10 @@ function Accounts() {
 
     return user.role === roles.ADMIN ? (
         <div>
-            {/* ------------------------------------------------ TAB PARKING-LOT ------------------------------------------------ */}
+            {/* --------------------------------------------------- TAB BASIC --------------------------------------------------- */}
             <div
                 className={
-                    swapPage
+                    swapPage === 1
                         ? 'account-list-content'
                         : 'account-list-content-unactive'
                 }
@@ -194,94 +235,21 @@ function Accounts() {
                 <div className="title">Danh sách tài khoản</div>
 
                 <div className="account-list-content__swap-page">
-                    <button className="button-active">Parking-lot</button>
+                    <button className="button-active">Basic User</button>
                     <button
                         className="button-unactive"
-                        onClick={(e) => setSwapPage(false)}
+                        onClick={() => setSwapPage(2)}
                     >
-                        Basic
+                        Parking-lot User
+                    </button>
+                    <button
+                        className="button-unactive"
+                        onClick={() => setSwapPage(3)}
+                    >
+                        Admin
                     </button>
                 </div>
 
-                <div className="account-list-content__action">
-                    <div className="account-list-content__action__select">
-                        <span>Hiển thị </span>
-                        <select
-                            defaultValue={{ value: params.pageSize }}
-                            onChange={(e) =>
-                                setParams({
-                                    limit: e.target.value,
-                                    page: params.page,
-                                })
-                            }
-                        >
-                            {numOfItem.map((numOfItem, index) => {
-                                return (
-                                    <option key={index} value={numOfItem}>
-                                        {numOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-                    <Dropdown overlay={menu} trigger="click" placement="bottom">
-                        <div
-                            className={
-                                activeFilter
-                                    ? 'account-list-content__action__filter-active'
-                                    : 'account-list-content__action__filter-unactive'
-                            }
-                        >
-                            <FilterOutlined />
-                        </div>
-                    </Dropdown>
-
-                    <div className="account-list-content__action__search">
-                        <Search
-                            className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
-                            allowClear
-                            suffix
-                        />
-                        <SearchOutlined className="account-list-content__action__search__icon" />
-                    </div>
-                </div>
-
-                <div className="account-list-content__sub">
-                    <Table
-                        className="account-list-content__sub__table"
-                        columns={columns}
-                        dataSource={parkingLotUserList}
-                        pagination={state.pagination}
-                        rowClassName={'account-list-content__sub__table__row'}
-                        onRow={(record, rowIndex) => {
-                            return {
-                                onClick: () => {},
-                            }
-                        }}
-                    ></Table>
-                </div>
-            </div>
-
-            {/* --------------------------------------------------- TAB BASIC --------------------------------------------------- */}
-            <div
-                className={
-                    swapPage
-                        ? 'account-list-content-unactive'
-                        : 'account-list-content'
-                }
-            >
-                <div className="title">Danh sách tài khoản</div>
-                <div className="account-list-content__swap-page">
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(true)}
-                    >
-                        Parking-lot
-                    </button>
-                    <button className="button-active">Basic</button>
-                </div>
                 <div className="account-list-content__action">
                     <div className="account-list-content__action__select">
                         <span>Hiển thị </span>
@@ -333,24 +301,192 @@ function Accounts() {
                         columns={columns}
                         dataSource={basicUserList}
                         pagination={state.pagination}
-                        rowClassName={'account-list-content__sub__table__row'}
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {},
                             }
                         }}
                     ></Table>
-                    <Modal
-                        className="delete-account-modal"
-                        title="Hủy User"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                    >
-                        <p>Bạn có chắn chắn muốn xóa user hay không ?</p>
-                    </Modal>
                 </div>
             </div>
+
+            {/* ------------------------------------------------ TAB PARKING-LOT ------------------------------------------------ */}
+            <div
+                className={
+                    swapPage === 2
+                        ? 'account-list-content'
+                        : 'account-list-content-unactive'
+                }
+            >
+                <div className="title">Danh sách tài khoản</div>
+                <div className="account-list-content__swap-page">
+                    <button
+                        className="button-unactive"
+                        onClick={() => setSwapPage(1)}
+                    >
+                        Basic User
+                    </button>
+                    <button className="button-active">Parking-lot User</button>
+                    <button
+                        className="button-unactive"
+                        onClick={() => setSwapPage(3)}
+                    >
+                        Admin
+                    </button>
+                </div>
+                <div className="account-list-content__action">
+                    <div className="account-list-content__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({
+                                    limit: e.target.value,
+                                    page: params.page,
+                                })
+                            }
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                activeFilter
+                                    ? 'account-list-content__action__filter-active'
+                                    : 'account-list-content__action__filter-unactive'
+                            }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
+
+                    <div className="account-list-content__action__search">
+                        <Search
+                            className="search-box"
+                            placeholder="Tìm kiếm"
+                            onSearch={onSearch}
+                            allowClear
+                            suffix
+                        />
+                        <SearchOutlined className="account-list-content__action__search__icon" />
+                    </div>
+                </div>
+
+                <div className="account-list-content__sub">
+                    <Table
+                        className="account-list-content__sub__table"
+                        columns={columns}
+                        dataSource={parkingLotUserList}
+                        pagination={state.pagination}
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => {},
+                            }
+                        }}
+                    ></Table>
+                </div>
+            </div>
+
+            {/* --------------------------------------------------- TAB ADMIN -------------------------------------------------- */}
+            <div
+                className={
+                    swapPage === 3
+                        ? 'account-list-content'
+                        : 'account-list-content-unactive'
+                }
+            >
+                <div className="title">Danh sách tài khoản</div>
+                <div className="account-list-content__swap-page">
+                    <button
+                        className="button-unactive"
+                        onClick={() => setSwapPage(1)}
+                    >
+                        Basic User
+                    </button>
+                    <button
+                        className="button-unactive"
+                        onClick={() => setSwapPage(2)}
+                    >
+                        Parking-lot User
+                    </button>
+                    <button className="button-active">Admin</button>
+                </div>
+                <div className="account-list-content__action">
+                    <div className="account-list-content__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({
+                                    limit: e.target.value,
+                                    page: params.page,
+                                })
+                            }
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                activeFilter
+                                    ? 'account-list-content__action__filter-active'
+                                    : 'account-list-content__action__filter-unactive'
+                            }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
+
+                    <div className="account-list-content__action__search">
+                        <Search
+                            className="search-box"
+                            placeholder="Tìm kiếm"
+                            onSearch={onSearch}
+                            allowClear
+                            suffix
+                        />
+                        <SearchOutlined className="account-list-content__action__search__icon" />
+                    </div>
+                </div>
+
+                <div className="account-list-content__sub">
+                    <Table
+                        className="account-list-content__sub__table"
+                        columns={columns}
+                        dataSource={AdminList}
+                        pagination={state.pagination}
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => {},
+                            }
+                        }}
+                    ></Table>
+                </div>
+            </div>
+
+            <Modal
+                className="delete-account-modal"
+                title="Xóa người dùng"
+                visible={showDeleteUserModal}
+                onOk={handleSubmit}
+                onCancel={handleCancel}
+            >
+                <p>Bạn có chắn chắn muốn xóa người dùng hay không ?</p>
+            </Modal>
         </div>
     ) : (
         <Navigate to="/404" />

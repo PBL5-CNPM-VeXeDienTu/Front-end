@@ -39,7 +39,10 @@ function Profile() {
             <div className="profile-content__sub">
                 <div className="profile-content__sub__avatar">
                     <img
-                        src={process.env.REACT_APP_API_URL + user.UserInfo?.avatar}
+                        src={
+                            process.env.REACT_APP_API_URL +
+                            user.UserInfo?.avatar
+                        }
                         alt="avatar"
                         onError={handleGetImageError}
                     />
