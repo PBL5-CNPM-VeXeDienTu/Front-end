@@ -108,7 +108,7 @@ function AllRoutes() {
                     element={<MainLayout component={Profile} />}
                 />
                 <Route
-                    path="/profile/edit"
+                    path="/profile/:id/edit"
                     element={<MainLayout component={EditProfile} />}
                 />
                 <Route

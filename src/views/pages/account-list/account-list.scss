@@ -148,6 +148,12 @@
                     }
                 }
             }
+            &__row {
+                td:nth-child(6) {
+                    padding: 2vh 0 2vh 0;
+                    text-align: center;
+                }
+            }
         }
     }
 }
