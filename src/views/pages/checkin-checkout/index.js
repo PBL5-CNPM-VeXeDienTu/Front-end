@@ -1,13 +1,45 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { QrReader } from 'react-qr-reader'
 import { Form, Input, Button } from 'antd'
-import messages from 'assets/lang/messages'
+import axios from 'axios'
 import './checkin-checkout.scss'
 
 function CheckinCheckout() {
     const videoRef = useRef(null)
     const photoRef = useRef(null)
     const [hasPhoto, setHasPhoto] = useState(false)
+    const ServerFlaskUrl = process.env.REACT_APP_API_FLASK_URL
+    const [licensePlate, setLicensePlate] = useState(
+        'Không nhận diện được biển số',
+    )
+
+    async function submit(e) {
+        e.preventDefault()
+        let video = videoRef.current
+        let photo = photoRef.current
+        photo.width = 640
+        photo.height = 480
+        let ctx = photo.getContext('2d')
+        ctx.drawImage(video, 0, 0, 640, 480)
+
+        setHasPhoto(true)
+        var img = new Image()
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0, 640, 480)
+        }
+
+        let ImgUrl = photo.toDataURL()
+        const blob = await (await fetch(ImgUrl)).blob()
+        const file = new File([blob], 'fileName.jpg', {
+            type: 'image/jpeg',
+            lastModified: new Date(),
+        })
+        const formData = new FormData()
+        formData.append('data', file, 'fileName.jpg')
+        axios.post(ServerFlaskUrl, formData).then((res) => {
+            setLicensePlate(res.data)
+        })
+    }
 
     const getVideo = () => {
         navigator.mediaDevices
@@ -18,16 +50,6 @@ function CheckinCheckout() {
                 video.play()
             })
             .catch((err) => {})
-    }
-
-    const takephoto = () => {
-        let video = videoRef.current
-        let photo = photoRef.current
-        photo.width = 640
-        photo.height = 480
-        let ctx = photo.getContext('2d')
-        ctx.drawImage(video, 0, 0, 640, 480)
-        setHasPhoto(true)
     }
 
     const closePhoto = () => {
@@ -70,32 +92,30 @@ function CheckinCheckout() {
                             <video
                                 className="checkin-checkout-content__app__item__camera__video"
                                 ref={videoRef}
-                            ></video>
+                            />
                             <canvas
                                 className="checkin-checkout-content__app__item__camera__video"
                                 ref={photoRef}
-                            ></canvas>
+                            />
                         </div>
                         <div className="checkin-checkout-content__app__item__form">
-                            <Form.Item
-                                className="checkin-checkout-content__app__item__form__license-plates"
-                                name="license-plates"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: messages['text_required'],
-                                    },
-                                ]}
-                            >
-                                <Input type="string" />
+                            <Form.Item className="checkin-checkout-content__app__item__form__license-plates">
+                                <Input
+                                    type="text"
+                                    required
+                                    value={licensePlate}
+                                    onChange={(e) =>
+                                        setLicensePlate(e.target.value)
+                                    }
+                                />
                             </Form.Item>
+
                             <div className="checkin-checkout-content__app__item__form__btn">
-                                <button
-                                    className="checkin-checkout-content__app__item__form__btn__takephoto"
-                                    onClick={takephoto}
-                                >
-                                    Take Photo
-                                </button>
+                                <form onSubmit={(e) => submit(e)}>
+                                    <button className="checkin-checkout-content__app__item__form__btn__takephoto">
+                                        Take Photo
+                                    </button>
+                                </form>
                                 <button
                                     className="checkin-checkout-content__app__item__form__btn__closephoto"
                                     onClick={closePhoto}
