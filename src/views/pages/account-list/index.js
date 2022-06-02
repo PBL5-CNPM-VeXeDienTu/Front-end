@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link, Navigate } from 'react-router-dom'
 import { Table, Input, Menu, Dropdown, Space, Modal } from 'antd'
 import {
     FilterOutlined,
@@ -7,8 +8,9 @@ import {
     EditOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
+import userApi from 'api/userApi'
+import * as roles from 'shared/constants/role'
 import './account-list.scss'
-import { Link } from 'react-router-dom'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
@@ -17,11 +19,17 @@ const addressTypeItem = ['All', 'Đà Nẵng', 'Quảng Nam', 'Huế']
 
 function Accounts() {
     const { user } = useAuth()
-    const [page, setPage] = useState(10)
     const [swapPage, setSwapPage] = useState(true)
     const [addressType, setAddressType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [parkingLotUserList, setParkingLotUserList] = useState([])
+    const [basicUserList, setBasicUserList] = useState([])
+    const [total, setTotal] = useState(0)
+    const [params, setParams] = useState({
+        limit: 10,
+        page: 1,
+    })
 
     const showModal = () => {
         setIsModalVisible(true)
@@ -35,33 +43,78 @@ function Accounts() {
         setIsModalVisible(false)
     }
 
-    const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
+    const onSearch = (value) => console.log(value)
 
     const state = {
         pagination: {
-            pageSize: page,
+            pageSize: params.limit,
+            total: total,
+            onChange: (page, pageSize) => {
+                setParams({
+                    limit: pageSize,
+                    page: page,
+                })
+            },
         },
     }
-
-    const onSearch = (value) => console.log(value)
 
     useEffect(() => {
         if (addressType === 'All') setActiveFilter(false)
         else setActiveFilter(true)
     }, [addressType])
 
-    const columnsBasic = [
+    useEffect(() => {
+        if (!!user) {
+            userApi.getListByParams(params).then((response) => {
+                setTotal(response.data.count)
+                setParkingLotUserList(
+                    response.data.rows
+                        .filter((user) => user.role === roles.PARKING_LOT_USER)
+                        .map((user) => ({
+                            id: user.id,
+                            avatar: user.UserInfo?.avatar,
+                            name: user.name,
+                            email: user.email,
+                            phone_number: user.UserInfo?.phone_number,
+                            address: user.UserInfo?.address,
+                        })),
+                )
+                setBasicUserList(
+                    response.data.rows
+                        .filter((user) => user.role === roles.BASIC_USER)
+                        .map((user) => ({
+                            id: user.id,
+                            avatar: user.UserInfo?.avatar,
+                            name: user.name,
+                            email: user.email,
+                            phone_number: user.UserInfo?.phone_number,
+                            address: user.UserInfo?.address,
+                        })),
+                )
+            })
+        }
+    }, [user, params])
+
+    const columns = [
         {
             title: 'Avatar',
             dataIndex: 'avatar',
             width: '5%',
-            render: () => (
-                <img src={avatarURL} className="avatar-user" alt="" />
-            ),
+            render: (text, record) => {
+                let imgSource = ''
+                try {
+                    imgSource = process.env.REACT_APP_API_URL + record.avatar
+                } catch (error) {
+                    imgSource =
+                        process.env.REACT_APP_API_URL +
+                        'public/images/avatars/user/default-avatar.png'
+                }
+                return <img src={imgSource} className="avatar-user" alt="" />
+            },
         },
         {
-            title: 'Tên tài khoản',
-            dataIndex: 'basic_name',
+            title: 'Chủ tài khoản',
+            dataIndex: 'name',
             width: '15%',
         },
         {
@@ -83,94 +136,19 @@ function Accounts() {
             title: 'Action',
             dataIndex: 'action',
             width: '15%',
-            render: () => (
+            render: (text, record) => (
                 <Space size="middle">
-                    <a href="/profile/edit">
+                    <Link to={`/profile/${record.id}/edit`}>
                         <EditOutlined className="icon-edit" />
-                    </a>
-                    <a href>
-                        <DeleteOutlined
-                            onClick={showModal}
-                            className="icon-delete"
-                        />
-                    </a>
+                    </Link>
+                    <DeleteOutlined
+                        onClick={showModal}
+                        className="icon-delete"
+                    />
                 </Space>
             ),
         },
     ]
-
-    const columnsParkinglot = [
-        {
-            title: 'Avatar',
-            dataIndex: 'avatar',
-            width: '5%',
-            render: () => (
-                <img src={avatarURL} className="avatar-user" alt="" />
-            ),
-        },
-        {
-            title: 'Tên tài khoản',
-            dataIndex: 'basic_name',
-            width: '15%',
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            width: '20%',
-        },
-        {
-            title: 'Số điện thoại',
-            dataIndex: 'phone_number',
-            width: '15%',
-        },
-        {
-            title: 'Địa chỉ',
-            dataIndex: 'address',
-            width: '35%',
-        },
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            width: '15%',
-            render: () => (
-                <Space size="middle">
-                    <a href>
-                        <EditOutlined className="icon-edit" />
-                    </a>
-                    <a href>
-                        <DeleteOutlined
-                            onClick={showModal}
-                            className="icon-delete"
-                        />
-                    </a>
-                </Space>
-            ),
-        },
-    ]
-
-    const dataBasic = []
-    for (let i = 0; i < page; i++) {
-        dataBasic.push({
-            key: i,
-            avatar: avatarURL,
-            basic_name: 'Phạm Văn Thọ',
-            email: 'thopham.21082001@gmail.com',
-            phone_number: '0702399134',
-            address: 'tổ 3 , thôn Đại La, xã Hòa Sơn,Huyện Hòa Văn ,tp Đà Nẵng',
-        })
-    }
-
-    const dataParkinglot = []
-    for (let i = 0; i < page; i++) {
-        dataParkinglot.push({
-            key: i,
-            avatar: avatarURL,
-            basic_name: 'Phạm Văn Thọ',
-            email: 'thopham.21082001@gmail.com',
-            phone_number: '0702399134',
-            address: 'tổ 3 , thôn Đại La, xã Hòa Sơn,Huyện Hòa Văn ,tp Đà Nẵng',
-        })
-    }
 
     const menu = () => {
         return (
@@ -198,8 +176,9 @@ function Accounts() {
         )
     }
 
-    return (
+    return user.role === roles.ADMIN ? (
         <div>
+            {/* ------------------------------------------------ TAB PARKING-LOT ------------------------------------------------ */}
             <div
                 className={
                     swapPage
@@ -223,8 +202,13 @@ function Accounts() {
                     <div className="account-list-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({
+                                    limit: e.target.value,
+                                    page: params.page,
+                                })
+                            }
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -262,14 +246,10 @@ function Accounts() {
                 <div className="account-list-content__sub">
                     <Table
                         className="account-list-content__sub__table"
-                        columns={columnsBasic}
-                        dataSource={dataBasic}
+                        columns={columns}
+                        dataSource={parkingLotUserList}
                         pagination={state.pagination}
-                        rowClassName={(record, index) => (
-                            <Link>
-                                <img src={record.avatar} alt="avatar" />
-                            </Link>
-                        )}
+                        rowClassName={'account-list-content__sub__table__row'}
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {},
@@ -279,6 +259,7 @@ function Accounts() {
                 </div>
             </div>
 
+            {/* --------------------------------------------------- TAB BASIC --------------------------------------------------- */}
             <div
                 className={
                     swapPage
@@ -300,8 +281,13 @@ function Accounts() {
                     <div className="account-list-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({
+                                    limit: e.target.value,
+                                    page: params.page,
+                                })
+                            }
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -339,9 +325,10 @@ function Accounts() {
                 <div className="account-list-content__sub">
                     <Table
                         className="account-list-content__sub__table"
-                        columns={columnsParkinglot}
-                        dataSource={dataParkinglot}
+                        columns={columns}
+                        dataSource={basicUserList}
                         pagination={state.pagination}
+                        rowClassName={'account-list-content__sub__table__row'}
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {},
@@ -360,6 +347,8 @@ function Accounts() {
                 </div>
             </div>
         </div>
+    ) : (
+        <Navigate to="/404" />
     )
 }
 

@@ -389,7 +389,9 @@ function ParkingLots() {
                                     : 'span2-italic'
                             }
                         >
-                            {feedback.response}
+                            {feedback.response
+                                ? feedback.response
+                                : 'Chưa có phản hồi'}
                         </span>
                     </div>
                 </Modal>

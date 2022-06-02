@@ -8,7 +8,6 @@ import './profile.scss'
 
 function Profile() {
     const { user } = useAuth()
-    // alert(user.birthday)
     const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
     const gender = user.gender ? 'Nam' : 'Nữ'
     const [birthday, setBirthday] = useState('01-01-2001')
@@ -28,7 +27,7 @@ function Profile() {
             <div className="title">
                 <span>Profile</span>
                 <Link
-                    to="/profile/edit"
+                    to={`/profile/${user.id}/edit`}
                     className="profile-content__button-edit"
                 >
                     <EditOutlined />
