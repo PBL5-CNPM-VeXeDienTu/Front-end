@@ -10,6 +10,7 @@ import {
 import useAuth from 'hooks/useAuth'
 import userApi from 'api/userApi'
 import * as roles from 'shared/constants/role'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './account-list.scss'
 
 const { Search } = Input
@@ -44,6 +45,10 @@ function Accounts() {
     }
 
     const onSearch = (value) => console.log(value)
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.USER_AVATAR
+    }
 
     const state = {
         pagination: {
@@ -101,15 +106,15 @@ function Accounts() {
             dataIndex: 'avatar',
             width: '5%',
             render: (text, record) => {
-                let imgSource = ''
-                try {
-                    imgSource = process.env.REACT_APP_API_URL + record.avatar
-                } catch (error) {
-                    imgSource =
-                        process.env.REACT_APP_API_URL +
-                        'public/images/avatars/user/default-avatar.png'
-                }
-                return <img src={imgSource} className="avatar-user" alt="" />
+                let imgSource = process.env.REACT_APP_API_URL + record.avatar
+                return (
+                    <img
+                        src={imgSource}
+                        className="avatar-user"
+                        alt=""
+                        onError={handleGetImageError}
+                    />
+                )
             },
         },
         {

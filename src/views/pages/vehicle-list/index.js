@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { PlusCircleOutlined } from '@ant-design/icons'
-
 import useAuth from 'hooks/useAuth'
 import * as verifyStates from 'shared/constants/verifyState'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import vehicleApi from 'api/vehicleApi'
 import './vehicle-list.scss'
 
 function Vehicles() {
     const { user } = useAuth()
     const [vehicleList, setVehicleList] = useState([])
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.VEHICLE_AVATAR
+    }
 
     useEffect(() => {
         if (!!user) {
@@ -18,6 +22,7 @@ function Vehicles() {
             })
         }
     }, [user])
+
     const navigate = useNavigate()
     const onClickHandler = (vehicleId) => navigate(`/vehicles/${vehicleId}`)
 
@@ -45,6 +50,7 @@ function Vehicles() {
                                     vehicle.avatar
                                 }
                                 alt=""
+                                onError={handleGetImageError}
                             />
                             <div className="vehicles-list-container__content__item__info">
                                 <div>
