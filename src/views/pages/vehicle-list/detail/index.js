@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { Modal, Button } from 'antd'
+import { Link, useNavigate, useParams, Navigate } from 'react-router-dom'
+import { Form, Input, Button, Modal, Radio } from 'antd'
 import useAuth from 'hooks/useAuth'
 import vehicleApi from 'api/vehicleApi'
+import * as verifyStates from 'shared/constants/verifyState'
 import * as roles from 'shared/constants/role'
 import './detail-vehicle.scss'
 
 function DetailVehicle() {
     const { user } = useAuth()
-    const [isModalVisible, setIsModalVisible] = useState(false)
     const { id } = useParams()
+    const navigate = useNavigate()
+    const [showModalVerify, setShowModalVerify] = useState(false)
+    const [showModalSoftDelete, setShowModalSoftDelete] = useState(false)
+    const [radioValue, setRadioValue] = useState()
     const [vehicle, setVehicle] = useState({
         key: 0,
         user_name: '',
@@ -28,19 +32,39 @@ function DetailVehicle() {
         }
     }, [user, id])
 
-    const showModal = () => {
-        setIsModalVisible(true)
+    const softDeleteHandle = async () => {
+        try {
+            const response = await vehicleApi.softDeleteById(vehicle.id)
+            alert(response.data.message)
+            navigate('/vehicles')
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const verifyHandle = async () => {
+        try {
+            const updateVerifyState = {
+                state: radioValue ? verifyStates.VERIFIED : verifyStates.DENIED,
+                note: document.getElementById('note').value,
+            }
+            const response = await vehicleApi.verifyById(
+                vehicle.id,
+                updateVerifyState,
+            )
+            alert(response.data.message)
+            navigate('/verify-request')
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
     const handleCancel = () => {
-        setIsModalVisible(false)
+        setShowModalSoftDelete(false)
+        setShowModalVerify(false)
     }
 
-    const handleOk = () => {
-        setIsModalVisible(false)
-    }
-
-    return (
+    return user.role !== roles.PARKING_LOT_USER ? (
         <div className="detail-vehicle-content">
             <div className="title">Thông tin xe</div>
             <div>
@@ -121,7 +145,10 @@ function DetailVehicle() {
                         : 'detail-vehicle-content__button-active'
                 }
             >
-                <Button className="button-delete" onClick={showModal}>
+                <Button
+                    className="button-delete"
+                    onClick={(e) => setShowModalSoftDelete(true)}
+                >
                     Hủy đăng ký
                 </Button>
                 <Button className="button-edit">
@@ -136,24 +163,89 @@ function DetailVehicle() {
                         : 'detail-vehicle-content__button-unactive'
                 }
             >
-                <Button className="button-gray" onClick={showModal}>
+                <Button className="button-gray">
                     <Link to="/verify-request">Thoát</Link>
                 </Button>
-                <Button className="button-green">
-                    <Link to="/verify-request">Xác thực</Link>
+                <Button
+                    className="button-green"
+                    onClick={(e) => setShowModalVerify(true)}
+                >
+                    Xác thực
                 </Button>
             </div>
 
             <Modal
                 className="delete-vehicle-modal"
+                title="Xác thực bãi đỗ xe"
+                visible={showModalVerify}
+                onCancel={handleCancel}
+                footer={null}
+            >
+                <Form
+                    className="delete-vehicle-modal__form"
+                    name="verify_parkingLot"
+                >
+                    <div className="delete-vehicle-modal__form__item">
+                        <span className="span">Trạng thái</span>
+                        <Form.Item name="state">
+                            <Radio.Group
+                                className="text"
+                                value={radioValue}
+                                defaultValue={radioValue}
+                                onChange={(e) => {
+                                    setRadioValue(e.target.value)
+                                }}
+                            >
+                                <Radio value={1}>{verifyStates.VERIFIED}</Radio>
+                                <Radio value={0}>{verifyStates.DENIED}</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </div>
+                    <div className="delete-vehicle-modal__form__item">
+                        <span className="span">Ghi chú</span>
+                        <Form.Item name="note" className="form-item">
+                            <Input.TextArea
+                                id="note"
+                                className="textarea"
+                                size="medium"
+                            />
+                        </Form.Item>
+                    </div>
+
+                    <div className="delete-vehicle-modal__button">
+                        <button
+                            className="button-gray"
+                            onClick={(e) => setShowModalVerify(false)}
+                        >
+                            Thoát
+                        </button>
+                        <button
+                            className="button-green"
+                            type="primary"
+                            htmlType="submit"
+                            onClick={verifyHandle}
+                        >
+                            Lưu
+                        </button>
+                    </div>
+                </Form>
+            </Modal>
+            <Modal
+                className="delete-vehicle-modal"
                 title="Hủy đăng ký xe"
-                visible={isModalVisible}
-                onOk={handleOk}
+                visible={showModalSoftDelete}
+                onOk={softDeleteHandle}
                 onCancel={handleCancel}
             >
-                <p>Bạn có chắn chắn muốn hủy đăng ký xe hay không ?</p>
+                <p>
+                    {user.role === roles.ADMIN
+                        ? 'Bạn có chắn chắn muốn xóa đăng kí xe hay không ?'
+                        : 'Bạn có chắn chắn muốn hủy đăng kí xe hay không ?'}
+                </p>
             </Modal>
         </div>
+    ) : (
+        <Navigate to="/404" />
     )
 }
 

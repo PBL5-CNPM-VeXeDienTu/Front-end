@@ -390,7 +390,7 @@ function VerifyRequest() {
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    navigate('/vehicles/detail/' + record.id)
+                                    navigate('/vehicles/' + record.id)
                                 },
                             }
                         }}
