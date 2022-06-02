@@ -2,16 +2,18 @@ import React from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Form, Input } from 'antd'
 import auth from 'api/auth'
+import useAuth from 'hooks/useAuth'
 import messages from 'assets/lang/messages'
 import './change-password.scss'
 
 function ChangePassword() {
     const navigate = useNavigate()
+    const { user } = useAuth()
     const handleSubmit = async (values) => {
         try {
             const response = await auth.changePassword(values)
             alert(response.data.message)
-            navigate('/profile')
+            navigate(`/profile/${user.id}`)
         } catch (error) {
             //TODO: hiển bị thông báo theo từng error code (error.request.status === 404)
             alert(error.response.data.message)
@@ -111,7 +113,7 @@ function ChangePassword() {
                 </div>
                 <div className="change-password-content__sub__button">
                     <button className="button-cancel">
-                        <Link to="/profile">Thoát</Link>
+                        <Link to={`/profile/${user.id}`}>Thoát</Link>
                     </button>
                     <button
                         className="button-save"

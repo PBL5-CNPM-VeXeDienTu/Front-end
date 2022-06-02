@@ -1,14 +1,9 @@
 import axiosClient from 'api/axiosClient'
 import { createContext, useState, useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import auth from 'api/auth'
 
 const UserContext = createContext({})
-
-export const roles = {
-    BASIC_USER: 1,
-    PARKING_LOT_USER: 2,
-    ADMIN: 3,
-}
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token'))
@@ -21,6 +16,8 @@ export const AuthProvider = ({ children }) => {
         () => ({ token, setToken, user, setUser, collapsed, setCollapsed }),
         [token, setToken, user, setUser, collapsed, setCollapsed],
     )
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (token !== 'null') {
@@ -36,6 +33,7 @@ export const AuthProvider = ({ children }) => {
                     localStorage.setItem('token', token)
                     localStorage.setItem('user', JSON.stringify(response.data))
                     localStorage.setItem('role', response.data.role)
+                    navigate(`/profile/${response.data.id}`)
                 })
                 .catch((error) => {
                     console.log(error)
