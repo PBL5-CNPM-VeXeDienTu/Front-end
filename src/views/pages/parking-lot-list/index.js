@@ -139,7 +139,7 @@ function ParkingLots() {
     }, [user, pageSize])
 
     const handleNavigation = (parkingLotId) => {
-        navigate(`/packages/${parkingLotId}`)
+        navigate(`/parking-lots/${parkingLotId}/packages`)
     }
 
     const menu = () => {

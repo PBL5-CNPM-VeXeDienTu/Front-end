@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Form, Input, Button, Select } from 'antd'
 import messages from 'assets/lang/messages'
 import packageApi from 'api/packageApi'
 import useAuth from 'hooks/useAuth'
+import packageTypeApi from 'api/packageTypeApi'
+import vehicleTypeApi from 'api/vehicleTypeApi'
+import parkingLotApi from 'api/parkingLotApi'
 import './add-package.scss'
 
 const { Option } = Select
@@ -11,26 +14,32 @@ const { Option } = Select
 function AddPackage() {
     const navigate = useNavigate()
     const { user } = useAuth()
-    const { id } = useParams()
-    const PackageTypes = []
-    for (let i = 0; i < 1; i++) {
-        PackageTypes.push(<Option key={i + 1}>Gói ưu đãi tuần</Option>)
-        PackageTypes.push(<Option key={i + 2}>Gói ưu đãi tháng</Option>)
-        PackageTypes.push(<Option key={i + 3}>Gói ưu đãi quý</Option>)
-        PackageTypes.push(<Option key={i + 4}>Gói ưu đãi năm</Option>)
-    }
+    const [packageTypes, setPackageTypes] = useState([])
+    const [vehicleTypes, setVehicleTypes] = useState([])
+    const [parkingLotByOwnerId, setParkingLotByOwnerId] = useState([])
 
-    const vehicleType = []
-    for (let i = 0; i < 1; i++) {
-        vehicleType.push(<Option key={i + 1}>Xe đạp điện / Xe máy điện</Option>)
-        vehicleType.push(<Option key={i + 2}>Xe đạp</Option>)
-        vehicleType.push(<Option key={i + 3}>Xe ô tô</Option>)
-    }
+    useEffect(() => {
+        packageTypeApi.getListPackageType().then((response) => {
+            setPackageTypes(response.data.rows)
+        })
+    }, [])
+
+    useEffect(() => {
+        vehicleTypeApi.getListVehicleType().then((response) => {
+            setVehicleTypes(response.data.rows)
+        })
+    }, [])
+
+    useEffect(() => {
+        parkingLotApi.getListByUserId(user.id).then((response) => {
+            setParkingLotByOwnerId(response.data.rows)
+        })
+    }, [user.id])
 
     const handleSubmit = async (values) => {
         try {
             const newPackage = {
-                parking_lot_id: parseInt(id),
+                parking_lot_id: parseInt(values.parking_lot_id),
                 name: values.name,
                 type_id: parseInt(values.type_id),
                 vehicle_type_id: parseInt(values.vehicle_type_id),
@@ -38,7 +47,7 @@ function AddPackage() {
             }
             const response = await packageApi.createNew(newPackage)
             alert(response.data.message)
-            navigate(`/packages/${id}`)
+            navigate(`/parking-lots/${values.parking_lot_id}/packages`)
         } catch (error) {
             alert(error.response.data.message)
         }
@@ -69,6 +78,29 @@ function AddPackage() {
                     </div>
 
                     <div className="add-package-content__sub__info__item">
+                        <span className="span">Nhà xe</span>
+                        <Form.Item
+                            name="parking_lot_id"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: messages['text_required'],
+                                },
+                            ]}
+                        >
+                            <Select className="textbox">
+                                {parkingLotByOwnerId.map((item, id) => {
+                                    return (
+                                        <Option value={item.id}>
+                                            {item.name}
+                                        </Option>
+                                    )
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </div>
+
+                    <div className="add-package-content__sub__info__item">
                         <span className="span">Loại gói ưu đãi</span>
                         <Form.Item
                             name="type_id"
@@ -79,7 +111,15 @@ function AddPackage() {
                                 },
                             ]}
                         >
-                            <Select classname="text">{PackageTypes}</Select>
+                            <Select className="textbox">
+                                {packageTypes.map((item, id) => {
+                                    return (
+                                        <Option value={item.id}>
+                                            {item.type_name}
+                                        </Option>
+                                    )
+                                })}
+                            </Select>
                         </Form.Item>
                     </div>
 
@@ -94,7 +134,15 @@ function AddPackage() {
                                 },
                             ]}
                         >
-                            <Select className="text">{vehicleType}</Select>
+                            <Select className="textbox">
+                                {vehicleTypes.map((item, id) => {
+                                    return (
+                                        <Option value={item.id}>
+                                            {item.type_name}
+                                        </Option>
+                                    )
+                                })}
+                            </Select>
                         </Form.Item>
                     </div>
                     <div className="add-package-content__sub__info__item">
