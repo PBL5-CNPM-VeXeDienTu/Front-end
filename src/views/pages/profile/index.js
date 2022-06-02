@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { EditOutlined } from '@ant-design/icons'
-
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import useAuth from 'hooks/useAuth'
 import './profile.scss'
 
@@ -11,6 +11,11 @@ function Profile() {
     const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
     const gender = user.gender ? 'Nam' : 'Nữ'
     const [birthday, setBirthday] = useState('01-01-2001')
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.USER_AVATAR
+    }
+
     useEffect(() => {
         try {
             if (user) {
@@ -36,7 +41,11 @@ function Profile() {
 
             <div className="profile-content__sub">
                 <div className="profile-content__sub__avatar">
-                    <img src={avatarURL} alt="avatar" />
+                    <img
+                        src={avatarURL}
+                        alt="avatar"
+                        onError={handleGetImageError}
+                    />
                 </div>
 
                 <div className="profile-content__sub__info">

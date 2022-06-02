@@ -5,24 +5,29 @@ import axios from 'axios'
 import './checkin-checkout.scss'
 
 function CheckinCheckout() {
+    const FLASK_SERVER_API = process.env.REACT_APP_API_FLASK_URL
+
     const videoRef = useRef(null)
     const photoRef = useRef(null)
     const [hasPhoto, setHasPhoto] = useState(false)
-    const ServerFlaskUrl = process.env.REACT_APP_API_FLASK_URL
     const [licensePlate, setLicensePlate] = useState(
         'Không nhận diện được biển số',
     )
 
-    async function submit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
+
         let video = videoRef.current
         let photo = photoRef.current
+
         photo.width = 640
         photo.height = 480
+
         let ctx = photo.getContext('2d')
         ctx.drawImage(video, 0, 0, 640, 480)
 
         setHasPhoto(true)
+
         var img = new Image()
         img.onload = function () {
             ctx.drawImage(img, 0, 0, 640, 480)
@@ -30,13 +35,15 @@ function CheckinCheckout() {
 
         let ImgUrl = photo.toDataURL()
         const blob = await (await fetch(ImgUrl)).blob()
+
         const file = new File([blob], 'fileName.jpg', {
             type: 'image/jpeg',
             lastModified: new Date(),
         })
+
         const formData = new FormData()
         formData.append('data', file, 'fileName.jpg')
-        axios.post(ServerFlaskUrl, formData).then((res) => {
+        axios.post(FLASK_SERVER_API, formData).then((res) => {
             setLicensePlate(res.data)
         })
     }
@@ -49,7 +56,9 @@ function CheckinCheckout() {
                 video.srcObject = stream
                 video.play()
             })
-            .catch((err) => {})
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     const closePhoto = () => {
@@ -79,7 +88,7 @@ function CheckinCheckout() {
                     <button className="button-active">Checkin</button>
                     <button
                         className="button-unactive"
-                        onClick={(e) => setSwapPage(false)}
+                        onClick={() => setSwapPage(false)}
                     >
                         Checkout
                     </button>
@@ -111,7 +120,7 @@ function CheckinCheckout() {
                             </Form.Item>
 
                             <div className="checkin-checkout-content__app__item__form__btn">
-                                <form onSubmit={(e) => submit(e)}>
+                                <form onSubmit={(e) => handleSubmit(e)}>
                                     <button className="checkin-checkout-content__app__item__form__btn__takephoto">
                                         Take Photo
                                     </button>
@@ -141,7 +150,7 @@ function CheckinCheckout() {
                 <div className="checkin-checkout-content__swap-page">
                     <button
                         className="button-unactive"
-                        onClick={(e) => setSwapPage(true)}
+                        onClick={() => setSwapPage(true)}
                     >
                         Checkin
                     </button>
@@ -160,6 +169,7 @@ function CheckinCheckout() {
                                     }
 
                                     if (!!error) {
+                                        alert(error)
                                     }
                                 }}
                                 style={{ width: '100%' }}

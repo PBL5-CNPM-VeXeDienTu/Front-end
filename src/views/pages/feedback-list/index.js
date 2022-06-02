@@ -42,6 +42,7 @@ const featureOfItem = [
     '[Basic user] Chỉnh sửa thông tin xe',
     '[Basic user] Hủy đăng ký xe',
 ]
+
 const feedbackTypeOfItem = [
     'All',
     'Câu hỏi',
@@ -51,7 +52,10 @@ const feedbackTypeOfItem = [
 
 function ParkingLots() {
     const { user } = useAuth()
-    const [pageSize, setPageSize] = useState(10)
+    const [params, setParams] = useState({
+        limit: 10,
+        page: 1,
+    })
     const [total, setTotal] = useState(0)
     const [feedbackType, setFeedbackType] = useState('All')
     const [feature, setFeature] = useState('All')
@@ -59,7 +63,7 @@ function ParkingLots() {
     const [activeFilter, setActiveFilter] = useState(false)
     const [showBasicUserModal, setShowBasicUserModal] = useState(false)
     const [showAdminModal, setShowAdminModal] = useState(false)
-    const [dataComlumns, setDataComlumns] = useState([{}])
+    const [dataColumns, setDataColumns] = useState([{}])
     const [radioValue, setRadioValue] = useState(0)
     const [feedback, setFeedback] = useState({
         key: 0,
@@ -93,60 +97,23 @@ function ParkingLots() {
 
     const state = {
         pagination: {
-            pageSize: pageSize,
+            pageSize: params.limit,
             total: total,
             onChange: (page, pageSize) => {
-                const params = {
+                setParams({
                     limit: pageSize,
                     page: page,
-                }
-                user.role === roles.ADMIN
-                    ? feedbackApi.getListByParams(params).then((response) => {
-                          setTotal(response.data.count)
-                          setDataComlumns(
-                              response.data.rows.map((feedback) => ({
-                                  id: feedback.id,
-                                  feedback_type: feedback.Feature.name,
-                                  feature: feedback.FeedbackType.type_name,
-                                  is_processed: feedback.is_processed
-                                      ? 'Đã duyệt'
-                                      : 'Chưa duyệt',
-                                  content: feedback.content,
-                                  response: feedback.response,
-                              })),
-                          )
-                      })
-                    : feedbackApi
-                          .getListByUserId(user.id, params)
-                          .then((response) => {
-                              setTotal(response.data.count)
-                              setDataComlumns(
-                                  response.data.rows.map((feedback) => ({
-                                      id: feedback.id,
-                                      feedback_type: feedback.Feature.name,
-                                      feature: feedback.FeedbackType.type_name,
-                                      is_processed: feedback.is_processed
-                                          ? 'Đã duyệt'
-                                          : 'Chưa duyệt',
-                                      content: feedback.content,
-                                      response: feedback.response,
-                                  })),
-                              )
-                          })
+                })
             },
         },
     }
 
     useEffect(() => {
         try {
-            const params = {
-                limit: pageSize,
-                page: 1,
-            }
             user.role === roles.ADMIN
                 ? feedbackApi.getListByParams(params).then((response) => {
                       setTotal(response.data.count)
-                      setDataComlumns(
+                      setDataColumns(
                           response.data.rows.map((feedback) => ({
                               id: feedback.id,
                               feedback_type: feedback.Feature.name,
@@ -163,7 +130,7 @@ function ParkingLots() {
                       .getListByUserId(user.id, params)
                       .then((response) => {
                           setTotal(response.data.count)
-                          setDataComlumns(
+                          setDataColumns(
                               response.data.rows.map((feedback) => ({
                                   id: feedback.id,
                                   feedback_type: feedback.Feature.name,
@@ -176,8 +143,10 @@ function ParkingLots() {
                               })),
                           )
                       })
-        } catch (error) {}
-    }, [pageSize, user.id, user.role])
+        } catch (error) {
+            alert(error)
+        }
+    }, [params, user])
 
     const handleCancel = () => {
         setShowBasicUserModal(false)
@@ -277,8 +246,13 @@ function ParkingLots() {
                 <div className="feedback-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
-                        defaultValue={{ value: pageSize }}
-                        onChange={(e) => setPageSize(e.target.value)}
+                        defaultValue={{ value: params.limit }}
+                        onChange={(e) =>
+                            setParams({
+                                limit: e.target.value,
+                                page: params.page,
+                            })
+                        }
                     >
                         {numOfItem.map((numOfItem, index) => {
                             return (
@@ -329,7 +303,7 @@ function ParkingLots() {
                 <Table
                     className="feedback-list-content__sub__table"
                     columns={columns}
-                    dataSource={dataComlumns}
+                    dataSource={dataColumns}
                     pagination={state.pagination}
                     rowClassName={(record, index) =>
                         record.is_processed === 'Đã duyệt'

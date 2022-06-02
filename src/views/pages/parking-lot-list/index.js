@@ -13,6 +13,7 @@ import useAuth from 'hooks/useAuth'
 import * as roles from 'shared/constants/role'
 import * as verifyStates from 'shared/constants/verifyState'
 import * as openStates from 'shared/constants/openState'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import parkingLotApi from 'api/parkingLotApi'
 
 import './parking-lot-list.scss'
@@ -170,6 +171,10 @@ function ParkingLots() {
         )
     }
 
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.PARKING_LOT_AVATAR
+    }
+
     return user.role === roles.BASIC_USER ? (
         //-------------------------------- Basic User --------------------------------------
         <div className="parking-lot-list-content">
@@ -256,6 +261,7 @@ function ParkingLots() {
                                     parkingLot.avatar
                                 }
                                 alt=""
+                                onError={handleGetImageError}
                             />
                             <div className="parking-lot-list-container__content__item__info">
                                 <div>
