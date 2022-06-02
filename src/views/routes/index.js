@@ -89,7 +89,7 @@ const availableRoles = [1, 2, 3]
 function AllRoutes() {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to={'/profile'} />} />
+            <Route path="/" element={<Navigate to={'/login'} />} />
 
             <Route element={<GuestRoute />}>
                 <Route path="/login" element={<Login />} />
@@ -104,7 +104,7 @@ function AllRoutes() {
                     element={<MainLayout component={ChangePassword} />}
                 />
                 <Route
-                    path="/profile"
+                    path="/profile/:id"
                     element={<MainLayout component={Profile} />}
                 />
                 <Route

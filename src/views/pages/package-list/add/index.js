@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Form, Input, Button, Select } from 'antd'
 import messages from 'assets/lang/messages'
 import packageApi from 'api/packageApi'
