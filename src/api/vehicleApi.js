@@ -21,9 +21,13 @@ const vehicleApi = {
         const url = `/api/vehicles/${id}`
         return axiosClient.patch(url, credentials)
     },
-    deleteById: (id) => {
+    softDeleteById: (id) => {
         const url = `/api/vehicles/${id}`
         return axiosClient.delete(url)
+    },
+    verifyById: (id, credentials) => {
+        const url = `/api/vehicles/${id}/verify`
+        return axiosClient.patch(url, credentials)
     },
 }
 
