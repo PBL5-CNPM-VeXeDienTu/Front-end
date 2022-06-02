@@ -13,6 +13,10 @@ const userApi = {
         const url = `/api/users/${id}`
         return axiosClient.patch(url, credentials)
     },
+    softDeleteById: (id) => {
+        const url = `/api/users/${id}`
+        return axiosClient.delete(url)
+    },
 }
 
 export default userApi
