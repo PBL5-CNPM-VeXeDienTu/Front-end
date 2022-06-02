@@ -454,7 +454,7 @@ function Packages() {
         }
     }
 
-    const handleNavigation = (parkingLotId) => {
+    const handleNavigation = () => {
         navigate(`/packages/add`)
     }
     const menu = () => {
@@ -687,7 +687,6 @@ function Packages() {
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    // console.log(record.id)
                                     setPackageItem(record)
                                     setUserPackage(record)
                                     user.role === roles.BASIC_USER
