@@ -32,7 +32,12 @@ function AddPackage() {
 
     useEffect(() => {
         parkingLotApi.getListByUserId(user.id).then((response) => {
-            setParkingLotByOwnerId(response.data.rows)
+            setParkingLotByOwnerId(
+                response.data.rows.filter(
+                    (parkinglot) =>
+                        parkinglot.VerifyState.state === 'Đã được kiểm duyệt',
+                ),
+            )
         })
     }, [user.id])
 
@@ -165,11 +170,11 @@ function AddPackage() {
                     </div>
                 </div>
                 <div className="add-package-content__sub__button">
-                    <Button className="button-cancel">
+                    <Button className="button-gray">
                         <Link to="/packages">Thoát</Link>
                     </Button>
                     <Button
-                        className="button-save"
+                        className="button-green"
                         type="primary"
                         htmlType="submit"
                     >
