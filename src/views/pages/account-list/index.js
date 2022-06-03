@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { Table, Input, Menu, Dropdown, Space, Modal } from 'antd'
 import {
     FilterOutlined,
@@ -21,6 +21,7 @@ const addressTypeItem = ['All', 'Đà Nẵng', 'Quảng Nam', 'Huế']
 
 function Accounts() {
     const { user } = useAuth()
+    const navigate = useNavigate()
     const [swapPage, setSwapPage] = useState(1)
     const [addressType, setAddressType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
@@ -311,7 +312,9 @@ function Accounts() {
                         pagination={state.pagination}
                         onRow={(record, rowIndex) => {
                             return {
-                                onClick: () => {},
+                                onClick: () => {
+                                    navigate(`/profile/${record.id}`)
+                                },
                             }
                         }}
                     ></Table>
@@ -402,7 +405,9 @@ function Accounts() {
                         pagination={state.pagination}
                         onRow={(record, rowIndex) => {
                             return {
-                                onClick: () => {},
+                                onClick: () => {
+                                    navigate(`/profile/${record.id}`)
+                                },
                             }
                         }}
                     ></Table>
@@ -493,7 +498,9 @@ function Accounts() {
                         pagination={state.pagination}
                         onRow={(record, rowIndex) => {
                             return {
-                                onClick: () => {},
+                                onClick: () => {
+                                    navigate(`/profile/${record.id}`)
+                                },
                             }
                         }}
                     ></Table>
