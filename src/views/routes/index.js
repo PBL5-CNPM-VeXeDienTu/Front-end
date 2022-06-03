@@ -73,6 +73,10 @@ const EditPackage = loadableComponent(() =>
 
 const Accounts = loadableComponent(() => import('views/pages/account-list'))
 
+const AddAccount = loadableComponent(() =>
+    import('views/pages/account-list/add'),
+)
+
 const VerifyRequest = loadableComponent(() =>
     import('views/pages/verify-request'),
 )
@@ -190,6 +194,10 @@ function AllRoutes() {
                 <Route
                     path="/accounts"
                     element={<MainLayout component={Accounts} />}
+                />
+                <Route
+                    path="/accounts/add"
+                    element={<MainLayout component={AddAccount} />}
                 />
                 <Route
                     path="/verify-request"

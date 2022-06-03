@@ -6,6 +6,7 @@ import {
     SearchOutlined,
     DeleteOutlined,
     EditOutlined,
+    PlusCircleOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import userApi from 'api/userApi'
@@ -293,6 +294,13 @@ function Accounts() {
                         />
                         <SearchOutlined className="account-list-content__action__search__icon" />
                     </div>
+                    <Link
+                        className="account-list-content__action__add"
+                        to="/accounts/add"
+                    >
+                        <PlusCircleOutlined className="feedback-list-content__action__add__icon" />
+                        <span>Thêm User</span>
+                    </Link>
                 </div>
 
                 <div className="account-list-content__sub">
@@ -377,6 +385,13 @@ function Accounts() {
                         />
                         <SearchOutlined className="account-list-content__action__search__icon" />
                     </div>
+                    <Link
+                        className="account-list-content__action__add"
+                        to="/accounts/add"
+                    >
+                        <PlusCircleOutlined className="feedback-list-content__action__add__icon" />
+                        <span>Thêm User</span>
+                    </Link>
                 </div>
 
                 <div className="account-list-content__sub">
@@ -461,6 +476,13 @@ function Accounts() {
                         />
                         <SearchOutlined className="account-list-content__action__search__icon" />
                     </div>
+                    <Link
+                        className="account-list-content__action__add"
+                        to="/accounts/add"
+                    >
+                        <PlusCircleOutlined className="feedback-list-content__action__add__icon" />
+                        <span>Thêm User</span>
+                    </Link>
                 </div>
 
                 <div className="account-list-content__sub">
