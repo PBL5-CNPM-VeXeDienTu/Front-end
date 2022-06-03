@@ -227,11 +227,11 @@ function EditProfile() {
                     </div>
 
                     <div className="edit-profile-content__sub__info__button">
-                        <Button className="button-cancel">
+                        <Button className="button-gray">
                             <Link to={`/profile/${user.id}`}>Thoát</Link>
                         </Button>
                         <Button
-                            className="button-save"
+                            className="button-green"
                             type="primary"
                             htmlType="submit"
                         >

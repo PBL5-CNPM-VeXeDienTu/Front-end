@@ -47,7 +47,10 @@ function ChangePassword() {
                                 },
                             ]}
                         >
-                            <Input.Password placeholder="Current password" />
+                            <Input.Password
+                                placeholder="Current password"
+                                className="text"
+                            />
                         </Form.Item>
                     </div>
 
@@ -70,7 +73,10 @@ function ChangePassword() {
                                 },
                             ]}
                         >
-                            <Input.Password placeholder="New password" />
+                            <Input.Password
+                                placeholder="New password"
+                                className="text"
+                            />
                         </Form.Item>
                     </div>
 
@@ -107,7 +113,10 @@ function ChangePassword() {
                                 }),
                             ]}
                         >
-                            <Input.Password placeholder="Confirm new password" />
+                            <Input.Password
+                                placeholder="Confirm new password"
+                                className="text"
+                            />
                         </Form.Item>
                     </div>
                 </div>
