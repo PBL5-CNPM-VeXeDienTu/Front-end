@@ -1,29 +1,57 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Form, Input, Button, Select, Radio, DatePicker } from 'antd'
 import { CameraOutlined } from '@ant-design/icons'
 import messages from 'assets/lang/messages'
 import userApi from 'api/userApi'
-import * as roles from 'shared/constants/role'
-
+import roleApi from 'api/roleApi'
+import uploadImageApi from 'api/uploadImageApi'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './add-account.scss'
+
 const { Option } = Select
 
 function AddAccount() {
     const navigate = useNavigate()
+    const [roleList, setRoleList] = useState([])
+    const [uploadAvatar, setUploadAvatar] = useState()
 
     const avatarURL =
         process.env.REACT_APP_API_URL +
         'public/images/avatars/user/default-avatar.png'
 
-    const roleName = []
-    roleName.push(<Option key={roles.BASIC_USER}>Basic User</Option>)
-    roleName.push(
-        <Option key={roles.PARKING_LOT_USER}>Parking-lot User</Option>,
-    )
-    roleName.push(<Option key={roles.ADMIN}>Admin</Option>)
+    const handleUploadImage = (e) => {
+        const userAvatar = document.getElementById('user-avatar')
+        userAvatar.src = URL.createObjectURL(e.target.files[0])
+        setUploadAvatar(e.target.files[0])
+    }
 
-    const handleSubmit = async (values) => {}
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.USER_AVATAR
+    }
+
+    const handleSubmit = async (values) => {
+        try {
+            const response = await userApi.createNew(values)
+
+            if (uploadAvatar) {
+                const postData = new FormData()
+                postData.append('user-avatar', uploadAvatar)
+                uploadImageApi.uploadUserAvatar(response.data.user_id, postData)
+            }
+
+            alert(response.data.message)
+            navigate('/accounts')
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    useEffect(() => {
+        roleApi.getList().then((response) => {
+            setRoleList(response.data)
+        })
+    }, [])
 
     return (
         <div className="add-account-content">
@@ -34,7 +62,12 @@ function AddAccount() {
                 onFinish={handleSubmit}
             >
                 <div className="add-account-content__sub__avatar">
-                    <img id="user-avatar" src={avatarURL} alt="avatar" />
+                    <img
+                        id="user-avatar"
+                        src={avatarURL}
+                        alt="avatar"
+                        onError={handleGetImageError}
+                    />
                     <div className="add-account-content__sub__avatar__button-upload">
                         <label for="image-input">
                             <CameraOutlined className="add-account-content__sub__avatar__icon" />
@@ -43,6 +76,7 @@ function AddAccount() {
                             id="image-input"
                             accept="image/png, image/jpeg"
                             type="file"
+                            onChange={handleUploadImage}
                         />
                     </div>
                 </div>
@@ -90,14 +124,30 @@ function AddAccount() {
                                 },
                             ]}
                         >
-                            <Select className="select">{roleName}</Select>
+                            <Select className="select">
+                                {roleList.map((item, id) => {
+                                    return (
+                                        <Option value={item.id}>
+                                            {item.name}
+                                        </Option>
+                                    )
+                                })}
+                            </Select>
                         </Form.Item>
                     </div>
 
                     <div className="add-account-content__sub__info__item">
                         <span className="span">Giới tính</span>
-                        <Form.Item name="gender">
-                            <Radio.Group defaultValue={1} className="text">
+                        <Form.Item
+                            name="gender"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: messages['text_required'],
+                                },
+                            ]}
+                        >
+                            <Radio.Group className="text">
                                 <Radio value={1}>Nam</Radio>
                                 <Radio value={0}>Nữ</Radio>
                             </Radio.Group>
