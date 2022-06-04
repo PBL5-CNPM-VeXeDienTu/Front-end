@@ -26,25 +26,27 @@ export const AuthProvider = ({ children }) => {
                 'Authorization'
             ] = `Bearer ${token}`
 
-            // Get current user's data
-            auth.getAuthenticatedUser()
-                .then((response) => {
-                    setUser(response.data)
-                    localStorage.setItem('token', token)
-                    localStorage.setItem('user', JSON.stringify(response.data))
-                    localStorage.setItem('role', response.data.role)
-                    navigate(`/profile/${response.data.id}`)
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+            if (token !== localStorage.getItem('token')) {
+                // Get current user's data
+                auth.getAuthenticatedUser()
+                    .then((response) => {
+                        setUser(response.data)
+                        localStorage.setItem('token', token)
+                        localStorage.setItem('user', JSON.stringify(response.data))
+                        localStorage.setItem('role', response.data.role)
+                        navigate(`/profile/${response.data.id}`)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            }
         } else {
             // User logout
             localStorage.setItem('token', null)
             localStorage.setItem('user', null)
             localStorage.setItem('role', null)
         }
-    }, [token])
+    }, [token, navigate])
 
     return (
         <UserContext.Provider value={providerValue}>
