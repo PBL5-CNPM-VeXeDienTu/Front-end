@@ -14,7 +14,7 @@ const parkingLotApi = {
         return axiosClient.get(url)
     },
     createNew: (credentials) => {
-        const url = `api/parking-lots`
+        const url = 'api/parking-lots'
         return axiosClient.post(url, credentials)
     },
     updateById: (id, credentials) => {

@@ -22,18 +22,16 @@ const addressTypeItem = ['All', 'Đà Nẵng', 'Quảng Nam', 'Huế']
 function Accounts() {
     const { user } = useAuth()
     const navigate = useNavigate()
-    const [swapPage, setSwapPage] = useState(1)
     const [addressType, setAddressType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
     const [showDeleteUserModal, setShowDeleteUserModal] = useState(false)
-    const [parkingLotUserList, setParkingLotUserList] = useState([])
-    const [basicUserList, setBasicUserList] = useState([])
-    const [AdminList, setAdminList] = useState([])
+    const [userList, setUserList] = useState([])
     const [deleteUser, setDeleteUser] = useState()
     const [total, setTotal] = useState(0)
     const [params, setParams] = useState({
         limit: 10,
         page: 1,
+        role: 1,
     })
 
     const handleCancel = () => {
@@ -62,6 +60,7 @@ function Accounts() {
             total: total,
             onChange: (page, pageSize) => {
                 setParams({
+                    ...params,
                     limit: pageSize,
                     page: page,
                 })
@@ -78,47 +77,17 @@ function Accounts() {
         if (!!user) {
             userApi.getListByParams(params).then((response) => {
                 setTotal(response.data.count)
-                setBasicUserList(
-                    response.data.rows
-                        .filter((user) => user.role === roles.BASIC_USER)
-                        .map((user) => ({
-                            id: user.id,
-                            role: user.role,
-                            avatar: user.UserInfo?.avatar,
-                            name: user.name,
-                            email: user.email,
-                            phone_number: user.UserInfo?.phone_number,
-                            address: user.UserInfo?.address,
-                            deletedAt: user.deletedAt ? 'Đã xóa' : 'Chưa xóa',
-                        })),
-                )
-                setParkingLotUserList(
-                    response.data.rows
-                        .filter((user) => user.role === roles.PARKING_LOT_USER)
-                        .map((user) => ({
-                            id: user.id,
-                            role: user.role,
-                            avatar: user.UserInfo?.avatar,
-                            name: user.name,
-                            email: user.email,
-                            phone_number: user.UserInfo?.phone_number,
-                            address: user.UserInfo?.address,
-                            deletedAt: user.deletedAt ? 'Đã xóa' : 'Chưa xóa',
-                        })),
-                )
-                setAdminList(
-                    response.data.rows
-                        .filter((user) => user.role === roles.ADMIN)
-                        .map((user) => ({
-                            id: user.id,
-                            role: user.role,
-                            avatar: user.UserInfo?.avatar,
-                            name: user.name,
-                            email: user.email,
-                            phone_number: user.UserInfo?.phone_number,
-                            address: user.UserInfo?.address,
-                            deletedAt: user.deletedAt ? 'Đã xóa' : 'Chưa xóa',
-                        })),
+                setUserList(
+                    response.data.rows.map((user) => ({
+                        id: user.id,
+                        role: user.role,
+                        avatar: user.UserInfo?.avatar,
+                        name: user.name,
+                        email: user.email,
+                        phone_number: user.UserInfo?.phone_number,
+                        address: user.UserInfo?.address,
+                        deletedAt: user.deletedAt ? 'Đã xóa' : 'Chưa xóa',
+                    })),
                 )
             })
         }
@@ -229,7 +198,7 @@ function Accounts() {
             {/* --------------------------------------------------- TAB BASIC --------------------------------------------------- */}
             <div
                 className={
-                    swapPage === 1
+                    params.role === 1
                         ? 'account-list-content'
                         : 'account-list-content-unactive'
                 }
@@ -240,13 +209,13 @@ function Accounts() {
                     <button className="button-active">Basic User</button>
                     <button
                         className="button-unactive"
-                        onClick={() => setSwapPage(2)}
+                        onClick={() => setParams({ ...params, role: 2 })}
                     >
                         Parking-lot User
                     </button>
                     <button
                         className="button-unactive"
-                        onClick={() => setSwapPage(3)}
+                        onClick={() => setParams({ ...params, role: 3 })}
                     >
                         Admin
                     </button>
@@ -308,7 +277,7 @@ function Accounts() {
                     <Table
                         className="account-list-content__sub__table"
                         columns={columns}
-                        dataSource={basicUserList}
+                        dataSource={userList}
                         pagination={state.pagination}
                         onRow={(record, rowIndex) => {
                             return {
@@ -324,7 +293,7 @@ function Accounts() {
             {/* ------------------------------------------------ TAB PARKING-LOT ------------------------------------------------ */}
             <div
                 className={
-                    swapPage === 2
+                    params.role === 2
                         ? 'account-list-content'
                         : 'account-list-content-unactive'
                 }
@@ -333,14 +302,14 @@ function Accounts() {
                 <div className="account-list-content__swap-page">
                     <button
                         className="button-unactive"
-                        onClick={() => setSwapPage(1)}
+                        onClick={() => setParams({ ...params, role: 1 })}
                     >
                         Basic User
                     </button>
                     <button className="button-active">Parking-lot User</button>
                     <button
                         className="button-unactive"
-                        onClick={() => setSwapPage(3)}
+                        onClick={() => setParams({ ...params, role: 3 })}
                     >
                         Admin
                     </button>
@@ -401,7 +370,7 @@ function Accounts() {
                     <Table
                         className="account-list-content__sub__table"
                         columns={columns}
-                        dataSource={parkingLotUserList}
+                        dataSource={userList}
                         pagination={state.pagination}
                         onRow={(record, rowIndex) => {
                             return {
@@ -417,7 +386,7 @@ function Accounts() {
             {/* --------------------------------------------------- TAB ADMIN -------------------------------------------------- */}
             <div
                 className={
-                    swapPage === 3
+                    params.role === 3
                         ? 'account-list-content'
                         : 'account-list-content-unactive'
                 }
@@ -426,13 +395,13 @@ function Accounts() {
                 <div className="account-list-content__swap-page">
                     <button
                         className="button-unactive"
-                        onClick={() => setSwapPage(1)}
+                        onClick={() => setParams({ ...params, role: 1 })}
                     >
                         Basic User
                     </button>
                     <button
                         className="button-unactive"
-                        onClick={() => setSwapPage(2)}
+                        onClick={() => setParams({ ...params, role: 2 })}
                     >
                         Parking-lot User
                     </button>
@@ -494,7 +463,7 @@ function Accounts() {
                     <Table
                         className="account-list-content__sub__table"
                         columns={columns}
-                        dataSource={AdminList}
+                        dataSource={userList}
                         pagination={state.pagination}
                         onRow={(record, rowIndex) => {
                             return {
