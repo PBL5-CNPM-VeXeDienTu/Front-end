@@ -459,13 +459,13 @@ function ParkingLots() {
                         </div>
                         <div className="feedback-list-modal__sub__button">
                             <button
-                                className="button-cancel"
+                                className="button-gray"
                                 onClick={(e) => setShowAdminModal(false)}
                             >
                                 Thoát
                             </button>
                             <button
-                                className="button-save"
+                                className="button-green"
                                 type="primary"
                                 htmlType="submit"
                                 onClick={handleSubmit}

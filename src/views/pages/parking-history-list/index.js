@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Menu, Dropdown } from 'antd'
+import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import parkingHistoryApi from 'api/parkingHistoryApi'
@@ -15,7 +15,7 @@ const columns = [
     {
         title: 'Biển số xe',
         dataIndex: 'license_plate',
-        width: '10%',
+        width: '15%',
     },
     {
         title: 'Tên bãi đỗ xe',
@@ -45,7 +45,7 @@ const columns = [
     {
         title: 'Phí đỗ xe (VND)',
         dataIndex: 'cost',
-        width: '15%',
+        width: '10%',
     },
 ]
 
@@ -56,6 +56,8 @@ function ParkingHistories() {
     const [vehicleState, setVehicleState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
     const [parkingHistoryList, setParkingHistoryList] = useState([])
+    const [parkingHistory, setParkingHistory] = useState({})
+    const [showModal, setShowModal] = useState(false)
     const [total, setTotal] = useState(0)
     const [params, setParams] = useState({
         limit: 10,
@@ -76,6 +78,25 @@ function ParkingHistories() {
     }
 
     const onSearch = (value) => console.log(value)
+
+    const onClickRow = (value) => {
+        setParkingHistory(value)
+        setShowModal(true)
+    }
+
+    const handleSubmit = async (values) => {
+        try {
+            const updateParkingHistory = { memo: values.memo }
+            const response = await parkingHistoryApi.updateById(
+                parkingHistory.id,
+                updateParkingHistory,
+            )
+            alert(response.data.message)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
 
     useEffect(() => {
         if (!!user) {
@@ -209,7 +230,165 @@ function ParkingHistories() {
                     columns={columns}
                     dataSource={parkingHistoryList}
                     pagination={state.pagination}
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: () => {
+                                user.role === roles.BASIC_USER
+                                    ? onClickRow(record)
+                                    : setParkingHistory(null)
+                            },
+                        }
+                    }}
                 />
+                <Modal
+                    className="parking-history-modal"
+                    visible={showModal}
+                    onCancel={() => setShowModal(false)}
+                    footer={null}
+                >
+                    <h1 className="title">Thông tin lịch sử gửi xe</h1>
+                    <Form
+                        className="parking-history-modal__sub"
+                        fields={[
+                            {
+                                name: ['parking_lot_name'],
+                                value: parkingHistory.parking_lot_name,
+                            },
+                            {
+                                name: ['license_plate'],
+                                value: parkingHistory.license_plate,
+                            },
+                            {
+                                name: ['checkin_time'],
+                                value: parkingHistory.checkin_time,
+                            },
+                            {
+                                name: ['checkout_time'],
+                                value: parkingHistory.checkout_time,
+                            },
+                            {
+                                name: ['state'],
+                                value: parkingHistory.state
+                                    ? 'Đang đỗ'
+                                    : 'Đã checkout',
+                            },
+                            {
+                                name: ['memo'],
+                                value: parkingHistory.memo,
+                            },
+                            {
+                                name: ['cost'],
+                                value: parkingHistory.cost,
+                            },
+                        ]}
+                    >
+                        <div className="parking-history-modal__sub__info">
+                            <div className="parking-history-modal__sub__info__item">
+                                <span className="span">Tên bãi đỗ xe</span>
+                                <Form.Item
+                                    name="parking_lot_name"
+                                    className="form-item"
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="parking-history-modal__sub__info__item">
+                                <span className="span">Biển số xe</span>
+                                <Form.Item
+                                    name="license_plate"
+                                    className="form-item"
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="parking-history-modal__sub__info__item">
+                                <span className="span">Thời gian checkin</span>
+                                <Form.Item
+                                    name="checkin_time"
+                                    className="form-item"
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="parking-history-modal__sub__info__item">
+                                <span className="span">Thời gian checkout</span>
+                                <Form.Item
+                                    name="checkout_time"
+                                    className="form-item"
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="parking-history-modal__sub__info__item">
+                                <span className="span">Trạng thái</span>
+                                <Form.Item name="state" className="form-item">
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="parking-history-modal__sub__info__item">
+                                <span className="span">Phí đỗ xe (VND)</span>
+                                <Form.Item name="cost" className="form-item">
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            <div className="parking-history-modal__sub__info__item">
+                                <span className="span">Ghi chú</span>
+                                <Form.Item name="memo" className="form-item">
+                                    <Input.TextArea
+                                        className="textarea"
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+                        </div>
+                        <div className="parking-history-modal__sub__button">
+                            <button
+                                className="button-gray"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Thoát
+                            </button>
+                            <button
+                                className="button-green"
+                                type="primary"
+                                htmlType="submit"
+                                onClick={handleSubmit}
+                            >
+                                Lưu
+                            </button>
+                        </div>
+                    </Form>
+                </Modal>
             </div>
         </div>
     )
