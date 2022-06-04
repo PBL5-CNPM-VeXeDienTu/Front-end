@@ -274,7 +274,7 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [pageSize, user])
+    }, [user, pageSize])
 
     const stateParkinglot = {
         pagination: {
@@ -349,7 +349,7 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [pageSize, id])
+    }, [id, pageSize])
 
     const stateOwnerOfPackage = {
         pagination: {
@@ -424,7 +424,7 @@ function Packages() {
                     alert(error.response.data.message)
                 })
         }
-    }, [pageSize, user])
+    }, [user, pageSize])
 
     const handleCancel = () => {
         setShowModalAll(false)
@@ -448,7 +448,7 @@ function Packages() {
             }
             const response = await userPackageApi.createNew(newUserPackage)
             alert(response.data.message)
-            window.location.reload()
+            setShowModalAll(false)
         } catch (error) {
             alert(error.response.data.message)
         }
@@ -600,13 +600,13 @@ function Packages() {
                     </div>
                     <div className="button">
                         <button
-                            className="button__cancel"
+                            className="button-gray"
                             onClick={(e) => setShowModalParkingLot(false)}
                         >
                             Thoát
                         </button>
                         <Link to={`/packages/${packageItem.id}/edit`}>
-                            <button className="button__ok"> Chỉnh sửa</button>
+                            <button className="button-green"> Chỉnh sửa</button>
                         </Link>
                     </div>
                 </Modal>
@@ -777,13 +777,13 @@ function Packages() {
                             </div>
                             <div className="button">
                                 <button
-                                    className="button__cancel"
+                                    className="button-gray"
                                     onClick={(e) => setShowModalAll(false)}
                                 >
                                     Thoát
                                 </button>
                                 <button
-                                    className="button__ok"
+                                    className="button-green"
                                     htmlType="submit"
                                 >
                                     Đăng ký
@@ -977,13 +977,13 @@ function Packages() {
                 </div>
                 <div className="button">
                     <button
-                        className="button__cancel"
+                        className="button-gray"
                         onClick={(e) => setShowModalParkingLot(false)}
                     >
                         Thoát
                     </button>
                     <Link to={`/packages/${packageItem.id}/edit`}>
-                        <button className="button__ok"> Chỉnh sửa</button>
+                        <button className="button-green"> Chỉnh sửa</button>
                     </Link>
                 </div>
             </Modal>
@@ -1091,13 +1091,13 @@ function Packages() {
                 </div>
                 <div className="button">
                     <button
-                        className="button__cancel"
+                        className="button-gray"
                         onClick={(e) => setShowModalParkingLot(false)}
                     >
                         Thoát
                     </button>
                     <Link to={`/packages/${packageItem.id}/edit`}>
-                        <button className="button__ok"> Chỉnh sửa</button>
+                        <button className="button-green"> Chỉnh sửa</button>
                     </Link>
                 </div>
             </Modal>

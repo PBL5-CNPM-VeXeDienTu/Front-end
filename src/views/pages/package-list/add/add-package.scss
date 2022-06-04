@@ -57,36 +57,6 @@
         }
         &__button {
             margin: 6% auto;
-            button {
-                margin: 0 20px;
-                width: 7vw;
-                height: 5vh;
-                border: none;
-                border-radius: 20px;
-                color: #000;
-                font-size: 1.1rem;
-                text-align: center;
-                cursor: pointer;
-            }
-
-            .button-cancel {
-                background-color: #c0c0c0;
-            }
-
-            .button-cancel:hover {
-                box-shadow: 0 0 5px #777;
-                background-color: #777;
-                color: #fff;
-            }
-
-            .button-save {
-                background-color: #b4e2b3;
-            }
-
-            .button-save:hover {
-                box-shadow: 0 0 5px #41bc3f;
-                background-color: #41bc3f;
-            }
         }
     }
 }
