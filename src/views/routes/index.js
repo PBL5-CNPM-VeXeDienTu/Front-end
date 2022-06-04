@@ -83,7 +83,7 @@ const VerifyRequest = loadableComponent(() =>
 const CheckinCheckout = loadableComponent(() =>
     import('views/pages/checkin-checkout'),
 )
-
+const Setting = loadableComponent(() => import('views/pages/setting'))
 const NotFound = loadableComponent(() => import('views/pages/404-not-found'))
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
@@ -162,6 +162,10 @@ function AllRoutes() {
                 <Route
                     path="/parking-histories"
                     element={<MainLayout component={ParkingHistories} />}
+                />
+                <Route
+                    path="/setting"
+                    element={<MainLayout component={Setting} />}
                 />
                 <Route
                     path="/wallets"
