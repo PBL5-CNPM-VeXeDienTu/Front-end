@@ -2,42 +2,50 @@ import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown } from 'antd'
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
+import parkingHistoryApi from 'api/parkingHistoryApi'
 import * as roles from 'shared/constants/role'
 
 import './parking-history-list.scss'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
+const vehicleStateOfItem = ['All', 'Đang đỗ', 'Không đỗ']
+const historyTypeOfItem = ['All', 'Biển số xe', 'Tên bãi đỗ xe']
 const columns = [
     {
         title: 'Biển số xe',
-        dataIndex: 'license_plates',
-        width: '20%',
+        dataIndex: 'license_plate',
+        width: '10%',
     },
     {
         title: 'Tên bãi đỗ xe',
         dataIndex: 'parking_lot_name',
-        width: '20%',
+        width: '25%',
     },
     {
         title: 'Thời gian checkin',
         dataIndex: 'checkin_time',
-        width: '10%',
+        width: '18%',
     },
     {
         title: 'Thời gian checkout',
         dataIndex: 'checkout_time',
-        width: '10%',
+        width: '18%',
     },
     {
         title: 'Trạng thái',
-        dataIndex: 'status',
-        width: '20%',
+        dataIndex: 'state',
+        width: '14%',
+        render: (text, record) => (
+            <span className={record.state ? 'span-green' : 'span-gray-italic'}>
+                {record.state ? 'Đang đỗ' : 'Đã checkout'}
+            </span>
+        ),
     },
     {
         title: 'Phí đỗ xe (VND)',
         dataIndex: 'cost',
-        width: '20%',
+        width: '15%',
     },
 ]
 
@@ -47,65 +55,57 @@ function ParkingHistories() {
     const [historyType, setHistoryType] = useState('All')
     const [vehicleState, setVehicleState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
+    const [parkingHistoryList, setParkingHistoryList] = useState([])
+    const [total, setTotal] = useState(0)
+    const [params, setParams] = useState({
+        limit: 10,
+        page: 1,
+    })
 
     const state = {
         pagination: {
-            pageSize: page,
+            pageSize: params.limit,
+            total: total,
+            onChange: (page, pageSize) => {
+                setParams({
+                    limit: pageSize,
+                    page: page,
+                })
+            },
         },
     }
 
     const onSearch = (value) => console.log(value)
 
     useEffect(() => {
+        if (!!user) {
+            if (user.role === roles.BASIC_USER) {
+                parkingHistoryApi
+                    .getListByParkingLotUserId(user.id, params)
+                    .then((response) => {
+                        setTotal(response.data.count)
+                        setParkingHistoryList(
+                            response.data.rows.map((parkingHistory) => ({
+                                key: parkingHistory.id,
+                                id: parkingHistory.id,
+                                license_plate:
+                                    parkingHistory.Vehicle?.license_plate,
+                                parking_lot_name:
+                                    parkingHistory.ParkingLot?.name,
+                                checkin_time: parkingHistory.checkin_time,
+                                checkout_time: parkingHistory.checkout_time,
+                                state: parkingHistory.is_parking,
+                                cost: parkingHistory.cost,
+                                memo: parkingHistory.memo,
+                            })),
+                        )
+                    })
+            }
+        }
         if (historyType === 'All' && vehicleState === 'All')
             setActiveFilter(false)
         else setActiveFilter(true)
-    }, [historyType, vehicleState])
-
-    const vehicleStateOfItem = ['All', 'Đang đỗ', 'Không đỗ']
-    const historyTypeOfItem = ['All', 'Biển số xe', 'Tên bãi đỗ xe']
-    const data = []
-    if (user.role === roles.BASIC_USER) {
-        for (let i = 0; i < page / 2; i++) {
-            data.push({
-                key: i,
-                license_plates: '29C99999',
-                parking_lot_name: i,
-                checkin_time: '7h30',
-                checkout_time: '14h30',
-                status: 'Đang đỗ',
-                cost: '2000',
-            })
-            data.push({
-                key: i + 1,
-                license_plates: '29C99999',
-                parking_lot_name: i,
-                checkin_time: '7h30',
-                status: 'Không đỗ',
-                cost: '2000',
-            })
-        }
-    } else if (user.role === roles.PARKING_LOT_USER) {
-        for (let i = 0; i < page / 2; i++) {
-            data.push({
-                key: i,
-                license_plates: '29C99999',
-                parking_lot_name: 'Phu',
-                checkin_time: '8h30',
-                status: 'Đang đỗ',
-                cost: '2000',
-            })
-            data.push({
-                key: i + 1,
-                license_plates: '29C99999',
-                parking_lot_name: 'Phu',
-                checkin_time: '7h30',
-                checkout_time: '14h30',
-                status: 'Không đỗ',
-                cost: '2000',
-            })
-        }
-    }
+    }, [user, params, historyType, vehicleState])
 
     const menu = () => {
         return (
@@ -207,13 +207,8 @@ function ParkingHistories() {
             <div className="history-list-content__sub">
                 <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={parkingHistoryList}
                     pagination={state.pagination}
-                    rowClassName={(record, index) =>
-                        record.status === 'Đang đỗ'
-                            ? 'history-list-content__sub__row-green'
-                            : 'history-list-content__sub__row-red'
-                    }
                 />
             </div>
         </div>
