@@ -1,20 +1,21 @@
 import React from 'react'
 import { Button, Layout, Menu } from 'antd'
 import { Link } from 'react-router-dom'
-import {
-    HomeOutlined,
-    OrderedListOutlined,
+import Icon, {
+    UserOutlined,
+    LineChartOutlined,
     GiftOutlined,
     WalletOutlined,
     HistoryOutlined,
     QrcodeOutlined,
     MessageOutlined,
     LeftOutlined,
+    CheckCircleOutlined,
     RightOutlined,
-    SnippetsOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
+import * as sidebarIcons from 'shared/icons/sidebar-icons'
 
 import 'antd/dist/antd.min.css'
 import 'components/siderbar/siderbar.scss'
@@ -32,14 +33,7 @@ const RenderMenu = () => {
     }
     const { Sider } = Layout
 
-    const onClickLink = (e, url = '/') => {
-        // if (isEditingData) {
-        //     e.preventDefault();
-        //     // show modal
-        //     setConfirmVisible(true);
-        //     setRedirectUrl(url);
-        // }
-    }
+    const onClickLink = (e, url = '/') => {}
 
     return user.role === roles.BASIC_USER ? (
         // ------------------- BASIC USER -----------------------
@@ -68,7 +62,7 @@ const RenderMenu = () => {
                 >
                     <Menu.Item
                         key="1"
-                        icon={<HomeOutlined className="menu-item-icon" />}
+                        icon={<Icon component={sidebarIcons.carSgv} />}
                     >
                         <Link className="sider-bar__link" to="/vehicles">
                             Danh sách các xe
@@ -76,9 +70,7 @@ const RenderMenu = () => {
                     </Menu.Item>
                     <Menu.Item
                         key="2"
-                        icon={
-                            <OrderedListOutlined className="menu-item-icon" />
-                        }
+                        icon={<Icon component={sidebarIcons.parkingListSgv} />}
                     >
                         <Link className="sider-bar__link" to="/parking-lots">
                             Danh sách bãi đỗ xe
@@ -171,7 +163,7 @@ const RenderMenu = () => {
                 >
                     <Menu.Item
                         key="1"
-                        icon={<HomeOutlined className="menu-item-icon" />}
+                        icon={<Icon component={sidebarIcons.parkingListSgv} />}
                     >
                         <Link className="sider-bar__link" to="/parking-lots">
                             Danh sách bãi xe
@@ -179,11 +171,12 @@ const RenderMenu = () => {
                     </Menu.Item>
                     <Menu.Item
                         key="2"
-                        icon={
-                            <OrderedListOutlined className="menu-item-icon" />
-                        }
+                        icon={<Icon component={sidebarIcons.twoWayArrowSvg} />}
                     >
-                        <Link className="sider-bar__link" to="/checkin-checkout">
+                        <Link
+                            className="sider-bar__link"
+                            to="/checkin-checkout"
+                        >
                             Quản lí ra vào bãi
                         </Link>
                     </Menu.Item>
@@ -223,7 +216,7 @@ const RenderMenu = () => {
                     </Menu.Item>
                     <Menu.Item
                         key="6"
-                        icon={<SnippetsOutlined className="menu-item-icon" />}
+                        icon={<LineChartOutlined className="menu-item-icon" />}
                     >
                         <Link className="sider-bar__link" to="#">
                             Thống kê doanh thu
@@ -275,7 +268,7 @@ const RenderMenu = () => {
                 >
                     <Menu.Item
                         key="1"
-                        icon={<HomeOutlined className="menu-item-icon" />}
+                        icon={<UserOutlined className="menu-item-icon" />}
                     >
                         <Link className="sider-bar__link" to="/accounts">
                             Quản lí tài khoản user
@@ -284,7 +277,7 @@ const RenderMenu = () => {
                     <Menu.Item
                         key="2"
                         icon={
-                            <OrderedListOutlined className="menu-item-icon" />
+                            <CheckCircleOutlined className="menu-item-icon" />
                         }
                     >
                         <Link className="sider-bar__link" to="/verify-request">

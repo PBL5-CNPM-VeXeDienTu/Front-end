@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Table, Input, Menu, Dropdown, Modal } from 'antd'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
 import {
     FilterOutlined,
     SearchOutlined,
@@ -8,12 +8,14 @@ import {
 } from '@ant-design/icons'
 import moment from 'moment'
 import useAuth from 'hooks/useAuth'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
+import packageApi from 'api/packageApi'
+import userPackageApi from 'api/userPackageApi'
 import './package-list.scss'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
-const columnsBasicUser = [
+const columnsForBacicAndParkinglotRole = [
     {
         title: 'Tên gói ưu đãi',
         dataIndex: 'name',
@@ -29,6 +31,7 @@ const columnsBasicUser = [
         dataIndex: 'package_type',
         width: '12%',
     },
+
     {
         title: 'Phương tiện',
         dataIndex: 'vehicle_type',
@@ -51,7 +54,7 @@ const columnsBasicUser = [
     },
 ]
 
-const columnsParkingLot = [
+const columnsForAdminAndBasicRole = [
     {
         title: 'Tên gói ưu đãi',
         dataIndex: 'name',
@@ -79,20 +82,65 @@ const columnsParkingLot = [
     },
 ]
 
+const columnsForParkinglotRole = [
+    {
+        title: 'Tên gói ưu đãi',
+        dataIndex: 'name',
+        width: '20%',
+    },
+    {
+        title: 'Tên bãi đỗ xe',
+        dataIndex: 'parking_lot_name',
+        width: '20%',
+    },
+    {
+        title: 'Loại gói ưu đãi',
+        dataIndex: 'package_type',
+        width: '12%',
+    },
+
+    {
+        title: 'Phương tiện',
+        dataIndex: 'vehicle_type',
+        width: '12%',
+    },
+    {
+        title: 'Ngày bắt đầu',
+        dataIndex: 'date_start',
+        width: '12%',
+    },
+    {
+        title: 'Giá (VND)',
+        dataIndex: 'price',
+        width: '10%',
+    },
+]
+
 const packageTypeItem = ['All', 'Gói tuần', 'Gói tháng', 'Gói quý']
 
 const vehicleTypeItem = ['All', 'Xe đạp', 'Xe máy', 'Xe ô tô']
 
 function Packages() {
     const { user } = useAuth()
+    const navigate = useNavigate()
+    const { id } = useParams()
     const dateNow = new Date()
-    const [page, setPage] = useState(10)
     const [swapPage, setSwapPage] = useState(false)
     const [packageType, setPackageType] = useState('All')
     const [vehicleType, setVehicleType] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
     const [showModalAll, setShowModalAll] = useState(false)
     const [showModalParkingLot, setShowModalParkingLot] = useState(false)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const [allPackageList, setAllPackageList] = useState([])
+    const [userPackageOfOwnerList, setUserPackageOfOwnerList] = useState([])
+    const [packageOfParkinglotList, setPackageOfParkinglotList] = useState([])
+    const [packageOfOwnerList, setPackageOfOwnerList] = useState([])
+
+    const [userPackage, setUserPackage] = useState({
+        key: 0,
+    })
 
     const [packageItem, setPackageItem] = useState({
         name: '',
@@ -102,15 +150,285 @@ function Packages() {
         price: '',
     })
 
+    const stateAllPackage = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                packageApi.getListByParams(params).then((response) => {
+                    setTotal(response.data.count)
+                    setAllPackageList(
+                        response.data.rows.map((packageItem) => ({
+                            id: packageItem.id,
+                            name: packageItem.name,
+                            parking_lot_name: packageItem.ParkingLot.name,
+                            package_type: packageItem.PackageType.type_name,
+                            vehicle_type: packageItem.VehicleType.type_name,
+                            price: packageItem.price,
+                        })),
+                    )
+                })
+            },
+        },
+    }
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        packageApi
+            .getListByParams(params)
+            .then((response) => {
+                setTotal(response.data.count)
+                setAllPackageList(
+                    response.data.rows.map((packageItem) => ({
+                        id: packageItem.id,
+                        name: packageItem.name,
+                        parking_lot_name: packageItem.ParkingLot.name,
+                        package_type: packageItem.PackageType.type_name,
+                        vehicle_type: packageItem.VehicleType.type_name,
+                        price: packageItem.price,
+                    })),
+                )
+            })
+            .catch((error) => {
+                alert(error.response.data.message)
+            })
+    }, [pageSize])
+
+    const stateOwnerOfUserPackage = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                if (!!user) {
+                    userPackageApi
+                        .getUserPackageByOwner(user.id, params)
+                        .then((response) => {
+                            setTotal(response.data.count)
+                            setUserPackageOfOwnerList(
+                                response.data.rows.map((packageItem) => ({
+                                    id: packageItem.id,
+                                    name: packageItem.name,
+                                    parking_lot_name:
+                                        packageItem.ParkingLot.name,
+                                    package_type:
+                                        packageItem.PackageType.type_name,
+                                    vehicle_type:
+                                        packageItem.VehicleType.type_name,
+                                    date_start: new Date(
+                                        packageItem.createdAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    date_end: new Date(
+                                        packageItem.expireAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    price: packageItem.price,
+                                })),
+                            )
+                        })
+                        .catch((error) => {
+                            alert(error.response.data.message)
+                        })
+                }
+            },
+        },
+    }
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        if (!!user) {
+            userPackageApi
+                .getUserPackageByOwner(user.id, params)
+                .then((response) => {
+                    setTotal(response.data.count)
+                    setUserPackageOfOwnerList(
+                        response.data.rows.map((packageItem) => ({
+                            id: packageItem.id,
+                            name: packageItem.name,
+                            parking_lot_name: packageItem.ParkingLot.name,
+                            package_type: packageItem.PackageType.type_name,
+                            vehicle_type: packageItem.VehicleType.type_name,
+                            date_start: new Date(
+                                packageItem.createdAt,
+                            ).toLocaleDateString('en-GB'),
+                            date_end: new Date(
+                                packageItem.expireAt,
+                            ).toLocaleDateString('en-GB'),
+                            price: packageItem.price,
+                        })),
+                    )
+                })
+                .catch((error) => {
+                    alert(error.response.data.message)
+                })
+        }
+    }, [user, pageSize])
+
+    const stateParkinglot = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                if (!!id) {
+                    packageApi
+                        .getListByParkinglotId(id, params)
+                        .then((response) => {
+                            setTotal(response.data.count)
+                            setPackageOfParkinglotList(
+                                response.data.rows.map((packageItem) => ({
+                                    id: packageItem.id,
+                                    name: packageItem.name,
+                                    parking_lot_name:
+                                        packageItem.ParkingLot.name,
+                                    package_type:
+                                        packageItem.PackageType.type_name,
+                                    vehicle_type:
+                                        packageItem.VehicleType.type_name,
+                                    date_start: new Date(
+                                        packageItem.createdAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    date_end: new Date(
+                                        packageItem.expireAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    price: packageItem.price,
+                                })),
+                            )
+                        })
+                        .catch((error) => {
+                            alert(error.response.data.message)
+                        })
+                }
+            },
+        },
+    }
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        if (!!id) {
+            packageApi
+                .getListByParkinglotId(id, params)
+                .then((response) => {
+                    setTotal(response.data.count)
+                    setPackageOfParkinglotList(
+                        response.data.rows.map((packageItem) => ({
+                            id: packageItem.id,
+                            name: packageItem.name,
+                            parking_lot_name: packageItem.ParkingLot.name,
+                            package_type: packageItem.PackageType.type_name,
+                            vehicle_type: packageItem.VehicleType.type_name,
+                            date_start: new Date(
+                                packageItem.createdAt,
+                            ).toLocaleDateString('en-GB'),
+                            date_end: new Date(
+                                packageItem.expireAt,
+                            ).toLocaleDateString('en-GB'),
+                            price: packageItem.price,
+                        })),
+                    )
+                })
+                .catch((error) => {
+                    alert(error.response.data.message)
+                })
+        }
+    }, [id, pageSize])
+
+    const stateOwnerOfPackage = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                if (!!user) {
+                    packageApi
+                        .getListByOwnerId(user.id, params)
+                        .then((response) => {
+                            setTotal(response.data.count)
+                            setPackageOfOwnerList(
+                                response.data.rows.map((packageItem) => ({
+                                    id: packageItem.id,
+                                    name: packageItem.name,
+                                    parking_lot_name:
+                                        packageItem.ParkingLot.name,
+                                    package_type:
+                                        packageItem.PackageType.type_name,
+                                    vehicle_type:
+                                        packageItem.VehicleType.type_name,
+                                    date_start: new Date(
+                                        packageItem.createdAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    date_end: new Date(
+                                        packageItem.expireAt,
+                                    ).toLocaleDateString('en-GB'),
+                                    price: packageItem.price,
+                                })),
+                            )
+                        })
+                        .catch((error) => {
+                            alert(error.response.data.message)
+                        })
+                }
+            },
+        },
+    }
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        if (!!user) {
+            packageApi
+                .getListByOwnerId(user.id, params)
+                .then((response) => {
+                    setTotal(response.data.count)
+                    setPackageOfOwnerList(
+                        response.data.rows.map((packageItem) => ({
+                            id: packageItem.id,
+                            name: packageItem.name,
+                            parking_lot_name: packageItem.ParkingLot.name,
+                            package_type: packageItem.PackageType.type_name,
+                            vehicle_type: packageItem.VehicleType.type_name,
+                            date_start: new Date(
+                                packageItem.createdAt,
+                            ).toLocaleDateString('en-GB'),
+                            date_end: new Date(
+                                packageItem.expireAt,
+                            ).toLocaleDateString('en-GB'),
+                            price: packageItem.price,
+                        })),
+                    )
+                })
+                .catch((error) => {
+                    alert(error.response.data.message)
+                })
+        }
+    }, [user, pageSize])
+
     const handleCancel = () => {
         setShowModalAll(false)
         setShowModalParkingLot(false)
-    }
-
-    const state = {
-        pagination: {
-            pageSize: page,
-        },
     }
 
     const onSearch = (value) => console.log(value)
@@ -123,62 +441,22 @@ function Packages() {
         else setActiveFilter(true)
     }, [packageType, vehicleType])
 
-    const dataAll = []
-    for (let i = 0; i < page; i++) {
-        dataAll.push({
-            key: i,
-            name: 'Ưu đãi 1000 năm có một',
-            parking_lot_name: 'Bãi đỗ xe Bách Khoa',
-            package_type: 'Gói quý',
-            vehicle_type: 'Xe máy',
-            price: 120000,
-        })
+    const handleSubmitAddUserPackage = async (values) => {
+        try {
+            const newUserPackage = {
+                package_id: userPackage.id,
+            }
+            const response = await userPackageApi.createNew(newUserPackage)
+            alert(response.data.message)
+            setShowModalAll(false)
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
-    const dataParkingLot = []
-    for (let i = 0; i < page / 2; i++) {
-        dataParkingLot.push({
-            key: i,
-            name: 'Ưu đãi 1000 năm có một',
-            parking_lot_name: 'Bãi đỗ xe Bách Khoa',
-            package_type: 'Gói quý',
-            vehicle_type: 'Xe máy',
-            price: 120000,
-        })
-        dataParkingLot.push({
-            key: i,
-            name: 'Ưu đãi 1000 năm có một',
-            parking_lot_name: 'Bãi đỗ xe Bách Khoa',
-            package_type: 'Gói năm',
-            vehicle_type: 'Xe máy',
-            price: 500000,
-        })
+    const handleNavigation = () => {
+        navigate(`/packages/add`)
     }
-
-    const dataBasicUser = []
-    for (let i = 0; i < page / 2; i++) {
-        dataBasicUser.push({
-            key: i,
-            name: 'Ưu đãi 1000 năm có một',
-            parking_lot_name: 'Bãi đỗ xe Bách Khoa',
-            package_type: 'Gói quý',
-            vehicle_type: 'Xe máy',
-            date_start: new Date('4-1-2022').toLocaleDateString('en-GB'),
-            date_end: new Date('5-1-2022').toLocaleDateString('en-GB'),
-            price: 120000,
-        })
-        dataBasicUser.push({
-            key: i,
-            name: 'Ưu đãi 1000 năm có một',
-            parking_lot_name: 'Bãi đỗ xe Bách Khoa',
-            package_type: 'Gói quý',
-            vehicle_type: 'Xe máy',
-            date_start: new Date('5-1-2022').toLocaleDateString('en-GB'),
-            date_end: new Date('6-1-2022').toLocaleDateString('en-GB'),
-            price: 120000,
-        })
-    }
-
     const menu = () => {
         return (
             <Menu class="package-list-menu">
@@ -231,8 +509,8 @@ function Packages() {
                 <div className="package-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
-                        defaultValue={{ value: page }}
-                        onChange={(e) => setPage(e.target.value)}
+                        defaultValue={{ value: pageSize }}
+                        onChange={(e) => setPageSize(e.target.value)}
                     >
                         {numOfItem.map((numOfItem, index) => {
                             return (
@@ -270,9 +548,9 @@ function Packages() {
             <div className="package-list-content__sub">
                 <Table
                     className="package-list-content__sub__table"
-                    columns={columnsParkingLot}
-                    dataSource={dataAll}
-                    pagination={state.pagination}
+                    columns={columnsForAdminAndBasicRole}
+                    dataSource={allPackageList}
+                    pagination={stateAllPackage.pagination}
                     rowClassName="package-list-content__sub__table__row-action"
                     onRow={(record, rowIndex) => {
                         return {
@@ -322,22 +600,21 @@ function Packages() {
                     </div>
                     <div className="button">
                         <button
-                            className="button__cancel"
+                            className="button-gray"
                             onClick={(e) => setShowModalParkingLot(false)}
                         >
                             Thoát
                         </button>
-                        <Link to="/packages/edit">
-                            <button className="button__ok"> Chỉnh sửa</button>
+                        <Link to={`/packages/${packageItem.id}/edit`}>
+                            <button className="button-green"> Chỉnh sửa</button>
                         </Link>
                     </div>
                 </Modal>
             </div>
         </div>
-    ) : (
-        // -------------------------------------- BASIC USER & PARKING-LOT USER ---------------------------------------
+    ) : user.role === roles.BASIC_USER ? (
+        // -------------------------------------- BASIC USER ---------------------------------------
         <div>
-            {/* ------------------------------------------ TAB TẤT CẢ ------------------------------------------ */}
             <div
                 className={
                     swapPage
@@ -360,8 +637,8 @@ function Packages() {
                     <div className="package-list-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: pageSize }}
+                            onChange={(e) => setPageSize(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -399,9 +676,9 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsParkingLot}
-                        dataSource={dataAll}
-                        pagination={state.pagination}
+                        columns={columnsForAdminAndBasicRole}
+                        dataSource={allPackageList}
+                        pagination={stateAllPackage.pagination}
                         rowClassName={(record, index) =>
                             user.role === roles.BASIC_USER
                                 ? 'package-list-content__sub__table__row-action'
@@ -411,6 +688,7 @@ function Packages() {
                             return {
                                 onClick: () => {
                                     setPackageItem(record)
+                                    setUserPackage(record)
                                     user.role === roles.BASIC_USER
                                         ? setShowModalAll(true)
                                         : handleCancel()
@@ -425,179 +703,95 @@ function Packages() {
                         footer={null}
                     >
                         <h1 className="h1">Thông tin gói ưu đãi</h1>
-                        <div className="div">
-                            <span className="span1">Tên gói ưu đãi</span>
-                            <span className="span2">{packageItem.name}</span>
-                        </div>
-                        <div className="div">
-                            <span className="span1">tên bãi đỗ xe</span>
-                            <span className="span2">
-                                {packageItem.parking_lot_name}
-                            </span>
-                        </div>
-                        <div className="div">
-                            <span className="span1">Loại gói ưu đãi</span>
-                            <span className="span2">
-                                {packageItem.package_type}
-                            </span>
-                        </div>
-                        <div className="div">
-                            <span className="span1">Phương tiện</span>
-                            <span className="span2">
-                                {packageItem.vehicle_type}
-                            </span>
-                        </div>
-                        <div className="div">
-                            <span className="span1">Giá</span>
-                            <span className="span2">
-                                {packageItem.price} VND
-                            </span>
-                        </div>
-                        <div className="button">
-                            <button
-                                className="button__cancel"
-                                onClick={(e) => setShowModalAll(false)}
-                            >
-                                Thoát
-                            </button>
-                            <button className="button__ok">Đăng ký</button>
-                        </div>
+                        <Form onFinish={handleSubmitAddUserPackage}>
+                            <div className="div">
+                                <span className="span1">Tên gói ưu đãi</span>
+                                <Form.Item
+                                    name="name"
+                                    className="span2"
+                                    initialValue={packageItem.name}
+                                >
+                                    <Input.TextArea
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    />
+                                </Form.Item>
+                            </div>
+                            <div className="div">
+                                <span className="span1">Tên bãi đỗ xe</span>
+                                <Form.Item
+                                    name="parking_lot_name"
+                                    className="span2"
+                                    initialValue={packageItem.parking_lot_name}
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    ></Input>
+                                </Form.Item>
+                            </div>
+                            <div className="div">
+                                <span className="span1">Loại gói ưu đãi</span>
+                                <Form.Item
+                                    name="package_type"
+                                    className="span2"
+                                    initialValue={packageItem.package_type}
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    ></Input>
+                                </Form.Item>
+                            </div>
+                            <div className="div">
+                                <span className="span1">Phương tiện</span>
+                                <Form.Item
+                                    name="vehicle_type"
+                                    className="span2"
+                                    initialValue={packageItem.vehicle_type}
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    ></Input>
+                                </Form.Item>
+                            </div>
+                            <div className="div">
+                                <span className="span1">Giá</span>
+                                <Form.Item
+                                    name="price"
+                                    className="span2"
+                                    initialValue={packageItem.price}
+                                    VND
+                                >
+                                    <Input
+                                        className="text"
+                                        disabled
+                                        size="medium"
+                                    ></Input>
+                                </Form.Item>
+                            </div>
+                            <div className="button">
+                                <button
+                                    className="button-gray"
+                                    onClick={(e) => setShowModalAll(false)}
+                                >
+                                    Thoát
+                                </button>
+                                <button
+                                    className="button-green"
+                                    htmlType="submit"
+                                >
+                                    Đăng ký
+                                </button>
+                            </div>
+                        </Form>
                     </Modal>
                 </div>
-            </div>
-
-            {/* -------------------------------- TAB CỦA TÔI - PARKING-LOT USER -------------------------------- */}
-            <div
-                className={
-                    swapPage && user.role === roles.PARKING_LOT_USER
-                        ? 'package-list-content'
-                        : 'package-list-content-unactive'
-                }
-            >
-                <div className="title">Các gói ưu đãi của tôi</div>
-                <div className="package-list-content__swap-page">
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(false)}
-                    >
-                        Tất cả
-                    </button>
-                    <button className="button-active">Của tôi</button>
-                </div>
-
-                <div className="package-list-content__action__state-two">
-                    <div className="package-list-content__action__select">
-                        <span>Hiển thị </span>
-                        <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
-                        >
-                            {numOfItem.map((numOfItem, index) => {
-                                return (
-                                    <option key={index} value={numOfItem}>
-                                        {numOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-                    <Dropdown overlay={menu} trigger="click" placement="bottom">
-                        <div
-                            className={
-                                activeFilter
-                                    ? 'package-list-content__action__filter-active'
-                                    : 'package-list-content__action__filter-unactive'
-                            }
-                        >
-                            <FilterOutlined />
-                        </div>
-                    </Dropdown>
-
-                    <div className="package-list-content__action__search">
-                        <Search
-                            className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
-                            allowClear
-                            suffix
-                        />
-                        <SearchOutlined className="package-list-content__action__search__icon" />
-                    </div>
-                    <Link
-                        className="package-list-content__action__add"
-                        to="/packages/add"
-                    >
-                        <PlusCircleOutlined className="package-list-content__action__add__icon" />
-                        <span>Thêm gói ưu đãi</span>
-                    </Link>
-                </div>
-
-                <div className="package-list-content__sub">
-                    <Table
-                        className="package-list-content__sub__table"
-                        columns={columnsParkingLot}
-                        dataSource={dataParkingLot}
-                        pagination={state.pagination}
-                        rowClassName="package-list-content__sub__table__row-action"
-                        onRow={(record, rowIndex) => {
-                            return {
-                                onClick: () => {
-                                    setShowModalParkingLot(true)
-                                    setPackageItem(record)
-                                },
-                            }
-                        }}
-                    />
-                </div>
-                <Modal
-                    className="package-list-modal"
-                    visible={showModalParkingLot}
-                    onCancel={handleCancel}
-                    footer={null}
-                >
-                    <h1 className="h1">Thông tin gói ưu đãi</h1>
-                    <div className="div">
-                        <span className="span1">Tên gói ưu đãi</span>
-                        <span className="span2">{packageItem.name}</span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">tên bãi đỗ xe</span>
-                        <span className="span2">
-                            {packageItem.parking_lot_name}
-                        </span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">Loại gói ưu đãi</span>
-                        <span className="span2">
-                            {packageItem.package_type}
-                        </span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">Phương tiện</span>
-                        <span className="span2">
-                            {packageItem.vehicle_type}
-                        </span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">Giá</span>
-                        <span className="span2">{packageItem.price} VND</span>
-                    </div>
-                    <div className="div">
-                        <span className="span1">Đang sử dụng</span>
-                        <span className="span2">1000 Người</span>
-                    </div>
-                    <div className="button">
-                        <button
-                            className="button__cancel"
-                            onClick={(e) => setShowModalParkingLot(false)}
-                        >
-                            Thoát
-                        </button>
-                        <Link to="/packages/edit">
-                            <button className="button__ok"> Chỉnh sửa</button>
-                        </Link>
-                    </div>
-                </Modal>
             </div>
 
             {/* ----------------------------------- TAB CỦA TÔI - BASIC USER ----------------------------------- */}
@@ -622,8 +816,8 @@ function Packages() {
                     <div className="package-list-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: pageSize }}
+                            onChange={(e) => setPageSize(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -661,14 +855,14 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsBasicUser}
-                        dataSource={dataBasicUser}
-                        pagination={state.pagination}
+                        columns={columnsForBacicAndParkinglotRole}
+                        dataSource={userPackageOfOwnerList}
+                        pagination={stateOwnerOfUserPackage.pagination}
                         rowClassName={(record, index) =>
                             moment(record.date_end, 'DD/MM/YYYY').toDate() >
                             dateNow
                                 ? 'package-list-content__sub__table__row-green'
-                                : 'package-list-content__sub__table__row-gray'
+                                : 'package-list-content__sub__table__row-red'
                         }
                         onRow={(record, rowIndex) => {
                             return {
@@ -678,6 +872,235 @@ function Packages() {
                     />
                 </div>
             </div>
+        </div>
+    ) : // ----------------------------------ParkingLot---------------------------------
+    id ? (
+        <div className={'package-list-content'}>
+            <div className="title">Các gói ưu đãi của tôi</div>
+
+            <div className="package-list-content__action__state-two">
+                <div className="package-list-content__action__select">
+                    <span>Hiển thị </span>
+                    <select
+                        defaultValue={{ value: pageSize }}
+                        onChange={(e) => setPageSize(e.target.value)}
+                    >
+                        {numOfItem.map((numOfItem, index) => {
+                            return (
+                                <option key={index} value={numOfItem}>
+                                    {numOfItem}
+                                </option>
+                            )
+                        })}
+                    </select>
+                </div>
+                <Dropdown overlay={menu} trigger="click" placement="bottom">
+                    <div
+                        className={
+                            activeFilter
+                                ? 'package-list-content__action__filter-active'
+                                : 'package-list-content__action__filter-unactive'
+                        }
+                    >
+                        <FilterOutlined />
+                    </div>
+                </Dropdown>
+
+                <div className="package-list-content__action__search">
+                    <Search
+                        className="search-box"
+                        placeholder="Tìm kiếm"
+                        onSearch={onSearch}
+                        allowClear
+                        suffix
+                    />
+                    <SearchOutlined className="package-list-content__action__search__icon" />
+                </div>
+                <button
+                    className="package-list-content__action__add"
+                    onClick={() => handleNavigation(id)}
+                >
+                    <PlusCircleOutlined className="package-list-content__action__add__icon" />
+                    <span>Thêm gói ưu đãi</span>
+                </button>
+            </div>
+
+            <div className="package-list-content__sub">
+                <Table
+                    className="package-list-content__sub__table"
+                    columns={columnsForBacicAndParkinglotRole}
+                    dataSource={packageOfParkinglotList}
+                    pagination={stateParkinglot.pagination}
+                    rowClassName="package-list-content__sub__table__row-action"
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: () => {
+                                setShowModalParkingLot(true)
+                                setPackageItem(record)
+                            },
+                        }
+                    }}
+                />
+            </div>
+            <Modal
+                className="package-list-modal"
+                visible={showModalParkingLot}
+                onCancel={handleCancel}
+                footer={null}
+            >
+                <h1 className="h1">Thông tin gói ưu đãi</h1>
+                <div className="div">
+                    <span className="span1">Tên gói ưu đãi</span>
+                    <span className="span2">{packageItem.name}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">tên bãi đỗ xe</span>
+                    <span className="span2">
+                        {packageItem.parking_lot_name}
+                    </span>
+                </div>
+                <div className="div">
+                    <span className="span1">Loại gói ưu đãi</span>
+                    <span className="span2">{packageItem.package_type}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Phương tiện</span>
+                    <span className="span2">{packageItem.vehicle_type}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Giá</span>
+                    <span className="span2">{packageItem.price} VND</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Đang sử dụng</span>
+                    <span className="span2">1000 Người</span>
+                </div>
+                <div className="button">
+                    <button
+                        className="button-gray"
+                        onClick={(e) => setShowModalParkingLot(false)}
+                    >
+                        Thoát
+                    </button>
+                    <Link to={`/packages/${packageItem.id}/edit`}>
+                        <button className="button-green"> Chỉnh sửa</button>
+                    </Link>
+                </div>
+            </Modal>
+        </div>
+    ) : (
+        <div className={'package-list-content'}>
+            <div className="title">Các gói ưu đãi của tôi</div>
+
+            <div className="package-list-content__action__state-two">
+                <div className="package-list-content__action__select">
+                    <span>Hiển thị </span>
+                    <select
+                        defaultValue={{ value: pageSize }}
+                        onChange={(e) => setPageSize(e.target.value)}
+                    >
+                        {numOfItem.map((numOfItem, index) => {
+                            return (
+                                <option key={index} value={numOfItem}>
+                                    {numOfItem}
+                                </option>
+                            )
+                        })}
+                    </select>
+                </div>
+                <Dropdown overlay={menu} trigger="click" placement="bottom">
+                    <div
+                        className={
+                            activeFilter
+                                ? 'package-list-content__action__filter-active'
+                                : 'package-list-content__action__filter-unactive'
+                        }
+                    >
+                        <FilterOutlined />
+                    </div>
+                </Dropdown>
+
+                <div className="package-list-content__action__search">
+                    <Search
+                        className="search-box"
+                        placeholder="Tìm kiếm"
+                        onSearch={onSearch}
+                        allowClear
+                        suffix
+                    />
+                    <SearchOutlined className="package-list-content__action__search__icon" />
+                </div>
+                <button
+                    className="package-list-content__action__add"
+                    onClick={() => handleNavigation(id)}
+                >
+                    <PlusCircleOutlined className="package-list-content__action__add__icon" />
+                    <span>Thêm gói ưu đãi</span>
+                </button>
+            </div>
+
+            <div className="package-list-content__sub">
+                <Table
+                    className="package-list-content__sub__table"
+                    columns={columnsForParkinglotRole}
+                    dataSource={packageOfOwnerList}
+                    pagination={stateOwnerOfPackage.pagination}
+                    rowClassName="package-list-content__sub__table__row-action"
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: () => {
+                                setShowModalParkingLot(true)
+                                setPackageItem(record)
+                            },
+                        }
+                    }}
+                />
+            </div>
+            <Modal
+                className="package-list-modal"
+                visible={showModalParkingLot}
+                onCancel={handleCancel}
+                footer={null}
+            >
+                <h1 className="h1">Thông tin gói ưu đãi</h1>
+                <div className="div">
+                    <span className="span1">Tên gói ưu đãi</span>
+                    <span className="span2">{packageItem.name}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">tên bãi đỗ xe</span>
+                    <span className="span2">
+                        {packageItem.parking_lot_name}
+                    </span>
+                </div>
+                <div className="div">
+                    <span className="span1">Loại gói ưu đãi</span>
+                    <span className="span2">{packageItem.package_type}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Phương tiện</span>
+                    <span className="span2">{packageItem.vehicle_type}</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Giá</span>
+                    <span className="span2">{packageItem.price} VND</span>
+                </div>
+                <div className="div">
+                    <span className="span1">Đang sử dụng</span>
+                    <span className="span2">1000 Người</span>
+                </div>
+                <div className="button">
+                    <button
+                        className="button-gray"
+                        onClick={(e) => setShowModalParkingLot(false)}
+                    >
+                        Thoát
+                    </button>
+                    <Link to={`/packages/${packageItem.id}/edit`}>
+                        <button className="button-green"> Chỉnh sửa</button>
+                    </Link>
+                </div>
+            </Modal>
         </div>
     )
 }

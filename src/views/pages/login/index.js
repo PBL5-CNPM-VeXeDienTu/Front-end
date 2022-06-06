@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Form, Input, Button, Modal } from 'antd'
 import { UserOutlined, UnlockOutlined } from '@ant-design/icons'
 import messages from 'assets/lang/messages'
@@ -24,14 +23,11 @@ function Login() {
     }
 
     const { setToken } = useAuth()
-    const navigate = useNavigate()
     const handleSubmit = async (values) => {
         try {
             const response = await auth.login(values)
             if (response.request.status === 200) {
                 setToken(response.data.token)
-                localStorage.setItem('token', response.data.token)
-                navigate('/profile')
                 alert(response.data.message)
             }
         } catch (error) {

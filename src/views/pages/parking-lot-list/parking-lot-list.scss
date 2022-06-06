@@ -12,7 +12,7 @@
         width: 100%;
         height: 100%;
         display: grid;
-        grid-template-columns: 40% 35% 25%;
+        grid-template-columns: 70% 5.5% 25%;
         padding: 0.5% 3%;
 
         &__select {
@@ -30,47 +30,28 @@
             }
         }
 
-        &__filter-state {
-            width: fit-content;
-            margin: auto;
-            .span {
-                margin-right: 1vw;
-            }
-            button {
-                width: 5.5vw;
-                height: 5.5vh;
-                border: none;
-                text-align: center;
-                background-color: #f0f0f0;
-                font-size: 1rem;
-                cursor: pointer;
-            }
-            .button-active {
-                background-color: #b4e2b3;
-                transition: 0.5s;
+        &__filter-unactive {
+            height: 5.5vh;
+            width: 5.5vh;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            cursor: pointer;
+        }
 
-                &__left {
-                    background-color: #b4e2b3;
-                    border-radius: 20px 0 0 20px;
-                    transition: 0.5s;
-                }
-                &__right {
-                    background-color: #b4e2b3;
-                    border-radius: 0 20px 20px 0;
-                    transition: 0.5s;
-                }
-            }
-            .button-unactive {
-                background-color: #f0f0f0;
-                &__left {
-                    background-color: #f0f0f0;
-                    border-radius: 20px 0 0 20px;
-                }
-                &__right {
-                    background-color: #f0f0f0;
-                    border-radius: 0 20px 20px 0;
-                }
-            }
+        &__filter-active {
+            height: 5.5vh;
+            width: 5.5vh;
+            border-radius: 50%;
+            background-color: #41bc3f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            cursor: pointer;
         }
 
         &__search {
@@ -184,6 +165,40 @@
 
         .ant-modal-body {
             height: fit-content !important;
+        }
+    }
+}
+.parking-lot-menu {
+    width: 15vw;
+    height: fit-content;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 #999;
+    padding: 2vh 2vh;
+
+    &__item {
+        &__row {
+            height: 5vh;
+            display: grid;
+            grid-template-columns: 40% 60%;
+
+            &__span {
+                margin: auto 0;
+            }
+
+            select {
+                margin: auto;
+                height: 4vh;
+                width: 100%;
+                background-color: #f0f0f0;
+                border: none;
+                border-radius: 10px;
+                padding-left: 0.5vw;
+            }
+
+            option {
+                border-radius: 0px;
+            }
         }
     }
 }
@@ -318,22 +333,65 @@
             }
 
             &__info {
-                width: 100%;
+                width: 95%;
                 margin: auto 0;
+
+                .div-unactive {
+                    display: none;
+                }
 
                 div {
                     height: 7vh;
                     display: grid;
-                    grid-template-columns: 30% 70%;
-
-                    .properties {
-                        font-weight: bold;
-                        text-align: right;
-                        width: 8vw;
-                    }
+                    grid-template-columns: 25% 75%;
 
                     span {
                         font-size: 1.1rem;
+                    }
+
+                    .span1 {
+                        width: 100%;
+                        text-align: right;
+                        font-weight: bold;
+                    }
+
+                    .span2 {
+                        margin-left: 10%;
+
+                        &-red {
+                            margin-left: 10%;
+                            color: red;
+                        }
+
+                        &-green {
+                            margin-left: 10%;
+                            color: #41bc3f;
+                        }
+
+                        &-orange {
+                            margin-left: 10%;
+                            color: orange;
+                        }
+                    }
+                    span {
+                        font-size: 1.1rem;
+                        color: black;
+                        a {
+                            color: #000;
+                        }
+                        button {
+                            width: 10vw;
+                            height: 5vh;
+                            border-radius: 20px;
+                            border: none;
+                            background-color: #b4e2b3;
+                            cursor: pointer;
+                        }
+                        button:hover {
+                            box-shadow: 0 0 5px #41bc3f;
+                            background-color: #41bc3f;
+                            color: #fff;
+                        }
                     }
                 }
             }

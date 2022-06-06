@@ -118,6 +118,7 @@
             background-color: #b4e2b3;
             color: #000;
             padding: 0 1vw;
+            border: none;
 
             span {
                 margin: auto;
@@ -153,6 +154,7 @@
 
                     td {
                         font-size: 1rem !important;
+                        background-color: #fff;
                         padding: 2vh 0 2vh 1.5vh;
                         max-width: 10vw;
                         white-space: nowrap;
@@ -166,12 +168,18 @@
                 cursor: pointer;
             }
 
-            &__row-gray {
+            &__row-red {
                 background-color: #f0f0f0;
+                td:nth-child(6) {
+                    color: red;
+                }
             }
 
             &__row-green {
                 color: #41bc3f;
+                td:nth-child(6) {
+                    color: #41bc3f;
+                }
             }
         }
     }
@@ -243,6 +251,9 @@
         .span2 {
             margin-left: 10%;
             max-width: 80%;
+            text-align: justify;
+            color: #000;
+            border-radius: none;
 
             &-red {
                 margin-left: 10%;
@@ -259,6 +270,9 @@
                 font-style: italic;
                 color: #888;
             }
+        }
+        .text {
+            color: #000;
         }
     }
 
@@ -345,4 +359,8 @@
 
 .ant-input-search-button:hover {
     background-color: transparent;
+}
+
+.text {
+    color: #000;
 }

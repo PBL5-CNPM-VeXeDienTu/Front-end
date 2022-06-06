@@ -11,21 +11,34 @@
     height: 100%;
     border-radius: 20px;
     background-color: #fff;
-
-    &__button-edit-unactive {
+    position: relative;
+    &__no-icon {
         display: none;
     }
-    &__button-edit-active {
-        font-size: 30px;
+    &__icon {
+        width: 100%;
         position: absolute;
-        right: 6%;
-        top: 8%;
-        color: #555;
-    }
+        top: 4%;
+        left: 90%;
 
-    &__button-edit:hover {
-        color: #41bc3f;
-        cursor: pointer;
+        span {
+            font-size: 25px;
+            margin: 5px;
+        }
+        .delete-parking-lot {
+            color: 555;
+        }
+        .delete-parking-lot:hover {
+            color: red;
+        }
+
+        .edit-parking-lot {
+            color: #555;
+        }
+
+        .edit-parking-lot:hover {
+            color: #41bc3f;
+        }
     }
 
     &__sub {
@@ -54,12 +67,32 @@
                 height: 8vh;
                 display: grid;
                 padding: auto 0;
-                grid-template-columns: 30% 70%;
+                grid-template-columns: 20% 80%;
 
-                .properties {
-                    font-weight: bold;
+                .span1 {
+                    width: 100%;
                     text-align: right;
-                    width: 8vw;
+                    font-weight: bold;
+                }
+
+                .span2 {
+                    margin-left: 10%;
+                    max-width: 80%;
+                    text-align: justify;
+
+                    &-red {
+                        margin-left: 10%;
+                        color: red;
+                    }
+
+                    &-green {
+                        margin-left: 10%;
+                        color: #41bc3f;
+                    }
+                    &-orange {
+                        margin-left: 10%;
+                        color: orange;
+                    }
                 }
 
                 span {
@@ -91,6 +124,75 @@
         }
         &__button-unactive {
             display: none;
+        }
+    }
+}
+.delete-parking-lot-modal {
+    width: 40vw !important;
+    top: 30% !important;
+
+    &__form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        &__item {
+            height: 8.5vh;
+            display: grid;
+            padding: auto 0;
+            grid-template-columns: 20% 80%;
+            .span {
+                font-weight: bold;
+                text-align: right;
+                margin-top: 5px;
+                font-size: 1rem;
+                // color: #555;
+            }
+            .text {
+                margin-left: 5%;
+            }
+            .textarea {
+                height: 12vh;
+                margin-left: 5%;
+                width: 25vw;
+            }
+        }
+    }
+    &__button {
+        margin: 10% auto 0 auto;
+    }
+
+    .ant-modal-content {
+        border-radius: 20px !important;
+
+        .ant-modal-header {
+            border-radius: 20px 20px 0 0;
+            background-color: #e9e9e9;
+        }
+
+        .ant-modal-body {
+            height: fit-content !important;
+            min-height: 10vh;
+        }
+
+        .ant-modal-footer {
+            text-align: center;
+
+            .ant-btn {
+                width: 7vw;
+                height: 5vh;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: bolder;
+                margin: 0 1vw;
+                color: #222;
+                background-color: #d5d5d5;
+                border: none;
+            }
+
+            .ant-btn-primary {
+                background: #41bc3f !important;
+                color: #fff;
+            }
         }
     }
 }

@@ -1,40 +1,108 @@
-import React from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, Link, useParams, Navigate } from 'react-router-dom'
 import { Input, Radio, Form, Button, DatePicker } from 'antd'
 import { CameraOutlined } from '@ant-design/icons'
 import moment from 'moment'
-import useAuth from 'hooks/useAuth'
 import messages from 'assets/lang/messages'
 import userApi from 'api/userApi'
+import uploadImageApi from 'api/uploadImageApi'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './edit-profile.scss'
 
 function EditProfile() {
-    const { user } = useAuth()
-    const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
     const navigate = useNavigate()
+    const { id } = useParams()
+    const [user, setUser] = useState({})
+    const [uploadAvatar, setUploadAvatar] = useState()
+
+    useEffect(() => {
+        if (!!id) {
+            userApi.getOneById(id).then((response) => {
+                setUser(response.data)
+            })
+        }
+    }, [id])
+
+    const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
+    const handleUploadImage = (e) => {
+        const userAvatar = document.getElementById('user-avatar')
+        userAvatar.src = URL.createObjectURL(e.target.files[0])
+        setUploadAvatar(e.target.files[0])
+    }
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.USER_AVATAR
+    }
 
     const handleSubmit = async (values) => {
         try {
-            const response = await userApi.update(user.id, values)
+            const response = await userApi.updateById(user.id, values)
+
+            if (uploadAvatar) {
+                const postData = new FormData()
+                postData.append('user-avatar', uploadAvatar)
+                uploadImageApi.uploadUserAvatar(user?.id, postData)
+            }
+
             alert(response.data.message)
-            navigate('/profile')
+            navigate(`/profile/${user.id}`)
+            window.location.reload()
         } catch (error) {
             alert(error.response.data.message)
         }
     }
 
-    return (
+    return user ? (
         <div className="edit-profile-content">
             <div className="title">Profile</div>
             <Form
-                name="editprofile"
+                name="edit-profile"
                 className="edit-profile-content__sub"
                 onFinish={handleSubmit}
+                fields={[
+                    {
+                        name: ['name'],
+                        value: user.name,
+                    },
+                    {
+                        name: ['email'],
+                        value: user.email,
+                    },
+                    {
+                        name: ['gender'],
+                        value: user.UserInfo?.gender ? 1 : 0,
+                    },
+                    {
+                        name: ['birthday'],
+                        value: moment(user.UserInfo?.birthday, 'YYYY/MM/DD'),
+                    },
+                    {
+                        name: ['address'],
+                        value: user.UserInfo?.address,
+                    },
+                    {
+                        name: ['phone_number'],
+                        value: user.UserInfo?.phone_number,
+                    },
+                ]}
             >
                 <div className="edit-profile-content__sub__avatar">
-                    <img src={avatarURL} alt="avatar" />
+                    <img
+                        id="user-avatar"
+                        src={avatarURL}
+                        alt="avatar"
+                        onError={handleGetImageError}
+                    />
                     <div className="edit-profile-content__sub__avatar__button-upload">
-                        <CameraOutlined className="edit-profile-content__sub__avatar__icon" />
+                        <label for="image-input">
+                            <CameraOutlined className="edit-profile-content__sub__avatar__icon" />
+                        </label>
+                        <input
+                            id="image-input"
+                            accept="image/png, image/jpeg"
+                            type="file"
+                            onChange={handleUploadImage}
+                        />
                     </div>
                 </div>
                 <div className="edit-profile-content__sub__info">
@@ -42,7 +110,7 @@ function EditProfile() {
                         <span className="span">Tên</span>
                         <Form.Item
                             name="name"
-                            initialValue={user.name}
+                            initialValue={user.name ? user.name : 'sd'}
                             rules={[
                                 {
                                     required: true,
@@ -87,9 +155,7 @@ function EditProfile() {
                     <div className="edit-profile-content__sub__info__item">
                         <span className="span">Giới tính</span>
                         <Form.Item name="gender">
-                            <Radio.Group
-                                defaultValue={user.UserInfo?.gender ? 1 : 0}
-                            >
+                            <Radio.Group defaultValue={user.gender ? 1 : 0}>
                                 <Radio value={1}>Nam</Radio>
                                 <Radio value={0}>Nữ</Radio>
                             </Radio.Group>
@@ -110,7 +176,7 @@ function EditProfile() {
                             <DatePicker
                                 size="medium"
                                 defaultValue={moment(
-                                    user.UserInfo?.birthday,
+                                    user.birthday,
                                     'YYYY/MM/DD',
                                 )}
                                 format="DD/MM/YYYY"
@@ -161,11 +227,11 @@ function EditProfile() {
                     </div>
 
                     <div className="edit-profile-content__sub__info__button">
-                        <Button className="button-cancel">
-                            <Link to="/profile">Thoát</Link>
+                        <Button className="button-gray">
+                            <Link to={`/profile/${user.id}`}>Thoát</Link>
                         </Button>
                         <Button
-                            className="button-save"
+                            className="button-green"
                             type="primary"
                             htmlType="submit"
                         >
@@ -175,6 +241,8 @@ function EditProfile() {
                 </div>
             </Form>
         </div>
+    ) : (
+        <Navigate to="/404" />
     )
 }
 

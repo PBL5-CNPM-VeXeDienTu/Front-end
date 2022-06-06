@@ -75,18 +75,37 @@
 
                 div {
                     height: 8vh;
-                    margin-right: 2vw;
+                    margin: 1vh 0;
                     display: grid;
-                    grid-template-columns: 40% 60%;
-
-                    .properties {
-                        font-weight: bold;
-                        text-align: right;
-                        margin-right: 3vw;
-                    }
+                    grid-template-columns: 35% 65%;
 
                     span {
                         font-size: 1.1rem;
+                    }
+
+                    .span1 {
+                        width: 100%;
+                        text-align: right;
+                        font-weight: bold;
+                    }
+
+                    .span2 {
+                        margin-left: 10%;
+
+                        &-red {
+                            margin-left: 10%;
+                            color: red;
+                        }
+
+                        &-green {
+                            margin-left: 10%;
+                            color: #41bc3f;
+                        }
+
+                        &-yellow {
+                            margin-left: 10%;
+                            color: orange;
+                        }
                     }
                 }
             }

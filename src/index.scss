@@ -31,7 +31,8 @@ code {
     cursor: pointer;
     background-color: #b4e2b3;
 }
-.button-green:hover {
+.button-green:hover,
+.button-green:focus {
     box-shadow: 0 0 5px #41bc3f;
     background-color: #41bc3f;
     color: #fff;
@@ -48,8 +49,19 @@ code {
     cursor: pointer;
     background-color: #c0c0c0;
 }
-.button-gray:hover {
+.button-gray:hover,
+.button-gray:focus {
     box-shadow: 0 0 5px #777;
     background-color: #777;
     color: #fff;
+}
+.span-red {
+    color: red;
+}
+.span-green {
+    color: #41bc3f;
+}
+.span-gray-italic {
+    color: gray;
+    font-style: italic;
 }

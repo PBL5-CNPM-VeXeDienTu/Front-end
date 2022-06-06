@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route } from 'react-router-dom'
 import MainLayout from 'components/layouts/MainLayout'
 import loadableComponent from 'components/loadable-component'
 import AuthenticatedRoute from './authenticated-route'
@@ -73,13 +73,17 @@ const EditPackage = loadableComponent(() =>
 
 const Accounts = loadableComponent(() => import('views/pages/account-list'))
 
+const AddAccount = loadableComponent(() =>
+    import('views/pages/account-list/add'),
+)
+
 const VerifyRequest = loadableComponent(() =>
     import('views/pages/verify-request'),
 )
 const CheckinCheckout = loadableComponent(() =>
     import('views/pages/checkin-checkout'),
 )
-
+const Setting = loadableComponent(() => import('views/pages/setting'))
 const NotFound = loadableComponent(() => import('views/pages/404-not-found'))
 const availableRoles = [1, 2, 3]
 // const BASIC_USER_ROLE = 0;
@@ -89,6 +93,8 @@ const availableRoles = [1, 2, 3]
 function AllRoutes() {
     return (
         <Routes>
+            <Route path="/" element={<Navigate to={'/login'} />} />
+
             <Route element={<GuestRoute />}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
@@ -102,11 +108,11 @@ function AllRoutes() {
                     element={<MainLayout component={ChangePassword} />}
                 />
                 <Route
-                    path="/profile"
+                    path="/profile/:id"
                     element={<MainLayout component={Profile} />}
                 />
                 <Route
-                    path="/profile/edit"
+                    path="/profile/:id/edit"
                     element={<MainLayout component={EditProfile} />}
                 />
                 <Route
@@ -114,11 +120,11 @@ function AllRoutes() {
                     element={<MainLayout component={Vehicles} />}
                 />
                 <Route
-                    path="/vehicles/detail"
+                    path="/vehicles/:id"
                     element={<MainLayout component={DetailVehicle} />}
                 />
                 <Route
-                    path="/vehicles/edit"
+                    path="/vehicles/:id/edit"
                     element={<MainLayout component={EditVehicle} />}
                 />
                 <Route
@@ -134,11 +140,11 @@ function AllRoutes() {
                     element={<MainLayout component={AddParkingLot} />}
                 />
                 <Route
-                    path="/parking-lots/detail"
+                    path="/parking-lots/:id"
                     element={<MainLayout component={DetailParkingLot} />}
                 />
                 <Route
-                    path="/parking-lots/edit"
+                    path="/parking-lots/:id/edit"
                     element={<MainLayout component={EditParkingLot} />}
                 />
                 <Route
@@ -158,6 +164,10 @@ function AllRoutes() {
                     element={<MainLayout component={ParkingHistories} />}
                 />
                 <Route
+                    path="/setting"
+                    element={<MainLayout component={Setting} />}
+                />
+                <Route
                     path="/wallets"
                     element={<MainLayout component={Wallets} />}
                 />
@@ -174,16 +184,24 @@ function AllRoutes() {
                     element={<MainLayout component={Packages} />}
                 />
                 <Route
+                    path="parking-lots/:id/packages"
+                    element={<MainLayout component={Packages} />}
+                />
+                <Route
                     path="/packages/add"
                     element={<MainLayout component={AddPackage} />}
                 />
                 <Route
-                    path="/packages/edit"
+                    path="/packages/:id/edit"
                     element={<MainLayout component={EditPackage} />}
                 />
                 <Route
                     path="/accounts"
                     element={<MainLayout component={Accounts} />}
+                />
+                <Route
+                    path="/accounts/add"
+                    element={<MainLayout component={AddAccount} />}
                 />
                 <Route
                     path="/verify-request"

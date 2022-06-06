@@ -53,7 +53,17 @@
                 &__icon {
                     color: #000;
                     font-size: 3vh;
-                    margin: auto;
+                    margin: 23% 23%;
+                }
+                &__icon:hover {
+                    cursor: pointer;
+                }
+
+                input {
+                    position: absolute;
+                    visibility: hidden;
+                    width: 0;
+                    height: 0;
                 }
             }
 
@@ -100,7 +110,7 @@
         &__cavet {
             width: 70%;
             height: 100%;
-            padding-top: 2vh;
+            padding-top: 14vh;
             margin: auto;
             display: grid;
             grid-template-columns: 50% 50%;
@@ -145,7 +155,16 @@
                     &__icon {
                         color: #000;
                         font-size: 3vh;
-                        margin: auto;
+                        margin: 23% 23%;
+                    }
+                    &__icon:hover {
+                        cursor: pointer;
+                    }
+                    input {
+                        position: absolute;
+                        visibility: hidden;
+                        width: 0;
+                        height: 0;
                     }
 
                     img {

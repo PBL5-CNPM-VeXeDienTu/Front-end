@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import moment from 'moment'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { EditOutlined } from '@ant-design/icons'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 
-import useAuth from 'hooks/useAuth'
+import userApi from 'api/userApi'
 import './profile.scss'
 
 function Profile() {
-    const { user } = useAuth()
-    // alert(user.birthday)
-    const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
-    const gender = user.gender ? 'Nam' : 'Nữ'
-    const [birthday, setBirthday] = useState('01-01-2001')
+    const { id } = useParams()
+    const [user, setUser] = useState({})
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.USER_AVATAR
+    }
+
     useEffect(() => {
         try {
-            if (user) {
-                const [month, day, year] = moment(user.UserInfo?.birthday)
-                    .format('L')
-                    .split('/')
-                setBirthday([day, month, year].join('/'))
+            if (!!id) {
+                userApi.getOneById(id).then((response) => {
+                    setUser(response.data)
+                })
             }
         } catch (error) {}
-    }, [user])
+    }, [id])
 
     return (
         <div className="profile-content">
             <div className="title">
                 <span>Profile</span>
                 <Link
-                    to="/profile/edit"
+                    to={`/profile/${user?.id}/edit`}
                     className="profile-content__button-edit"
                 >
                     <EditOutlined />
@@ -37,7 +38,14 @@ function Profile() {
 
             <div className="profile-content__sub">
                 <div className="profile-content__sub__avatar">
-                    <img src={avatarURL} alt="avatar" />
+                    <img
+                        src={
+                            process.env.REACT_APP_API_URL +
+                            user.UserInfo?.avatar
+                        }
+                        alt="avatar"
+                        onError={handleGetImageError}
+                    />
                 </div>
 
                 <div className="profile-content__sub__info">
@@ -51,11 +59,15 @@ function Profile() {
                     </div>
                     <div>
                         <span className="properties">Giới tính</span>
-                        <span>{gender}</span>
+                        <span>{user.UserInfo?.gender ? 'Nam' : 'Nữ'}</span>
                     </div>
                     <div>
                         <span className="properties">Ngày sinh</span>
-                        <span>{birthday}</span>
+                        <span>
+                            {new Date(
+                                user.UserInfo?.birthday,
+                            ).toLocaleDateString('en-GB')}
+                        </span>
                     </div>
                     <div>
                         <span className="properties">Địa chỉ</span>

@@ -40,7 +40,16 @@
             &__icon {
                 color: #000;
                 font-size: 3vh;
-                margin: auto;
+                margin: 23% 23%;
+            }
+            &__icon:hover {
+                cursor: pointer;
+            }
+            input {
+                position: absolute;
+                visibility: hidden;
+                width: 0;
+                height: 0;
             }
 
             img {
@@ -73,7 +82,7 @@
                     height: 5vh !important;
                 }
                 .textarea {
-                    height: 15vh !important;
+                    height: 25vh !important;
                 }
 
                 input:hover {

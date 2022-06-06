@@ -1,7 +1,16 @@
-import React, { useState } from 'react'
-import { Table, Input } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
+import { Table, Input, Menu, Dropdown } from 'antd'
+import {
+    SearchOutlined,
+    FilterOutlined,
+    PlusCircleOutlined,
+} from '@ant-design/icons'
+import parkingLotApi from 'api/parkingLotApi'
+import vehicleApi from 'api/vehicleApi'
+import useAuth from 'hooks/useAuth'
+import * as roles from 'shared/constants/role'
+import * as verifyStates from 'shared/constants/verifyState'
 import './verify-request.scss'
 
 const { Search } = Input
@@ -34,20 +43,20 @@ const columVehicle = [
     },
     {
         title: 'Trạng thái ',
-        dataIndex: 'status',
+        dataIndex: 'verify_state',
         width: '15%',
     },
 ]
 
 const columParkingLot = [
     {
-        title: 'Tên chủ sở hữu',
-        dataIndex: 'owner_name',
+        title: 'Tên bãi đỗ xe',
+        dataIndex: 'name',
         width: '20%',
     },
     {
-        title: 'Tên bãi đỗ xe',
-        dataIndex: 'name',
+        title: 'Tên chủ sở hữu',
+        dataIndex: 'owner_name',
         width: '20%',
     },
     {
@@ -62,66 +71,156 @@ const columParkingLot = [
     },
     {
         title: 'Trạng thái ',
-        dataIndex: 'status',
+        dataIndex: 'verify_state',
         width: '15%',
     },
 ]
 
 function VerifyRequest() {
     const navigate = useNavigate()
-    const [page, setPage] = useState(10)
+    const { user } = useAuth()
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
     const [swapPage, setSwapPage] = useState(false)
-    const [filterState, setFilterState] = useState(0)
-    const [parkingLot, setParkingLot] = useState({
-        key: 0,
-        name: '',
-        address: '',
-        created_at: '',
-        owner_name: '',
-        status: '',
-    })
-    const [vehicle, setVehicle] = useState({
-        key: 0,
-        user_name: '',
-        brand: '',
-        license_plate: '',
-        created_at: '',
-        type_of_vehicle: '',
-        status: '',
-    })
-    const state = {
-        pagination: {
-            pageSize: page,
-        },
-    }
+    const [activeFilter, setActiveFilter] = useState(false)
+    const [verifyStateFilter, setVerifyStateFilter] = useState('All')
+    const [parkingLotList, setParkingLotList] = useState()
+    const [vehicleList, setVehicleList] = useState()
+
     const onSearch = (value) => console.log(value)
 
-    const parkingLotData = []
-    for (let i = 0; i < page; i++) {
-        parkingLotData.push({
-            key: i,
-            name: 'Bãi đỗ xe Bách Khoa',
-            address: '60 Ngô Sĩ Liên, Hòa Khánh Bắc, Liên Chiểu, Đà Nẵng',
-            created_at: '7.30.23 11/5/2022',
-            owner_name: 'Nguyễn Hoàng Phú',
-            status: 'Đã xác thực',
-        })
+    useEffect(() => {
+        if (verifyStateFilter === 'All') setActiveFilter(false)
+        else setActiveFilter(true)
+    }, [verifyStateFilter])
+
+    const parkingLotState = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                parkingLotApi.getListByParams(params).then((response) => {
+                    setTotal(response.data.count)
+                    setParkingLotList(
+                        response.data.rows.map((parkingLot) => ({
+                            id: parkingLot.id,
+                            name: parkingLot.name,
+                            owner_name: parkingLot.Owner.name,
+                            address: parkingLot.address,
+                            created_at: parkingLot.createdAt,
+                            verify_state: parkingLot.VerifyState.state,
+                        })),
+                    )
+                })
+            },
+        },
     }
 
-    const vehicleData = []
-    for (let i = 0; i < page; i++) {
-        vehicleData.push({
-            key: i,
-            user_name: 'Nguyễn Phạm Nhật Hào',
-            brand: 'Ferrari SF90 Spider',
-            license_plate: '29C-99999',
-            created_at: '7.30.23 11/5/2022',
-            type_of_vehicle: 'Xe máy',
-            status: 'Chưa xác thực',
-        })
+    const vehicleState = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                vehicleApi.getListByParams(params).then((response) => {
+                    setTotal(response.data.count)
+                    setVehicleList(
+                        response.data.rows.map((vehicle) => ({
+                            user_name: vehicle.Owner.name,
+                            brand: vehicle.brand,
+                            license_plate: vehicle.license_plate,
+                            created_at: vehicle.createdAt,
+                            type_of_vehicle: vehicle.VehicleType.type_name,
+                            verify_state: vehicle.VerifyState.state,
+                        })),
+                    )
+                })
+            },
+        },
     }
 
-    return (
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        parkingLotApi.getListByParams(params).then((response) => {
+            setTotal(response.data.count)
+            setParkingLotList(
+                response.data.rows.map((parkingLot) => ({
+                    id: parkingLot.id,
+                    name: parkingLot.name,
+                    owner_name: parkingLot.Owner.name,
+                    address: parkingLot.address,
+                    created_at: parkingLot.createdAt,
+                    verify_state: parkingLot.VerifyState.state,
+                })),
+            )
+        })
+    }, [pageSize])
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+        }
+        vehicleApi.getListByParams(params).then((response) => {
+            setTotal(response.data.count)
+            setVehicleList(
+                response.data.rows.map((vehicle) => ({
+                    id: vehicle.id,
+                    user_name: vehicle.Owner.name,
+                    brand: vehicle.brand,
+                    license_plate: vehicle.license_plate,
+                    created_at: vehicle.createdAt,
+                    type_of_vehicle: vehicle.VehicleType.type_name,
+                    verify_state: vehicle.VerifyState.state,
+                })),
+            )
+        })
+    }, [pageSize])
+
+    const menu = () => {
+        return (
+            <Menu class="verify-request-menu">
+                <div className="verify-request-menu__item">
+                    <div className="verify-request-menu__item__row">
+                        <span className="verify-request-menu__item__row__span">
+                            Trạng thái
+                        </span>
+                        <select
+                            className="verify-request-menu__item__row__select"
+                            onChange={(e) =>
+                                setVerifyStateFilter(e.target.value)
+                            }
+                        >
+                            <option key={1} value="All">
+                                All
+                            </option>
+                            <option key={2} value={verifyStates.VERIFIED}>
+                                {verifyStates.VERIFIED}
+                            </option>
+                            <option key={3} value={verifyStates.PENDING}>
+                                {verifyStates.PENDING}
+                            </option>
+                            <option key={4} value={verifyStates.DENIED}>
+                                {verifyStates.DENIED}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </Menu>
+        )
+    }
+
+    return user.role === roles.ADMIN ? (
         <div>
             {/* ----------------------------------- TAB PARKING-LOT  ----------------------------------- */}
             <div
@@ -150,8 +249,8 @@ function VerifyRequest() {
                     <div className="verify-request-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: pageSize }}
+                            onChange={(e) => setPageSize(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -162,40 +261,17 @@ function VerifyRequest() {
                             })}
                         </select>
                     </div>
-
-                    <div className="verify-request-content__action__filter-state">
-                        <span className="span">Trạng thái</span>
-                        <button
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
                             className={
-                                filterState === 0
-                                    ? 'button-active__left'
-                                    : 'button-unactive__left'
+                                activeFilter
+                                    ? 'verify-request-content__action__filter-active'
+                                    : 'verify-request-content__action__filter-unactive'
                             }
-                            onClick={(e) => setFilterState(0)}
                         >
-                            All
-                        </button>
-                        <button
-                            className={
-                                filterState === 1
-                                    ? 'button-active'
-                                    : 'button-unactive'
-                            }
-                            onClick={(e) => setFilterState(1)}
-                        >
-                            Đã xác thực
-                        </button>
-                        <button
-                            className={
-                                filterState === 2
-                                    ? 'button-active__right'
-                                    : 'button-unactive__right'
-                            }
-                            onClick={(e) => setFilterState(2)}
-                        >
-                            Chưa xác thực
-                        </button>
-                    </div>
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
 
                     <div className="verify-request-content__action__search">
                         <Search
@@ -207,25 +283,34 @@ function VerifyRequest() {
                         />
                         <SearchOutlined className="verify-request-content__action__search__icon" />
                     </div>
+
+                    <Link
+                        className={'verify-request-content__action__add'}
+                        to="/parking-lots/add"
+                    >
+                        <PlusCircleOutlined className="verify-request-content__action__add__icon" />
+                        <span>Thêm</span>
+                    </Link>
                 </div>
 
                 <div className="verify-request-content__sub">
                     <Table
                         className="verify-request-content__sub__table"
                         columns={columParkingLot}
-                        dataSource={parkingLotData}
-                        pagination={state.pagination}
+                        dataSource={parkingLotList}
+                        pagination={parkingLotState.pagination}
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    setParkingLot(record)
-                                    navigate('/parking-lots/detail')
+                                    navigate(`/parking-lots/${record.id}`)
                                 },
                             }
                         }}
                         rowClassName={(record, index) =>
-                            record.status === 'Đã xác thực'
+                            record.verify_state === verifyStates.VERIFIED
                                 ? 'verify-request-content__sub__row-green'
+                                : record.verify_state === verifyStates.PENDING
+                                ? 'verify-request-content__sub__row-orange'
                                 : 'verify-request-content__sub__row-red'
                         }
                     />
@@ -259,8 +344,8 @@ function VerifyRequest() {
                     <div className="verify-request-content__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: pageSize }}
+                            onChange={(e) => setPageSize(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -272,39 +357,17 @@ function VerifyRequest() {
                         </select>
                     </div>
 
-                    <div className="verify-request-content__action__filter-state">
-                        <span className="span">Trạng thái</span>
-                        <button
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
                             className={
-                                filterState === 0
-                                    ? 'button-active__left'
-                                    : 'button-unactive__left'
+                                activeFilter
+                                    ? 'verify-request-content__action__filter-active'
+                                    : 'verify-request-content__action__filter-unactive'
                             }
-                            onClick={(e) => setFilterState(0)}
                         >
-                            All
-                        </button>
-                        <button
-                            className={
-                                filterState === 1
-                                    ? 'button-active'
-                                    : 'button-unactive'
-                            }
-                            onClick={(e) => setFilterState(1)}
-                        >
-                            Đã xác thực
-                        </button>
-                        <button
-                            className={
-                                filterState === 2
-                                    ? 'button-active__right'
-                                    : 'button-unactive__right'
-                            }
-                            onClick={(e) => setFilterState(2)}
-                        >
-                            Chưa xác thực
-                        </button>
-                    </div>
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
 
                     <div className="verify-request-content__action__search">
                         <Search
@@ -322,25 +385,28 @@ function VerifyRequest() {
                     <Table
                         className="verify-request-content__sub__table"
                         columns={columVehicle}
-                        dataSource={vehicleData}
-                        pagination={state.pagination}
+                        dataSource={vehicleList}
+                        pagination={vehicleState.pagination}
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    setVehicle(record)
-                                    navigate('/vehicles/detail')
+                                    navigate('/vehicles/' + record.id)
                                 },
                             }
                         }}
                         rowClassName={(record, index) =>
-                            record.status === 'Đã xác thực'
+                            record.verify_state === verifyStates.VERIFIED
                                 ? 'verify-request-content__sub__table__row-green'
+                                : record.verify_state === verifyStates.PENDING
+                                ? 'verify-request-content__sub__table__row-orange'
                                 : 'verify-request-content__sub__table__row-red'
                         }
                     />
                 </div>
             </div>
         </div>
+    ) : (
+        <Navigate to="/404" />
     )
 }
 

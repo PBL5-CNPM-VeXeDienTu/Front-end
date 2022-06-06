@@ -1,14 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Table, Input, Modal } from 'antd'
+import { Table, Input, Modal, Menu, Dropdown } from 'antd'
 import {
     PlusCircleOutlined,
     EditOutlined,
     CloseOutlined,
     SearchOutlined,
+    FilterOutlined,
 } from '@ant-design/icons'
+import NotFound from 'views/pages/404-not-found'
 import useAuth from 'hooks/useAuth'
-import { roles } from 'contexts/UserContext'
+import * as roles from 'shared/constants/role'
+import * as verifyStates from 'shared/constants/verifyState'
+import * as openStates from 'shared/constants/openState'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
+import parkingLotApi from 'api/parkingLotApi'
 
 import './parking-lot-list.scss'
 
@@ -18,22 +24,22 @@ const columns = [
     {
         title: 'Tên bãi đỗ xe',
         dataIndex: 'name',
-        width: '25%',
+        width: '20%',
+    },
+    {
+        title: 'Chủ sở hữu',
+        dataIndex: 'owner_name',
+        width: '20%',
     },
     {
         title: 'Thời gian mở',
-        dataIndex: 'time',
+        dataIndex: 'time_slot',
         width: '13%',
-    },
-    {
-        title: 'Sức chứa',
-        dataIndex: 'capacity',
-        width: '10%',
     },
     {
         title: 'Trạng thái',
-        dataIndex: 'status',
-        width: '13%',
+        dataIndex: 'is_open',
+        width: '10%',
     },
     {
         title: 'Địa chỉ',
@@ -43,45 +49,130 @@ const columns = [
 
 function ParkingLots() {
     const { user } = useAuth()
-    const [page, setPage] = useState(10)
-    const [filterState, setFilterState] = useState(0)
-    const [isModalVisible, setIsModalVisible] = useState(false)
     const navigate = useNavigate()
-
-    const avatarURL =
-        process.env.REACT_APP_API_URL +
-        'public/images/avatars/parking-lot/default-avatar.png'
+    const [activeFilter, setActiveFilter] = useState(false)
+    const [openStateFilter, setOpenStateFilter] = useState('All')
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [pageSize, setPageSize] = useState(10)
+    const [total, setTotal] = useState(0)
+    const [parkingLotId, setParkingLotId] = useState()
+    const [parkingLotList, setParkingLotList] = useState([])
 
     const onSearch = (value) => console.log(value)
 
-    const state = {
-        pagination: {
-            pageSize: page,
-        },
-    }
-
-    const data = []
-    for (let i = 0; i < page; i++) {
-        data.push({
-            key: i,
-            name: 'Bãi đỗ xe KTX Bách Khoa',
-            time: '7h - 21h30',
-            capacity: 200,
-            status: 'Đang mở cửa',
-            address: '60 Ngô Sĩ Liên, Hòa Khánh Bắc, Liên Chiển, Đà Nẵng',
-        })
-    }
-
-    const showModal = () => {
+    const showModal = (parkingLotId) => {
         setIsModalVisible(true)
+        setParkingLotId(parkingLotId)
     }
 
     const handleCancel = () => {
         setIsModalVisible(false)
     }
 
-    const handleOk = () => {
-        setIsModalVisible(false)
+    const handleOk = async () => {
+        try {
+            const response = await parkingLotApi.softDeleteById(parkingLotId)
+            alert(response.data.message)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    useEffect(() => {
+        if (openStateFilter === 'All') setActiveFilter(false)
+        else setActiveFilter(true)
+    }, [openStateFilter])
+
+    const state = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                parkingLotApi.getListByParams(params).then((response) => {
+                    setParkingLotList(
+                        response.data.rows.map((parkingLot) => ({
+                            id: parkingLot.id,
+                            name: parkingLot.name,
+                            owner_name: parkingLot.Owner.name,
+                            time_slot: parkingLot.time_slot,
+                            is_open: parkingLot.is_open
+                                ? openStates.OPENING
+                                : openStates.CLOSED,
+                            address: parkingLot.address,
+                        })),
+                    )
+                })
+            },
+        },
+    }
+
+    useEffect(() => {
+        if (!!user) {
+            const params = {
+                limit: pageSize,
+                page: 1,
+            }
+            user.role === roles.PARKING_LOT_USER
+                ? parkingLotApi.getListByUserId(user.id).then((response) => {
+                      setParkingLotList(response.data.rows)
+                  })
+                : parkingLotApi.getListByParams(params).then((response) => {
+                      setTotal(response.data.count)
+                      setParkingLotList(
+                          response.data.rows.map((parkingLot) => ({
+                              id: parkingLot.id,
+                              name: parkingLot.name,
+                              owner_name: parkingLot.Owner.name,
+                              time_slot: parkingLot.time_slot,
+                              is_open: parkingLot.is_open
+                                  ? openStates.OPENING
+                                  : openStates.CLOSED,
+                              address: parkingLot.address,
+                          })),
+                      )
+                  })
+        }
+    }, [user, pageSize])
+
+    const handleNavigation = (parkingLotId) => {
+        navigate(`/parking-lots/${parkingLotId}/packages`)
+    }
+
+    const menu = () => {
+        return (
+            <Menu class="parking-lot-menu">
+                <div className="parking-lot-menu__item">
+                    <div className="parking-lot-menu__item__row">
+                        <span className="parking-lot-menu__item__row__span">
+                            Trạng thái
+                        </span>
+                        <select
+                            className="parking-lot-menu__item__row__select"
+                            onChange={(e) => setOpenStateFilter(e.target.value)}
+                        >
+                            <option key={1} value="All">
+                                All
+                            </option>
+                            <option key={2} value={openStates.OPENING}>
+                                {openStates.OPENING}
+                            </option>
+                            <option key={3} value={openStates.CLOSED}>
+                                {openStates.CLOSED}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </Menu>
+        )
+    }
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.PARKING_LOT_AVATAR
     }
 
     return user.role === roles.BASIC_USER ? (
@@ -92,8 +183,8 @@ function ParkingLots() {
                 <div className="parking-lot-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
-                        defaultValue={{ value: page }}
-                        onChange={(e) => setPage(e.target.value)}
+                        defaultValue={{ value: pageSize }}
+                        onChange={(e) => setPageSize(e.target.value)}
                     >
                         {numOfItem.map((numOfItem, index) => {
                             return (
@@ -104,39 +195,17 @@ function ParkingLots() {
                         })}
                     </select>
                 </div>
-                <div className="parking-lot-list-content__action__filter-state">
-                    <span className="span">Trạng thái</span>
-                    <button
+                <Dropdown overlay={menu} trigger="click" placement="bottom">
+                    <div
                         className={
-                            filterState === 0
-                                ? 'button-active__left'
-                                : 'button-unactive__left'
+                            activeFilter
+                                ? 'parking-lot-list-content__action__filter-active'
+                                : 'parking-lot-list-content__action__filter-unactive'
                         }
-                        onClick={(e) => setFilterState(0)}
                     >
-                        All
-                    </button>
-                    <button
-                        className={
-                            filterState === 1
-                                ? 'button-active'
-                                : 'button-unactive'
-                        }
-                        onClick={(e) => setFilterState(1)}
-                    >
-                        Mở cửa
-                    </button>
-                    <button
-                        className={
-                            filterState === 2
-                                ? 'button-active__right'
-                                : 'button-unactive__right'
-                        }
-                        onClick={(e) => setFilterState(2)}
-                    >
-                        Đóng cửa
-                    </button>
-                </div>
+                        <FilterOutlined />
+                    </div>
+                </Dropdown>
 
                 <div className="parking-lot-list-content__action__search">
                     <Search
@@ -154,16 +223,17 @@ function ParkingLots() {
                 <Table
                     className="parking-lot-list-content__sub__table"
                     columns={columns}
-                    dataSource={data}
+                    dataSource={parkingLotList}
                     pagination={state.pagination}
                     rowClassName={(record, index) =>
-                        record.status === 'Đang mở cửa'
+                        record.status === openStates.OPENING
                             ? 'parking-lot-list-content__sub__table__row-green'
                             : 'parking-lot-list-content__sub__table__row-red'
                     }
                     onRow={(record, rowIndex) => {
                         return {
-                            onClick: () => navigate('/parking-lots/detail'),
+                            onClick: () =>
+                                navigate(`/parking-lots/${record.id}`),
                         }
                     }}
                 />
@@ -181,140 +251,127 @@ function ParkingLots() {
                 </Link>
             </div>
             <div className="parking-lot-list-container__content">
-                <div className="parking-lot-list-container__content__sub">
-                    <div className="parking-lot-list-container__content__item">
-                        <img
-                            className="parking-lot-list-container__content__item__image"
-                            src={avatarURL}
-                            alt=""
-                        />
-                        <div className="parking-lot-list-container__content__item__info">
-                            <div>
-                                <span className="properties">Tên nhà xe</span>
-                                <span>Bãi xe khu A đại học Bách Khoa</span>
-                            </div>
-                            <div>
-                                <span className="properties">Chủ nhà xe</span>
-                                <span>Nguyễn Hoàng Phú</span>
-                            </div>
-                            <div>
-                                <span className="properties">Thời gian mở</span>
-                                <span>7h - 22h</span>
-                            </div>
-                            <div>
-                                <span className="properties">Tình trạng</span>
-                                <span>Đang mở</span>
-                            </div>
-                            <div>
-                                <span className="properties">Sức chứa</span>
-                                <span>1000</span>
-                            </div>
-                            <div>
-                                <span className="properties">Xác thực</span>
-                                <span>Đã xác thực</span>
-                            </div>
-                            <div>
-                                <span className="properties">Mô tả</span>
-                                <span>
-                                    xe có đầy đủ 2 kính , bánh xe có vành màu
-                                    cam , ống bô độ vip.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="parking-lot-list-container__content__icon">
-                        <Link to="/parking-lots/edit">
-                            <span className="edit-parking-lot">
-                                <EditOutlined />
-                            </span>
-                        </Link>
-                        <span className="delete-parking-lot">
-                            <CloseOutlined onClick={showModal} />
-                        </span>
-                    </div>
-                    <Modal
-                        className="delete-parking-lot-modal"
-                        title="Hủy đăng ký bãi đỗ xe"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                    >
-                        <p>
-                            Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay
-                            không ?
-                        </p>
-                    </Modal>
-                </div>
+                {parkingLotList?.map((parkingLot) => (
+                    <div className="parking-lot-list-container__content__sub">
+                        <div className="parking-lot-list-container__content__item">
+                            <img
+                                className="parking-lot-list-container__content__item__image"
+                                src={
+                                    process.env.REACT_APP_API_URL +
+                                    parkingLot.avatar
+                                }
+                                alt=""
+                                onError={handleGetImageError}
+                            />
+                            <div className="parking-lot-list-container__content__item__info">
+                                <div>
+                                    <span className="span1">Tên nhà xe</span>
+                                    <span className="span2">
+                                        {parkingLot.name}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Thời gian mở</span>
+                                    <span className="span2">
+                                        {parkingLot.time_slot}
+                                    </span>
+                                </div>
 
-                <div className="parking-lot-list-container__content__sub">
-                    <div className="parking-lot-list-container__content__item">
-                        <img
-                            className="parking-lot-list-container__content__item__image"
-                            src={avatarURL}
-                            alt=""
-                        />
-                        <div className="parking-lot-list-container__content__item__info">
-                            <div>
-                                <span className="properties">Tên nhà xe</span>
-                                <span>Bãi xe khu A đại học Bách Khoa</span>
-                            </div>
-                            <div>
-                                <span className="properties">Chủ nhà xe</span>
-                                <span>Nguyễn Hoàng Phú</span>
-                            </div>
-                            <div>
-                                <span className="properties">Thời gian mở</span>
-                                <span>7h - 22h</span>
-                            </div>
-                            <div>
-                                <span className="properties">Tình trạng</span>
-                                <span>Đang mở</span>
-                            </div>
-                            <div>
-                                <span className="properties">Sức chứa</span>
-                                <span>1000</span>
-                            </div>
-                            <div>
-                                <span className="properties">Xác thực</span>
-                                <span>Đã xác thực</span>
-                            </div>
-                            <div>
-                                <span className="properties">Mô tả</span>
-                                <span>
-                                    xe có đầy đủ 2 kính , bánh xe có vành màu
-                                    cam , ống bô độ vip.
-                                </span>
+                                <div>
+                                    <span className="span1">Sức chứa</span>
+                                    <span className="span2">
+                                        {parkingLot.capacity}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Tình trạng</span>
+                                    <span
+                                        className={
+                                            parkingLot.is_open
+                                                ? 'span2-green'
+                                                : 'span2-red'
+                                        }
+                                    >
+                                        {parkingLot.is_open
+                                            ? openStates.OPENING
+                                            : openStates.CLOSED}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Xác thực</span>
+                                    <span
+                                        className={
+                                            parkingLot.VerifyState.state ===
+                                            verifyStates.VERIFIED
+                                                ? 'span2-green'
+                                                : parkingLot.VerifyState
+                                                      .state ===
+                                                  verifyStates.PENDING
+                                                ? 'span2-orange'
+                                                : 'span2-red'
+                                        }
+                                    >
+                                        {parkingLot.VerifyState.state}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="span1">Địa chỉ</span>
+                                    <span className="span2">
+                                        {parkingLot.address}
+                                    </span>
+                                </div>
+                                <div
+                                    className={
+                                        parkingLot.VerifyState.state ===
+                                        verifyStates.VERIFIED
+                                            ? 'div-active'
+                                            : 'div-unactive'
+                                    }
+                                >
+                                    <span className="span1">Gói ưu đãi</span>
+                                    <span className="span2">
+                                        <button
+                                            onClick={() =>
+                                                handleNavigation(parkingLot.id)
+                                            }
+                                        >
+                                            Xem gói ưu đãi
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="parking-lot-list-container__content__icon">
-                        <Link to="/parking-lots/edit">
-                            <span className="edit-parking-lot">
-                                <EditOutlined />
+                        <div className="parking-lot-list-container__content__icon">
+                            <Link to={`/parking-lots/${parkingLot.id}/edit`}>
+                                <span className="edit-parking-lot">
+                                    <EditOutlined />
+                                </span>
+                            </Link>
+                            <span className="delete-parking-lot">
+                                <CloseOutlined
+                                    onClick={(e) => showModal(parkingLot.id)}
+                                />
                             </span>
-                        </Link>
-                        <span className="delete-parking-lot">
-                            <CloseOutlined onClick={showModal} />
-                        </span>
+                        </div>
+                        <Modal
+                            className="delete-parking-lot-modal"
+                            title="Hủy đăng ký bãi đỗ xe"
+                            visible={isModalVisible}
+                            onOk={handleOk}
+                            onCancel={handleCancel}
+                        >
+                            <p>
+                                Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay
+                                không ?
+                            </p>
+                        </Modal>
                     </div>
-                    <Modal
-                        className="delete-parking-lot-modal"
-                        title="Hủy đăng ký bãi đỗ xe"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                    >
-                        <p>
-                            Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay
-                            không ?
-                        </p>
-                    </Modal>
-                </div>
+                ))}
             </div>
         </div>
     ) : (
         //------------------------------------ Admin --------------------------------------
-        <div className="parking-lot-list-content">Admin</div>
+        <NotFound />
     )
 }
 

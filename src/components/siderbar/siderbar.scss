@@ -9,12 +9,13 @@
     background: #fff;
     flex: 1;
     transition: 0.1s;
+    z-index: 3;
     &__logo {
         height: 7vh;
-        z-index: 1;
         padding: 4px 10px 4px 10px;
-        box-shadow: 0 0 8px 0px rgba($color: rgb(0, 0, 0), $alpha: 0.3);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         padding: 9px 10px;
+        z-index: 1;
     }
     &__link {
         font-size: medium;
@@ -65,14 +66,10 @@
     background-color: #fff;
 }
 
-.logo-full,
-.logo-collapsed {
+.logo-full {
     margin: 0px 8px;
     background-repeat: no-repeat;
     height: 7vh;
-}
-
-.logo-full {
     object-fit: contain;
     background-position: 50% 0;
     background-size: 40%;
@@ -80,6 +77,9 @@
 }
 
 .logo-collapsed {
+    margin: 0px 12px;
+    background-repeat: no-repeat;
+    height: 7vh;
     object-fit: contain;
     background-size: 100%;
     background-image: url('../../assets/images/app-logo/header_logo_collapsed.png');
