@@ -186,7 +186,7 @@ function AddVehicle() {
                 </div>
                 <div className="add-vehicle-content__sub__cavet">
                     <div className="add-vehicle-content__sub__cavet__item">
-                        <span className="span">Hình ảnh caver trước</span>
+                        <span className="span">Hình ảnh cavet trước</span>
                         <div className="add-vehicle-content__sub__cavet__item__image">
                             <img
                                 src={cavetFrontURL}
@@ -208,7 +208,7 @@ function AddVehicle() {
                         </div>
                     </div>
                     <div className="add-vehicle-content__sub__cavet__item">
-                        <span className="span">Hình ảnh caver sau</span>
+                        <span className="span">Hình ảnh cavet sau</span>
                         <div className="add-vehicle-content__sub__cavet__item__image">
                             <img
                                 src={cavetBackURL}

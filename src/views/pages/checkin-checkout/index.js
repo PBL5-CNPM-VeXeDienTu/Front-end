@@ -57,7 +57,7 @@ function CheckinCheckout() {
                 video.play()
             })
             .catch((error) => {
-                alert(error)
+                console.log(error)
             })
     }
 
@@ -164,12 +164,12 @@ function CheckinCheckout() {
                             <QrReader
                                 className="checkin-checkout-content__sub__item__camera__video"
                                 onResult={(result, error) => {
-                                    if (!!result) {
-                                        setData(result?.text)
+                                    if (result) {
+                                        setData(result.text)
                                     }
 
-                                    if (!!error) {
-                                        alert(error)
+                                    if (error) {
+                                        // console.log(error);
                                     }
                                 }}
                                 style={{ width: '100%' }}

@@ -11,6 +11,11 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
 }
+
+button:hover {
+    cursor: pointer;
+}
+
 .title {
     width: 100%;
     font-size: 2rem;

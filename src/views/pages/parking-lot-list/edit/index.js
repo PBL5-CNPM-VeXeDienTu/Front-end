@@ -81,7 +81,7 @@ function EditParkingLot() {
             alert(error.response.data.message)
         }
     }
-    return user.role !== roles.BASIC_USER ? (
+    return user.role !== roles.PARKING_USER ? (
         <div className="edit-parking-lot-content">
             <div className="title">Chỉnh sửa thông tin bãi đỗ xe</div>
             <Form

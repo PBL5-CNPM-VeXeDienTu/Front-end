@@ -175,8 +175,8 @@ function ParkingLots() {
         e.target.src = defaultImageUrl.PARKING_LOT_AVATAR
     }
 
-    return user.role === roles.BASIC_USER ? (
-        //-------------------------------- Basic User --------------------------------------
+    return user.role === roles.PARKING_USER ? (
+        //-------------------------------- Parking User --------------------------------------
         <div className="parking-lot-list-content">
             <div className="title">Danh sách bãi đỗ xe</div>
             <div className="parking-lot-list-content__action">

@@ -38,9 +38,9 @@ const columns = [
 
 const featureOfItem = [
     'All',
-    '[Basic user] Đăng ký xe',
-    '[Basic user] Chỉnh sửa thông tin xe',
-    '[Basic user] Hủy đăng ký xe',
+    '[Parking user] Đăng ký xe',
+    '[Parking user] Chỉnh sửa thông tin xe',
+    '[Parking user] Hủy đăng ký xe',
 ]
 
 const feedbackTypeOfItem = [
@@ -61,7 +61,7 @@ function ParkingLots() {
     const [feature, setFeature] = useState('All')
     const [feedbackState, setFeedbackState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [showBasicUserModal, setShowBasicUserModal] = useState(false)
+    const [showParkingUserModal, setShowParkingUserModal] = useState(false)
     const [showAdminModal, setShowAdminModal] = useState(false)
     const [dataColumns, setDataColumns] = useState([{}])
     const [radioValue, setRadioValue] = useState(0)
@@ -76,7 +76,7 @@ function ParkingLots() {
     const onSearch = (value) => console.log(value)
 
     const showFeedbackItem = (record) => {
-        setShowBasicUserModal(true)
+        setShowParkingUserModal(true)
         setFeedback(record)
     }
 
@@ -149,7 +149,7 @@ function ParkingLots() {
     }, [params, user])
 
     const handleCancel = () => {
-        setShowBasicUserModal(false)
+        setShowParkingUserModal(false)
         setShowAdminModal(false)
     }
 
@@ -322,10 +322,10 @@ function ParkingLots() {
                         }
                     }}
                 />
-                {/* -------------------------------------- MODAL BASIC USER & PARKING-LOT USER -------------------------------------- */}
+                {/* -------------------------------------- MODAL PARKING USER & PARKING-LOT USER -------------------------------------- */}
                 <Modal
                     className="feedback-list-modal"
-                    visible={showBasicUserModal}
+                    visible={showParkingUserModal}
                     onCancel={handleCancel}
                     footer={null}
                 >

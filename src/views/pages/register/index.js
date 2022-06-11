@@ -118,7 +118,7 @@ function Register() {
                                         defaultValue="Role"
                                         className="input role"
                                     >
-                                        <Option value="1">Basic user</Option>
+                                        <Option value="1">Parking user</Option>
                                         <Option value="2">
                                             Pakinglot user
                                         </Option>

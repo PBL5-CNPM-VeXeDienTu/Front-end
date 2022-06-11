@@ -33,8 +33,6 @@ export const AuthProvider = ({ children }) => {
                         setUser(response.data)
                         localStorage.setItem('token', token)
                         localStorage.setItem('user', JSON.stringify(response.data))
-                        localStorage.setItem('role', response.data.role)
-                        navigate(`/profile/${response.data.id}`)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -44,7 +42,6 @@ export const AuthProvider = ({ children }) => {
             // User logout
             localStorage.setItem('token', null)
             localStorage.setItem('user', null)
-            localStorage.setItem('role', null)
         }
     }, [token, navigate])
 

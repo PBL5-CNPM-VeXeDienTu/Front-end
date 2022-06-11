@@ -66,7 +66,7 @@ function DetailVehicle() {
 
     return user.role !== roles.PARKING_LOT_USER ? (
         <div className="detail-vehicle-content">
-            <div className="title">Thông tin xe</div>
+            <div className="title">Thông tin chi tiết xe</div>
             <div>
                 <div className="detail-vehicle-content__vehicle">
                     <div className="detail-vehicle-content__vehicle__image">
@@ -103,6 +103,23 @@ function DetailVehicle() {
                         </div>
 
                         <div className="detail-vehicle-content__vehicle__info__item">
+                            <span className="span-title">Trạng thái</span>
+                            <span
+                                className={
+                                    vehicle.VerifyState.state ===
+                                    verifyStates.VERIFIED
+                                        ? 'span-green'
+                                        : vehicle.VerifyState.state ===
+                                            verifyStates.PENDING
+                                        ? 'span-yellow'
+                                        : 'span-red'
+                                }
+                            >
+                                {vehicle.VerifyState.state}
+                            </span>
+                        </div>
+
+                        <div className="detail-vehicle-content__vehicle__info__item">
                             <span className="span-title">Mô tả</span>
                             <span className="span-content">
                                 {vehicle.detail}
@@ -113,7 +130,7 @@ function DetailVehicle() {
 
                 <div className="detail-vehicle-content__cavet">
                     <div className="detail-vehicle-content__cavet__item">
-                        <span className="span">Hình ảnh caver trước</span>
+                        <span className="span">Hình ảnh cavet trước</span>
                         <div className="detail-vehicle-content__cavet__item__image">
                             <img
                                 src={
@@ -125,7 +142,7 @@ function DetailVehicle() {
                         </div>
                     </div>
                     <div className="detail-vehicle-content__cavet__item">
-                        <span className="span">Hình ảnh caver sau</span>
+                        <span className="span">Hình ảnh cavet sau</span>
                         <div className="detail-vehicle-content__cavet__item__image">
                             <img
                                 src={
@@ -232,7 +249,7 @@ function DetailVehicle() {
             </Modal>
             <Modal
                 className="delete-vehicle-modal"
-                title="Hủy đăng ký xe"
+                title="Xác nhận hủy đăng ký xe"
                 visible={showModalSoftDelete}
                 onOk={softDeleteHandle}
                 onCancel={handleCancel}

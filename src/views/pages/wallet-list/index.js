@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Menu, Dropdown, Space, Modal, DatePicker } from 'antd'
+import { Table, Input, Menu, Dropdown, Space, DatePicker } from 'antd'
 import {
     FilterOutlined,
     SearchOutlined,
-    DeleteOutlined,
     PlusCircleOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
@@ -18,22 +17,9 @@ function Wallets() {
     const [page, setPage] = useState(10)
     const [swapPage, setSwapPage] = useState(true)
     const [activeFilter, setActiveFilter] = useState(false)
-    const [isModalVisible, setIsModalVisible] = useState(false)
     const [walletType, setWalletType] = useState('All')
     const [walletState, setWalletState] = useState('All')
     let navigate = useNavigate()
-
-    const showModal = () => {
-        setIsModalVisible(true)
-    }
-
-    const handleCancel = () => {
-        setIsModalVisible(false)
-    }
-
-    const handleOk = () => {
-        setIsModalVisible(false)
-    }
 
     const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
 
@@ -100,17 +86,14 @@ function Wallets() {
                     <a href="/wallets/payment">
                         <PlusCircleOutlined className="icon-edit" />
                     </a>
-                    <div onClick={showModal}>
-                        <DeleteOutlined className="icon-delete" />
-                    </div>
                 </Space>
             ),
         },
     ]
 
-    const dataBasic = []
+    const dataParkingUser = []
     for (let i = 0; i < page; i++) {
-        dataBasic.push({
+        dataParkingUser.push({
             key: i,
             avatar: avatarURL,
             name: 'Phạm Văn Thọ',
@@ -118,7 +101,7 @@ function Wallets() {
             updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
             amount_trans: '-100000',
         })
-        dataBasic.push({
+        dataParkingUser.push({
             key: i + 1,
             avatar: avatarURL,
             name: 'Phạm Văn Thọ',
@@ -128,9 +111,9 @@ function Wallets() {
         })
     }
 
-    const dataParkinglot = []
+    const dataParkingLotUser = []
     for (let i = 0; i < page; i++) {
-        dataParkinglot.push({
+        dataParkingLotUser.push({
             key: i,
             avatar: avatarURL,
             name: 'Phạm Văn Thọ',
@@ -138,7 +121,7 @@ function Wallets() {
             updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
             amount_trans: '+100000',
         })
-        dataParkinglot.push({
+        dataParkingLotUser.push({
             key: i + 1,
             avatar: avatarURL,
             name: 'Phạm Văn Thọ',
@@ -220,21 +203,21 @@ function Wallets() {
                         : 'wallet-list-content-unactive'
                 }
             >
-                <div className="title">Danh sách ví</div>
+                <div className="title">Danh sách ví cá nhân</div>
 
                 <div className="wallet-list-content__swap-page">
-                    <button className="button-active">Parking-lot</button>
+                    <button className="button-active">Parking User</button>
                     <button
                         className="button-unactive"
                         onClick={(e) => setSwapPage(false)}
                     >
-                        Basic
+                        Parking-lot User
                     </button>
                 </div>
 
                 <div className="wallet-list-content__action">
                     <div className="wallet-list-content__action__select">
-                        <span>Hiển thị </span>
+                        <span>Hiển thị</span>
                         <select
                             defaultValue={{ value: page }}
                             onChange={(e) => setPage(e.target.value)}
@@ -276,7 +259,7 @@ function Wallets() {
                     <Table
                         className="wallet-list-content__sub__table"
                         columns={columns}
-                        dataSource={dataBasic}
+                        dataSource={dataParkingLotUser}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
                             record.amount_trans >= 0
@@ -284,7 +267,7 @@ function Wallets() {
                                 : 'wallet-list-content__sub__table__row-red'
                         }
                         onRow={handleRow}
-                    ></Table>
+                    />
                 </div>
             </div>
 
@@ -295,19 +278,19 @@ function Wallets() {
                         : 'wallet-list-content'
                 }
             >
-                <div className="title">Danh sách ví</div>
+                <div className="title">Danh sách ví cá nhân</div>
                 <div className="wallet-list-content__swap-page">
                     <button
                         className="button-unactive"
                         onClick={(e) => setSwapPage(true)}
                     >
-                        Parking-lot
+                        Parking User
                     </button>
-                    <button className="button-active">Basic</button>
+                    <button className="button-active">Parking-lot User</button>
                 </div>
                 <div className="wallet-list-content__action">
                     <div className="wallet-list-content__action__select">
-                        <span>Hiển thị </span>
+                        <span>Hiển thị</span>
                         <select
                             defaultValue={{ value: page }}
                             onChange={(e) => setPage(e.target.value)}
@@ -349,7 +332,7 @@ function Wallets() {
                     <Table
                         className="wallet-list-content__sub__table"
                         columns={columns}
-                        dataSource={dataParkinglot}
+                        dataSource={dataParkingUser}
                         pagination={state.pagination}
                         rowClassName={(record, index) =>
                             record.amount_trans >= 0
@@ -357,16 +340,7 @@ function Wallets() {
                                 : 'wallet-list-content__sub__table__row-red'
                         }
                         //onRow={handleRow}
-                    ></Table>
-                    <Modal
-                        className="delete-wallet-modal"
-                        title="Hủy Ví"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                    >
-                        <p>Bạn có chắn chắn muốn hủy ví hay không ?</p>
-                    </Modal>
+                    />
                 </div>
             </div>
         </div>

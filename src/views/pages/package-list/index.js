@@ -54,7 +54,7 @@ const columnsForBacicAndParkinglotRole = [
     },
 ]
 
-const columnsForAdminAndBasicRole = [
+const columnsForAdminAndParkingUserRole = [
     {
         title: 'Tên gói ưu đãi',
         dataIndex: 'name',
@@ -548,7 +548,7 @@ function Packages() {
             <div className="package-list-content__sub">
                 <Table
                     className="package-list-content__sub__table"
-                    columns={columnsForAdminAndBasicRole}
+                    columns={columnsForAdminAndParkingUserRole}
                     dataSource={allPackageList}
                     pagination={stateAllPackage.pagination}
                     rowClassName="package-list-content__sub__table__row-action"
@@ -612,8 +612,8 @@ function Packages() {
                 </Modal>
             </div>
         </div>
-    ) : user.role === roles.BASIC_USER ? (
-        // -------------------------------------- BASIC USER ---------------------------------------
+    ) : user.role === roles.PARKING_USER ? (
+        // -------------------------------------- PARKING USER ---------------------------------------
         <div>
             <div
                 className={
@@ -676,11 +676,11 @@ function Packages() {
                 <div className="package-list-content__sub">
                     <Table
                         className="package-list-content__sub__table"
-                        columns={columnsForAdminAndBasicRole}
+                        columns={columnsForAdminAndParkingUserRole}
                         dataSource={allPackageList}
                         pagination={stateAllPackage.pagination}
                         rowClassName={(record, index) =>
-                            user.role === roles.BASIC_USER
+                            user.role === roles.PARKING_USER
                                 ? 'package-list-content__sub__table__row-action'
                                 : 'package-list-content__sub__table__row-noaction'
                         }
@@ -689,7 +689,7 @@ function Packages() {
                                 onClick: () => {
                                     setPackageItem(record)
                                     setUserPackage(record)
-                                    user.role === roles.BASIC_USER
+                                    user.role === roles.PARKING_USER
                                         ? setShowModalAll(true)
                                         : handleCancel()
                                 },
@@ -794,10 +794,10 @@ function Packages() {
                 </div>
             </div>
 
-            {/* ----------------------------------- TAB CỦA TÔI - BASIC USER ----------------------------------- */}
+            {/* ----------------------------------- TAB CỦA TÔI - PARKING USER ----------------------------------- */}
             <div
                 className={
-                    swapPage && user.role === roles.BASIC_USER
+                    swapPage && user.role === roles.PARKING_USER
                         ? 'package-list-content'
                         : 'package-list-content-unactive'
                 }

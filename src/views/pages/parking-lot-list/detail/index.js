@@ -64,7 +64,7 @@ function DetailParkingLot() {
             </div>
             <div
                 className={
-                    user.role === roles.BASIC_USER
+                    user.role === roles.PARKING_USER
                         ? 'detail-parking-lot-content__no-icon'
                         : 'detail-parking-lot-content__icon'
                 }
@@ -117,7 +117,7 @@ function DetailParkingLot() {
                     </div>
                     <div
                         className={
-                            user.role === roles.BASIC_USER
+                            user.role === roles.PARKING_USER
                                 ? 'div-unactive'
                                 : 'div-active'
                         }

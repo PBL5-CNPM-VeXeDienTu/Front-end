@@ -100,7 +100,7 @@ function ParkingHistories() {
 
     useEffect(() => {
         if (!!user) {
-            if (user.role === roles.BASIC_USER) {
+            if (user.role === roles.PARKING_USER) {
                 parkingHistoryApi
                     .getListByParkingLotUserId(user.id, params)
                     .then((response) => {
@@ -233,7 +233,7 @@ function ParkingHistories() {
                     onRow={(record, rowIndex) => {
                         return {
                             onClick: () => {
-                                user.role === roles.BASIC_USER
+                                user.role === roles.PARKING_USER
                                     ? onClickRow(record)
                                     : setParkingHistory(null)
                             },
