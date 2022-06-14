@@ -32,7 +32,10 @@ export const AuthProvider = ({ children }) => {
                     .then((response) => {
                         setUser(response.data)
                         localStorage.setItem('token', token)
-                        localStorage.setItem('user', JSON.stringify(response.data))
+                        localStorage.setItem(
+                            'user',
+                            JSON.stringify(response.data),
+                        )
                     })
                     .catch((error) => {
                         console.log(error)

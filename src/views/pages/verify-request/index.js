@@ -284,7 +284,7 @@ function VerifyRequest() {
                         />
                         <SearchOutlined className="verify-request-content__action__search__icon" />
                     </div>
-                    
+
                     <Link
                         className={'verify-request-content__action__add'}
                         to="/parking-lots/add"
@@ -295,7 +295,7 @@ function VerifyRequest() {
                 </div>
 
                 <div className="verify-request-content__sub">
-                <Table
+                    <Table
                         className="verify-request-content__sub__table"
                         columns={columParkingLot}
                         dataSource={parkingLotList}

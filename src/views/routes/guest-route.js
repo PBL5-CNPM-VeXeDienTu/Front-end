@@ -6,7 +6,7 @@ import * as roles from 'shared/constants/role'
 
 const GuestRoute = () => {
     const { user, token } = useAuth()
-    
+
     if (token !== 'null' && user) {
         localStorage.setItem('selected_sidebar_key', 1)
         switch (user.role) {
@@ -20,7 +20,7 @@ const GuestRoute = () => {
                 return <Navigate to={`/profile/${user.id}`} />
         }
     }
-    
+
     return <Outlet />
 }
 

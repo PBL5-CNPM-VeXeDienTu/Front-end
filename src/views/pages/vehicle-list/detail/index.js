@@ -110,7 +110,7 @@ function DetailVehicle() {
                                     verifyStates.VERIFIED
                                         ? 'span-green'
                                         : vehicle.VerifyState.state ===
-                                            verifyStates.PENDING
+                                          verifyStates.PENDING
                                         ? 'span-yellow'
                                         : 'span-red'
                                 }
