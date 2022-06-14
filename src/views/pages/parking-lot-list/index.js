@@ -24,17 +24,22 @@ const columns = [
     {
         title: 'Tên bãi đỗ xe',
         dataIndex: 'name',
-        width: '20%',
+        width: '15%',
     },
     {
         title: 'Chủ sở hữu',
         dataIndex: 'owner_name',
-        width: '20%',
+        width: '15%',
     },
     {
         title: 'Thời gian mở',
         dataIndex: 'time_slot',
         width: '13%',
+    },
+    {
+        title: 'Sức chứa',
+        dataIndex: 'capacity',
+        width: '10%',
     },
     {
         title: 'Trạng thái',
@@ -98,10 +103,13 @@ function ParkingLots() {
                         response.data.rows.map((parkingLot) => ({
                             id: parkingLot.id,
                             name: parkingLot.name,
+                            capacity: parkingLot.capacity,
                             owner_name: parkingLot.Owner.name,
                             time_slot: parkingLot.time_slot,
                             is_open: parkingLot.is_open
-                                ? openStates.OPENING
+                                ? parkingLot.is_full
+                                    ? openStates.FULL
+                                    : openStates.OPENING
                                 : openStates.CLOSED,
                             address: parkingLot.address,
                         })),
@@ -128,9 +136,12 @@ function ParkingLots() {
                               id: parkingLot.id,
                               name: parkingLot.name,
                               owner_name: parkingLot.Owner.name,
+                              capacity: parkingLot.capacity,
                               time_slot: parkingLot.time_slot,
                               is_open: parkingLot.is_open
-                                  ? openStates.OPENING
+                                  ? parkingLot.is_full
+                                      ? openStates.FULL
+                                      : openStates.OPENING
                                   : openStates.CLOSED,
                               address: parkingLot.address,
                           })),
@@ -163,6 +174,9 @@ function ParkingLots() {
                             </option>
                             <option key={3} value={openStates.CLOSED}>
                                 {openStates.CLOSED}
+                            </option>
+                            <option key={4} value={openStates.FULL}>
+                                {openStates.FULL}
                             </option>
                         </select>
                     </div>
@@ -226,7 +240,7 @@ function ParkingLots() {
                     dataSource={parkingLotList}
                     pagination={state.pagination}
                     rowClassName={(record, index) =>
-                        record.status === openStates.OPENING
+                        record.is_open === openStates.OPENING
                             ? 'parking-lot-list-content__sub__table__row-green'
                             : 'parking-lot-list-content__sub__table__row-red'
                     }
@@ -288,12 +302,16 @@ function ParkingLots() {
                                     <span
                                         className={
                                             parkingLot.is_open
-                                                ? 'span2-green'
+                                                ? parkingLot.is_full
+                                                    ? 'span2-red'
+                                                    : 'span2-green'
                                                 : 'span2-red'
                                         }
                                     >
                                         {parkingLot.is_open
-                                            ? openStates.OPENING
+                                            ? parkingLot.is_full
+                                                ? openStates.FULL
+                                                : openStates.OPENING
                                             : openStates.CLOSED}
                                     </span>
                                 </div>

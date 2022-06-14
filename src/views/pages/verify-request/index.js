@@ -222,7 +222,7 @@ function VerifyRequest() {
 
     return user.role === roles.ADMIN ? (
         <div>
-            {/* ------------------------------------- TAB VEHICLE -------------------------------------- */}
+            {/* ----------------------------------- TAB PARKING-LOT  ----------------------------------- */}
             <div
                 className={
                     swapPage
@@ -231,7 +231,7 @@ function VerifyRequest() {
                 }
             >
                 <div className="verify-request-content__title">
-                    Danh sách đăng ký xe
+                    Danh sách đăng ký bãi đỗ xe
                 </div>
                 <div className="verify-request-content__swap-page">
                     <button
@@ -318,7 +318,7 @@ function VerifyRequest() {
                 </div>
             </div>
 
-            {/* ----------------------------------- TAB PARKING-LOT  ----------------------------------- */}
+            {/* ------------------------------------- TAB VEHICLE -------------------------------------- */}
             <div
                 className={
                     swapPage
@@ -327,7 +327,7 @@ function VerifyRequest() {
                 }
             >
                 <div className="verify-request-content__title">
-                    Danh sách đăng ký bãi đỗ xe
+                    Danh sách đăng ký xe
                 </div>
                 <div className="verify-request-content__swap-page">
                     <button className="button-active">Xe</button>
