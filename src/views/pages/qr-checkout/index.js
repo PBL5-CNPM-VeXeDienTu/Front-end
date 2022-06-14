@@ -42,7 +42,9 @@ function QrCheckout() {
                             <span>Bãi xe Nhật Hào</span>
                         </div>
                         <div>
-                            <span className="properties">Địa chỉ bãi đỗ xe</span>
+                            <span className="properties">
+                                Địa chỉ bãi đỗ xe
+                            </span>
                             <span>142/20 Âu Cơ</span>
                         </div>
                         <div>

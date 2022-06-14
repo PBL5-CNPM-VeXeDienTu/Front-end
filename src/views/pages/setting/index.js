@@ -1,12 +1,5 @@
 import React, { useState } from 'react'
-import {
-    Button,
-    Form,
-    Table,
-    Input,
-    Space,
-    Modal,
-} from 'antd'
+import { Button, Form, Table, Input, Space, Modal } from 'antd'
 import {
     EditOutlined,
     SearchOutlined,

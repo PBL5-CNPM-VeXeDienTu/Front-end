@@ -40,11 +40,11 @@ const RenderMenu = () => {
         localStorage.setItem('selected_sidebar_key', e.key)
     }
 
-    const parkingUserMenu = 
+    const parkingUserMenu = (
         <>
             <Menu.Item
                 key="1"
-                icon={<Icon component={sidebarIcons.carSgv} />}
+                icon={<Icon component={sidebarIcons.vehicleSgv} />}
             >
                 <Link className="sider-bar__link" to="/vehicles">
                     Danh sách các xe
@@ -52,7 +52,7 @@ const RenderMenu = () => {
             </Menu.Item>
             <Menu.Item
                 key="2"
-                icon={<Icon component={sidebarIcons.parkingListSgv} />}
+                icon={<Icon component={sidebarIcons.parkingLotSgv} />}
             >
                 <Link className="sider-bar__link" to="/parking-lots">
                     Danh sách bãi đỗ xe
@@ -85,10 +85,7 @@ const RenderMenu = () => {
                 key="5"
                 icon={<HistoryOutlined className="menu-item-icon" />}
             >
-                <Link
-                    className="sider-bar__link"
-                    to="/parking-histories"
-                >
+                <Link className="sider-bar__link" to="/parking-histories">
                     Lịch sử gửi xe
                 </Link>
             </Menu.Item>
@@ -109,12 +106,13 @@ const RenderMenu = () => {
                 </Link>
             </Menu.Item>
         </>
+    )
 
-    const parkingLotUserMenu = 
+    const parkingLotUserMenu = (
         <>
             <Menu.Item
                 key="1"
-                icon={<Icon component={sidebarIcons.parkingListSgv} />}
+                icon={<Icon component={sidebarIcons.parkingLotSgv} />}
             >
                 <Link className="sider-bar__link" to="/parking-lots">
                     Danh sách bãi xe
@@ -124,10 +122,7 @@ const RenderMenu = () => {
                 key="2"
                 icon={<Icon component={sidebarIcons.twoWayArrowSvg} />}
             >
-                <Link
-                    className="sider-bar__link"
-                    to="/checkin-checkout"
-                >
+                <Link className="sider-bar__link" to="/checkin-checkout">
                     Quản lí ra vào bãi
                 </Link>
             </Menu.Item>
@@ -158,10 +153,7 @@ const RenderMenu = () => {
                 key="5"
                 icon={<HistoryOutlined className="menu-item-icon" />}
             >
-                <Link
-                    className="sider-bar__link"
-                    to="/parking-histories"
-                >
+                <Link className="sider-bar__link" to="/parking-histories">
                     Lịch sử gửi xe
                 </Link>
             </Menu.Item>
@@ -182,8 +174,9 @@ const RenderMenu = () => {
                 </Link>
             </Menu.Item>
         </>
+    )
 
-    const adminMenu = 
+    const adminMenu = (
         <>
             <Menu.Item
                 key="1"
@@ -195,9 +188,7 @@ const RenderMenu = () => {
             </Menu.Item>
             <Menu.Item
                 key="2"
-                icon={
-                    <CheckCircleOutlined className="menu-item-icon" />
-                }
+                icon={<CheckCircleOutlined className="menu-item-icon" />}
             >
                 <Link className="sider-bar__link" to="/verify-request">
                     Quản lí yêu cầu đăng kí
@@ -228,6 +219,7 @@ const RenderMenu = () => {
                 </Link>
             </Menu.Item>
         </>
+    )
 
     return (
         <Layout className="layout-container">
@@ -254,18 +246,14 @@ const RenderMenu = () => {
                     className="sider-bar__menu"
                     onSelect={(e) => handleSelectItem(e)}
                 >
-                    {
-                        user.role === roles.PARKING_USER ? (
-                            // ------------------- PARKING USER -----------------------
-                            parkingUserMenu
-                        ) : user.role === roles.PARKING_LOT_USER ? (
-                            //------------------PARKING-LOT USER---------------------
-                            parkingLotUserMenu
-                        ) :  (
-                            //------------------------ADMIN--------------------------
-                            adminMenu
-                        )
-                    }
+                    {user.role === roles.PARKING_USER
+                        ? // ------------------- PARKING USER -----------------------
+                          parkingUserMenu
+                        : user.role === roles.PARKING_LOT_USER
+                        ? //------------------PARKING-LOT USER---------------------
+                          parkingLotUserMenu
+                        : //------------------------ADMIN--------------------------
+                          adminMenu}
                     <div className="scoll-menu">
                         <Button
                             className="scoll-menu-button"
