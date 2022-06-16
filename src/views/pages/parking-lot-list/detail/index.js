@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Form, Input, Button, Modal, Radio, Table, Space } from 'antd'
+import { Form, Input, Button, Modal, Radio, Table, Space, Select } from 'antd'
 import {
     EditOutlined,
     CloseOutlined,
@@ -10,9 +10,14 @@ import {
 import * as roles from 'shared/constants/role'
 import * as verifyStates from 'shared/constants/verifyState'
 import * as openState from 'shared/constants/openState'
+import messages from 'assets/lang/messages'
 import useAuth from 'hooks/useAuth'
 import parkingLotApi from 'api/parkingLotApi'
+import vehicleTypeApi from 'api/vehicleTypeApi'
+import parkingPriceApi from 'api/parkingPriceApi'
 import './detail-parking-lot.scss'
+
+const { Option } = Select
 
 function DetailParkingLot() {
     const { user } = useAuth()
@@ -21,21 +26,31 @@ function DetailParkingLot() {
     const [parkingLot, setParkingLot] = useState({})
     const [showModalSoftDelete, setShowModalSoftDelete] = useState(false)
     const [showModalVerify, setShowModalVerify] = useState(false)
+    const [showParkingPriceModal, setShowParkingPriceModal] = useState(false)
     const [radioValue, setRadioValue] = useState()
     const [parkingPirceList, setParkingPirceList] = useState([])
+    const [vehicleTypeList, setVehicleTypeList] = useState([])
 
     useEffect(() => {
         try {
             if (!!id) {
                 parkingLotApi.getOneById(id).then((response) => {
                     setParkingLot(response.data)
-                    console.log(response.data)
                     setParkingPirceList(
                         response.data.ParkingPrices.map((parkingPirce) => ({
                             key: parkingPirce.id,
                             id: parkingPirce.id,
                             vehicle_type: parkingPirce.VehicleType.type_name,
                             price: parkingPirce.price,
+                        })),
+                    )
+                })
+                vehicleTypeApi.getList().then((response) => {
+                    setVehicleTypeList(
+                        response.data.rows.map((vehicleType) => ({
+                            key: vehicleType.id,
+                            id: vehicleType.id,
+                            vehicle_type_name: vehicleType.type_name,
                         })),
                     )
                 })
@@ -48,6 +63,7 @@ function DetailParkingLot() {
     const handleCancel = () => {
         setShowModalSoftDelete(false)
         setShowModalVerify(false)
+        setShowParkingPriceModal(false)
     }
 
     const softDeleteHandle = async () => {
@@ -69,6 +85,21 @@ function DetailParkingLot() {
                 parkingLot.id,
                 updateVerifyState,
             )
+            alert(response.data.message)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const parkingPriceHandleSubmit = async (values) => {
+        try {
+            const newParkingPrice = {
+                parking_lot_id: parkingLot.id,
+                vehicle_type_id: values.vehicle_type_id,
+                price: parseInt(values.price),
+            }
+            const response = await parkingPriceApi.createNew(newParkingPrice)
             alert(response.data.message)
             window.location.reload()
         } catch (error) {
@@ -259,7 +290,10 @@ function DetailParkingLot() {
                                 : 'detail-parking-lot-content__sub__parking-prices__button-add'
                         }
                     >
-                        <Button className="button-green">
+                        <Button
+                            className="button-green"
+                            onClick={() => setShowParkingPriceModal(true)}
+                        >
                             <PlusCircleOutlined className="detail-parking-lot-content__sub__parking-prices__button-add__icon" />
                             Thêm
                         </Button>
@@ -344,6 +378,87 @@ function DetailParkingLot() {
                         ? 'Bạn có chắn chắn muốn xóa bãi đỗ xe hay không ?'
                         : 'Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay không ?'}
                 </p>
+            </Modal>
+            <Modal
+                className="parking-price-modal"
+                visible={showParkingPriceModal}
+                onCancel={handleCancel}
+                footer={null}
+            >
+                <h1 className="title">Thêm phí đỗ xe</h1>
+                <Form
+                    name="parking-price"
+                    className="parking-price-modal__sub"
+                    onFinish={parkingPriceHandleSubmit}
+                    fields={[
+                        {
+                            name: ['parking_lot_id'],
+                            value: parkingLot.idid,
+                        },
+                        {
+                            name: ['vehicle_type_id'],
+                        },
+                        {
+                            name: ['price'],
+                        },
+                    ]}
+                >
+                    <div className="parking-price-modal__sub__info">
+                        <div className="parking-price-modal__sub__info__item">
+                            <span className="span">Loại xe</span>
+                            <Form.Item
+                                name="vehicle_type_id"
+                                className="form-item"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: messages['text_required'],
+                                    },
+                                ]}
+                            >
+                                <Select className="select">
+                                    {vehicleTypeList.map((item, id) => {
+                                        return (
+                                            <Option value={item.id}>
+                                                {item.vehicle_type_name}
+                                            </Option>
+                                        )
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </div>
+
+                        <div className="parking-price-modal__sub__info__item">
+                            <span className="span">Giá đỗ xe (VND)</span>
+                            <Form.Item
+                                name="price"
+                                className="form-item"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: messages['text_required'],
+                                    },
+                                    {
+                                        pattern: '^([-]?[0-9][0-9]*|0)$',
+                                        message: messages['invalid_number'],
+                                    },
+                                ]}
+                            >
+                                <Input className="input" size="medium" />
+                            </Form.Item>
+                        </div>
+                    </div>
+                    <div className="parking-price-modal__sub__button">
+                        <button
+                            type="button"
+                            className="button-gray"
+                            onClick={(e) => setShowParkingPriceModal(false)}
+                        >
+                            Thoát
+                        </button>
+                        <button className="button-green">Lưu</button>
+                    </div>
+                </Form>
             </Modal>
         </div>
     )
