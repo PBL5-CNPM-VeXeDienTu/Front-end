@@ -24,6 +24,11 @@ button:hover {
     color: #41bc3f;
     font-weight: bold;
 }
+
+.div-unactive {
+    display: none !important;
+}
+
 .button-green {
     margin: 0 20px;
     width: 7vw;

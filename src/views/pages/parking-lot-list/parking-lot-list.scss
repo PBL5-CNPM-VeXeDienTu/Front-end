@@ -109,65 +109,6 @@
         }
     }
 }
-
-.parking-lot-list-modal {
-    width: 50vw !important;
-    height: fit-content !important;
-    margin: auto !important;
-
-    .h1 {
-        text-align: center;
-        margin-bottom: 5vh;
-        font-size: 2rem;
-    }
-
-    .div {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 40% 60%;
-        margin: 1vh 0;
-        font-size: 1rem;
-
-        .span1 {
-            width: 100%;
-            text-align: right;
-            font-weight: bold;
-        }
-
-        .span2 {
-            margin-left: 10%;
-            max-width: 80%;
-
-            &-red {
-                margin-left: 10%;
-                color: red;
-            }
-
-            &-green {
-                margin-left: 10%;
-                color: #41bc3f;
-            }
-            &-italic {
-                margin-left: 10%;
-                font-style: italic;
-                color: #888;
-            }
-        }
-    }
-
-    .ant-modal-content {
-        border-radius: 20px !important;
-
-        .ant-modal-header {
-            border-radius: 20px 20px 0 0;
-            background-color: #e9e9e9;
-        }
-
-        .ant-modal-body {
-            height: fit-content !important;
-        }
-    }
-}
 .parking-lot-menu {
     width: 15vw;
     height: fit-content;
@@ -285,6 +226,7 @@
         &__sub {
             width: 100%;
             height: 80vh;
+            cursor: pointer;
             margin-bottom: 20px;
             display: grid;
             grid-template-rows: 1% 99%;

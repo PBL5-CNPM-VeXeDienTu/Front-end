@@ -230,9 +230,7 @@ function VerifyRequest() {
                         : 'verify-request-content-unactive'
                 }
             >
-                <div className="verify-request-content__title">
-                    Danh sách đăng ký xe
-                </div>
+                <div className="title">Danh sách đăng ký bãi đỗ xe</div>
                 <div className="verify-request-content__swap-page">
                     <button
                         className="button-unactive"
@@ -326,9 +324,7 @@ function VerifyRequest() {
                         : 'verify-request-content'
                 }
             >
-                <div className="verify-request-content__title">
-                    Danh sách đăng ký bãi đỗ xe
-                </div>
+                <div className="title">Danh sách đăng ký xe</div>
                 <div className="verify-request-content__swap-page">
                     <button className="button-active">Xe</button>
                     <button
