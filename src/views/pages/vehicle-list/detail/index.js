@@ -15,13 +15,7 @@ function DetailVehicle() {
     const [showModalSoftDelete, setShowModalSoftDelete] = useState(false)
     const [radioValue, setRadioValue] = useState()
     const [vehicle, setVehicle] = useState({
-        key: 0,
-        user_name: '',
-        brand: '',
-        license_plate: '',
-        created_at: '',
-        type_of_vehicle: '',
-        status: '',
+        state: 'loading',
     })
 
     useEffect(() => {
@@ -106,16 +100,18 @@ function DetailVehicle() {
                             <span className="span-title">Trạng thái</span>
                             <span
                                 className={
-                                    vehicle.VerifyState.state ===
-                                    verifyStates.VERIFIED
-                                        ? 'span-green'
-                                        : vehicle.VerifyState.state ===
-                                          verifyStates.PENDING
-                                        ? 'span-yellow'
-                                        : 'span-red'
+                                    vehicle.VerifyState?.state
+                                        ? vehicle.VerifyState?.state ===
+                                          verifyStates.VERIFIED
+                                            ? 'span-green'
+                                            : vehicle.VerifyState.state ===
+                                              verifyStates.PENDING
+                                            ? 'span-yellow'
+                                            : 'span-red'
+                                        : 'span2'
                                 }
                             >
-                                {vehicle.VerifyState.state}
+                                {vehicle.VerifyState?.state}
                             </span>
                         </div>
 
