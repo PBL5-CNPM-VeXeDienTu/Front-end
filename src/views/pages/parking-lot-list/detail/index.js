@@ -23,6 +23,7 @@ function DetailParkingLot() {
     const { user } = useAuth()
     const { id } = useParams()
     const navigate = useNavigate()
+    const [actionState, setActionState] = useState('null')
     const [parkingLot, setParkingLot] = useState({})
     const [showModalSoftDelete, setShowModalSoftDelete] = useState(false)
     const [showModalVerify, setShowModalVerify] = useState(false)
@@ -30,6 +31,7 @@ function DetailParkingLot() {
     const [radioValue, setRadioValue] = useState()
     const [parkingPirceList, setParkingPirceList] = useState([])
     const [vehicleTypeList, setVehicleTypeList] = useState([])
+    const [parkingPirce, setParkingPirce] = useState({})
 
     useEffect(() => {
         try {
@@ -40,7 +42,9 @@ function DetailParkingLot() {
                         response.data.ParkingPrices.map((parkingPirce) => ({
                             key: parkingPirce.id,
                             id: parkingPirce.id,
-                            vehicle_type: parkingPirce.VehicleType.type_name,
+                            vehicle_type_id: parkingPirce.VehicleType.id,
+                            vehicle_type_name:
+                                parkingPirce.VehicleType.type_name,
                             price: parkingPirce.price,
                         })),
                     )
@@ -94,12 +98,30 @@ function DetailParkingLot() {
 
     const parkingPriceHandleSubmit = async (values) => {
         try {
-            const newParkingPrice = {
-                parking_lot_id: parkingLot.id,
-                vehicle_type_id: values.vehicle_type_id,
-                price: parseInt(values.price),
+            let response = null
+            switch (actionState) {
+                case 'add':
+                    const newParkingPrice = {
+                        parking_lot_id: parkingLot.id,
+                        vehicle_type_id: values.vehicle_type_id,
+                        price: parseInt(values.price),
+                    }
+                    response = await parkingPriceApi.createNew(newParkingPrice)
+                    break
+                case 'edit':
+                    const updateParkingPrice = {
+                        parking_lot_id: parkingLot.id,
+                        vehicle_type_id: values.vehicle_type_id,
+                        price: parseInt(values.price),
+                    }
+                    response = await parkingPriceApi.updateById(
+                        parkingPirce.id,
+                        updateParkingPrice,
+                    )
+                    break
+                default:
+                    break
             }
-            const response = await parkingPriceApi.createNew(newParkingPrice)
             alert(response.data.message)
             window.location.reload()
         } catch (error) {
@@ -123,7 +145,7 @@ function DetailParkingLot() {
     const actionColumns = [
         {
             title: 'Loại xe',
-            dataIndex: 'vehicle_type',
+            dataIndex: 'vehicle_type_name',
             width: '20%',
         },
         {
@@ -137,7 +159,19 @@ function DetailParkingLot() {
             width: '5%',
             render: (text, record) => (
                 <Space size="middle">
-                    <EditOutlined onClick={() => {}} className="icon-edit" />
+                    <EditOutlined
+                        className="icon-edit"
+                        onClick={() => {
+                            setParkingPirce({
+                                id: record.id,
+                                vehicle_type_id: record.vehicle_type_id,
+                                vehicle_type_name: record.vehicle_type_name,
+                                price: record.price,
+                            })
+                            setShowParkingPriceModal(true)
+                            setActionState('edit')
+                        }}
+                    />
                     <DeleteOutlined
                         onClick={() => {}}
                         className="icon-delete"
@@ -292,7 +326,10 @@ function DetailParkingLot() {
                     >
                         <Button
                             className="button-green"
-                            onClick={() => setShowParkingPriceModal(true)}
+                            onClick={() => {
+                                setShowParkingPriceModal(true)
+                                setActionState('add')
+                            }}
                         >
                             <PlusCircleOutlined className="detail-parking-lot-content__sub__parking-prices__button-add__icon" />
                             Thêm
@@ -385,7 +422,11 @@ function DetailParkingLot() {
                 onCancel={handleCancel}
                 footer={null}
             >
-                <h1 className="title">Thêm phí đỗ xe</h1>
+                <h1 className="title">
+                    {actionState === 'add'
+                        ? 'Thêm phí đỗ xe'
+                        : 'Chỉnh sửa phí đỗ xe'}
+                </h1>
                 <Form
                     name="parking-price"
                     className="parking-price-modal__sub"
@@ -393,13 +434,19 @@ function DetailParkingLot() {
                     fields={[
                         {
                             name: ['parking_lot_id'],
-                            value: parkingLot.idid,
+                            value: parkingLot.id,
                         },
                         {
                             name: ['vehicle_type_id'],
+                            value: parkingPirce.vehicle_type_id,
+                        },
+                        {
+                            name: ['vehicle_type_name'],
+                            value: parkingPirce.vehicle_type_name,
                         },
                         {
                             name: ['price'],
+                            value: parkingPirce.price,
                         },
                     ]}
                 >
@@ -409,6 +456,7 @@ function DetailParkingLot() {
                             <Form.Item
                                 name="vehicle_type_id"
                                 className="form-item"
+                                // initialValue={parkingPirce.vehicle_type_id}
                                 rules={[
                                     {
                                         required: true,
@@ -416,7 +464,10 @@ function DetailParkingLot() {
                                     },
                                 ]}
                             >
-                                <Select className="select">
+                                <Select
+                                    className="select"
+                                    defaultValue={parkingPirce.vehicle_type_id}
+                                >
                                     {vehicleTypeList.map((item, id) => {
                                         return (
                                             <Option value={item.id}>
@@ -433,13 +484,14 @@ function DetailParkingLot() {
                             <Form.Item
                                 name="price"
                                 className="form-item"
+                                initialValue={parkingPirce.price}
                                 rules={[
                                     {
                                         required: true,
                                         message: messages['text_required'],
                                     },
                                     {
-                                        pattern: '^([-]?[0-9][0-9]*|0)$',
+                                        pattern: '^([-]?[1-9][0-9]*|0)$',
                                         message: messages['invalid_number'],
                                     },
                                 ]}
