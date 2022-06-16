@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Table, Input, Modal, Menu, Dropdown } from 'antd'
+import { Table, Input, Menu, Dropdown } from 'antd'
 import {
     PlusCircleOutlined,
-    EditOutlined,
-    CloseOutlined,
     SearchOutlined,
     FilterOutlined,
 } from '@ant-design/icons'
@@ -57,32 +55,11 @@ function ParkingLots() {
     const navigate = useNavigate()
     const [activeFilter, setActiveFilter] = useState(false)
     const [openStateFilter, setOpenStateFilter] = useState('All')
-    const [isModalVisible, setIsModalVisible] = useState(false)
     const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [parkingLotId, setParkingLotId] = useState()
     const [parkingLotList, setParkingLotList] = useState([])
 
     const onSearch = (value) => console.log(value)
-
-    const showModal = (parkingLotId) => {
-        setIsModalVisible(true)
-        setParkingLotId(parkingLotId)
-    }
-
-    const handleCancel = () => {
-        setIsModalVisible(false)
-    }
-
-    const handleOk = async () => {
-        try {
-            const response = await parkingLotApi.softDeleteById(parkingLotId)
-            alert(response.data.message)
-            window.location.reload()
-        } catch (error) {
-            alert(error.response.data.message)
-        }
-    }
 
     useEffect(() => {
         if (openStateFilter === 'All') setActiveFilter(false)
@@ -149,10 +126,6 @@ function ParkingLots() {
                   })
         }
     }, [user, pageSize])
-
-    const handleNavigation = (parkingLotId) => {
-        navigate(`/parking-lots/${parkingLotId}/packages`)
-    }
 
     const menu = () => {
         return (
@@ -266,7 +239,12 @@ function ParkingLots() {
             </div>
             <div className="parking-lot-list-container__content">
                 {parkingLotList?.map((parkingLot) => (
-                    <div className="parking-lot-list-container__content__sub">
+                    <div
+                        className="parking-lot-list-container__content__sub"
+                        onClick={() =>
+                            navigate(`/parking-lots/${parkingLot.id}`)
+                        }
+                    >
                         <div className="parking-lot-list-container__content__item">
                             <img
                                 className="parking-lot-list-container__content__item__image"
@@ -338,51 +316,8 @@ function ParkingLots() {
                                         {parkingLot.address}
                                     </span>
                                 </div>
-                                <div
-                                    className={
-                                        parkingLot.VerifyState.state ===
-                                        verifyStates.VERIFIED
-                                            ? 'div-active'
-                                            : 'div-unactive'
-                                    }
-                                >
-                                    <span className="span1">Gói ưu đãi</span>
-                                    <span className="span2">
-                                        <button
-                                            onClick={() =>
-                                                handleNavigation(parkingLot.id)
-                                            }
-                                        >
-                                            Xem gói ưu đãi
-                                        </button>
-                                    </span>
-                                </div>
                             </div>
                         </div>
-                        <div className="parking-lot-list-container__content__icon">
-                            <Link to={`/parking-lots/${parkingLot.id}/edit`}>
-                                <span className="edit-parking-lot">
-                                    <EditOutlined />
-                                </span>
-                            </Link>
-                            <span className="delete-parking-lot">
-                                <CloseOutlined
-                                    onClick={(e) => showModal(parkingLot.id)}
-                                />
-                            </span>
-                        </div>
-                        <Modal
-                            className="delete-parking-lot-modal"
-                            title="Hủy đăng ký bãi đỗ xe"
-                            visible={isModalVisible}
-                            onOk={handleOk}
-                            onCancel={handleCancel}
-                        >
-                            <p>
-                                Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay
-                                không ?
-                            </p>
-                        </Modal>
                     </div>
                 ))}
             </div>

@@ -48,148 +48,135 @@ function Login() {
     }
 
     return (
-        <div className="login-container-main">
-            <div className="login-card">
-                <div className="login-img-background">
-                    <img
-                        className="img-background"
-                        src={background}
-                        alt={'backgound'}
-                    />
-                </div>
-                <div className="login-container-sub">
-                    <div className="login-img-content"></div>
-                    <div className="login-form-content">
-                        <Form
-                            name="login"
-                            className="login-form"
-                            onFinish={handleSubmit}
+        <div className="login-container">
+            <div className="login-container__sub">
+                <img
+                    className="login-container__sub__image"
+                    src={background}
+                    alt={'backgound'}
+                />
+                <div className="login-container__sub__content">
+                    <Form
+                        name="login"
+                        className="login-container__sub__content__form"
+                        onFinish={handleSubmit}
+                    >
+                        <img
+                            className="image-avatar"
+                            src={avatar}
+                            alt={'avatar'}
+                        />
+                        <h2>Welcome</h2>
+                        <div className="login-container__sub__content__form__item">
+                            <i>
+                                <UserOutlined />
+                            </i>
+                            <Form.Item
+                                className="form-item"
+                                name="email"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: messages['email_required'],
+                                    },
+                                    {
+                                        type: 'email',
+                                        message: messages['invalid_email'],
+                                    },
+                                ]}
+                            >
+                                <Input
+                                    placeholder="Email"
+                                    className="input email"
+                                />
+                            </Form.Item>
+                        </div>
+
+                        <div className="login-container__sub__content__form__item">
+                            <i>
+                                <UnlockOutlined />
+                            </i>
+                            <Form.Item
+                                className="form-item"
+                                name="password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: messages['password_required'],
+                                    },
+                                    {
+                                        type: 'string',
+                                        min: 6,
+                                        max: 24,
+                                        message:
+                                            messages['invalid_password_length'],
+                                    },
+                                ]}
+                            >
+                                <Input.Password
+                                    placeholder="Password"
+                                    className="input password"
+                                />
+                            </Form.Item>
+                        </div>
+                        <label className="forgot-password" onClick={showModal}>
+                            Forgot Password
+                        </label>
+                        <Modal
+                            className="forgot-password-modal"
+                            title="Quên mật khẩu"
+                            visible={isModalVisible}
+                            onOk={form.submit}
+                            onCancel={handleCancel}
                         >
-                            <img src={avatar} alt={'avatar'} />
-                            <h2>Welcome</h2>
-                            <div className="input-div email">
-                                <i>
-                                    <UserOutlined />
-                                </i>
-                                <Form.Item
-                                    className="form-item"
-                                    name="email"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: messages['email_required'],
-                                        },
-                                        {
-                                            type: 'email',
-                                            message: messages['invalid_email'],
-                                        },
-                                    ]}
-                                >
-                                    <Input
-                                        type="email"
-                                        placeholder="Email"
-                                        size="large"
-                                        className="input email"
-                                    />
-                                </Form.Item>
-                            </div>
+                            <Form
+                                form={form}
+                                onFinish={handleForgotPasswordSubmit}
+                            >
+                                <h3>Email</h3>
+                                <div className="forgot-password-modal__email">
+                                    <i className="forgot-password-modal__email__icon">
+                                        <UserOutlined className="icon" />
+                                    </i>
+                                    <Form.Item
+                                        className="forgot-password-modal__email__item"
+                                        name="email"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message:
+                                                    messages['email_required'],
+                                            },
+                                            {
+                                                type: 'email',
+                                                message:
+                                                    messages['invalid_email'],
+                                            },
+                                        ]}
+                                    >
+                                        <Input
+                                            name="forgot-password-email"
+                                            type="email"
+                                            placeholder="Email"
+                                            size="large"
+                                            className="forgot-password-modal__email__item__input"
+                                        />
+                                    </Form.Item>
+                                </div>
+                            </Form>
+                        </Modal>
 
-                            <div className="input-div password">
-                                <i>
-                                    <UnlockOutlined />
-                                </i>
-                                <Form.Item
-                                    className="form-item"
-                                    name="password"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message:
-                                                messages['password_required'],
-                                        },
-                                        {
-                                            type: 'string',
-                                            min: 6,
-                                            max: 24,
-                                            message:
-                                                messages[
-                                                    'invalid_password_length'
-                                                ],
-                                        },
-                                    ]}
-                                >
-                                    <Input.Password
-                                        placeholder="Password"
-                                        className="input password"
-                                    />
-                                </Form.Item>
-                            </div>
-                            <label
-                                className="forgot-password"
-                                onClick={showModal}
-                            >
-                                Forgot Password
-                            </label>
-                            <Modal
-                                className="forgot-password-modal"
-                                title="Quên mật khẩu"
-                                visible={isModalVisible}
-                                onOk={form.submit}
-                                onCancel={handleCancel}
-                            >
-                                <Form
-                                    form={form}
-                                    onFinish={handleForgotPasswordSubmit}
-                                >
-                                    <h3>Email</h3>
-                                    <div className="forgot-password-modal__email">
-                                        <i className="forgot-password-modal__email__icon">
-                                            <UserOutlined className="icon" />
-                                        </i>
-                                        <Form.Item
-                                            className="forgot-password-modal__email__item"
-                                            name="email"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message:
-                                                        messages[
-                                                            'email_required'
-                                                        ],
-                                                },
-                                                {
-                                                    type: 'email',
-                                                    message:
-                                                        messages[
-                                                            'invalid_email'
-                                                        ],
-                                                },
-                                            ]}
-                                        >
-                                            <Input
-                                                name="forgot-password-email"
-                                                type="email"
-                                                placeholder="Email"
-                                                size="large"
-                                                className="forgot-password-modal__email__item__input"
-                                            />
-                                        </Form.Item>
-                                    </div>
-                                </Form>
-                            </Modal>
-
-                            <Button
-                                className="button-submit"
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                LOGIN
-                            </Button>
-                            <a className="create-account" href="/register">
-                                Create new account{' '}
-                            </a>
-                        </Form>
-                    </div>
+                        <Button
+                            className="button-submit"
+                            type="primary"
+                            htmlType="submit"
+                        >
+                            LOGIN
+                        </Button>
+                        <a className="create-account" href="/register">
+                            Create new account{' '}
+                        </a>
+                    </Form>
                 </div>
             </div>
         </div>
