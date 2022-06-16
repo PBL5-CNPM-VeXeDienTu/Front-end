@@ -1,12 +1,8 @@
 import axiosClient from './axiosClient'
 
 const vehicleTypeApi = {
-    getListVehicleType: () => {
+    getList: () => {
         const url = `/api/vehicle-types`
-        return axiosClient.get(url)
-    },
-    getPackageTypeById: (id) => {
-        const url = `/api/package-types/${id}`
         return axiosClient.get(url)
     },
     createNew: (credentials) => {

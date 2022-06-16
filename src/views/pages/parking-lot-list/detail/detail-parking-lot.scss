@@ -247,6 +247,72 @@
         }
     }
 }
+.parking-price-modal {
+    width: 40vw !important;
+    height: fit-content !important;
+    margin: auto !important;
+
+    .div {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 35% 65%;
+        margin: 1vh 0;
+        font-size: 1rem;
+    }
+
+    .ant-modal-content {
+        border-radius: 20px !important;
+
+        .ant-modal-header {
+            border-radius: 20px 20px 0 0;
+            background-color: #e9e9e9;
+        }
+
+        .ant-modal-body {
+            height: fit-content !important;
+        }
+    }
+    &__sub {
+        width: 100%;
+        padding: 0 5%;
+        display: flex;
+        flex-direction: column;
+
+        &__info {
+            width: 100%;
+            margin: 2% auto;
+
+            &__item {
+                height: fit-content;
+                min-height: 7vh;
+                display: grid;
+                grid-template-columns: 40% 60%;
+
+                .span {
+                    font-weight: bold;
+                    text-align: right;
+                    margin-top: 5px;
+                    padding-right: 20px;
+                    font-size: 1.1rem;
+                    width: 100%;
+                }
+                .form-item {
+                    margin: 0 !important;
+                }
+                .text {
+                    color: #000;
+                }
+                .text:hover {
+                    box-shadow: 0 0 3px #41bc3f !important;
+                    border-color: #41bc3f !important;
+                }
+            }
+        }
+        &__button {
+            margin: 2% auto 0 auto;
+        }
+    }
+}
 .ant-input-focused,
 .ant-input:focus {
     box-shadow: 0 0 3px #41bc3f;
