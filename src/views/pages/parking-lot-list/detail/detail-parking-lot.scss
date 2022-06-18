@@ -299,17 +299,10 @@
                 .form-item {
                     margin: 0 !important;
                 }
-                .text {
-                    color: #000;
-                }
-                .text:hover {
-                    box-shadow: 0 0 3px #41bc3f !important;
-                    border-color: #41bc3f !important;
-                }
             }
         }
         &__button {
-            margin: 2% auto 0 auto;
+            margin: 4% auto 0 auto;
         }
     }
 }
