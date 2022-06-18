@@ -227,10 +227,7 @@ function Accounts() {
                         <select
                             defaultValue={{ value: params.pageSize }}
                             onChange={(e) =>
-                                setParams({
-                                    limit: e.target.value,
-                                    page: params.page,
-                                })
+                                setParams({ ...params, limit: e.target.value })
                             }
                         >
                             {numOfItem.map((numOfItem, index) => {
@@ -320,10 +317,7 @@ function Accounts() {
                         <select
                             defaultValue={{ value: params.pageSize }}
                             onChange={(e) =>
-                                setParams({
-                                    limit: e.target.value,
-                                    page: params.page,
-                                })
+                                setParams({ ...params, limit: e.target.value })
                             }
                         >
                             {numOfItem.map((numOfItem, index) => {
@@ -413,10 +407,7 @@ function Accounts() {
                         <select
                             defaultValue={{ value: params.pageSize }}
                             onChange={(e) =>
-                                setParams({
-                                    limit: e.target.value,
-                                    page: params.page,
-                                })
+                                setParams({ ...params, limit: e.target.value })
                             }
                         >
                             {numOfItem.map((numOfItem, index) => {
