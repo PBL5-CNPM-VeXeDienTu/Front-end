@@ -25,9 +25,12 @@ function DetailParkingLot() {
     const navigate = useNavigate()
     const [actionState, setActionState] = useState('null')
     const [parkingLot, setParkingLot] = useState({})
-    const [showModalSoftDelete, setShowModalSoftDelete] = useState(false)
-    const [showModalVerify, setShowModalVerify] = useState(false)
+    const [showDeleteParkingLotModal, setShowDeleteParkingLotModal] =
+        useState(false)
+    const [showVerifyModal, setShowVerifyModal] = useState(false)
     const [showParkingPriceModal, setShowParkingPriceModal] = useState(false)
+    const [showDeleteParkingPriceModal, setShowDeleteParkingPriceModal] =
+        useState(false)
     const [radioValue, setRadioValue] = useState()
     const [parkingPirceList, setParkingPirceList] = useState([])
     const [vehicleTypeList, setVehicleTypeList] = useState([])
@@ -65,12 +68,13 @@ function DetailParkingLot() {
     }, [id])
 
     const handleCancel = () => {
-        setShowModalSoftDelete(false)
-        setShowModalVerify(false)
+        setShowDeleteParkingLotModal(false)
+        setShowVerifyModal(false)
         setShowParkingPriceModal(false)
+        setShowDeleteParkingPriceModal(false)
     }
 
-    const softDeleteHandle = async () => {
+    const softDeleteParkingLotHandle = async () => {
         try {
             const response = await parkingLotApi.softDeleteById(parkingLot.id)
             alert(response.data.message)
@@ -118,6 +122,9 @@ function DetailParkingLot() {
                         parkingPirce.id,
                         updateParkingPrice,
                     )
+                    break
+                case 'delete':
+                    response = await parkingPriceApi.deleteById(parkingPirce.id)
                     break
                 default:
                     break
@@ -173,7 +180,16 @@ function DetailParkingLot() {
                         }}
                     />
                     <DeleteOutlined
-                        onClick={() => {}}
+                        onClick={() => {
+                            setParkingPirce({
+                                id: record.id,
+                                vehicle_type_id: record.vehicle_type_id,
+                                vehicle_type_name: record.vehicle_type_name,
+                                price: record.price,
+                            })
+                            setShowDeleteParkingPriceModal(true)
+                            setActionState('delete')
+                        }}
                         className="icon-delete"
                     />
                 </Space>
@@ -200,7 +216,7 @@ function DetailParkingLot() {
                 </Link>
                 <span className="delete-parking-lot">
                     <CloseOutlined
-                        onClick={(e) => setShowModalSoftDelete(true)}
+                        onClick={(e) => setShowDeleteParkingLotModal(true)}
                     />
                 </span>
             </div>
@@ -305,7 +321,7 @@ function DetailParkingLot() {
                         </Button>
                         <Button
                             className="button-green"
-                            onClick={() => setShowModalVerify(true)}
+                            onClick={() => setShowVerifyModal(true)}
                         >
                             Xác thực
                         </Button>
@@ -350,7 +366,7 @@ function DetailParkingLot() {
             <Modal
                 className="delete-parking-lot-modal"
                 title="Xác thực bãi đỗ xe"
-                visible={showModalVerify}
+                visible={showVerifyModal}
                 onCancel={handleCancel}
                 footer={null}
             >
@@ -388,7 +404,7 @@ function DetailParkingLot() {
                     <div className="delete-parking-lot-modal__button">
                         <button
                             className="button-gray"
-                            onClick={(e) => setShowModalVerify(false)}
+                            onClick={(e) => setShowVerifyModal(false)}
                         >
                             Thoát
                         </button>
@@ -403,11 +419,12 @@ function DetailParkingLot() {
                     </div>
                 </Form>
             </Modal>
+
             <Modal
-                className="delete-parking-lot-modal"
+                className="delete-modal"
                 title="Hủy đăng ký bãi đỗ xe"
-                visible={showModalSoftDelete}
-                onOk={softDeleteHandle}
+                visible={showDeleteParkingLotModal}
+                onOk={softDeleteParkingLotHandle}
                 onCancel={handleCancel}
             >
                 <p>
@@ -416,6 +433,7 @@ function DetailParkingLot() {
                         : 'Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay không ?'}
                 </p>
             </Modal>
+
             <Modal
                 className="parking-price-modal"
                 visible={showParkingPriceModal}
@@ -456,7 +474,6 @@ function DetailParkingLot() {
                             <Form.Item
                                 name="vehicle_type_id"
                                 className="form-item"
-                                // initialValue={parkingPirce.vehicle_type_id}
                                 rules={[
                                     {
                                         required: true,
@@ -511,6 +528,16 @@ function DetailParkingLot() {
                         <button className="button-green">Lưu</button>
                     </div>
                 </Form>
+            </Modal>
+
+            <Modal
+                className="delete-modal"
+                title="Xóa phí đỗ xe"
+                visible={showDeleteParkingPriceModal}
+                onOk={parkingPriceHandleSubmit}
+                onCancel={handleCancel}
+            >
+                <p>Bạn có chắn chắn muốn xóa phí đỗ xe này hay không ?</p>
             </Modal>
         </div>
     )
