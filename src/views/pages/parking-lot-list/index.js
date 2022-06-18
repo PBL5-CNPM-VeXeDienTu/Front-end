@@ -53,44 +53,25 @@ const columns = [
 function ParkingLots() {
     const { user } = useAuth()
     const navigate = useNavigate()
-    const [activeFilter, setActiveFilter] = useState(false)
-    const [openStateFilter, setOpenStateFilter] = useState('All')
-    const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
     const [parkingLotList, setParkingLotList] = useState([])
-
-    const onSearch = (value) => console.log(value)
-
-    useEffect(() => {
-        if (openStateFilter === 'All') setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [openStateFilter])
+    const [params, setParams] = useState({
+        limit: 10,
+        page: 1,
+        txt_search: null,
+        is_open: null,
+        is_full: 0,
+    })
 
     const state = {
         pagination: {
-            pageSize: pageSize,
+            pageSize: params.limit,
             total: total,
             onChange: (page, pageSize) => {
-                const params = {
+                setParams({
+                    ...params,
                     limit: pageSize,
                     page: page,
-                }
-                parkingLotApi.getListByParams(params).then((response) => {
-                    setParkingLotList(
-                        response.data.rows.map((parkingLot) => ({
-                            id: parkingLot.id,
-                            name: parkingLot.name,
-                            capacity: parkingLot.capacity,
-                            owner_name: parkingLot.Owner.name,
-                            time_slot: parkingLot.time_slot,
-                            is_open: parkingLot.is_open
-                                ? parkingLot.is_full
-                                    ? openStates.FULL
-                                    : openStates.OPENING
-                                : openStates.CLOSED,
-                            address: parkingLot.address,
-                        })),
-                    )
                 })
             },
         },
@@ -98,10 +79,6 @@ function ParkingLots() {
 
     useEffect(() => {
         if (!!user) {
-            const params = {
-                limit: pageSize,
-                page: 1,
-            }
             user.role === roles.PARKING_LOT_USER
                 ? parkingLotApi.getListByUserId(user.id).then((response) => {
                       setParkingLotList(response.data.rows)
@@ -125,7 +102,7 @@ function ParkingLots() {
                       )
                   })
         }
-    }, [user, pageSize])
+    }, [user, params])
 
     const menu = () => {
         return (
@@ -137,7 +114,38 @@ function ParkingLots() {
                         </span>
                         <select
                             className="parking-lot-menu__item__row__select"
-                            onChange={(e) => setOpenStateFilter(e.target.value)}
+                            onChange={(e) => {
+                                switch (e.target.value) {
+                                    case openStates.OPENING:
+                                        setParams({
+                                            ...params,
+                                            is_open: 1,
+                                            is_full: null,
+                                        })
+                                        break
+                                    case openStates.CLOSED:
+                                        setParams({
+                                            ...params,
+                                            is_open: 0,
+                                            is_full: null,
+                                        })
+                                        break
+                                    case openStates.FULL:
+                                        setParams({
+                                            ...params,
+                                            is_open: null,
+                                            is_full: 1,
+                                        })
+                                        break
+                                    default:
+                                        setParams({
+                                            ...params,
+                                            is_open: null,
+                                            is_full: null,
+                                        })
+                                        break
+                                }
+                            }}
                         >
                             <option key={1} value="All">
                                 All
@@ -170,8 +178,10 @@ function ParkingLots() {
                 <div className="parking-lot-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
-                        defaultValue={{ value: pageSize }}
-                        onChange={(e) => setPageSize(e.target.value)}
+                        defaultValue={{ value: params.limit }}
+                        onChange={(e) =>
+                            setParams({ ...params, limit: e.target.value })
+                        }
                     >
                         {numOfItem.map((numOfItem, index) => {
                             return (
@@ -185,7 +195,7 @@ function ParkingLots() {
                 <Dropdown overlay={menu} trigger="click" placement="bottom">
                     <div
                         className={
-                            activeFilter
+                            params.is_full || params.is_open !== null
                                 ? 'parking-lot-list-content__action__filter-active'
                                 : 'parking-lot-list-content__action__filter-unactive'
                         }
@@ -197,8 +207,10 @@ function ParkingLots() {
                 <div className="parking-lot-list-content__action__search">
                     <Search
                         className="search-box"
-                        placeholder="Tìm kiếm"
-                        onSearch={onSearch}
+                        placeholder="Tên bãi đỗ xe, chủ sở hữu, địa chỉ"
+                        onChange={(e) =>
+                            setParams({ ...params, txt_search: e.target.value })
+                        }
                         allowClear
                         suffix
                     />
@@ -212,11 +224,18 @@ function ParkingLots() {
                     columns={columns}
                     dataSource={parkingLotList}
                     pagination={state.pagination}
-                    rowClassName={(record, index) =>
-                        record.is_open === openStates.OPENING
-                            ? 'parking-lot-list-content__sub__table__row-green'
-                            : 'parking-lot-list-content__sub__table__row-red'
-                    }
+                    rowClassName={(record, index) => {
+                        switch (record.is_open) {
+                            case openStates.OPENING:
+                                return 'parking-lot-list-content__sub__table__row-green'
+                            case openStates.FULL:
+                                return 'parking-lot-list-content__sub__table__row-orange'
+                            case openStates.CLOSED:
+                                return 'parking-lot-list-content__sub__table__row-red'
+                            default:
+                                break
+                        }
+                    }}
                     onRow={(record, rowIndex) => {
                         return {
                             onClick: () =>
@@ -281,7 +300,7 @@ function ParkingLots() {
                                         className={
                                             parkingLot.is_open
                                                 ? parkingLot.is_full
-                                                    ? 'span2-red'
+                                                    ? 'span2-orange'
                                                     : 'span2-green'
                                                 : 'span2-red'
                                         }
