@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Table, DatePicker, Menu, Dropdown } from 'antd'
 import { Link, useParams } from 'react-router-dom'
 import walletApi from 'api/walletApi'
-import {
-    FilterOutlined,
-    PlusCircleOutlined,
-} from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
+import { FilterOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import * as roles from 'shared/constants/role'
 import './detail-wallet.scss'
-
 
 const numOfItem = [10, 15, 25]
 const columns = [
@@ -41,7 +38,7 @@ const columns = [
 
 function DetailWallet() {
     const { user } = useAuth()
-    const { id } = useParams() // dung cho admin nhung chua lam
+    const { id } = useParams()
     const [walletType, setWalletType] = useState('All')
     const [balance, setBalance] = useState(0)
     const [total, setTotal] = useState(0)
@@ -65,19 +62,48 @@ function DetailWallet() {
                     limit: pageSize,
                     page: page,
                 }
-                walletApi.getWalletByUserId(user.id,params).then((response) => {
-                    setBalance(response.data.Wallet.balance)
-                    setTotal(response.data.Transactions.count)
-                    setTransactionList(
-                        response.data.Transactions.rows.map((transaction) => ({
-                        type: transaction.TransactionType.type_name,
-                        time: transaction.createdAt,
-                        begin: transaction.old_balance,
-                        money: transaction.amount,
-                        after: transaction.new_balance,
-                        })),
-                    )
-                })
+                if (user.role === roles.ADMIN) {
+                    walletApi.getWalletByUserId(id, params).then((response) => {
+                        setBalance(response.data.Wallet.balance)
+                        setTotal(response.data.Transactions.count)
+                        setTransactionList(
+                            response.data.Transactions.rows.map(
+                                (transaction) => ({
+                                    type: transaction.TransactionType.type_name,
+                                    time: transaction.createdAt,
+                                    begin: transaction.old_balance,
+                                    money:
+                                        transaction.amount < 0
+                                            ? transaction.amount
+                                            : '+' + transaction.amount,
+                                    after: transaction.new_balance,
+                                }),
+                            ),
+                        )
+                    })
+                } else {
+                    walletApi
+                        .getWalletByUserId(user.id, params)
+                        .then((response) => {
+                            setBalance(response.data.Wallet.balance)
+                            setTotal(response.data.Transactions.count)
+                            setTransactionList(
+                                response.data.Transactions.rows.map(
+                                    (transaction) => ({
+                                        type: transaction.TransactionType
+                                            .type_name,
+                                        time: transaction.createdAt,
+                                        begin: transaction.old_balance,
+                                        money:
+                                            transaction.amount < 0
+                                                ? transaction.amount
+                                                : '+' + transaction.amount,
+                                        after: transaction.new_balance,
+                                    }),
+                                ),
+                            )
+                        })
+                }
             },
         },
     }
@@ -90,26 +116,51 @@ function DetailWallet() {
 
     useEffect(() => {
         const params = {
-                    limit: pageSize,
-                    page: 1,
-                }
-        if (!!user) {
-            walletApi.getWalletByUserId(user.id,params).then((response) => {
-                setBalance(response.data.Wallet.balance)
-                setTotal(response.data.Transactions.count)
-                setTransactionList(
-                    response.data.Transactions.rows.map((transaction) => ({
-                    type: transaction.TransactionType.type_name,
-                    time: transaction.createdAt,
-                    begin: transaction.old_balance,
-                    money: transaction.amount,
-                    after: transaction.new_balance,
-                    })),
-                )
-            })
+            limit: pageSize,
+            page: 1,
         }
-    }, [user,pageSize])
-
+        if (!!user) {
+            if (user.role === roles.ADMIN) {
+                walletApi.getWalletByUserId(id, params).then((response) => {
+                    setBalance(response.data.Wallet.balance)
+                    setTotal(response.data.Transactions.count)
+                    setTransactionList(
+                        response.data.Transactions.rows.map((transaction) => ({
+                            type: transaction.TransactionType.type_name,
+                            time: transaction.createdAt,
+                            begin: transaction.old_balance,
+                            money:
+                                transaction.amount < 0
+                                    ? transaction.amount
+                                    : '+' + transaction.amount,
+                            after: transaction.new_balance,
+                        })),
+                    )
+                })
+            } else {
+                walletApi
+                    .getWalletByUserId(user.id, params)
+                    .then((response) => {
+                        setBalance(response.data.Wallet.balance)
+                        setTotal(response.data.Transactions.count)
+                        setTransactionList(
+                            response.data.Transactions.rows.map(
+                                (transaction) => ({
+                                    type: transaction.TransactionType.type_name,
+                                    time: transaction.createdAt,
+                                    begin: transaction.old_balance,
+                                    money:
+                                        transaction.amount < 0
+                                            ? transaction.amount
+                                            : '+' + transaction.amount,
+                                    after: transaction.new_balance,
+                                }),
+                            ),
+                        )
+                    })
+            }
+        }
+    }, [user, pageSize, id])
 
     const menu = () => {
         return (
@@ -155,6 +206,7 @@ function DetailWallet() {
                         </span>
                         <DatePicker
                             size="medium"
+                            className="input"
                             // defaultValue={moment(
                             //     'YYYY/MM/DD',
                             // )}
@@ -169,6 +221,7 @@ function DetailWallet() {
                         </span>
                         <DatePicker
                             size="medium"
+                            className="input"
                             // defaultValue={moment(
                             //     'YYYY/MM/DD',
                             // )}

@@ -195,9 +195,8 @@
                 margin: auto;
                 height: 4vh;
                 width: 100%;
-                background-color: #f0f0f0;
-                border: none;
-                border-radius: 10px;
+                background-color: #fff;
+                border: 1px solid #ddd !important;
                 padding-left: 0.5vw;
             }
 
@@ -206,33 +205,6 @@
             }
         }
     }
-}
-
-.ant-picker-focused,
-.ant-picker:hover {
-    border-color: #41bc3f;
-    box-shadow: none;
-}
-
-.ant-input:hover,
-.ant-picker:hover {
-    border-color: #41bc3f;
-}
-
-.ant-picker-today-btn {
-    color: #41bc3f;
-}
-
-.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner:before {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    border: 1px solid #41bc3f;
-    border-radius: 2px;
-    content: '';
 }
 
 .ant-table-tbody > tr > td {
