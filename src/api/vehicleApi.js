@@ -2,7 +2,10 @@ import axiosClient from './axiosClient'
 
 const vehicleApi = {
     getListByParams: (params) => {
-        const url = `/api/vehicles?limit=${params.limit}&page=${params.page}`
+        let url = '/api/vehicles?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getListByUserId: (id) => {
