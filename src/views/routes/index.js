@@ -181,7 +181,7 @@ function AllRoutes() {
                     element={<MainLayout component={Packages} />}
                 />
                 <Route
-                    path="parking-lots/:id/packages"
+                    path="/parking-lots/:id/packages"
                     element={<MainLayout component={Packages} />}
                 />
                 <Route
