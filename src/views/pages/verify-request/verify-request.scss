@@ -199,28 +199,25 @@
     padding: 2vh 2vh;
 
     &__item {
-        &__row {
-            height: 5vh;
-            display: grid;
-            grid-template-columns: 30% 70%;
+        height: 5vh;
+        display: grid;
+        grid-template-columns: 30% 70%;
+        margin: 5px 0;
+        &__span {
+            margin: auto 0;
+        }
 
-            &__span {
-                margin: auto 0;
-            }
+        select {
+            margin: auto;
+            height: 4vh;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ddd !important;
+            padding-left: 0.5vw;
+        }
 
-            select {
-                margin: auto;
-                height: 4vh;
-                width: 100%;
-                background-color: #f0f0f0;
-                border: none;
-                border-radius: 10px;
-                padding-left: 0.5vw;
-            }
-
-            option {
-                border-radius: 0px;
-            }
+        option {
+            border-radius: 0px;
         }
     }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, Link, Navigate } from 'react-router-dom'
-import { Table, Input, Menu, Dropdown } from 'antd'
+import { Table, Input, Menu, Dropdown, DatePicker } from 'antd'
 import {
     SearchOutlined,
     FilterOutlined,
@@ -144,36 +144,67 @@ function VerifyRequest() {
         return (
             <Menu class="verify-request-menu">
                 <div className="verify-request-menu__item">
-                    <div className="verify-request-menu__item__row">
-                        <span className="verify-request-menu__item__row__span">
-                            Trạng thái
-                        </span>
-                        <select
-                            className="verify-request-menu__item__row__select"
-                            onChange={(e) =>
-                                setParams({
-                                    ...params,
-                                    verify_state:
-                                        e.target.value === 'All'
-                                            ? null
-                                            : e.target.value,
-                                })
-                            }
-                        >
-                            <option key={1} value="All">
-                                All
-                            </option>
-                            <option key={2} value={verifyStates.VERIFIED}>
-                                {verifyStates.VERIFIED}
-                            </option>
-                            <option key={3} value={verifyStates.PENDING}>
-                                {verifyStates.PENDING}
-                            </option>
-                            <option key={4} value={verifyStates.DENIED}>
-                                {verifyStates.DENIED}
-                            </option>
-                        </select>
-                    </div>
+                    <span className="verify-request-menu__item__span">
+                        Trạng thái
+                    </span>
+                    <select
+                        className="verify-request-menu__item__select"
+                        onChange={(e) =>
+                            setParams({
+                                ...params,
+                                verify_state:
+                                    e.target.value === 'All'
+                                        ? null
+                                        : e.target.value,
+                            })
+                        }
+                    >
+                        <option key={1} value="All">
+                            All
+                        </option>
+                        <option key={2} value={verifyStates.VERIFIED}>
+                            {verifyStates.VERIFIED}
+                        </option>
+                        <option key={3} value={verifyStates.PENDING}>
+                            {verifyStates.PENDING}
+                        </option>
+                        <option key={4} value={verifyStates.DENIED}>
+                            {verifyStates.DENIED}
+                        </option>
+                    </select>
+                </div>
+
+                <div className="verify-request-menu__item">
+                    <span className="verify-request-menu__item__span">
+                        Từ ngày
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                from_date: dateString,
+                            })
+                        }
+                        placeholder="Thời gian bắt đầu"
+                    />
+                </div>
+                <div className="verify-request-menu__item">
+                    <span className="verify-request-menu__item__span">
+                        Đến ngày
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                to_date: dateString,
+                            })
+                        }
+                        placeholder="Thời gian bắt đầu"
+                    />
                 </div>
             </Menu>
         )

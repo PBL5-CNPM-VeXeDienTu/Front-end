@@ -19,14 +19,12 @@ button:hover {
     background-color: #fff !important;
     border-radius: 0 !important;
     padding: 2% 4%;
+    border: 1px solid #ddd !important;
 }
 .input:hover,
-.input:focus {
-    border: 1px solid #41bc3f;
-    box-shadow: none;
-}
 .input:not(:focus),
 .input:focus {
+    border: 1px solid #41bc3f;
     box-shadow: none;
 }
 
