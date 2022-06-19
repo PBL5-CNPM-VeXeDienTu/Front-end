@@ -75,7 +75,7 @@ const RenderMenu = () => {
                     to={
                         user.role === roles.ADMIN
                             ? '/wallets'
-                            : '/wallets/detail'
+                            : `/wallets/${user.id}/detail`
                     }
                 >
                     Ví cá nhân
@@ -143,7 +143,7 @@ const RenderMenu = () => {
                     to={
                         user.role === roles.ADMIN
                             ? '/wallets'
-                            : '/wallets/detail'
+                            : `/wallets/${user.id}/detail`
                     }
                 >
                     Ví cá nhân

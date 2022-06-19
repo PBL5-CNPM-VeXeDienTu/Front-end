@@ -53,30 +53,6 @@
             }
         }
 
-        &__filter-unactive {
-            height: 5.5vh;
-            width: 5.5vh;
-            border-radius: 50%;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #000;
-            cursor: pointer;
-        }
-
-        &__filter-active {
-            height: 5.5vh;
-            width: 5.5vh;
-            border-radius: 50%;
-            background-color: #41bc3f;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            cursor: pointer;
-        }
-
         &__search {
             width: 100%;
             position: relative;
@@ -185,6 +161,10 @@
     padding: 2vh 2vh;
 
     &__item {
+        &__span {
+            margin: auto auto;
+            font-weight: bold;
+        }
         &__row {
             height: 5vh;
             display: grid;
@@ -199,9 +179,8 @@
                 margin: auto;
                 height: 4vh;
                 width: 100%;
-                background-color: #f0f0f0;
-                border: none;
-                border-radius: 10px;
+                background-color: #fff;
+                border: 1px solid #ddd !important;
                 padding-left: 0.5vw;
             }
 

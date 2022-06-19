@@ -169,7 +169,7 @@ function AllRoutes() {
                     element={<MainLayout component={Wallets} />}
                 />
                 <Route
-                    path="/wallets/detail"
+                    path="/wallets/:id/detail"
                     element={<MainLayout component={DetailWallet} />}
                 />
                 <Route
