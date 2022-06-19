@@ -19,13 +19,13 @@ function AddPackage() {
     const [parkingLotByOwnerId, setParkingLotByOwnerId] = useState([])
 
     useEffect(() => {
-        packageTypeApi.getListPackageType().then((response) => {
+        packageTypeApi.getAll().then((response) => {
             setPackageTypes(response.data.rows)
         })
     }, [])
 
     useEffect(() => {
-        vehicleTypeApi.getListVehicleType().then((response) => {
+        vehicleTypeApi.getAll().then((response) => {
             setVehicleTypes(response.data.rows)
         })
     }, [])

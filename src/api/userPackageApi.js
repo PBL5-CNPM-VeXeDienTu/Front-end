@@ -6,7 +6,10 @@ const userPackageApi = {
         return axiosClient.get(url, { params })
     },
     getUserPackageByOwner: (id, params) => {
-        const url = `/api/user-packages/get-by-owner/${id}?limit=${params.limit}&page=${params.page}`
+        let url = `/api/user-packages/get-by-owner/${id}?`
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     createNew: (credentials) => {

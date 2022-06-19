@@ -52,7 +52,7 @@ function DetailParkingLot() {
                         })),
                     )
                 })
-                vehicleTypeApi.getList().then((response) => {
+                vehicleTypeApi.getAll().then((response) => {
                     setVehicleTypeList(
                         response.data.rows.map((vehicleType) => ({
                             key: vehicleType.id,
@@ -301,7 +301,9 @@ function DetailParkingLot() {
                         >
                             <span className="span1">Gói ưu đãi</span>
                             <span className="span2">
-                                <Link to="/packages">
+                                <Link
+                                    to={`/parking-lots/${parkingLot.id}/packages`}
+                                >
                                     <button>Xem gói ưu đãi</button>
                                 </Link>
                             </span>
