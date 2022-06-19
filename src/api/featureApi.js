@@ -1,26 +1,26 @@
 import axiosClient from './axiosClient'
 
-const packageTypeApi = {
+const featureApi = {
     getAll: () => {
-        const url = '/api/package-types'
+        const url = '/api/features'
         return axiosClient.get(url)
     },
-    getPackageTypeById: (id) => {
-        const url = `/api/package-types/${id}`
+    getFeatureById: (id) => {
+        const url = `/api/features/${id}`
         return axiosClient.get(url)
     },
     createNew: (credentials) => {
-        const url = `/api/package-types`
+        const url = `/api/features`
         return axiosClient.post(url, credentials)
     },
     updateById: (id, credentials) => {
-        const url = `/api/package-types/${id}`
+        const url = `/api/features/${id}`
         return axiosClient.patch(url, credentials)
     },
     deleteById: (id, credentials) => {
-        const url = `/api/package-types/${id}`
+        const url = `/api/features/${id}`
         return axiosClient.delete(url, credentials)
     },
 }
 
-export default packageTypeApi
+export default featureApi
