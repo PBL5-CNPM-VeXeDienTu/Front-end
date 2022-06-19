@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, DatePicker, Menu, Dropdown } from 'antd'
-import { Link } from 'react-router-dom'
+import { Table, DatePicker, Menu, Dropdown } from 'antd'
+import { Link, useParams } from 'react-router-dom'
+import walletApi from 'api/walletApi'
 import {
     FilterOutlined,
     PlusCircleOutlined,
-    SearchOutlined,
 } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
 import './detail-wallet.scss'
 
-const { Search } = Input
+
 const numOfItem = [10, 15, 25]
 const columns = [
     {
@@ -39,49 +40,76 @@ const columns = [
 ]
 
 function DetailWallet() {
+    const { user } = useAuth()
+    const { id } = useParams() // dung cho admin nhung chua lam
     const [walletType, setWalletType] = useState('All')
-    const [walletState, setWalletState] = useState('All')
+    const [balance, setBalance] = useState(0)
+    const [total, setTotal] = useState(0)
+    const [transactionList, setTransactionList] = useState()
+    const [walletFillter, setWalletFillter] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
-    const [page, setPage] = useState(10)
-
-    const onSearch = (value) => console.log(value)
-    const state = {
-        pagination: {
-            pageSize: page,
-        },
-    }
-
-    useEffect(() => {
-        if (walletType === 'All' && walletState === 'All')
-            setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [walletType, walletState])
-
+    const [pageSize, setPageSize] = useState(10)
     const walletTypeOfItem = [
         'All',
         'Nạp Card',
         'Liên kết với ngân hàng',
         'Nạp tiền trực tiếp với chủ nhà xe',
     ]
-    const data = []
-    for (let i = 0; i < 46; i += 2) {
-        data.push({
-            key: i,
-            type: `Nạp tiền qua thẻ cào ${i}`,
-            time: `25/4/2021 7:12`,
-            begin: 200000,
-            money: `+100000`,
-            after: 300000,
-        })
-        data.push({
-            key: i + 1,
-            type: `Nạp tiền qua thẻ cào ${i + 1}`,
-            time: `25/4/2021 7:12`,
-            begin: 200000,
-            money: -100000,
-            after: 300000,
-        })
+
+    const walletState = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                }
+                walletApi.getWalletByUserId(user.id,params).then((response) => {
+                    setBalance(response.data.Wallet.balance)
+                    setTotal(response.data.Transactions.count)
+                    setTransactionList(
+                        response.data.Transactions.rows.map((transaction) => ({
+                        type: transaction.TransactionType.type_name,
+                        time: transaction.createdAt,
+                        begin: transaction.old_balance,
+                        money: transaction.amount,
+                        after: transaction.new_balance,
+                        })),
+                    )
+                })
+            },
+        },
     }
+
+    useEffect(() => {
+        if (walletType === 'All' && walletFillter === 'All')
+            setActiveFilter(false)
+        else setActiveFilter(true)
+    }, [walletType, walletFillter])
+
+    useEffect(() => {
+        const params = {
+                    limit: pageSize,
+                    page: 1,
+                }
+        if (!!user) {
+            walletApi.getWalletByUserId(user.id,params).then((response) => {
+                setBalance(response.data.Wallet.balance)
+                setTotal(response.data.Transactions.count)
+                setTransactionList(
+                    response.data.Transactions.rows.map((transaction) => ({
+                    type: transaction.TransactionType.type_name,
+                    time: transaction.createdAt,
+                    begin: transaction.old_balance,
+                    money: transaction.amount,
+                    after: transaction.new_balance,
+                    })),
+                )
+            })
+        }
+    }, [user,pageSize])
+
 
     const menu = () => {
         return (
@@ -113,7 +141,7 @@ function DetailWallet() {
                         </span>
                         <select
                             className="detail-wallet-menu__item__row__select"
-                            onChange={(e) => setWalletState(e.target.value)}
+                            onChange={(e) => setWalletFillter(e.target.value)}
                         >
                             <option value="All">All</option>
                             <option value="Nạp tiền">Nạp tiền</option>
@@ -160,7 +188,7 @@ function DetailWallet() {
             </div>
             <div className="detail-wallet-content__balance">
                 <div className="detail-wallet-content__balance__title">
-                    Số dư khả dụng: 5000000 VND
+                    Số dư khả dụng: {balance} VND
                 </div>
                 <Link
                     to="/wallets/payment"
@@ -180,8 +208,8 @@ function DetailWallet() {
                     <div className="detail-wallet-content__history__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: pageSize }}
+                            onChange={(e) => setPageSize(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -203,22 +231,12 @@ function DetailWallet() {
                             <FilterOutlined />
                         </div>
                     </Dropdown>
-                    <div className="detail-wallet-content__history__action__search">
-                        <Search
-                            className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
-                            allowClear
-                            suffix
-                        />
-                        <SearchOutlined className="detail-wallet-content__history__action__search__icon" />
-                    </div>
                 </div>
                 <div className="detail-wallet-content__history__table">
                     <Table
                         columns={columns}
-                        dataSource={data}
-                        pagination={state.pagination}
+                        dataSource={transactionList}
+                        pagination={walletState.pagination}
                         rowClassName={(record, index) =>
                             record.money >= 0
                                 ? 'detail-wallet-content__history__table__row-green'
