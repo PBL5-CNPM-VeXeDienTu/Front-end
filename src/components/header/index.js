@@ -48,7 +48,7 @@ function Header() {
     const userRole = () => {
         switch (user.role) {
             case 1:
-                return 'Basic User'
+                return 'Parking User'
             case 2:
                 return 'Parking-lot User'
             case 3:

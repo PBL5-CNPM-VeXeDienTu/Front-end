@@ -86,9 +86,6 @@ const CheckinCheckout = loadableComponent(() =>
 const Setting = loadableComponent(() => import('views/pages/setting'))
 const NotFound = loadableComponent(() => import('views/pages/404-not-found'))
 const availableRoles = [1, 2, 3]
-// const BASIC_USER_ROLE = 0;
-// const PARKING_LOT_USER_ROLE = 1;
-// const ADMIN_ROLE = 2;
 
 function AllRoutes() {
     return (
@@ -172,7 +169,7 @@ function AllRoutes() {
                     element={<MainLayout component={Wallets} />}
                 />
                 <Route
-                    path="/wallets/detail"
+                    path="/wallets/:id/detail"
                     element={<MainLayout component={DetailWallet} />}
                 />
                 <Route
@@ -184,7 +181,7 @@ function AllRoutes() {
                     element={<MainLayout component={Packages} />}
                 />
                 <Route
-                    path="parking-lots/:id/packages"
+                    path="/parking-lots/:id/packages"
                     element={<MainLayout component={Packages} />}
                 />
                 <Route

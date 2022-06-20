@@ -195,7 +195,7 @@ function Accounts() {
 
     return user.role === roles.ADMIN ? (
         <div>
-            {/* --------------------------------------------------- TAB BASIC --------------------------------------------------- */}
+            {/* --------------------------------------------------- TAB PARKING USER --------------------------------------------------- */}
             <div
                 className={
                     params.role === 1
@@ -206,7 +206,7 @@ function Accounts() {
                 <div className="title">Danh sách tài khoản</div>
 
                 <div className="account-list-content__swap-page">
-                    <button className="button-active">Basic User</button>
+                    <button className="button-active">Parking User</button>
                     <button
                         className="button-unactive"
                         onClick={() => setParams({ ...params, role: 2 })}
@@ -227,10 +227,7 @@ function Accounts() {
                         <select
                             defaultValue={{ value: params.pageSize }}
                             onChange={(e) =>
-                                setParams({
-                                    limit: e.target.value,
-                                    page: params.page,
-                                })
+                                setParams({ ...params, limit: e.target.value })
                             }
                         >
                             {numOfItem.map((numOfItem, index) => {
@@ -304,7 +301,7 @@ function Accounts() {
                         className="button-unactive"
                         onClick={() => setParams({ ...params, role: 1 })}
                     >
-                        Basic User
+                        Parking User
                     </button>
                     <button className="button-active">Parking-lot User</button>
                     <button
@@ -320,10 +317,7 @@ function Accounts() {
                         <select
                             defaultValue={{ value: params.pageSize }}
                             onChange={(e) =>
-                                setParams({
-                                    limit: e.target.value,
-                                    page: params.page,
-                                })
+                                setParams({ ...params, limit: e.target.value })
                             }
                         >
                             {numOfItem.map((numOfItem, index) => {
@@ -397,7 +391,7 @@ function Accounts() {
                         className="button-unactive"
                         onClick={() => setParams({ ...params, role: 1 })}
                     >
-                        Basic User
+                        Parking User
                     </button>
                     <button
                         className="button-unactive"
@@ -413,10 +407,7 @@ function Accounts() {
                         <select
                             defaultValue={{ value: params.pageSize }}
                             onChange={(e) =>
-                                setParams({
-                                    limit: e.target.value,
-                                    page: params.page,
-                                })
+                                setParams({ ...params, limit: e.target.value })
                             }
                         >
                             {numOfItem.map((numOfItem, index) => {

@@ -50,11 +50,16 @@
                     }
                     img {
                         margin-left: 18%;
-                        width: 10vw;
-                        height: 10vw;
-                        background-color: rgba(8, 168, 231, 0.667);
+                        width: 15vw;
+                        height: 15vw;
                     }
                 }
+            }
+
+            &__qr {
+                width: 25vw;
+                margin: auto;
+                margin-left: 100px;
             }
         }
     }

@@ -9,6 +9,8 @@ import {
 import useAuth from 'hooks/useAuth'
 import * as roles from 'shared/constants/role'
 import feedbackApi from 'api/feedbackAPi'
+import feedbackTypeApi from 'api/feedbackTypeApi'
+import featureApi from 'api/featureApi'
 import './feedback-list.scss'
 
 const { Search } = Input
@@ -36,47 +38,27 @@ const columns = [
     },
 ]
 
-const featureOfItem = [
-    'All',
-    '[Basic user] Đăng ký xe',
-    '[Basic user] Chỉnh sửa thông tin xe',
-    '[Basic user] Hủy đăng ký xe',
-]
-
-const feedbackTypeOfItem = [
-    'All',
-    'Câu hỏi',
-    'Liên lạc về lỗi của hệ thống',
-    'Mong muốn thêm chức năng',
-]
-
 function ParkingLots() {
     const { user } = useAuth()
+    const [total, setTotal] = useState(0)
+    const [showParkingUserModal, setShowParkingUserModal] = useState(false)
+    const [showAdminModal, setShowAdminModal] = useState(false)
+    const [radioValue, setRadioValue] = useState(0)
+    const [feedbackList, setFeedbackList] = useState([])
+    const [feedbackTypeList, setFeedbackTypeList] = useState([])
+    const [featureList, setFeatureList] = useState([])
+    const [feedback, setFeedback] = useState({})
     const [params, setParams] = useState({
         limit: 10,
         page: 1,
+        txt_search: null,
+        type_id: null,
+        feature_id: null,
+        is_processed: null,
     })
-    const [total, setTotal] = useState(0)
-    const [feedbackType, setFeedbackType] = useState('All')
-    const [feature, setFeature] = useState('All')
-    const [feedbackState, setFeedbackState] = useState('All')
-    const [activeFilter, setActiveFilter] = useState(false)
-    const [showBasicUserModal, setShowBasicUserModal] = useState(false)
-    const [showAdminModal, setShowAdminModal] = useState(false)
-    const [dataColumns, setDataColumns] = useState([{}])
-    const [radioValue, setRadioValue] = useState(0)
-    const [feedback, setFeedback] = useState({
-        key: 0,
-        type_name: '',
-        feedback_name: '',
-        is_processed: '',
-        content: '',
-    })
-
-    const onSearch = (value) => console.log(value)
 
     const showFeedbackItem = (record) => {
-        setShowBasicUserModal(true)
+        setShowParkingUserModal(true)
         setFeedback(record)
     }
 
@@ -84,16 +66,6 @@ function ParkingLots() {
         setShowAdminModal(true)
         setFeedback(record)
     }
-
-    useEffect(() => {
-        if (
-            feedbackType === 'All' &&
-            feature === 'All' &&
-            feedbackState === 'All'
-        )
-            setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [feedbackType, feature, feedbackState])
 
     const state = {
         pagination: {
@@ -113,7 +85,7 @@ function ParkingLots() {
             user.role === roles.ADMIN
                 ? feedbackApi.getListByParams(params).then((response) => {
                       setTotal(response.data.count)
-                      setDataColumns(
+                      setFeedbackList(
                           response.data.rows.map((feedback) => ({
                               id: feedback.id,
                               feedback_type: feedback.Feature.name,
@@ -130,7 +102,7 @@ function ParkingLots() {
                       .getListByUserId(user.id, params)
                       .then((response) => {
                           setTotal(response.data.count)
-                          setDataColumns(
+                          setFeedbackList(
                               response.data.rows.map((feedback) => ({
                                   id: feedback.id,
                                   feedback_type: feedback.Feature.name,
@@ -143,13 +115,29 @@ function ParkingLots() {
                               })),
                           )
                       })
+            feedbackTypeApi.getAll().then((response) => {
+                setFeedbackTypeList(
+                    response.data.rows.map((feedbackType) => ({
+                        id: feedbackType.id,
+                        type_name: feedbackType.type_name,
+                    })),
+                )
+            })
+            featureApi.getAll().then((response) => {
+                setFeatureList(
+                    response.data.rows.map((feature) => ({
+                        id: feature.id,
+                        name: feature.name,
+                    })),
+                )
+            })
         } catch (error) {
             alert(error)
         }
     }, [params, user])
 
     const handleCancel = () => {
-        setShowBasicUserModal(false)
+        setShowParkingUserModal(false)
         setShowAdminModal(false)
     }
 
@@ -180,20 +168,29 @@ function ParkingLots() {
                         </span>
                         <select
                             className="feedback-list-menu__item__row__select"
-                            onChange={(e) => setFeedbackType(e.target.value)}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    type_id:
+                                        e.target.value === 'All'
+                                            ? null
+                                            : e.target.value,
+                                })
+                            }
                         >
-                            {feedbackTypeOfItem.map(
-                                (feedbackTypeOfItem, index) => {
-                                    return (
-                                        <option
-                                            key={index}
-                                            value={feedbackTypeOfItem}
-                                        >
-                                            {feedbackTypeOfItem}
-                                        </option>
-                                    )
-                                },
-                            )}
+                            <option key={1} value="All">
+                                All{' '}
+                            </option>
+                            {feedbackTypeList.map((feedbackType, index) => {
+                                return (
+                                    <option
+                                        key={index + 1}
+                                        value={feedbackType.id}
+                                    >
+                                        {feedbackType.type_name}
+                                    </option>
+                                )
+                            })}
                         </select>
                     </div>
 
@@ -203,12 +200,23 @@ function ParkingLots() {
                         </span>
                         <select
                             className="feedback-list-menu__item__row__select"
-                            onChange={(e) => setFeature(e.target.value)}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    feature_id:
+                                        e.target.value === 'All'
+                                            ? null
+                                            : e.target.value,
+                                })
+                            }
                         >
-                            {featureOfItem.map((featureOfItem, index) => {
+                            <option key={1} value="All">
+                                All{' '}
+                            </option>
+                            {featureList.map((feature, index) => {
                                 return (
-                                    <option key={index} value={featureOfItem}>
-                                        {featureOfItem}
+                                    <option key={index + 1} value={feature.id}>
+                                        {feature.name}
                                     </option>
                                 )
                             })}
@@ -221,7 +229,30 @@ function ParkingLots() {
                         </span>
                         <select
                             className="feedback-list-menu__item__row__select"
-                            onChange={(e) => setFeedbackState(e.target.value)}
+                            onChange={(e) => {
+                                switch (e.target.value) {
+                                    case 'All':
+                                        setParams({
+                                            ...params,
+                                            is_processed: null,
+                                        })
+                                        break
+                                    case 'Chưa duyệt':
+                                        setParams({
+                                            ...params,
+                                            is_processed: 0,
+                                        })
+                                        break
+                                    case 'Đã duyệt':
+                                        setParams({
+                                            ...params,
+                                            is_processed: 1,
+                                        })
+                                        break
+                                    default:
+                                        break
+                                }
+                            }}
                         >
                             <option value="All">All</option>
                             <option value="Chưa duyệt">Chưa duyệt</option>
@@ -266,7 +297,9 @@ function ParkingLots() {
                 <Dropdown overlay={menu} trigger="click" placement="bottom">
                     <div
                         className={
-                            activeFilter
+                            params.type_id != null ||
+                            params.feature_id != null ||
+                            params.is_processed != null
                                 ? 'feedback-list-content__action__filter-active'
                                 : 'feedback-list-content__action__filter-unactive'
                         }
@@ -278,8 +311,10 @@ function ParkingLots() {
                 <div className="feedback-list-content__action__search">
                     <Search
                         className="search-box"
-                        placeholder="Tìm kiếm"
-                        onSearch={onSearch}
+                        placeholder="Loại phản hồi, chức năng, nội dung"
+                        onChange={(e) =>
+                            setParams({ ...params, txt_search: e.target.value })
+                        }
                         allowClear
                         suffix
                     />
@@ -303,7 +338,7 @@ function ParkingLots() {
                 <Table
                     className="feedback-list-content__sub__table"
                     columns={columns}
-                    dataSource={dataColumns}
+                    dataSource={feedbackList}
                     pagination={state.pagination}
                     rowClassName={(record, index) =>
                         record.is_processed === 'Đã duyệt'
@@ -322,10 +357,10 @@ function ParkingLots() {
                         }
                     }}
                 />
-                {/* -------------------------------------- MODAL BASIC USER & PARKING-LOT USER -------------------------------------- */}
+                {/* -------------------------------------- MODAL PARKING USER & PARKING-LOT USER -------------------------------------- */}
                 <Modal
                     className="feedback-list-modal"
-                    visible={showBasicUserModal}
+                    visible={showParkingUserModal}
                     onCancel={handleCancel}
                     footer={null}
                 >

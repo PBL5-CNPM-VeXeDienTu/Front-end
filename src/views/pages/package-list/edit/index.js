@@ -38,13 +38,13 @@ function EditPackage() {
     }, [id])
 
     useEffect(() => {
-        packageTypeApi.getListPackageType().then((response) => {
+        packageTypeApi.getAll().then((response) => {
             setPackageTypes(response.data.rows)
         })
     }, [])
 
     useEffect(() => {
-        vehicleTypeApi.getListVehicleType().then((response) => {
+        vehicleTypeApi.getAll().then((response) => {
             setVehicleTypes(response.data.rows)
         })
     }, [])

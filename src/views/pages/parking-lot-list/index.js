@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Table, Input, Modal, Menu, Dropdown } from 'antd'
+import { Table, Input, Menu, Dropdown } from 'antd'
 import {
     PlusCircleOutlined,
-    EditOutlined,
-    CloseOutlined,
     SearchOutlined,
     FilterOutlined,
 } from '@ant-design/icons'
@@ -24,17 +22,22 @@ const columns = [
     {
         title: 'Tên bãi đỗ xe',
         dataIndex: 'name',
-        width: '20%',
+        width: '15%',
     },
     {
         title: 'Chủ sở hữu',
         dataIndex: 'owner_name',
-        width: '20%',
+        width: '15%',
     },
     {
         title: 'Thời gian mở',
         dataIndex: 'time_slot',
         width: '13%',
+    },
+    {
+        title: 'Sức chứa',
+        dataIndex: 'capacity',
+        width: '10%',
     },
     {
         title: 'Trạng thái',
@@ -50,62 +53,25 @@ const columns = [
 function ParkingLots() {
     const { user } = useAuth()
     const navigate = useNavigate()
-    const [activeFilter, setActiveFilter] = useState(false)
-    const [openStateFilter, setOpenStateFilter] = useState('All')
-    const [isModalVisible, setIsModalVisible] = useState(false)
-    const [pageSize, setPageSize] = useState(10)
     const [total, setTotal] = useState(0)
-    const [parkingLotId, setParkingLotId] = useState()
     const [parkingLotList, setParkingLotList] = useState([])
-
-    const onSearch = (value) => console.log(value)
-
-    const showModal = (parkingLotId) => {
-        setIsModalVisible(true)
-        setParkingLotId(parkingLotId)
-    }
-
-    const handleCancel = () => {
-        setIsModalVisible(false)
-    }
-
-    const handleOk = async () => {
-        try {
-            const response = await parkingLotApi.softDeleteById(parkingLotId)
-            alert(response.data.message)
-            window.location.reload()
-        } catch (error) {
-            alert(error.response.data.message)
-        }
-    }
-
-    useEffect(() => {
-        if (openStateFilter === 'All') setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [openStateFilter])
+    const [params, setParams] = useState({
+        limit: 10,
+        page: 1,
+        txt_search: null,
+        is_open: null,
+        is_full: 0,
+    })
 
     const state = {
         pagination: {
-            pageSize: pageSize,
+            pageSize: params.limit,
             total: total,
             onChange: (page, pageSize) => {
-                const params = {
+                setParams({
+                    ...params,
                     limit: pageSize,
                     page: page,
-                }
-                parkingLotApi.getListByParams(params).then((response) => {
-                    setParkingLotList(
-                        response.data.rows.map((parkingLot) => ({
-                            id: parkingLot.id,
-                            name: parkingLot.name,
-                            owner_name: parkingLot.Owner.name,
-                            time_slot: parkingLot.time_slot,
-                            is_open: parkingLot.is_open
-                                ? openStates.OPENING
-                                : openStates.CLOSED,
-                            address: parkingLot.address,
-                        })),
-                    )
                 })
             },
         },
@@ -113,10 +79,6 @@ function ParkingLots() {
 
     useEffect(() => {
         if (!!user) {
-            const params = {
-                limit: pageSize,
-                page: 1,
-            }
             user.role === roles.PARKING_LOT_USER
                 ? parkingLotApi.getListByUserId(user.id).then((response) => {
                       setParkingLotList(response.data.rows)
@@ -128,20 +90,19 @@ function ParkingLots() {
                               id: parkingLot.id,
                               name: parkingLot.name,
                               owner_name: parkingLot.Owner.name,
+                              capacity: parkingLot.capacity,
                               time_slot: parkingLot.time_slot,
                               is_open: parkingLot.is_open
-                                  ? openStates.OPENING
+                                  ? parkingLot.is_full
+                                      ? openStates.FULL
+                                      : openStates.OPENING
                                   : openStates.CLOSED,
                               address: parkingLot.address,
                           })),
                       )
                   })
         }
-    }, [user, pageSize])
-
-    const handleNavigation = (parkingLotId) => {
-        navigate(`/parking-lots/${parkingLotId}/packages`)
-    }
+    }, [user, params])
 
     const menu = () => {
         return (
@@ -153,7 +114,38 @@ function ParkingLots() {
                         </span>
                         <select
                             className="parking-lot-menu__item__row__select"
-                            onChange={(e) => setOpenStateFilter(e.target.value)}
+                            onChange={(e) => {
+                                switch (e.target.value) {
+                                    case openStates.OPENING:
+                                        setParams({
+                                            ...params,
+                                            is_open: 1,
+                                            is_full: null,
+                                        })
+                                        break
+                                    case openStates.CLOSED:
+                                        setParams({
+                                            ...params,
+                                            is_open: 0,
+                                            is_full: null,
+                                        })
+                                        break
+                                    case openStates.FULL:
+                                        setParams({
+                                            ...params,
+                                            is_open: null,
+                                            is_full: 1,
+                                        })
+                                        break
+                                    default:
+                                        setParams({
+                                            ...params,
+                                            is_open: null,
+                                            is_full: null,
+                                        })
+                                        break
+                                }
+                            }}
                         >
                             <option key={1} value="All">
                                 All
@@ -163,6 +155,9 @@ function ParkingLots() {
                             </option>
                             <option key={3} value={openStates.CLOSED}>
                                 {openStates.CLOSED}
+                            </option>
+                            <option key={4} value={openStates.FULL}>
+                                {openStates.FULL}
                             </option>
                         </select>
                     </div>
@@ -175,16 +170,18 @@ function ParkingLots() {
         e.target.src = defaultImageUrl.PARKING_LOT_AVATAR
     }
 
-    return user.role === roles.BASIC_USER ? (
-        //-------------------------------- Basic User --------------------------------------
+    return user.role === roles.PARKING_USER ? (
+        //-------------------------------- Parking User --------------------------------------
         <div className="parking-lot-list-content">
             <div className="title">Danh sách bãi đỗ xe</div>
             <div className="parking-lot-list-content__action">
                 <div className="parking-lot-list-content__action__select">
                     <span>Hiển thị </span>
                     <select
-                        defaultValue={{ value: pageSize }}
-                        onChange={(e) => setPageSize(e.target.value)}
+                        defaultValue={{ value: params.limit }}
+                        onChange={(e) =>
+                            setParams({ ...params, limit: e.target.value })
+                        }
                     >
                         {numOfItem.map((numOfItem, index) => {
                             return (
@@ -198,7 +195,7 @@ function ParkingLots() {
                 <Dropdown overlay={menu} trigger="click" placement="bottom">
                     <div
                         className={
-                            activeFilter
+                            params.is_full || params.is_open !== null
                                 ? 'parking-lot-list-content__action__filter-active'
                                 : 'parking-lot-list-content__action__filter-unactive'
                         }
@@ -210,8 +207,10 @@ function ParkingLots() {
                 <div className="parking-lot-list-content__action__search">
                     <Search
                         className="search-box"
-                        placeholder="Tìm kiếm"
-                        onSearch={onSearch}
+                        placeholder="Tên bãi đỗ xe, chủ sở hữu, địa chỉ"
+                        onChange={(e) =>
+                            setParams({ ...params, txt_search: e.target.value })
+                        }
                         allowClear
                         suffix
                     />
@@ -225,11 +224,18 @@ function ParkingLots() {
                     columns={columns}
                     dataSource={parkingLotList}
                     pagination={state.pagination}
-                    rowClassName={(record, index) =>
-                        record.status === openStates.OPENING
-                            ? 'parking-lot-list-content__sub__table__row-green'
-                            : 'parking-lot-list-content__sub__table__row-red'
-                    }
+                    rowClassName={(record, index) => {
+                        switch (record.is_open) {
+                            case openStates.OPENING:
+                                return 'parking-lot-list-content__sub__table__row-green'
+                            case openStates.FULL:
+                                return 'parking-lot-list-content__sub__table__row-orange'
+                            case openStates.CLOSED:
+                                return 'parking-lot-list-content__sub__table__row-red'
+                            default:
+                                break
+                        }
+                    }}
                     onRow={(record, rowIndex) => {
                         return {
                             onClick: () =>
@@ -252,7 +258,12 @@ function ParkingLots() {
             </div>
             <div className="parking-lot-list-container__content">
                 {parkingLotList?.map((parkingLot) => (
-                    <div className="parking-lot-list-container__content__sub">
+                    <div
+                        className="parking-lot-list-container__content__sub"
+                        onClick={() =>
+                            navigate(`/parking-lots/${parkingLot.id}`)
+                        }
+                    >
                         <div className="parking-lot-list-container__content__item">
                             <img
                                 className="parking-lot-list-container__content__item__image"
@@ -288,12 +299,16 @@ function ParkingLots() {
                                     <span
                                         className={
                                             parkingLot.is_open
-                                                ? 'span2-green'
+                                                ? parkingLot.is_full
+                                                    ? 'span2-orange'
+                                                    : 'span2-green'
                                                 : 'span2-red'
                                         }
                                     >
                                         {parkingLot.is_open
-                                            ? openStates.OPENING
+                                            ? parkingLot.is_full
+                                                ? openStates.FULL
+                                                : openStates.OPENING
                                             : openStates.CLOSED}
                                     </span>
                                 </div>
@@ -320,51 +335,8 @@ function ParkingLots() {
                                         {parkingLot.address}
                                     </span>
                                 </div>
-                                <div
-                                    className={
-                                        parkingLot.VerifyState.state ===
-                                        verifyStates.VERIFIED
-                                            ? 'div-active'
-                                            : 'div-unactive'
-                                    }
-                                >
-                                    <span className="span1">Gói ưu đãi</span>
-                                    <span className="span2">
-                                        <button
-                                            onClick={() =>
-                                                handleNavigation(parkingLot.id)
-                                            }
-                                        >
-                                            Xem gói ưu đãi
-                                        </button>
-                                    </span>
-                                </div>
                             </div>
                         </div>
-                        <div className="parking-lot-list-container__content__icon">
-                            <Link to={`/parking-lots/${parkingLot.id}/edit`}>
-                                <span className="edit-parking-lot">
-                                    <EditOutlined />
-                                </span>
-                            </Link>
-                            <span className="delete-parking-lot">
-                                <CloseOutlined
-                                    onClick={(e) => showModal(parkingLot.id)}
-                                />
-                            </span>
-                        </div>
-                        <Modal
-                            className="delete-parking-lot-modal"
-                            title="Hủy đăng ký bãi đỗ xe"
-                            visible={isModalVisible}
-                            onOk={handleOk}
-                            onCancel={handleCancel}
-                        >
-                            <p>
-                                Bạn có chắn chắn muốn hủy đăng ký bãi đỗ xe hay
-                                không ?
-                            </p>
-                        </Modal>
                     </div>
                 ))}
             </div>

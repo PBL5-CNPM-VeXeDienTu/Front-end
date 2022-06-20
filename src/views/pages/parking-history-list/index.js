@@ -9,8 +9,7 @@ import './parking-history-list.scss'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
-const vehicleStateOfItem = ['All', 'Đang đỗ', 'Không đỗ']
-const historyTypeOfItem = ['All', 'Biển số xe', 'Tên bãi đỗ xe']
+const vehicleStateOfItem = ['All', 'Đang đỗ', 'Đã checkout']
 const columns = [
     {
         title: 'Biển số xe',
@@ -52,7 +51,6 @@ const columns = [
 function ParkingHistories() {
     const { user } = useAuth()
     const [page, setPage] = useState(10)
-    const [historyType, setHistoryType] = useState('All')
     const [vehicleState, setVehicleState] = useState('All')
     const [activeFilter, setActiveFilter] = useState(false)
     const [parkingHistoryList, setParkingHistoryList] = useState([])
@@ -100,7 +98,7 @@ function ParkingHistories() {
 
     useEffect(() => {
         if (!!user) {
-            if (user.role === roles.BASIC_USER) {
+            if (user.role === roles.PARKING_USER) {
                 parkingHistoryApi
                     .getListByParkingLotUserId(user.id, params)
                     .then((response) => {
@@ -123,38 +121,14 @@ function ParkingHistories() {
                     })
             }
         }
-        if (historyType === 'All' && vehicleState === 'All')
-            setActiveFilter(false)
+        if (vehicleState === 'All') setActiveFilter(false)
         else setActiveFilter(true)
-    }, [user, params, historyType, vehicleState])
+    }, [user, params, vehicleState])
 
     const menu = () => {
         return (
             <Menu class="history-list-menu">
                 <div className="history-list-menu__item">
-                    <div className="history-list-menu__item__row">
-                        <span className="history-list-menu__item__row__span">
-                            Tìm kiếm theo
-                        </span>
-                        <select
-                            className="history-list-menu__item__row__select"
-                            onChange={(e) => setHistoryType(e.target.value)}
-                        >
-                            {historyTypeOfItem.map(
-                                (historyTypeOfItem, index) => {
-                                    return (
-                                        <option
-                                            key={index}
-                                            value={historyTypeOfItem}
-                                        >
-                                            {historyTypeOfItem}
-                                        </option>
-                                    )
-                                },
-                            )}
-                        </select>
-                    </div>
-
                     <div className="history-list-menu__item__row">
                         <span className="history-list-menu__item__row__span">
                             Trạng thái
@@ -233,7 +207,7 @@ function ParkingHistories() {
                     onRow={(record, rowIndex) => {
                         return {
                             onClick: () => {
-                                user.role === roles.BASIC_USER
+                                user.role === roles.PARKING_USER
                                     ? onClickRow(record)
                                     : setParkingHistory(null)
                             },

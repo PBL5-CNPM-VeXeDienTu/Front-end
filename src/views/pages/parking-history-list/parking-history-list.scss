@@ -80,7 +80,7 @@
     }
 }
 .history-list-menu {
-    width: 25vw;
+    width: 15vw;
     height: fit-content;
     background-color: #fff;
     border-radius: 5px;
@@ -90,7 +90,7 @@
         &__row {
             height: 5vh;
             display: grid;
-            grid-template-columns: 30% 70%;
+            grid-template-columns: 40% 60%;
             &__span {
                 margin: auto 0;
             }
@@ -98,9 +98,8 @@
                 margin: auto;
                 height: 4vh;
                 width: 100%;
-                background-color: #f0f0f0;
-                border: none;
-                border-radius: 10px;
+                background-color: #fff;
+                border: 1px solid #ddd !important;
                 padding-left: 0.5vw;
             }
             option {

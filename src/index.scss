@@ -11,6 +11,34 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
 }
+
+button:hover {
+    cursor: pointer;
+}
+.input {
+    background-color: #fff !important;
+    border-radius: 0 !important;
+    padding: 2% 4%;
+    border: 1px solid #ddd !important;
+}
+.input:hover,
+.input:not(:focus),
+.input:focus {
+    border: 1px solid #41bc3f;
+    box-shadow: none;
+}
+
+.ant-select-single .ant-select-selector {
+    border-radius: 0 !important;
+    background-color: #fff !important;
+}
+.ant-select-selector:hover,
+.ant-select-selector:focus {
+    border-radius: 0;
+    box-shadow: 0 0 3px #41bc3f !important;
+    border-color: #41bc3f !important;
+}
+
 .title {
     width: 100%;
     font-size: 2rem;
@@ -19,6 +47,11 @@ code {
     color: #41bc3f;
     font-weight: bold;
 }
+
+.div-unactive {
+    display: none !important;
+}
+
 .button-green {
     margin: 0 20px;
     width: 7vw;

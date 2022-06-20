@@ -2,15 +2,24 @@ import axiosClient from './axiosClient'
 
 const packageApi = {
     getListByParams: (params) => {
-        const url = `/api/packages?limit=${params.limit}&page=${params.page}`
+        let url = '/api/packages?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getListByParkinglotId: (id, params) => {
-        const url = `/api/packages/get-by-parking-lot/${id}?limit=${params.limit}&page=${params.page}`
+        let url = `/api/packages/get-by-parking-lot/${id}?`
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getListByOwnerId: (id, params) => {
-        const url = `/api/packages/get-by-owner/${id}?limit=${params.limit}&page=${params.page}`
+        let url = `/api/packages/get-by-owner/${id}?`
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getOneById: (id) => {

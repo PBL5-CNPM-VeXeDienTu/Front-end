@@ -78,7 +78,7 @@ function Vehicles() {
                                     </span>
                                 </div>
                                 <div>
-                                    <span className="span1">Xác thực</span>
+                                    <span className="span1">Trạng thái</span>
                                     <span
                                         className={
                                             vehicle.VerifyState.state ===

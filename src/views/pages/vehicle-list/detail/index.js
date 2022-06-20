@@ -15,13 +15,7 @@ function DetailVehicle() {
     const [showModalSoftDelete, setShowModalSoftDelete] = useState(false)
     const [radioValue, setRadioValue] = useState()
     const [vehicle, setVehicle] = useState({
-        key: 0,
-        user_name: '',
-        brand: '',
-        license_plate: '',
-        created_at: '',
-        type_of_vehicle: '',
-        status: '',
+        state: 'loading',
     })
 
     useEffect(() => {
@@ -66,7 +60,7 @@ function DetailVehicle() {
 
     return user.role !== roles.PARKING_LOT_USER ? (
         <div className="detail-vehicle-content">
-            <div className="title">Thông tin xe</div>
+            <div className="title">Thông tin chi tiết xe</div>
             <div>
                 <div className="detail-vehicle-content__vehicle">
                     <div className="detail-vehicle-content__vehicle__image">
@@ -103,6 +97,25 @@ function DetailVehicle() {
                         </div>
 
                         <div className="detail-vehicle-content__vehicle__info__item">
+                            <span className="span-title">Trạng thái</span>
+                            <span
+                                className={
+                                    vehicle.VerifyState?.state
+                                        ? vehicle.VerifyState?.state ===
+                                          verifyStates.VERIFIED
+                                            ? 'span-green'
+                                            : vehicle.VerifyState.state ===
+                                              verifyStates.PENDING
+                                            ? 'span-yellow'
+                                            : 'span-red'
+                                        : 'span2'
+                                }
+                            >
+                                {vehicle.VerifyState?.state}
+                            </span>
+                        </div>
+
+                        <div className="detail-vehicle-content__vehicle__info__item">
                             <span className="span-title">Mô tả</span>
                             <span className="span-content">
                                 {vehicle.detail}
@@ -113,7 +126,7 @@ function DetailVehicle() {
 
                 <div className="detail-vehicle-content__cavet">
                     <div className="detail-vehicle-content__cavet__item">
-                        <span className="span">Hình ảnh caver trước</span>
+                        <span className="span">Hình ảnh cavet trước</span>
                         <div className="detail-vehicle-content__cavet__item__image">
                             <img
                                 src={
@@ -125,7 +138,7 @@ function DetailVehicle() {
                         </div>
                     </div>
                     <div className="detail-vehicle-content__cavet__item">
-                        <span className="span">Hình ảnh caver sau</span>
+                        <span className="span">Hình ảnh cavet sau</span>
                         <div className="detail-vehicle-content__cavet__item__image">
                             <img
                                 src={
@@ -232,7 +245,7 @@ function DetailVehicle() {
             </Modal>
             <Modal
                 className="delete-vehicle-modal"
-                title="Hủy đăng ký xe"
+                title="Xác nhận hủy đăng ký xe"
                 visible={showModalSoftDelete}
                 onOk={softDeleteHandle}
                 onCancel={handleCancel}

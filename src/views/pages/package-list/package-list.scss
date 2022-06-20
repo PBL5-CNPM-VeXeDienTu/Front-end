@@ -48,7 +48,7 @@
             height: 100%;
             margin-top: 1%;
             display: grid;
-            grid-template-columns: 52% 5.5% 24% 20%;
+            grid-template-columns: 53% 5.5% 24% 20%;
             padding: 0.5% 3%;
         }
 
@@ -211,9 +211,8 @@
                 margin: auto;
                 height: 4vh;
                 width: 100%;
-                background-color: #f0f0f0;
-                border: none;
-                border-radius: 10px;
+                background-color: #fff;
+                border: 1px solid #ddd !important;
                 padding-left: 0.5vw;
             }
 

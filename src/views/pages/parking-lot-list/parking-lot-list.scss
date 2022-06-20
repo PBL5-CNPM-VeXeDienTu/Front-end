@@ -96,75 +96,21 @@
             }
 
             &__row-red {
-                td:nth-child(4) {
+                td:nth-child(5) {
                     color: red;
                 }
             }
 
             &__row-green {
-                td:nth-child(4) {
+                td:nth-child(5) {
                     color: #41bc3f;
                 }
             }
-        }
-    }
-}
-
-.parking-lot-list-modal {
-    width: 50vw !important;
-    height: fit-content !important;
-    margin: auto !important;
-
-    .h1 {
-        text-align: center;
-        margin-bottom: 5vh;
-        font-size: 2rem;
-    }
-
-    .div {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 40% 60%;
-        margin: 1vh 0;
-        font-size: 1rem;
-
-        .span1 {
-            width: 100%;
-            text-align: right;
-            font-weight: bold;
-        }
-
-        .span2 {
-            margin-left: 10%;
-            max-width: 80%;
-
-            &-red {
-                margin-left: 10%;
-                color: red;
+            &__row-orange {
+                td:nth-child(5) {
+                    color: orange;
+                }
             }
-
-            &-green {
-                margin-left: 10%;
-                color: #41bc3f;
-            }
-            &-italic {
-                margin-left: 10%;
-                font-style: italic;
-                color: #888;
-            }
-        }
-    }
-
-    .ant-modal-content {
-        border-radius: 20px !important;
-
-        .ant-modal-header {
-            border-radius: 20px 20px 0 0;
-            background-color: #e9e9e9;
-        }
-
-        .ant-modal-body {
-            height: fit-content !important;
         }
     }
 }
@@ -190,9 +136,8 @@
                 margin: auto;
                 height: 4vh;
                 width: 100%;
-                background-color: #f0f0f0;
-                border: none;
-                border-radius: 10px;
+                background-color: #fff;
+                border: 1px solid #ddd !important;
                 padding-left: 0.5vw;
             }
 
@@ -285,6 +230,7 @@
         &__sub {
             width: 100%;
             height: 80vh;
+            cursor: pointer;
             margin-bottom: 20px;
             display: grid;
             grid-template-rows: 1% 99%;

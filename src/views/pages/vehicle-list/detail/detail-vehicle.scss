@@ -52,6 +52,22 @@
                     text-align: right;
                     margin-right: 2vw;
                 }
+
+                .span {
+                    margin-left: 10%;
+
+                    &-red {
+                        color: red;
+                    }
+
+                    &-green {
+                        color: #41bc3f;
+                    }
+
+                    &-yellow {
+                        color: orange;
+                    }
+                }
             }
         }
     }

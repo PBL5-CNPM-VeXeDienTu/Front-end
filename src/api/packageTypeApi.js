@@ -1,8 +1,8 @@
 import axiosClient from './axiosClient'
 
 const packageTypeApi = {
-    getListPackageType: () => {
-        const url = `/api/package-types`
+    getAll: () => {
+        const url = '/api/package-types'
         return axiosClient.get(url)
     },
     getPackageTypeById: (id) => {

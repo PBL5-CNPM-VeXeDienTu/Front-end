@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Menu, Dropdown, Space, Modal, DatePicker } from 'antd'
+import { Table, Input, Menu, Dropdown, Space, DatePicker } from 'antd'
+import { useNavigate } from 'react-router-dom'
+import useAuth from 'hooks/useAuth'
+import walletApi from 'api/walletApi'
 import {
     FilterOutlined,
     SearchOutlined,
-    DeleteOutlined,
     PlusCircleOutlined,
 } from '@ant-design/icons'
-import useAuth from 'hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import * as roles from 'shared/constants/role'
 import './wallet-list.scss'
 
 const { Search } = Input
@@ -15,61 +16,23 @@ const numOfItem = [10, 15, 25]
 
 function Wallets() {
     const { user } = useAuth()
-    const [page, setPage] = useState(10)
+    const [pageSize, setPageSize] = useState(10)
     const [swapPage, setSwapPage] = useState(true)
-    const [activeFilter, setActiveFilter] = useState(false)
-    const [isModalVisible, setIsModalVisible] = useState(false)
-    const [walletType, setWalletType] = useState('All')
-    const [walletState, setWalletState] = useState('All')
+    const [total, setTotal] = useState(0)
+    const [walletList, setWalletList] = useState()
     let navigate = useNavigate()
 
-    const showModal = () => {
-        setIsModalVisible(true)
-    }
-
-    const handleCancel = () => {
-        setIsModalVisible(false)
-    }
-
-    const handleOk = () => {
-        setIsModalVisible(false)
-    }
-
-    const avatarURL = process.env.REACT_APP_API_URL + user.UserInfo?.avatar
-
-    const state = {
-        pagination: {
-            pageSize: page,
-        },
-    }
-
     const onSearch = (value) => console.log(value)
-
-    useEffect(() => {
-        // TODO
-    }, [activeFilter])
-
-    useEffect(() => {
-        if (walletType === 'All' && walletState === 'All')
-            setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [walletType, walletState])
-
-    const walletTypeOfItem = [
-        'All',
-        'Nạp Card',
-        'Liên kết với ngân hàng',
-        'Nạp tiền trực tiếp với chủ nhà xe',
-    ]
 
     const columns = [
         {
             title: 'Avatar',
             dataIndex: 'avatar',
             width: '10%',
-            render: () => (
-                <img src={avatarURL} className="avatar-user" alt="" />
-            ),
+            render: (text, record) => {
+                let imgSource = process.env.REACT_APP_API_URL + record.avatar
+                return <img src={imgSource} className="avatar-user" alt="" />
+            },
         },
         {
             title: 'Chủ tài khoản',
@@ -100,109 +63,95 @@ function Wallets() {
                     <a href="/wallets/payment">
                         <PlusCircleOutlined className="icon-edit" />
                     </a>
-                    <div onClick={showModal}>
-                        <DeleteOutlined className="icon-delete" />
-                    </div>
                 </Space>
             ),
         },
     ]
 
-    const dataBasic = []
-    for (let i = 0; i < page; i++) {
-        dataBasic.push({
-            key: i,
-            avatar: avatarURL,
-            name: 'Phạm Văn Thọ',
-            balance: '1200000',
-            updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
-            amount_trans: '-100000',
-        })
-        dataBasic.push({
-            key: i + 1,
-            avatar: avatarURL,
-            name: 'Phạm Văn Thọ',
-            balance: '1200000',
-            updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
-            amount_trans: '+100000',
-        })
-    }
-
-    const dataParkinglot = []
-    for (let i = 0; i < page; i++) {
-        dataParkinglot.push({
-            key: i,
-            avatar: avatarURL,
-            name: 'Phạm Văn Thọ',
-            balance: '1200000',
-            updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
-            amount_trans: '+100000',
-        })
-        dataParkinglot.push({
-            key: i + 1,
-            avatar: avatarURL,
-            name: 'Phạm Văn Thọ',
-            balance: '1200000',
-            updated_at: new Date('5-1-2022').toLocaleDateString('en-GB'),
-            amount_trans: '-100000',
-        })
-    }
-
-    const handleRow = (record) => ({
-        onClick: () => {
-            // router.push(`/schedule/${record.id}`)
-            navigate(`/wallets/detail`)
+    const walletState = {
+        pagination: {
+            pageSize: pageSize,
+            total: total,
+            onChange: (page, pageSize) => {
+                const params = {
+                    limit: pageSize,
+                    page: page,
+                    role: swapPage
+                        ? roles.PARKING_USER
+                        : roles.PARKING_LOT_USER,
+                }
+                walletApi.getListWallets(params).then((response) => {
+                    setTotal(response.data.count)
+                    setWalletList(
+                        response.data.rows.map((wallet) => ({
+                            id: wallet.Owner.id,
+                            avatar: wallet.Owner.UserInfo.avatar,
+                            name: wallet.Owner.name,
+                            balance: wallet.balance,
+                            updated_at: wallet.Transactions[0].createdAt,
+                            amount_trans:
+                                wallet.Transactions[0].amount < 0
+                                    ? wallet.Transactions[0].amount
+                                    : '+' + wallet.Transactions[0].amount,
+                        })),
+                    )
+                })
+            },
         },
-    })
+    }
+
+    useEffect(() => {
+        const params = {
+            limit: pageSize,
+            page: 1,
+            role: swapPage ? roles.PARKING_USER : roles.PARKING_LOT_USER,
+        }
+        if (!!user) {
+            walletApi.getListWallets(params).then((response) => {
+                setTotal(response.data.count)
+                setWalletList(
+                    response.data.rows.map((wallet) => ({
+                        id: wallet.Owner.id,
+                        avatar: wallet.Owner.UserInfo.avatar,
+                        name: wallet.Owner.name,
+                        balance: wallet.balance,
+                        updated_at: wallet.Transactions[0].createdAt,
+                        amount_trans:
+                            wallet.Transactions[0].amount < 0
+                                ? wallet.Transactions[0].amount
+                                : '+' + wallet.Transactions[0].amount,
+                    })),
+                )
+            })
+        }
+    }, [user, pageSize, swapPage])
 
     const menu = () => {
         return (
             <Menu class="wallet-list-menu">
                 <div className="wallet-list-menu__item">
+                    <span className="wallet-list-menu__item__span">
+                        Thời điểm giao dịch
+                    </span>
                     <div className="wallet-list-menu__item__row">
                         <span className="wallet-list-menu__item__row__span">
-                            Loại giao dịch
-                        </span>
-                        <select
-                            className="wallet-list-menu__item__row__select"
-                            onChange={(e) => setWalletType(e.target.value)}
-                        >
-                            {walletTypeOfItem.map((walletTypeOfItem, index) => {
-                                return (
-                                    <option
-                                        key={index}
-                                        value={walletTypeOfItem}
-                                    >
-                                        {walletTypeOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-                    <div className="wallet-list-menu__item__row">
-                        <span className="wallet-list-menu__item__row__span">
-                            Trạng thái
-                        </span>
-                        <select
-                            className="wallet-list-menu__item__row__select"
-                            onChange={(e) => setWalletState(e.target.value)}
-                        >
-                            <option value="All">All</option>
-                            <option value="Nạp tiền">Nạp tiền</option>
-                            <option value="Rút tiền">Rút tiền</option>
-                        </select>
-                    </div>
-
-                    <div className="wallet-list-menu__item__row">
-                        <span className="wallet-list-menu__item__row__span">
-                            Giao dịch gần nhất
+                            Bắt đầu
                         </span>
                         <DatePicker
                             size="medium"
-                            // defaultValue={moment(
-                            //     'YYYY/MM/DD',
-                            // )}
-                            // format="DD/MM/YYYY"
+                            className="input"
+                            placeholder="Thời gian kết thúc"
+                        />
+                    </div>
+                </div>
+                <div className="wallet-list-menu__item">
+                    <div className="wallet-list-menu__item__row">
+                        <span className="wallet-list-menu__item__row__span">
+                            Kết thúc
+                        </span>
+                        <DatePicker
+                            size="medium"
+                            className="input"
                             placeholder="Thời gian kết thúc"
                         />
                     </div>
@@ -220,24 +169,24 @@ function Wallets() {
                         : 'wallet-list-content-unactive'
                 }
             >
-                <div className="title">Danh sách ví</div>
+                <div className="title">Danh sách ví cá nhân</div>
 
                 <div className="wallet-list-content__swap-page">
-                    <button className="button-active">Parking-lot</button>
+                    <button className="button-active">Parking User</button>
                     <button
                         className="button-unactive"
                         onClick={(e) => setSwapPage(false)}
                     >
-                        Basic
+                        Parking-lot User
                     </button>
                 </div>
 
                 <div className="wallet-list-content__action">
                     <div className="wallet-list-content__action__select">
-                        <span>Hiển thị </span>
+                        <span>Hiển thị</span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: pageSize }}
+                            onChange={(e) => setPageSize(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -251,9 +200,7 @@ function Wallets() {
                     <Dropdown overlay={menu} trigger="click" placement="bottom">
                         <div
                             className={
-                                activeFilter
-                                    ? 'wallet-list-content__action__filter-active'
-                                    : 'wallet-list-content__action__filter-unactive'
+                                'wallet-list-content__action__filter-unactive'
                             }
                         >
                             <FilterOutlined />
@@ -276,15 +223,21 @@ function Wallets() {
                     <Table
                         className="wallet-list-content__sub__table"
                         columns={columns}
-                        dataSource={dataBasic}
-                        pagination={state.pagination}
+                        dataSource={walletList}
+                        pagination={walletState.pagination}
                         rowClassName={(record, index) =>
                             record.amount_trans >= 0
                                 ? 'wallet-list-content__sub__table__row-green'
                                 : 'wallet-list-content__sub__table__row-red'
                         }
-                        onRow={handleRow}
-                    ></Table>
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => {
+                                    navigate(`/wallets/${record.id}/detail`)
+                                },
+                            }
+                        }}
+                    />
                 </div>
             </div>
 
@@ -295,22 +248,22 @@ function Wallets() {
                         : 'wallet-list-content'
                 }
             >
-                <div className="title">Danh sách ví</div>
+                <div className="title">Danh sách ví cá nhân</div>
                 <div className="wallet-list-content__swap-page">
                     <button
                         className="button-unactive"
                         onClick={(e) => setSwapPage(true)}
                     >
-                        Parking-lot
+                        Parking User
                     </button>
-                    <button className="button-active">Basic</button>
+                    <button className="button-active">Parking-lot User</button>
                 </div>
                 <div className="wallet-list-content__action">
                     <div className="wallet-list-content__action__select">
-                        <span>Hiển thị </span>
+                        <span>Hiển thị</span>
                         <select
-                            defaultValue={{ value: page }}
-                            onChange={(e) => setPage(e.target.value)}
+                            defaultValue={{ value: pageSize }}
+                            onChange={(e) => setPageSize(e.target.value)}
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -324,9 +277,7 @@ function Wallets() {
                     <Dropdown overlay={menu} trigger="click" placement="bottom">
                         <div
                             className={
-                                activeFilter
-                                    ? 'wallet-list-content__action__filter-active'
-                                    : 'wallet-list-content__action__filter-unactive'
+                                'wallet-list-content__action__filter-unactive'
                             }
                         >
                             <FilterOutlined />
@@ -349,24 +300,21 @@ function Wallets() {
                     <Table
                         className="wallet-list-content__sub__table"
                         columns={columns}
-                        dataSource={dataParkinglot}
-                        pagination={state.pagination}
+                        dataSource={walletList}
+                        pagination={walletState.pagination}
                         rowClassName={(record, index) =>
                             record.amount_trans >= 0
                                 ? 'wallet-list-content__sub__table__row-green'
                                 : 'wallet-list-content__sub__table__row-red'
                         }
-                        //onRow={handleRow}
-                    ></Table>
-                    <Modal
-                        className="delete-wallet-modal"
-                        title="Hủy Ví"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                    >
-                        <p>Bạn có chắn chắn muốn hủy ví hay không ?</p>
-                    </Modal>
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: () => {
+                                    navigate(`/wallets/${record.id}/detail`)
+                                },
+                            }
+                        }}
+                    />
                 </div>
             </div>
         </div>

@@ -10,17 +10,17 @@ function QrCheckout() {
 
     const QRList = [
         {
-            userid: '32',
+            user_id: '32',
             license_plates: '34-B11234',
             qr_key: '29,219219',
         },
         {
-            userid: '11',
+            user_id: '11',
             license_plates: '55-A99234',
             qr_key: '21,1361723821',
         },
         {
-            userid: '44',
+            user_id: '44',
             license_plates: '22-A99234',
             qr_key: '17,12831823',
         },
@@ -38,11 +38,13 @@ function QrCheckout() {
                             <img src={avatarURL} alt="" />
                         </div>
                         <div>
-                            <span className="properties">Tên bãi đang đỗ</span>
+                            <span className="properties">Tên bãi đỗ xe</span>
                             <span>Bãi xe Nhật Hào</span>
                         </div>
                         <div>
-                            <span className="properties">Địa chỉ bãi xe</span>
+                            <span className="properties">
+                                Địa chỉ bãi đỗ xe
+                            </span>
                             <span>142/20 Âu Cơ</span>
                         </div>
                         <div>
@@ -52,16 +54,17 @@ function QrCheckout() {
                             <span>2022-03-22 07:12:37</span>
                         </div>
                         <div>
-                            <span className="properties">Memo</span>
+                            <span className="properties">Ghi chú</span>
                             <span>
-                                gần cột màu đỏ, dưới cửa sổ, gần biển treo tường
+                                Gần cột màu đỏ, dưới cửa sổ, gần biển treo tường
                                 màu xanh
                             </span>
                         </div>
                     </div>
 
                     <QR
-                        userid={value.userid}
+                        className="qr-code"
+                        user_id={value.user_id}
                         license_plates={value.license_plates}
                         qr_key={value.qr_key}
                     />
