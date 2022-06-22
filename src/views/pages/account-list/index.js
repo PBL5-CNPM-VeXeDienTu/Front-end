@@ -17,13 +17,9 @@ import './account-list.scss'
 const { Search } = Input
 const numOfItem = [10, 15, 25]
 
-const addressTypeItem = ['All', 'Đà Nẵng', 'Quảng Nam', 'Huế']
-
 function Accounts() {
     const { user } = useAuth()
     const navigate = useNavigate()
-    const [addressType, setAddressType] = useState('All')
-    const [activeFilter, setActiveFilter] = useState(false)
     const [showDeleteUserModal, setShowDeleteUserModal] = useState(false)
     const [userList, setUserList] = useState([])
     const [deleteUser, setDeleteUser] = useState()
@@ -31,12 +27,10 @@ function Accounts() {
     const [params, setParams] = useState({
         limit: 10,
         page: 1,
-        role: 1,
+        role: roles.PARKING_USER,
+        txt_search: null,
+        is_deleted: null,
     })
-
-    const handleCancel = () => {
-        setShowDeleteUserModal(false)
-    }
 
     const handleSubmit = async () => {
         try {
@@ -48,7 +42,9 @@ function Accounts() {
         }
     }
 
-    const onSearch = (value) => console.log(value)
+    const handleCancel = () => {
+        setShowDeleteUserModal(false)
+    }
 
     const handleGetImageError = (e) => {
         e.target.src = defaultImageUrl.USER_AVATAR
@@ -67,12 +63,6 @@ function Accounts() {
             },
         },
     }
-
-    useEffect(() => {
-        if (addressType === 'All') setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [addressType])
-
     useEffect(() => {
         if (!!user) {
             userApi.getListByParams(params).then((response) => {
@@ -123,7 +113,7 @@ function Accounts() {
         {
             title: 'Số điện thoại',
             dataIndex: 'phone_number',
-            width: '10%',
+            width: '15%',
         },
         {
             title: 'Địa chỉ',
@@ -133,7 +123,7 @@ function Accounts() {
         {
             title: 'Trạng thái',
             dataIndex: 'deletedAt',
-            width: '15%',
+            width: '10%',
             render: (text, record) => (
                 <span
                     className={
@@ -177,15 +167,24 @@ function Accounts() {
                         </span>
                         <select
                             className="account-list-menu__item__row__select"
-                            onChange={(e) => setAddressType(e.target.value)}
+                            onChange={(e) => {
+                                e.target.value === 'All'
+                                    ? setParams({ ...params, is_deleted: null })
+                                    : setParams({
+                                          ...params,
+                                          is_deleted: e.target.value,
+                                      })
+                            }}
                         >
-                            {addressTypeItem.map((addressType, index) => {
-                                return (
-                                    <option key={index} value={addressType}>
-                                        {addressType}
-                                    </option>
-                                )
-                            })}
+                            <option key={0} value={'All'}>
+                                All
+                            </option>
+                            <option key={1} value={0}>
+                                Chưa xóa
+                            </option>
+                            <option key={2} value={1}>
+                                Đã xóa
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -209,13 +208,20 @@ function Accounts() {
                     <button className="button-active">Parking User</button>
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: 2 })}
+                        onClick={() =>
+                            setParams({
+                                ...params,
+                                role: roles.PARKING_LOT_USER,
+                                txt_search: null,
+                                is_deleted: null,
+                            })
+                        }
                     >
                         Parking-lot User
                     </button>
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: 3 })}
+                        onClick={() => setParams({ ...params, role: roles.ADMIN })}
                     >
                         Admin
                     </button>
@@ -242,7 +248,7 @@ function Accounts() {
                     <Dropdown overlay={menu} trigger="click" placement="bottom">
                         <div
                             className={
-                                activeFilter
+                                params.is_deleted !== null
                                     ? 'account-list-content__action__filter-active'
                                     : 'account-list-content__action__filter-unactive'
                             }
@@ -254,8 +260,13 @@ function Accounts() {
                     <div className="account-list-content__action__search">
                         <Search
                             className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            placeholder="Chủ tài khoản, email, số điện thoại, địa chỉ"
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -299,14 +310,21 @@ function Accounts() {
                 <div className="account-list-content__swap-page">
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: 1 })}
+                        onClick={() =>
+                            setParams({
+                                ...params,
+                                role: roles.PARKING_USER,
+                                txt_search: null,
+                                is_deleted: null,
+                            })
+                        }
                     >
                         Parking User
                     </button>
                     <button className="button-active">Parking-lot User</button>
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: 3 })}
+                        onClick={() => setParams({ ...params, role: roles.ADMIN })}
                     >
                         Admin
                     </button>
@@ -332,7 +350,7 @@ function Accounts() {
                     <Dropdown overlay={menu} trigger="click" placement="bottom">
                         <div
                             className={
-                                activeFilter
+                                params.is_deleted !== null
                                     ? 'account-list-content__action__filter-active'
                                     : 'account-list-content__action__filter-unactive'
                             }
@@ -344,8 +362,13 @@ function Accounts() {
                     <div className="account-list-content__action__search">
                         <Search
                             className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            placeholder="Chủ tài khoản, email, số điện thoại, địa chỉ"
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -389,13 +412,20 @@ function Accounts() {
                 <div className="account-list-content__swap-page">
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: 1 })}
+                        onClick={() =>
+                            setParams({
+                                ...params,
+                                role: roles.PARKING_USER,
+                                txt_search: null,
+                                is_deleted: null,
+                            })
+                        }
                     >
                         Parking User
                     </button>
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: 2 })}
+                        onClick={() => setParams({ ...params, role: roles.PARKING_LOT_USER })}
                     >
                         Parking-lot User
                     </button>
@@ -422,7 +452,7 @@ function Accounts() {
                     <Dropdown overlay={menu} trigger="click" placement="bottom">
                         <div
                             className={
-                                activeFilter
+                                params.is_deleted !== null
                                     ? 'account-list-content__action__filter-active'
                                     : 'account-list-content__action__filter-unactive'
                             }
@@ -434,8 +464,13 @@ function Accounts() {
                     <div className="account-list-content__action__search">
                         <Search
                             className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            placeholder="Chủ tài khoản, email, số điện thoại, địa chỉ"
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
