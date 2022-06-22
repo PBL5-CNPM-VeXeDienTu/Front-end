@@ -2,7 +2,10 @@ import axiosClient from './axiosClient'
 
 const userApi = {
     getListByParams: (params) => {
-        const url = `/api/users?limit=${params.limit}&page=${params.page}&role=${params.role}`
+        let url = '/api/users?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getOneById: (id) => {
