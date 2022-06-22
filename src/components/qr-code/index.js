@@ -9,11 +9,14 @@ function QR(props) {
     const [clickedImg, setClickedImg] = useState(null)
 
     var data =
-        'User_Id: ' +
-        props.userid +
+        'Vehicle_Id: ' +
+        props.vehicle_id +
         '\n' +
-        'License_plate: ' +
-        props.license_plates +
+        'Parking_Lot_Id: ' +
+        props.parking_lot_id +
+        '\n' +
+        'Checkin_Time: ' +
+        props.checkin_time +
         '\n' +
         'QR_key: ' +
         props.qr_key

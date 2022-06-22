@@ -8,21 +8,33 @@ function QrCheckout() {
         process.env.REACT_APP_API_URL +
         'public/images/avatars/vehicle/default-avatar.png'
 
+/* 
+    qrData: {
+        vehicle_id,
+        parking_lot_id,
+        checkin_time,
+        qr_key
+    }
+*/
+
     const QRList = [
         {
-            user_id: '32',
-            license_plates: '34-B11234',
-            qr_key: '29,219219',
+            vehicle_id: '4',
+            parking_lot_id: '1',
+            checkin_time: '2022-06-21 20:37:25',
+            qr_key: '496a6e00-f167-11ec-9d32-657952c1f360',
         },
         {
-            user_id: '11',
-            license_plates: '55-A99234',
-            qr_key: '21,1361723821',
+            vehicle_id: '2',
+            parking_lot_id: '9',
+            checkin_time: '2022-06-18 20:50:25',
+            qr_key: '9b2c7c80-ef0d-11ec-a52f-b1040bb98e5f',
         },
         {
-            user_id: '44',
-            license_plates: '22-A99234',
-            qr_key: '17,12831823',
+            vehicle_id: '2',
+            parking_lot_id: '9',
+            checkin_time: '2022-06-18 20:50:25',
+            qr_key: '9b2c7c80-ef0d-11ec-a52f-b1040bb98e5f',
         },
     ]
     const listQRs = QRList.map((value, index) => {
@@ -64,8 +76,9 @@ function QrCheckout() {
 
                     <QR
                         className="qr-code"
-                        user_id={value.user_id}
-                        license_plates={value.license_plates}
+                        vehicle_id={value.vehicle_id}
+                        parking_lot_id={value.parking_lot_id}
+                        checkin_time={value.checkin_time}
                         qr_key={value.qr_key}
                     />
                 </div>
