@@ -208,7 +208,8 @@
             margin: auto 0;
         }
 
-        select, .input {
+        select,
+        .input {
             margin: auto;
             height: 4vh;
             width: 100%;
@@ -221,10 +222,10 @@
             border-radius: 0px;
         }
     }
-    .border-bottom{
+    .border-bottom {
         border-bottom: 1px solid #555;
     }
-    .padding-left{
+    .padding-left {
         padding-left: 30px;
     }
 }
