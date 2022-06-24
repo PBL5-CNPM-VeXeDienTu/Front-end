@@ -17,9 +17,9 @@ const featureApi = {
         const url = `/api/features/${id}`
         return axiosClient.patch(url, credentials)
     },
-    deleteById: (id, credentials) => {
+    deleteById: (id) => {
         const url = `/api/features/${id}`
-        return axiosClient.delete(url, credentials)
+        return axiosClient.delete(url)
     },
 }
 

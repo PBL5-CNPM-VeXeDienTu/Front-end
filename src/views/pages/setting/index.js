@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Table, Input, Space, Modal } from 'antd'
 import {
     EditOutlined,
@@ -6,36 +6,147 @@ import {
     DeleteOutlined,
     PlusCircleOutlined,
 } from '@ant-design/icons'
+import useAuth from 'hooks/useAuth'
+import transactionTypeApi from 'api/transactionTypeApi'
+import vehicleTypeApi from 'api/vehicleTypeApi'
+import packageTypeApi from 'api/packageTypeApi'
+import feedbackTypeApi from 'api/feedbackTypeApi'
+import featureApi from 'api/featureApi'
 import messages from 'assets/lang/messages'
 import './setting.scss'
 
+const TAB_TRANSACTION_TYPE = 'Loại giao dịch'
+const TAB_VEHICLE_TYPE = 'Loại phương tiện'
+const TAB_PACKAGE_TYPE = 'Loại gói ưu đãi'
+const TAB_FEEDBACK_TYPE = 'Loại feedback'
+const TAB_FEATURE = 'Chức năng'
+
 const { Search } = Input
-const numOfItem = [10, 15, 25]
 
 function Setting() {
-    const [limit, setLimit] = useState(10)
-    const [swapPage, setSwapPage] = useState(1)
+    const { user } = useAuth()
+    const [isEdit, setIsEdit] = useState(false)
     const [showTransactionModal, setShowTransactionModal] = useState(false)
     const [showVehicleModal, setShowVehicleModal] = useState(false)
     const [showPackageModal, setShowPackageModal] = useState(false)
     const [showFeedbackModal, setShowFeedbackModal] = useState(false)
     const [showFeatureModal, setShowFeatureModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [transactionType, setTransactionType] = useState()
+    const [vehicleType, setVehicleType] = useState()
+    const [packageType, setPackageType] = useState()
+    const [feedbackType, setFeedbackType] = useState()
+    const [features, setFeatures] = useState()
     const [data, setData] = useState({})
+    const [total, setTotal] = useState(0)
+    const [tabActive, setTabActive] = useState(TAB_TRANSACTION_TYPE)
+    const defaultParams = {
+        limit: 10,
+        page: 1,
+        txt_search: null,
+        type_id: null,
+        vehicle_type_id: null,
+    }
+    const [params, setParams] = useState(defaultParams)
 
     const state = {
         pagination: {
-            pageSize: limit,
+            pageSize: params.limit,
+            total: total,
+            onChange: (page, pageSize) => {
+                setParams({
+                    ...params,
+                    limit: pageSize,
+                    page: page,
+                })
+            },
         },
     }
 
     const onSearch = (value) => console.log(value)
 
+    useEffect(() => {
+        switch (tabActive) {
+            case TAB_TRANSACTION_TYPE:
+                transactionTypeApi.getAll().then((response) => {
+                    setTransactionType(
+                        response.data.rows.map((transaction) => ({
+                            id: transaction.id,
+                            createdAt: transaction.createdAt,
+                            type_name: transaction.type_name,
+                            updatedAt: transaction.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_VEHICLE_TYPE:
+                vehicleTypeApi.getAll().then((response) => {
+                    setVehicleType(
+                        response.data.rows.map((vehicleType) => ({
+                            id: vehicleType.id,
+                            createdAt: vehicleType.createdAt,
+                            type_name: vehicleType.type_name,
+                            updatedAt: vehicleType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_PACKAGE_TYPE:
+                packageTypeApi.getAll().then((response) => {
+                    setPackageType(
+                        response.data.rows.map((packageType) => ({
+                            id: packageType.id,
+                            createdAt: packageType.createdAt,
+                            type_name: packageType.type_name,
+                            updatedAt: packageType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_FEEDBACK_TYPE:
+                feedbackTypeApi.getAll().then((response) => {
+                    setFeedbackType(
+                        response.data.rows.map((feedbackType) => ({
+                            id: feedbackType.id,
+                            createdAt: feedbackType.createdAt,
+                            type_name: feedbackType.type_name,
+                            updatedAt: feedbackType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_FEATURE:
+                featureApi.getAll().then((response) => {
+                    setFeatures(
+                        response.data.rows.map((featureType) => ({
+                            id: featureType.id,
+                            createdAt: featureType.createdAt,
+                            name: featureType.name,
+                            updatedAt: featureType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            default:
+                break
+        }
+    }, [tabActive])
+
     const columnsTransaction = [
         {
             title: 'Tên loại giao dịch',
-            dataIndex: 'name',
-            width: '85%',
+            dataIndex: 'type_name',
+            width: '45%',
+        },
+        {
+            title: 'Thời gian tạo',
+            dataIndex: 'createdAt',
+            width: '20%',
+        },
+        {
+            title: 'Thời gian update',
+            dataIndex: 'updatedAt',
+            width: '20%',
         },
         {
             title: 'Action',
@@ -45,6 +156,7 @@ function Setting() {
                 <Space size="middle">
                     <EditOutlined
                         onClick={(e) => {
+                            setIsEdit(true)
                             setShowTransactionModal(true)
                             setData(record)
                         }}
@@ -64,8 +176,18 @@ function Setting() {
     const columnsVehicle = [
         {
             title: 'Tên loại phương tiện',
-            dataIndex: 'name',
-            width: '85%',
+            dataIndex: 'type_name',
+            width: '45%',
+        },
+        {
+            title: 'Thời gian tạo',
+            dataIndex: 'createdAt',
+            width: '20%',
+        },
+        {
+            title: 'Thời gian update',
+            dataIndex: 'updatedAt',
+            width: '20%',
         },
         {
             title: 'Action',
@@ -75,6 +197,7 @@ function Setting() {
                 <Space size="middle">
                     <EditOutlined
                         onClick={(e) => {
+                            setIsEdit(true)
                             setShowVehicleModal(true)
                             setData(record)
                         }}
@@ -94,8 +217,18 @@ function Setting() {
     const columnsPackage = [
         {
             title: 'Tên loại gói ưu đãi',
-            dataIndex: 'name',
-            width: '85%',
+            dataIndex: 'type_name',
+            width: '45%',
+        },
+        {
+            title: 'Thời gian tạo',
+            dataIndex: 'createdAt',
+            width: '20%',
+        },
+        {
+            title: 'Thời gian update',
+            dataIndex: 'updatedAt',
+            width: '20%',
         },
         {
             title: 'Action',
@@ -105,6 +238,7 @@ function Setting() {
                 <Space size="middle">
                     <EditOutlined
                         onClick={(e) => {
+                            setIsEdit(true)
                             setShowPackageModal(true)
                             setData(record)
                         }}
@@ -124,8 +258,18 @@ function Setting() {
     const columnsFeedback = [
         {
             title: 'Tên loại feedback',
-            dataIndex: 'name',
-            width: '85%',
+            dataIndex: 'type_name',
+            width: '45%',
+        },
+        {
+            title: 'Thời gian tạo',
+            dataIndex: 'createdAt',
+            width: '20%',
+        },
+        {
+            title: 'Thời gian update',
+            dataIndex: 'updatedAt',
+            width: '20%',
         },
         {
             title: 'Action',
@@ -135,6 +279,7 @@ function Setting() {
                 <Space size="middle">
                     <EditOutlined
                         onClick={(e) => {
+                            setIsEdit(true)
                             setShowFeedbackModal(true)
                             setData(record)
                         }}
@@ -155,7 +300,17 @@ function Setting() {
         {
             title: 'Tên chức năng',
             dataIndex: 'name',
-            width: '85%',
+            width: '45%',
+        },
+        {
+            title: 'Thời gian tạo',
+            dataIndex: 'createdAt',
+            width: '20%',
+        },
+        {
+            title: 'Thời gian update',
+            dataIndex: 'updatedAt',
+            width: '20%',
         },
         {
             title: 'Action',
@@ -165,6 +320,7 @@ function Setting() {
                 <Space size="middle">
                     <EditOutlined
                         onClick={(e) => {
+                            setIsEdit(true)
                             setShowFeatureModal(true)
                             setData(record)
                         }}
@@ -182,129 +338,267 @@ function Setting() {
         },
     ]
 
-    const dataTransactionType = []
-    for (let i = 0; i < limit; i++) {
-        dataTransactionType.push({
-            key: i,
-            id: i,
-            name: 'loại giao dịch 1',
-        })
-        dataTransactionType.push({
-            key: i + 1,
-            id: i,
-            name: 'loại giao dịch 2',
-        })
+    const handleEditTransactionSubmit = async (values) => {
+        try {
+            const response = await transactionTypeApi.updateById(
+                data.id,
+                values,
+            )
+            alert(response.data.message)
+            setShowTransactionModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
-    const dataVehicleType = []
-    for (let i = 0; i < limit; i++) {
-        dataVehicleType.push({
-            key: i,
-            id: i,
-            name: 'loại phương tiện 1',
-        })
-        dataVehicleType.push({
-            key: i + 1,
-            id: i,
-            name: 'loại phương tiện 2',
-        })
+    const handleAddTransactionSubmit = async (values) => {
+        try {
+            const response = await transactionTypeApi.createNew(values)
+
+            alert(response.data.message)
+            setShowTransactionModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
-    const dataPackageType = []
-    for (let i = 0; i < limit; i++) {
-        dataPackageType.push({
-            key: i,
-            id: i,
-            name: 'loại package 1',
-        })
-        dataPackageType.push({
-            key: i + 1,
-            name: 'loại package 2',
-        })
+
+    const handleEditVehicleTypeSubmit = async (values) => {
+        try {
+            const response = await vehicleTypeApi.updateById(data.id, values)
+            alert(response.data.message)
+            setShowVehicleModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
-    const dataFeedbackType = []
-    for (let i = 0; i < limit; i++) {
-        dataFeedbackType.push({
-            key: i,
-            id: i,
-            name: 'loại feedback 1',
-        })
-        dataFeedbackType.push({
-            key: i + 1,
-            id: i,
-            name: 'loại feedback 2',
-        })
+
+    const handleAddVehicleTypeSubmit = async (values) => {
+        try {
+            const response = await vehicleTypeApi.createNew(values)
+
+            alert(response.data.message)
+            setShowVehicleModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
-    const dataFeatureType = []
-    for (let i = 0; i < limit; i++) {
-        dataFeatureType.push({
-            key: i,
-            id: i,
-            name: 'chức năng 1',
-        })
-        dataFeatureType.push({
-            key: i + 1,
-            id: i,
-            name: 'chức năng 2',
-        })
+
+    const handleEditPackageTypeSubmit = async (values) => {
+        try {
+            const response = await packageTypeApi.updateById(data.id, values)
+            alert(response.data.message)
+            setShowPackageModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleAddPackageTypeSubmit = async (values) => {
+        try {
+            const response = await packageTypeApi.createNew(values)
+
+            alert(response.data.message)
+            setShowPackageModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleEditFeedbackTypeSubmit = async (values) => {
+        try {
+            const response = await feedbackTypeApi.updateById(data.id, values)
+            alert(response.data.message)
+            setShowFeedbackModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleAddFeedbackTypeSubmit = async (values) => {
+        try {
+            const response = await feedbackTypeApi.createNew(values)
+
+            alert(response.data.message)
+            setShowFeedbackModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleEditFeaturesSubmit = async (values) => {
+        try {
+            const response = await featureApi.updateById(data.id, values)
+            alert(response.data.message)
+            setShowFeatureModal(false)
+            // window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleAddFeaturesSubmit = async (values) => {
+        console.log(values)
+        try {
+            const response = await featureApi.createNew(values)
+
+            alert(response.data.message)
+            setShowFeatureModal(false)
+            //window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleDeleteTransactionTypeSubmit = async () => {
+        try {
+            const response = await transactionTypeApi.deleteById(data.id)
+
+            alert(response.data.message)
+            setShowDeleteModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleDeleteVehicleTypeSubmit = async () => {
+        try {
+            const response = await vehicleTypeApi.deleteById(data.id)
+
+            alert(response.data.message)
+            setShowDeleteModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleDeletePackageTypeSubmit = async () => {
+        try {
+            const response = await packageTypeApi.deleteById(data.id)
+
+            alert(response.data.message)
+            setShowDeleteModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleDeleteFeedbackTypeSubmit = async () => {
+        try {
+            const response = await feedbackTypeApi.deleteById(data.id)
+
+            alert(response.data.message)
+            setShowDeleteModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleDeleteFeaturesSubmit = async () => {
+        try {
+            const response = await featureApi.deleteById(data.id)
+
+            alert(response.data.message)
+            setShowDeleteModal(false)
+            window.location.reload()
+        } catch (error) {
+            alert(error.response.data.message)
+        }
     }
 
     return (
-        <div>
+        <div className="setting-content">
+            <div className="title">Master Setting</div>
+
+            <div className="setting-content__swap-page">
+                <button
+                    className={
+                        tabActive === TAB_TRANSACTION_TYPE
+                            ? 'button-active'
+                            : 'button-unactive'
+                    }
+                    onClick={(e) => {
+                        setTabActive(TAB_TRANSACTION_TYPE)
+                        setParams(defaultParams)
+                    }}
+                >
+                    Loại giao dịch
+                </button>
+                <button
+                    className={
+                        tabActive === TAB_VEHICLE_TYPE
+                            ? 'button-active'
+                            : 'button-unactive'
+                    }
+                    onClick={(e) => {
+                        setTabActive(TAB_VEHICLE_TYPE)
+                        setParams(defaultParams)
+                    }}
+                >
+                    Loại phương tiện
+                </button>
+                <button
+                    className={
+                        tabActive === TAB_PACKAGE_TYPE
+                            ? 'button-active'
+                            : 'button-unactive'
+                    }
+                    onClick={(e) => {
+                        setTabActive(TAB_PACKAGE_TYPE)
+                        setParams(defaultParams)
+                    }}
+                >
+                    Loại gói ưu đãi
+                </button>
+                <button
+                    className={
+                        tabActive === TAB_FEEDBACK_TYPE
+                            ? 'button-active'
+                            : 'button-unactive'
+                    }
+                    onClick={(e) => {
+                        setTabActive(TAB_FEEDBACK_TYPE)
+                        setParams(defaultParams)
+                    }}
+                >
+                    Loại feedback
+                </button>
+                <button
+                    className={
+                        tabActive === TAB_FEATURE
+                            ? 'button-active'
+                            : 'button-unactive'
+                    }
+                    onClick={(e) => {
+                        setTabActive(TAB_FEATURE)
+                        setParams(defaultParams)
+                    }}
+                >
+                    Chức năng
+                </button>
+            </div>
+
+            {/* ------------------------------ TAB TRANSACTION_TYPE ------------------------------- */}
             <div
                 className={
-                    swapPage === 1
-                        ? 'setting-content'
-                        : 'setting-content-unactive'
+                    tabActive === TAB_TRANSACTION_TYPE
+                        ? 'setting-content__tab'
+                        : 'setting-content__tab-unactive'
                 }
             >
-                <div className="title">Danh sách loại giao dịch</div>
-
-                <div className="setting-content__swap-page">
-                    <button className="button-active">Loại giao dịch</button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(2)}
-                    >
-                        Loại phương tiện
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(3)}
-                    >
-                        Loại gói ưu đãi
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(4)}
-                    >
-                        Loại feedback
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(5)}
-                    >
-                        Chức năng
-                    </button>
-                </div>
-
-                <div className="setting-content__action">
-                    <div className="setting-content__action__select">
-                        <span>Hiển thị </span>
-                        <select
-                            defaultValue={{ value: limit }}
-                            onChange={(e) => setLimit(e.target.value)}
-                        >
-                            {numOfItem.map((numOfItem, index) => {
-                                return (
-                                    <option key={index} value={numOfItem}>
-                                        {numOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-
-                    <div className="setting-content__action__search">
+                <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
                             placeholder="Tìm kiếm"
@@ -312,32 +606,35 @@ function Setting() {
                             allowClear
                             suffix
                         />
-                        <SearchOutlined className="setting-content__action__search__icon" />
+                        <SearchOutlined className="setting-content__tab__action__search__icon" />
                     </div>
                     <Button
-                        className="setting-content__action__add"
-                        onClick={() => setShowTransactionModal(true)}
+                        className="setting-content__tab__action__add"
+                        onClick={() => {
+                            setIsEdit(false)
+                            setShowTransactionModal(true)
+                        }}
                     >
-                        <PlusCircleOutlined className="setting-content__action__add__icon" />
+                        <PlusCircleOutlined className="setting-content__tab__action__add__icon" />
 
                         <span>Thêm</span>
                     </Button>
                 </div>
 
-                <div className="setting-content__sub">
+                <div className="setting-content__tab__sub">
                     <Table
-                        className="setting-content__sub__table"
+                        className="setting-content__tab__sub__table"
                         columns={columnsTransaction}
-                        dataSource={dataTransactionType}
-                        pagination={state.pagination}
+                        dataSource={transactionType}
+                        //pagination={state.pagination}
                     />
 
                     <Modal
                         className="modal"
                         title={
-                            data.name === ''
-                                ? 'Thêm loại giao dịch'
-                                : 'Chỉnh sửa loại giao dịch'
+                            isEdit
+                                ? 'Chỉnh sửa loại giao dịch'
+                                : 'Thêm loại giao dịch'
                         }
                         visible={showTransactionModal}
                         onCancel={() => {
@@ -353,17 +650,22 @@ function Setting() {
                         <Form
                             className="modal__form"
                             name="form"
+                            onFinish={
+                                isEdit
+                                    ? handleEditTransactionSubmit
+                                    : handleAddTransactionSubmit
+                            }
                             fields={[
                                 {
-                                    name: 'name',
-                                    value: data.name,
+                                    name: 'type_name',
+                                    value: data.type_name,
                                 },
                             ]}
                         >
                             <div className="modal__form__item">
                                 <span className="span">Tên loại giao dịch</span>
                                 <Form.Item
-                                    name="name"
+                                    name="type_name"
                                     rules={[
                                         {
                                             required: true,
@@ -371,7 +673,10 @@ function Setting() {
                                         },
                                     ]}
                                 >
-                                    <Input type="text" />
+                                    <Input
+                                        type="type_name"
+                                        className="textbox"
+                                    />
                                 </Form.Item>
                             </div>
                             <div className="modal__form__button">
@@ -388,68 +693,29 @@ function Setting() {
                                 >
                                     Thoát
                                 </button>
-                                <button className="button-green">Lưu</button>
+                                <button
+                                    className="button-green"
+                                    type="primary"
+                                    htmlType="submit"
+                                >
+                                    Lưu
+                                </button>
                             </div>
                         </Form>
                     </Modal>
                 </div>
             </div>
 
-            {/* vi tri thu 2  */}
-
+            {/* ------------------------------ TAB VEHICLE_TYPE ------------------------------- */}
             <div
                 className={
-                    swapPage === 2
-                        ? 'setting-content'
-                        : 'setting-content-unactive'
+                    tabActive === TAB_VEHICLE_TYPE
+                        ? 'setting-content__tab'
+                        : 'setting-content__tab-unactive'
                 }
             >
-                <div className="title">Danh sách loại phương tiện</div>
-                <div className="setting-content__swap-page">
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(1)}
-                    >
-                        Loại giao dịch
-                    </button>
-                    <button className="button-active">Loại phương tiện</button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(3)}
-                    >
-                        Loại gói ưu đãi
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(4)}
-                    >
-                        Loại feedback
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(5)}
-                    >
-                        Chức năng
-                    </button>
-                </div>
-                <div className="setting-content__action">
-                    <div className="setting-content__action__select">
-                        <span>Hiển thị </span>
-                        <select
-                            defaultValue={{ value: limit }}
-                            onChange={(e) => setLimit(e.target.value)}
-                        >
-                            {numOfItem.map((numOfItem, index) => {
-                                return (
-                                    <option key={index} value={numOfItem}>
-                                        {numOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-
-                    <div className="setting-content__action__search">
+                <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
                             placeholder="Tìm kiếm"
@@ -457,30 +723,33 @@ function Setting() {
                             allowClear
                             suffix
                         />
-                        <SearchOutlined className="setting-content__action__search__icon" />
+                        <SearchOutlined className="setting-content__tab__action__search__icon" />
                     </div>
                     <Button
-                        className="setting-content__action__add"
-                        onClick={() => setShowVehicleModal(true)}
+                        className="setting-content__tab__action__add"
+                        onClick={() => {
+                            setIsEdit(false)
+                            setShowVehicleModal(true)
+                        }}
                     >
-                        <PlusCircleOutlined className="setting-content__action__add__icon" />
+                        <PlusCircleOutlined className="setting-content__tab__action__add__icon" />
                         <span>Thêm</span>
                     </Button>
                 </div>
 
-                <div className="setting-content__sub">
+                <div className="setting-content__tab__sub">
                     <Table
-                        className="setting-content__sub__table"
+                        className="setting-content__tab__sub__table"
                         columns={columnsVehicle}
-                        dataSource={dataVehicleType}
-                        pagination={state.pagination}
+                        dataSource={vehicleType}
+                        //pagination={state.pagination}
                     />
                     <Modal
                         className="modal"
                         title={
-                            data.name === ''
-                                ? 'Thêm loại phương tiện'
-                                : 'Chỉnh sửa loại phương tiện'
+                            isEdit
+                                ? 'Chỉnh sửa loại phương tiện'
+                                : 'Thêm loại phương tiện'
                         }
                         visible={showVehicleModal}
                         onCancel={() => {
@@ -496,10 +765,15 @@ function Setting() {
                         <Form
                             className="modal__form"
                             name="form"
+                            onFinish={
+                                isEdit
+                                    ? handleEditVehicleTypeSubmit
+                                    : handleAddVehicleTypeSubmit
+                            }
                             fields={[
                                 {
-                                    name: 'name',
-                                    value: data.name,
+                                    name: 'type_name',
+                                    value: data.type_name,
                                 },
                             ]}
                         >
@@ -508,7 +782,7 @@ function Setting() {
                                     Tên loại phương tiện
                                 </span>
                                 <Form.Item
-                                    name="name"
+                                    name="type_name"
                                     rules={[
                                         {
                                             required: true,
@@ -533,68 +807,29 @@ function Setting() {
                                 >
                                     Thoát
                                 </button>
-                                <button className="button-green">Lưu</button>
+                                <button
+                                    className="button-green"
+                                    type="primary"
+                                    htmlType="submit"
+                                >
+                                    Lưu
+                                </button>
                             </div>
                         </Form>
                     </Modal>
                 </div>
             </div>
 
+            {/* ------------------------------ TAB PACKAGE_TYPE ------------------------------- */}
             <div
                 className={
-                    swapPage === 3
-                        ? 'setting-content'
-                        : 'setting-content-unactive'
+                    tabActive === TAB_PACKAGE_TYPE
+                        ? 'setting-content__tab'
+                        : 'setting-content__tab-unactive'
                 }
             >
-                <div className="title">Danh sách loại gói ưu đãi</div>
-
-                <div className="setting-content__swap-page">
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(1)}
-                    >
-                        Loại giao dịch
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(2)}
-                    >
-                        Loại phương tiện
-                    </button>
-                    <button className="button-active">Loại gói ưu đãi</button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(4)}
-                    >
-                        Loại feedback
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(5)}
-                    >
-                        Chức năng
-                    </button>
-                </div>
-
-                <div className="setting-content__action">
-                    <div className="setting-content__action__select">
-                        <span>Hiển thị </span>
-                        <select
-                            defaultValue={{ value: limit }}
-                            onChange={(e) => setLimit(e.target.value)}
-                        >
-                            {numOfItem.map((numOfItem, index) => {
-                                return (
-                                    <option key={index} value={numOfItem}>
-                                        {numOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-
-                    <div className="setting-content__action__search">
+                <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
                             placeholder="Tìm kiếm"
@@ -602,30 +837,33 @@ function Setting() {
                             allowClear
                             suffix
                         />
-                        <SearchOutlined className="setting-content__action__search__icon" />
+                        <SearchOutlined className="setting-content__tab__action__search__icon" />
                     </div>
                     <Button
-                        className="setting-content__action__add"
-                        onClick={() => setShowPackageModal(true)}
+                        className="setting-content__tab__action__add"
+                        onClick={() => {
+                            setIsEdit(false)
+                            setShowPackageModal(true)
+                        }}
                     >
-                        <PlusCircleOutlined className="setting-content__action__add__icon" />
+                        <PlusCircleOutlined className="setting-content__tab__action__add__icon" />
                         <span>Thêm</span>
                     </Button>
                 </div>
 
-                <div className="setting-content__sub">
+                <div className="setting-content__tab__sub">
                     <Table
-                        className="setting-content__sub__table"
+                        className="setting-content__tab__sub__table"
                         columns={columnsPackage}
-                        dataSource={dataPackageType}
-                        pagination={state.pagination}
+                        dataSource={packageType}
+                        //pagination={state.pagination}
                     />
                     <Modal
                         className="modal"
                         title={
-                            data.name === ''
-                                ? 'Thêm loại gói ưu đãi'
-                                : 'Chỉnh sửa loại gói ưu đãi'
+                            isEdit
+                                ? 'Chỉnh sửa loại gói ưu đãi'
+                                : 'Thêm loại gói ưu đãi'
                         }
                         visible={showPackageModal}
                         onCancel={() => {
@@ -641,10 +879,15 @@ function Setting() {
                         <Form
                             className="modal__form"
                             name="form"
+                            onFinish={
+                                isEdit
+                                    ? handleEditPackageTypeSubmit
+                                    : handleAddPackageTypeSubmit
+                            }
                             fields={[
                                 {
-                                    name: 'name',
-                                    value: data.name,
+                                    name: 'type_name',
+                                    value: data.type_name,
                                 },
                             ]}
                         >
@@ -653,7 +896,7 @@ function Setting() {
                                     Tên loại gói ưu đãi
                                 </span>
                                 <Form.Item
-                                    name="name"
+                                    name="type_name"
                                     rules={[
                                         {
                                             required: true,
@@ -678,68 +921,29 @@ function Setting() {
                                 >
                                     Thoát
                                 </button>
-                                <button className="button-green">Lưu</button>
+                                <button
+                                    className="button-green"
+                                    type="primary"
+                                    htmlType="submit"
+                                >
+                                    Lưu
+                                </button>
                             </div>
                         </Form>
                     </Modal>
                 </div>
             </div>
-            {/* ket thuc vi tri thu 3, vi tri thu 4 */}
+
+            {/* ------------------------------ TAB FEEDBACK_TYPE ------------------------------- */}
             <div
                 className={
-                    swapPage === 4
-                        ? 'setting-content'
-                        : 'setting-content-unactive'
+                    tabActive === TAB_FEEDBACK_TYPE
+                        ? 'setting-content__tab'
+                        : 'setting-content__tab-unactive'
                 }
             >
-                <div className="title">Danh sách loại feedback</div>
-
-                <div className="setting-content__swap-page">
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(1)}
-                    >
-                        Loại giao dịch
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(2)}
-                    >
-                        Loại phương tiện
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(3)}
-                    >
-                        Loại gói ưu đãi
-                    </button>
-                    <button className="button-active">Loại feedback</button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(5)}
-                    >
-                        Chức năng
-                    </button>
-                </div>
-
-                <div className="setting-content__action">
-                    <div className="setting-content__action__select">
-                        <span>Hiển thị </span>
-                        <select
-                            defaultValue={{ value: limit }}
-                            onChange={(e) => setLimit(e.target.value)}
-                        >
-                            {numOfItem.map((numOfItem, index) => {
-                                return (
-                                    <option key={index} value={numOfItem}>
-                                        {numOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-
-                    <div className="setting-content__action__search">
+                <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
                             placeholder="Tìm kiếm"
@@ -747,30 +951,33 @@ function Setting() {
                             allowClear
                             suffix
                         />
-                        <SearchOutlined className="setting-content__action__search__icon" />
+                        <SearchOutlined className="setting-content__tab__action__search__icon" />
                     </div>
                     <Button
-                        className="setting-content__action__add"
-                        onClick={() => setShowFeedbackModal(true)}
+                        className="setting-content__tab__action__add"
+                        onClick={() => {
+                            setIsEdit(false)
+                            setShowFeedbackModal(true)
+                        }}
                     >
-                        <PlusCircleOutlined className="setting-content__action__add__icon" />
+                        <PlusCircleOutlined className="setting-content__tab__action__add__icon" />
                         <span>Thêm</span>
                     </Button>
                 </div>
 
-                <div className="setting-content__sub">
+                <div className="setting-content__tab__sub">
                     <Table
-                        className="setting-content__sub__table"
+                        className="setting-content__tab__sub__table"
                         columns={columnsFeedback}
-                        dataSource={dataFeedbackType}
-                        pagination={state.pagination}
+                        dataSource={feedbackType}
+                        //pagination={state.pagination}
                     />
                     <Modal
                         className="modal"
                         title={
-                            data.name === ''
-                                ? 'Thêm loại phương tiện'
-                                : 'Chỉnh sửa loại phương tiện'
+                            isEdit
+                                ? 'Chỉnh sửa loại phương tiện'
+                                : 'Thêm loại phương tiện'
                         }
                         visible={showFeedbackModal}
                         onCancel={() => {
@@ -786,17 +993,22 @@ function Setting() {
                         <Form
                             className="modal__form"
                             name="form"
+                            onFinish={
+                                isEdit
+                                    ? handleEditFeedbackTypeSubmit
+                                    : handleAddFeedbackTypeSubmit
+                            }
                             fields={[
                                 {
-                                    name: 'name',
-                                    value: data.name,
+                                    name: 'type_name',
+                                    value: data.type_name,
                                 },
                             ]}
                         >
                             <div className="modal__form__item">
                                 <span className="span">Tên loại feedback</span>
                                 <Form.Item
-                                    name="name"
+                                    name="type_name"
                                     rules={[
                                         {
                                             required: true,
@@ -821,69 +1033,29 @@ function Setting() {
                                 >
                                     Thoát
                                 </button>
-                                <button className="button-green">Lưu</button>
+                                <button
+                                    className="button-green"
+                                    type="primary"
+                                    htmlType="submit"
+                                >
+                                    Lưu
+                                </button>
                             </div>
                         </Form>
                     </Modal>
                 </div>
             </div>
 
-            {/* vi tri thu 5 */}
+            {/* ------------------------------ TAB FEATURE ------------------------------- */}
             <div
                 className={
-                    swapPage === 5
-                        ? 'setting-content'
-                        : 'setting-content-unactive'
+                    tabActive === TAB_FEATURE
+                        ? 'setting-content__tab'
+                        : 'setting-content__tab-unactive'
                 }
             >
-                <div className="title">Danh sách chức năng</div>
-
-                <div className="setting-content__swap-page">
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(1)}
-                    >
-                        Loại giao dịch
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(2)}
-                    >
-                        Loại phương tiện
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(3)}
-                    >
-                        Loại gói ưu đãi
-                    </button>
-                    <button
-                        className="button-unactive"
-                        onClick={(e) => setSwapPage(4)}
-                    >
-                        Loại feedback
-                    </button>
-                    <button className="button-active">Chức năng</button>
-                </div>
-
-                <div className="setting-content__action">
-                    <div className="setting-content__action__select">
-                        <span>Hiển thị </span>
-                        <select
-                            defaultValue={{ value: limit }}
-                            onChange={(e) => setLimit(e.target.value)}
-                        >
-                            {numOfItem.map((numOfItem, index) => {
-                                return (
-                                    <option key={index} value={numOfItem}>
-                                        {numOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-
-                    <div className="setting-content__action__search">
+                <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
                             placeholder="Tìm kiếm"
@@ -891,30 +1063,31 @@ function Setting() {
                             allowClear
                             suffix
                         />
-                        <SearchOutlined className="setting-content__action__search__icon" />
+                        <SearchOutlined className="setting-content__tab__action__search__icon" />
                     </div>
                     <Button
-                        className="setting-content__action__add"
-                        onClick={() => setShowFeatureModal(true)}
+                        className="setting-content__tab__action__add"
+                        onClick={() => {
+                            setIsEdit(false)
+                            setShowFeatureModal(true)
+                        }}
                     >
-                        <PlusCircleOutlined className="setting-content__action__add__icon" />
+                        <PlusCircleOutlined className="setting-content__tab__action__add__icon" />
                         <span>Thêm</span>
                     </Button>
                 </div>
 
-                <div className="setting-content__sub">
+                <div className="setting-content__tab__sub">
                     <Table
-                        className="setting-content__sub__table"
+                        className="setting-content__tab__sub__table"
                         columns={columnsFeature}
-                        dataSource={dataFeatureType}
-                        pagination={state.pagination}
+                        dataSource={features}
+                        //pagination={state.pagination}
                     />
                     <Modal
                         className="modal"
                         title={
-                            data.name === ''
-                                ? 'Thêm chức năng'
-                                : 'Chỉnh sửa chức năng'
+                            isEdit ? 'Chỉnh sửa chức năng' : 'Thêm chức năng'
                         }
                         visible={showFeatureModal}
                         onCancel={() => {
@@ -930,6 +1103,11 @@ function Setting() {
                         <Form
                             className="modal__form"
                             name="form"
+                            onFinish={
+                                isEdit
+                                    ? handleEditFeaturesSubmit
+                                    : handleAddFeaturesSubmit
+                            }
                             fields={[
                                 {
                                     name: 'name',
@@ -965,7 +1143,13 @@ function Setting() {
                                 >
                                     Thoát
                                 </button>
-                                <button className="button-green">Lưu</button>
+                                <button
+                                    className="button-green"
+                                    type="primary"
+                                    htmlType="submit"
+                                >
+                                    Lưu
+                                </button>
                             </div>
                         </Form>
                     </Modal>
@@ -975,15 +1159,15 @@ function Setting() {
             <Modal
                 className="modal"
                 title={
-                    swapPage === 1
+                    tabActive === TAB_TRANSACTION_TYPE
                         ? 'Xóa loại giao dịch'
-                        : swapPage === 2
+                        : tabActive === TAB_VEHICLE_TYPE
                         ? 'Xóa loại phương tiện'
-                        : swapPage === 3
+                        : tabActive === TAB_PACKAGE_TYPE
                         ? 'Xóa loại gói ưu đãi'
-                        : swapPage === 4
+                        : tabActive === TAB_FEEDBACK_TYPE
                         ? 'Xóa loại feedback'
-                        : swapPage === 5
+                        : tabActive === TAB_FEATURE
                         ? 'Xóa chức năng'
                         : null
                 }
@@ -1001,31 +1185,38 @@ function Setting() {
                 <Form
                     className="modal__form"
                     name="form"
-                    fields={[
-                        {
-                            id: 'id',
-                            value: data.id,
-                        },
-                    ]}
+                    onFinish={
+                        tabActive === TAB_TRANSACTION_TYPE
+                            ? handleDeleteTransactionTypeSubmit
+                            : tabActive === TAB_VEHICLE_TYPE
+                            ? handleDeleteVehicleTypeSubmit
+                            : tabActive === TAB_PACKAGE_TYPE
+                            ? handleDeletePackageTypeSubmit
+                            : tabActive === TAB_FEEDBACK_TYPE
+                            ? handleDeleteFeedbackTypeSubmit
+                            : tabActive === TAB_FEATURE
+                            ? handleDeleteFeaturesSubmit
+                            : null
+                    }
                 >
-                    {swapPage === 1 ? (
+                    {tabActive === TAB_TRANSACTION_TYPE ? (
                         <p>
                             Bạn có chắn chắn muốn xóa loại giao dịch này không?
                         </p>
-                    ) : swapPage === 2 ? (
+                    ) : tabActive === TAB_VEHICLE_TYPE ? (
                         <p>
                             Bạn có chắn chắn muốn xóa loại phương tiện này
                             không?
                         </p>
-                    ) : swapPage === 3 ? (
+                    ) : tabActive === TAB_PACKAGE_TYPE ? (
                         <p>
                             Bạn có chắn chắn muốn xóa loại gói ưu đãi này không?
                         </p>
-                    ) : swapPage === 4 ? (
+                    ) : tabActive === TAB_FEEDBACK_TYPE ? (
                         <p>
                             Bạn có chắn chắn muốn xóa loại feedback này không?
                         </p>
-                    ) : swapPage === 5 ? (
+                    ) : tabActive === TAB_FEATURE ? (
                         <p>Bạn có chắn chắn muốn xóa chức năng này không?</p>
                     ) : null}
                     <div className="modal__form__button">
@@ -1041,7 +1232,14 @@ function Setting() {
                         >
                             Thoát
                         </button>
-                        <button className="button-green">Lưu</button>
+                        <button
+                            className="button-green"
+                            type="primary"
+                            htmlType="submit"
+                        >
+                            {' '}
+                            Xóa
+                        </button>
                     </div>
                 </Form>
             </Modal>

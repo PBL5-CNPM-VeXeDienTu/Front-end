@@ -17,9 +17,9 @@ const packageTypeApi = {
         const url = `/api/package-types/${id}`
         return axiosClient.patch(url, credentials)
     },
-    deleteById: (id, credentials) => {
+    deleteById: (id) => {
         const url = `/api/package-types/${id}`
-        return axiosClient.delete(url, credentials)
+        return axiosClient.delete(url)
     },
 }
 

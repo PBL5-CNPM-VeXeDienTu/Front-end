@@ -13,9 +13,9 @@ const vehicleTypeApi = {
         const url = `/api/vehicle-types/${id}`
         return axiosClient.patch(url, credentials)
     },
-    deleteById: (id, credentials) => {
+    deleteById: (id) => {
         const url = `/api/vehicle-types/${id}`
-        return axiosClient.delete(url, credentials)
+        return axiosClient.delete(url)
     },
 }
 
