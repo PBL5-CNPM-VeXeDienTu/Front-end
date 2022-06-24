@@ -271,6 +271,7 @@ function ParkingHistories() {
 
             <div className="history-list-content__sub">
                 <Table
+                    className="history-list-content__sub__table"
                     columns={columns}
                     dataSource={parkingHistoryList}
                     pagination={state.pagination}
