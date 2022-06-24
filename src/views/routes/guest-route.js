@@ -7,7 +7,7 @@ import * as roles from 'shared/constants/role'
 const GuestRoute = () => {
     const { user, token } = useAuth()
 
-    if (token !== 'null' && user) {
+    if (token !== 'null' && user !== 'null') {
         localStorage.setItem('selected_sidebar_key', 1)
         switch (user.role) {
             case roles.PARKING_USER:
