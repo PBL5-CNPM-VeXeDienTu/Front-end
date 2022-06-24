@@ -1,6 +1,7 @@
 .history-list-content {
     width: 100%;
     height: fit-content;
+    min-height: 84vh;
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
     background-color: #fff;
     border-radius: 20px;
@@ -66,15 +67,28 @@
     &__sub {
         width: 95%;
         margin: auto;
-        &__row-red {
-            td:nth-child(5) {
-                color: red;
-            }
-        }
+        &__table {
+            table {
+                margin-top: 1%;
 
-        &__row-green {
-            td:nth-child(5) {
-                color: #41bc3f;
+                tr {
+                    height: 5px !important;
+
+                    th {
+                        padding: 1.5vh !important;
+                        font-size: 1.1rem;
+                    }
+
+                    td {
+                        font-size: 1rem !important;
+                        background-color: #fff;
+                        padding: 2vh 0 2vh 1.5vh;
+                        max-width: 10vw;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
             }
         }
     }
@@ -111,6 +125,12 @@
         option {
             border-radius: 0px;
         }
+    }
+    .border-bottom {
+        border-bottom: 1px solid #555;
+    }
+    .padding-left {
+        padding-left: 30px;
     }
     .border-bottom {
         border-bottom: 1px solid #555;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
+import { Table, Input, Menu, Dropdown, Modal, Form, DatePicker } from 'antd'
 import {
     FilterOutlined,
     SearchOutlined,
@@ -98,20 +98,20 @@ function Packages() {
     const [packageTypeList, setPackageTypeList] = useState([])
     const [vehicleTypeList, setVehicleTypeList] = useState([])
     const [userPackageList, setUserPackageList] = useState([])
-    // const [packageOfParkinglotList, setPackageOfParkinglotList] = useState([])
-    // const [packageOfOwnerList, setPackageOfOwnerList] = useState([])
-
     const [userPackage, setUserPackage] = useState({})
-
     const [packageItem, setPackageItem] = useState({})
-
     const [params, setParams] = useState({
         limit: 10,
         page: 1,
         tab_state: TAB_ALL,
         txt_search: null,
         type_id: null,
+        is_expired: null,
         vehicle_type_id: null,
+        created_from_date: null,
+        created_to_date: null,
+        expired_from_date: null,
+        expired_to_date: null,
     })
 
     const state = {
@@ -127,7 +127,6 @@ function Packages() {
             },
         },
     }
-
     useEffect(() => {
         if (params.tab_state === TAB_OWNER) {
             userPackageApi
@@ -254,70 +253,161 @@ function Packages() {
         return (
             <Menu class="package-list-menu">
                 <div className="package-list-menu__item">
-                    <div className="package-list-menu__item__row">
-                        <span className="package-list-menu__item__row__span">
-                            Loại gói
-                        </span>
-                        <select
-                            className="package-list-menu__item__row__select"
-                            onChange={(e) => {
-                                setParams({
-                                    ...params,
-                                    type_id:
-                                        e.target.value === 'All'
-                                            ? null
-                                            : e.target.value,
-                                })
-                            }}
-                        >
-                            <option key={1} value="All">
-                                All
-                            </option>
-                            {packageTypeList.map((packageType, index) => {
-                                return (
-                                    <option
-                                        key={index + 1}
-                                        value={packageType.id}
-                                    >
-                                        {packageType.type_name}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-
-                    <div className="package-list-menu__item__row">
-                        <span className="package-list-menu__item__row__span">
-                            Phương tiện
-                        </span>
-                        <select
-                            className="package-list-menu__item__row__select"
-                            onChange={(e) => {
-                                setParams({
-                                    ...params,
-                                    vehicle_type_id:
-                                        e.target.value === 'All'
-                                            ? null
-                                            : e.target.value,
-                                })
-                            }}
-                        >
-                            <option key={1} value="All">
-                                All
-                            </option>
-                            {vehicleTypeList.map((vehicleType, index) => {
-                                return (
-                                    <option
-                                        key={index + 1}
-                                        value={vehicleType.id}
-                                    >
-                                        {vehicleType.type_name}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
+                    <span className="package-list-menu__item__span">
+                        Loại gói
+                    </span>
+                    <select
+                        className="package-list-menu__item__select"
+                        onChange={(e) => {
+                            setParams({
+                                ...params,
+                                type_id:
+                                    e.target.value === 'All'
+                                        ? null
+                                        : e.target.value,
+                            })
+                        }}
+                    >
+                        <option key={1} value="All">
+                            All
+                        </option>
+                        {packageTypeList.map((packageType, index) => {
+                            return (
+                                <option key={index + 1} value={packageType.id}>
+                                    {packageType.type_name}
+                                </option>
+                            )
+                        })}
+                    </select>
                 </div>
+
+                <div className="package-list-menu__item">
+                    <span className="package-list-menu__item__span">
+                        Phương tiện
+                    </span>
+                    <select
+                        className="package-list-menu__item__select"
+                        onChange={(e) => {
+                            setParams({
+                                ...params,
+                                vehicle_type_id:
+                                    e.target.value === 'All'
+                                        ? null
+                                        : e.target.value,
+                            })
+                        }}
+                    >
+                        <option key={1} value="All">
+                            All
+                        </option>
+                        {vehicleTypeList.map((vehicleType, index) => {
+                            return (
+                                <option key={index + 1} value={vehicleType.id}>
+                                    {vehicleType.type_name}
+                                </option>
+                            )
+                        })}
+                    </select>
+                </div>
+                {params.tab_state === TAB_OWNER ? (
+                    <>
+                        <div className="package-list-menu__item">
+                            <span className="package-list-menu__item__span">
+                                Tình trạng
+                            </span>
+                            <select
+                                className="package-list-menu__item__select"
+                                onChange={(e) => {
+                                    setParams({
+                                        ...params,
+                                        is_expired:
+                                            e.target.value === 'All'
+                                                ? null
+                                                : e.target.value,
+                                    })
+                                }}
+                            >
+                                <option key={0} value="All">
+                                    All
+                                </option>
+                                <option key={1} value={0}>
+                                    Chưa hết hạn
+                                </option>
+                                <option key={2} value={1}>
+                                    Đã hết hạn
+                                </option>
+                            </select>
+                        </div>
+                        <div className="border-bottom">
+                            Ngày bắt đầu gói ưu đãi
+                        </div>
+                        <div className="package-list-menu__item">
+                            <span className="package-list-menu__item__span padding-left">
+                                Từ ngày :
+                            </span>
+                            <DatePicker
+                                className="input"
+                                size="medium"
+                                onChange={(date, dateString) =>
+                                    setParams({
+                                        ...params,
+                                        created_from_date: dateString,
+                                    })
+                                }
+                            />
+                        </div>
+                        <div className="package-list-menu__item">
+                            <span className="package-list-menu__item__span padding-left">
+                                Đến ngày :
+                            </span>
+                            <DatePicker
+                                className="input"
+                                size="medium"
+                                onChange={(date, dateString) =>
+                                    setParams({
+                                        ...params,
+                                        created_to_date: dateString,
+                                    })
+                                }
+                            />
+                        </div>
+                        <div className="border-bottom">
+                            Ngày kết thúc gói ưu đãi
+                        </div>
+                        <div className="package-list-menu__item">
+                            <span className="package-list-menu__item__span padding-left">
+                                Từ ngày :
+                            </span>
+                            <DatePicker
+                                className="input"
+                                size="medium"
+                                onChange={(date, dateString) =>
+                                    setParams({
+                                        ...params,
+                                        expired_from_date: dateString,
+                                    })
+                                }
+                            />
+                        </div>
+                        <div className="package-list-menu__item">
+                            <span className="package-list-menu__item__span padding-left">
+                                Đến ngày :
+                            </span>
+                            <DatePicker
+                                className="input"
+                                size="medium"
+                                onChange={(date, dateString) =>
+                                    setParams({
+                                        ...params,
+                                        expired_to_date: dateString,
+                                    })
+                                }
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <></>
+                )}
             </Menu>
         )
     }
@@ -455,7 +545,13 @@ function Packages() {
                     <button
                         className="button-unactive"
                         onClick={(e) =>
-                            setParams({ ...params, tab_state: TAB_OWNER })
+                            setParams({
+                                ...params,
+                                txt_search: null,
+                                type_id: null,
+                                vehicle_type_id: null,
+                                tab_state: TAB_OWNER,
+                            })
                         }
                     >
                         Của tôi
@@ -644,7 +740,18 @@ function Packages() {
                     <button
                         className="button-unactive"
                         onClick={(e) =>
-                            setParams({ ...params, tab_state: TAB_ALL })
+                            setParams({
+                                ...params,
+                                tab_state: TAB_ALL,
+                                txt_search: null,
+                                type_id: null,
+                                vehicle_type_id: null,
+                                is_expired: null,
+                                created_from_date: null,
+                                created_to_date: null,
+                                expired_from_date: null,
+                                expired_to_date: null,
+                            })
                         }
                     >
                         Tất cả
@@ -673,7 +780,16 @@ function Packages() {
                         <div
                             className={
                                 params.type_id !== null ||
-                                params.vehicle_type_id !== null
+                                params.vehicle_type_id !== null ||
+                                params.is_expired !== null ||
+                                (params.created_from_date !== null &&
+                                    params.created_from_date !== '') ||
+                                (params.created_to_date !== null &&
+                                    params.created_to_date !== '') ||
+                                (params.expired_from_date !== null &&
+                                    params.expired_from_date !== '') ||
+                                (params.expired_to_date !== null &&
+                                    params.expired_to_date !== '')
                                     ? 'package-list-content__action__filter-active'
                                     : 'package-list-content__action__filter-unactive'
                             }
