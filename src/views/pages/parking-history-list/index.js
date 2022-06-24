@@ -54,7 +54,7 @@ function ParkingHistories() {
     const [parkingHistory, setParkingHistory] = useState({})
     const [showModal, setShowModal] = useState(false)
     const [total, setTotal] = useState(0)
-    const [params, setParams] = useState({
+    const defaultParams = {
         limit: 10,
         page: 1,
         txt_search: null,
@@ -63,7 +63,8 @@ function ParkingHistories() {
         checkin_to_date: null,
         checkout_from_date: null,
         checkout_to_date: null,
-    })
+    }
+    const [params, setParams] = useState(defaultParams)
 
     const state = {
         pagination: {

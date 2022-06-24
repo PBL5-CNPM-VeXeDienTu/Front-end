@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown, Space, DatePicker } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import useAuth from 'hooks/useAuth'
 import walletApi from 'api/walletApi'
 import {
     FilterOutlined,
@@ -14,6 +15,7 @@ const { Search } = Input
 const numOfItem = [10, 15, 25]
 
 function Wallets() {
+    const { user } = useAuth()
     const [pageSize, setPageSize] = useState(10)
     const [swapPage, setSwapPage] = useState(true)
     const [total, setTotal] = useState(0)
@@ -56,9 +58,9 @@ function Wallets() {
             title: 'Action',
             dataIndex: 'action',
             width: '15%',
-            render: (text, record) => (
+            render: () => (
                 <Space size="middle">
-                    <a href={`/wallet/${record.id}/recharge`}>
+                    <a href="/wallets/payment">
                         <PlusCircleOutlined className="icon-edit" />
                     </a>
                 </Space>
@@ -82,7 +84,7 @@ function Wallets() {
                     setTotal(response.data.count)
                     setWalletList(
                         response.data.rows.map((wallet) => ({
-                            id: wallet.id,
+                            id: wallet.Owner.id,
                             avatar: wallet.Owner.UserInfo.avatar,
                             name: wallet.Owner.name,
                             balance: wallet.balance,
@@ -104,24 +106,25 @@ function Wallets() {
             page: 1,
             role: swapPage ? roles.PARKING_USER : roles.PARKING_LOT_USER,
         }
-
-        walletApi.getListWallets(params).then((response) => {
-            setTotal(response.data.count)
-            setWalletList(
-                response.data.rows.map((wallet) => ({
-                    id: wallet.user_id,
-                    avatar: wallet.Owner.UserInfo.avatar,
-                    name: wallet.Owner.name,
-                    balance: wallet.balance,
-                    updated_at: wallet.Transactions[0].createdAt,
-                    amount_trans:
-                        wallet.Transactions[0].amount < 0
-                            ? wallet.Transactions[0].amount
-                            : '+' + wallet.Transactions[0].amount,
-                })),
-            )
-        })
-    }, [pageSize, swapPage])
+        if (!!user) {
+            walletApi.getListWallets(params).then((response) => {
+                setTotal(response.data.count)
+                setWalletList(
+                    response.data.rows.map((wallet) => ({
+                        id: wallet.Owner.id,
+                        avatar: wallet.Owner.UserInfo.avatar,
+                        name: wallet.Owner.name,
+                        balance: wallet.balance,
+                        updated_at: wallet.Transactions[0].createdAt,
+                        amount_trans:
+                            wallet.Transactions[0].amount < 0
+                                ? wallet.Transactions[0].amount
+                                : '+' + wallet.Transactions[0].amount,
+                    })),
+                )
+            })
+        }
+    }, [user, pageSize, swapPage])
 
     const menu = () => {
         return (
@@ -230,7 +233,7 @@ function Wallets() {
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    navigate(`/wallet/${record.id}`)
+                                    navigate(`/user-wallet/${record.id}`)
                                 },
                             }
                         }}
@@ -307,7 +310,7 @@ function Wallets() {
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: () => {
-                                    navigate(`/wallet/${record.id}`)
+                                    navigate(`/wallets/${record.id}/detail`)
                                 },
                             }
                         }}

@@ -24,13 +24,14 @@ function Accounts() {
     const [userList, setUserList] = useState([])
     const [deleteUser, setDeleteUser] = useState()
     const [total, setTotal] = useState(0)
-    const [params, setParams] = useState({
+    const defaultParams = {
         limit: 10,
         page: 1,
         role: roles.PARKING_USER,
         txt_search: null,
         is_deleted: null,
-    })
+    }
+    const [params, setParams] = useState(defaultParams)
 
     const handleSubmit = async () => {
         try {
@@ -210,10 +211,8 @@ function Accounts() {
                         className="button-unactive"
                         onClick={() =>
                             setParams({
-                                ...params,
+                                ...defaultParams,
                                 role: roles.PARKING_LOT_USER,
-                                txt_search: null,
-                                is_deleted: null,
                             })
                         }
                     >
@@ -314,10 +313,8 @@ function Accounts() {
                         className="button-unactive"
                         onClick={() =>
                             setParams({
-                                ...params,
+                                ...defaultParams,
                                 role: roles.PARKING_USER,
-                                txt_search: null,
-                                is_deleted: null,
                             })
                         }
                     >
@@ -418,10 +415,8 @@ function Accounts() {
                         className="button-unactive"
                         onClick={() =>
                             setParams({
-                                ...params,
+                                ...defaultParams,
                                 role: roles.PARKING_USER,
-                                txt_search: null,
-                                is_deleted: null,
                             })
                         }
                     >
