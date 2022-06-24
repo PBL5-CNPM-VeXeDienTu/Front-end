@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Menu, Dropdown, Modal, Form } from 'antd'
+import { Table, Input, Menu, Dropdown, Modal, Form, DatePicker } from 'antd'
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import parkingHistoryApi from 'api/parkingHistoryApi'
@@ -9,7 +9,6 @@ import './parking-history-list.scss'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
-const vehicleStateOfItem = ['All', 'Đang đỗ', 'Đã checkout']
 const columns = [
     {
         title: 'Biển số xe',
@@ -51,8 +50,6 @@ const columns = [
 function ParkingHistories() {
     const { user } = useAuth()
     const [page, setPage] = useState(10)
-    const [vehicleState, setVehicleState] = useState('All')
-    const [activeFilter, setActiveFilter] = useState(false)
     const [parkingHistoryList, setParkingHistoryList] = useState([])
     const [parkingHistory, setParkingHistory] = useState({})
     const [showModal, setShowModal] = useState(false)
@@ -60,6 +57,12 @@ function ParkingHistories() {
     const [params, setParams] = useState({
         limit: 10,
         page: 1,
+        txt_search: null,
+        is_parking: null,
+        checkin_from_date: null,
+        checkin_to_date: null,
+        checkout_from_date: null,
+        checkout_to_date: null,
     })
 
     const state = {
@@ -74,8 +77,6 @@ function ParkingHistories() {
             },
         },
     }
-
-    const onSearch = (value) => console.log(value)
 
     const onClickRow = (value) => {
         setParkingHistory(value)
@@ -98,59 +99,118 @@ function ParkingHistories() {
 
     useEffect(() => {
         if (!!user) {
-            if (user.role === roles.PARKING_USER) {
-                parkingHistoryApi
-                    .getListByParkingLotUserId(user.id, params)
-                    .then((response) => {
-                        setTotal(response.data.count)
-                        setParkingHistoryList(
-                            response.data.rows.map((parkingHistory) => ({
-                                key: parkingHistory.id,
-                                id: parkingHistory.id,
-                                license_plate:
-                                    parkingHistory.Vehicle?.license_plate,
-                                parking_lot_name:
-                                    parkingHistory.ParkingLot?.name,
-                                checkin_time: parkingHistory.checkin_time,
-                                checkout_time: parkingHistory.checkout_time,
-                                state: parkingHistory.is_parking,
-                                cost: parkingHistory.cost,
-                                memo: parkingHistory.memo,
-                            })),
-                        )
-                    })
-            }
+            parkingHistoryApi
+                .getListByParkingLotUserId(user.id, params)
+                .then((response) => {
+                    setTotal(response.data.count)
+                    setParkingHistoryList(
+                        response.data.rows.map((parkingHistory) => ({
+                            key: parkingHistory.id,
+                            id: parkingHistory.id,
+                            license_plate:
+                                parkingHistory.Vehicle?.license_plate,
+                            parking_lot_name: parkingHistory.ParkingLot?.name,
+                            checkin_time: parkingHistory.checkin_time,
+                            checkout_time: parkingHistory.checkout_time,
+                            state: parkingHistory.is_parking,
+                            cost: parkingHistory.cost,
+                            memo: parkingHistory.memo,
+                        })),
+                    )
+                })
         }
-        if (vehicleState === 'All') setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [user, params, vehicleState])
+    }, [user, params])
 
     const menu = () => {
         return (
             <Menu class="history-list-menu">
                 <div className="history-list-menu__item">
-                    <div className="history-list-menu__item__row">
-                        <span className="history-list-menu__item__row__span">
-                            Trạng thái
-                        </span>
-                        <select
-                            className="history-list-menu__item__row__select"
-                            onChange={(e) => setVehicleState(e.target.value)}
-                        >
-                            {vehicleStateOfItem.map(
-                                (vehicleStateOfItem, index) => {
-                                    return (
-                                        <option
-                                            key={index}
-                                            value={vehicleStateOfItem}
-                                        >
-                                            {vehicleStateOfItem}
-                                        </option>
-                                    )
-                                },
-                            )}
-                        </select>
-                    </div>
+                    <span className="history-list-menu__item__span">
+                        Trạng thái
+                    </span>
+                    <select
+                        className="history-list-menu__item__select"
+                        onChange={(e) => {
+                            e.target.value === 'All'
+                                ? setParams({ ...params, is_parking: null })
+                                : setParams({
+                                      ...params,
+                                      is_parking: parseInt(e.target.value),
+                                  })
+                        }}
+                    >
+                        <option key={1} value={'All'}>
+                            All
+                        </option>
+                        <option key={3} value={0}>
+                            Đã chechout
+                        </option>
+                        <option key={2} value={1}>
+                            Đang đỗ
+                        </option>
+                    </select>
+                </div>
+                <div className="border-bottom">Checkin</div>
+                <div className="history-list-menu__item">
+                    <span className="history-list-menu__item__span padding-left">
+                        Từ ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                checkin_from_date: dateString,
+                            })
+                        }
+                    />
+                </div>
+                <div className="history-list-menu__item">
+                    <span className="history-list-menu__item__span padding-left">
+                        Đến ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                checkin_to_date: dateString,
+                            })
+                        }
+                    />
+                </div>
+                <div className="border-bottom">Checkout</div>
+                <div className="history-list-menu__item">
+                    <span className="history-list-menu__item__span padding-left">
+                        Từ ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                checkout_from_date: dateString,
+                            })
+                        }
+                    />
+                </div>
+                <div className="history-list-menu__item">
+                    <span className="history-list-menu__item__span padding-left">
+                        Đến ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                checkout_to_date: dateString,
+                            })
+                        }
+                    />
                 </div>
             </Menu>
         )
@@ -178,7 +238,15 @@ function ParkingHistories() {
                 <Dropdown overlay={menu} trigger="click" placement="bottom">
                     <div
                         className={
-                            activeFilter
+                            params.is_parking !== null ||
+                            (params.checkin_from_date !== null &&
+                                params.checkin_from_date !== '') ||
+                            (params.checkin_to_date !== null &&
+                                params.checkin_to_date !== '') ||
+                            (params.checkout_from_date !== null &&
+                                params.checkout_from_date !== '') ||
+                            (params.checkout_to_date !== null &&
+                                params.checkout_to_date !== '')
                                 ? 'history-list-content__action__filter-active'
                                 : 'history-list-content__action__filter-unactive'
                         }
@@ -190,8 +258,10 @@ function ParkingHistories() {
                 <div className="history-list-content__action__search">
                     <Search
                         className="search-box"
-                        placeholder="Tìm kiếm"
-                        onSearch={onSearch}
+                        placeholder="Tên bãi đỗ xe, biển số xe"
+                        onChange={(e) =>
+                            setParams({ ...params, txt_search: e.target.value })
+                        }
                         allowClear
                         suffix
                     />
