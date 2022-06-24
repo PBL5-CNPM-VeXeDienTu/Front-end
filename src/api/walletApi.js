@@ -2,7 +2,10 @@ import axiosClient from './axiosClient'
 
 const walletApi = {
     getWalletByUserId: (id, params) => {
-        const url = `api/wallets/get-by-owner/${id}?limit=${params.limit}&page=${params.page}`
+        let url = `api/wallets/get-by-owner/${id}?`
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getListWallets: (params) => {

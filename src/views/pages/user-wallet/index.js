@@ -13,13 +13,13 @@ import {
 import { useParams } from 'react-router-dom'
 import messages from 'assets/lang/messages'
 import walletApi from 'api/walletApi'
+import transactionTypeApi from 'api/transactionTypeApi'
 import useAuth from 'hooks/useAuth'
 import {
     FilterOutlined,
     PlusCircleOutlined,
     SearchOutlined,
 } from '@ant-design/icons'
-import * as roles from 'shared/constants/role'
 import './user-wallet.scss'
 
 const { Search } = Input
@@ -56,146 +56,65 @@ const columns = [
 function UserWallet() {
     const { user } = useAuth()
     const { id } = useParams()
-    const [walletType, setWalletType] = useState('All')
     const [balance, setBalance] = useState(0)
     const [total, setTotal] = useState(0)
     const [transactionList, setTransactionList] = useState()
+    const [transactionTypeList, setTransactionTypeList] = useState()
     const [walletID, setWalletID] = useState()
-    const [walletFillter, setWalletFillter] = useState('All')
-    const [activeFilter, setActiveFilter] = useState(false)
     const [showModal, setShowModal] = useState(false)
-    const [pageSize, setPageSize] = useState(10)
-    const [params, setParams] = useState({
+    const defaultParams = {
         limit: 10,
         page: 1,
         txt_search: null,
         type_id: null,
-        state: 0,
+        state: null,
         from_date: null,
         to_date: null,
-    })
-
-    const walletTypeOfItem = [
-        'All',
-        'Nạp Card',
-        'Liên kết với ngân hàng',
-        'Nạp tiền trực tiếp với chủ nhà xe',
-    ]
+    }
+    const [params, setParams] = useState(defaultParams)
 
     const walletState = {
         pagination: {
-            pageSize: pageSize,
+            pageSize: params.pageSize,
             total: total,
             onChange: (page, pageSize) => {
-                const params = {
+                setParams({
+                    ...defaultParams,
                     limit: pageSize,
                     page: page,
-                }
-                if (user.role === roles.ADMIN) {
-                    walletApi.getWalletByUserId(id, params).then((response) => {
-                        setWalletID(response.data.Wallet.id)
-                        setBalance(response.data.Wallet.balance)
-                        setTotal(response.data.Transactions.count)
-                        setTransactionList(
-                            response.data.Transactions.rows.map(
-                                (transaction) => ({
-                                    type: transaction.TransactionType.type_name,
-                                    time: transaction.createdAt,
-                                    begin: transaction.old_balance,
-                                    money:
-                                        transaction.amount < 0
-                                            ? transaction.amount
-                                            : '+' + transaction.amount,
-                                    after: transaction.new_balance,
-                                }),
-                            ),
-                        )
-                    })
-                } else {
-                    walletApi
-                        .getWalletByUserId(user.id, params)
-                        .then((response) => {
-                            setWalletID(response.data.Wallet.id)
-                            setBalance(response.data.Wallet.balance)
-                            setTotal(response.data.Transactions.count)
-                            setTransactionList(
-                                response.data.Transactions.rows.map(
-                                    (transaction) => ({
-                                        type: transaction.TransactionType
-                                            .type_name,
-                                        time: transaction.createdAt,
-                                        begin: transaction.old_balance,
-                                        money:
-                                            transaction.amount < 0
-                                                ? transaction.amount
-                                                : '+' + transaction.amount,
-                                        after: transaction.new_balance,
-                                    }),
-                                ),
-                            )
-                        })
-                }
+                })
             },
         },
     }
 
     useEffect(() => {
-        if (walletType === 'All' && walletFillter === 'All')
-            setActiveFilter(false)
-        else setActiveFilter(true)
-    }, [walletType, walletFillter])
-
-    useEffect(() => {
-        const params = {
-            limit: pageSize,
-            page: 1,
-        }
-        if (user.role === roles.ADMIN) {
-            walletApi.getWalletByUserId(id, params).then((response) => {
-                setWalletID(response.data.Wallet.id)
-                setBalance(response.data.Wallet.balance)
-                setTotal(response.data.Transactions.count)
-                setTransactionList(
-                    response.data.Transactions.rows.map((transaction) => ({
-                        type: transaction.TransactionType.type_name,
-                        time: transaction.createdAt,
-                        begin: transaction.old_balance,
-                        money:
-                            transaction.amount < 0
-                                ? transaction.amount
-                                : '+' + transaction.amount,
-                        after: transaction.new_balance,
-                    })),
-                )
-            })
-        } else {
-            walletApi.getWalletByUserId(user.id, params).then((response) => {
-                setWalletID(response.data.Wallet.id)
-                setBalance(response.data.Wallet.balance)
-                setTotal(response.data.Transactions.count)
-                setTransactionList(
-                    response.data.Transactions.rows.map((transaction) => ({
-                        type: transaction.TransactionType.type_name,
-                        time: transaction.createdAt,
-                        begin: transaction.old_balance,
-                        money:
-                            transaction.amount < 0
-                                ? transaction.amount
-                                : '+' + transaction.amount,
-                        after: transaction.new_balance,
-                    })),
-                )
-            })
-        }
-    }, [user, pageSize, id])
-
-    const onButtonClick = (e) => {
-        setShowModal(true)
-    }
-
-    const handleCancle = (e) => {
-        setShowModal(false)
-    }
+        const user_id = !!id ? id : user.id
+        walletApi.getWalletByUserId(user_id, params).then((response) => {
+            setWalletID(response.data.Wallet.id)
+            setBalance(response.data.Wallet.balance)
+            setTotal(response.data.Transactions.count)
+            setTransactionList(
+                response.data.Transactions.rows.map((transaction) => ({
+                    type: transaction.TransactionType.type_name,
+                    time: transaction.createdAt,
+                    begin: transaction.old_balance,
+                    money:
+                        transaction.amount < 0
+                            ? transaction.amount
+                            : '+' + transaction.amount,
+                    after: transaction.new_balance,
+                })),
+            )
+        })
+        transactionTypeApi.getAll().then((response) => {
+            setTransactionTypeList(
+                response.data.rows.map((transactionType) => ({
+                    type_id: transactionType.id,
+                    type_name: transactionType.type_name,
+                })),
+            )
+        })
+    }, [id, user, params])
 
     const handleSubmit = async (values) => {
         try {
@@ -213,98 +132,132 @@ function UserWallet() {
 
     const menu = () => {
         return (
-            <Menu class="detail-wallet-menu">
-                <div className="detail-wallet-menu__item">
-                    <div className="detail-wallet-menu__item__row">
-                        <span className="detail-wallet-menu__item__row__span">
-                            Loại giao dịch
-                        </span>
-                        <select
-                            className="detail-wallet-menu__item__row__select"
-                            onChange={(e) => setWalletType(e.target.value)}
-                        >
-                            {walletTypeOfItem.map((walletTypeOfItem, index) => {
-                                return (
-                                    <option
-                                        key={index}
-                                        value={walletTypeOfItem}
-                                    >
-                                        {walletTypeOfItem}
-                                    </option>
-                                )
-                            })}
-                        </select>
-                    </div>
-                    <div className="detail-wallet-menu__item__row">
-                        <span className="detail-wallet-menu__item__row__span">
-                            Trạng thái
-                        </span>
-                        <select
-                            className="detail-wallet-menu__item__row__select"
-                            onChange={(e) => setWalletFillter(e.target.value)}
-                        >
-                            <option value="All">All</option>
-                            <option value="Nạp tiền">Nạp tiền</option>
-                            <option value="Rút tiền">Rút tiền</option>
-                        </select>
-                    </div>
+            <Menu class="user-wallet-menu">
+                <div className="user-wallet-menu__row">
+                    <span className="user-wallet-menu__row__span">
+                        Loại giao dịch
+                    </span>
+                    <select
+                        className="user-wallet-menu__row__select"
+                        onChange={(e) =>
+                            setParams({
+                                ...params,
+                                type_id:
+                                    e.target.value === 'All'
+                                        ? null
+                                        : e.target.value,
+                            })
+                        }
+                    >
+                        <option key={0} value={'All'}>
+                            All
+                        </option>
+                        {transactionTypeList.map((transactionType, index) => {
+                            return (
+                                <option
+                                    key={index + 1}
+                                    value={transactionType.type_id}
+                                >
+                                    {transactionType.type_name}
+                                </option>
+                            )
+                        })}
+                    </select>
+                </div>
+                <div className="user-wallet-menu__row">
+                    <span className="user-wallet-menu__row__span">
+                        Trạng thái
+                    </span>
+                    <select
+                        className="user-wallet-menu__row__select"
+                        onChange={(e) =>
+                            setParams({
+                                ...params,
+                                state:
+                                    e.target.value === 'All'
+                                        ? null
+                                        : e.target.value,
+                            })
+                        }
+                    >
+                        <option value="All">All</option>
+                        <option value={'Nạp tiền'}>Nạp tiền</option>
+                        <option value={'Rút tiền'}>Rút tiền</option>
+                    </select>
+                </div>
 
-                    <div className="detail-wallet-menu__item__row">
-                        <span className="detail-wallet-menu__item__row__span">
-                            Thời gian bắt đầu
-                        </span>
-                        <DatePicker
-                            size="medium"
-                            className="input"
-                            placeholder="Thời gian bắt đầu"
-                        />
-                    </div>
-
-                    <div className="detail-wallet-menu__item__row">
-                        <span className="detail-wallet-menu__item__row__span">
-                            Thời gian kết thúc
-                        </span>
-                        <DatePicker
-                            size="medium"
-                            className="input"
-                            placeholder="Thời gian kết thúc"
-                        />
-                    </div>
+                <div className="border-bottom">
+                    Thời điểm thực hiện giao dịch
+                </div>
+                <div className="user-wallet-menu__row">
+                    <span className="user-wallet-menu__row__span padding-left">
+                        Từ ngày
+                    </span>
+                    <DatePicker
+                        size="medium"
+                        className="input"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                from_date: dateString,
+                            })
+                        }
+                    />
+                </div>
+                <div className="user-wallet-menu__row">
+                    <span className="user-wallet-menu__row__span padding-left">
+                        Đến ngày
+                    </span>
+                    <DatePicker
+                        size="medium"
+                        className="input"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                to_date: dateString,
+                            })
+                        }
+                    />
                 </div>
             </Menu>
         )
     }
 
     return (
-        <div className="detail-wallet-content">
+        <div className="user-wallet-content">
             <div className="title">
                 <span>Ví cá nhân</span>
             </div>
-            <div className="detail-wallet-content__balance">
-                <div className="detail-wallet-content__balance__title">
+            <div className="user-wallet-content__balance">
+                <div className="user-wallet-content__balance__title">
                     Số dư khả dụng: {balance} VND
                 </div>
                 <Button
-                    className="detail-wallet-content__balance__btn"
-                    onClick={onButtonClick}
+                    className="user-wallet-content__balance__btn"
+                    onClick={() => setShowModal(true)}
                     shape="circle"
                 >
-                    <PlusCircleOutlined className="detail-wallet-content__balance__btn__icon" />
-                    <span className="detail-wallet-content__balance__btn__char">
+                    <PlusCircleOutlined className="user-wallet-content__balance__btn__icon" />
+                    <span className="user-wallet-content__balance__btn__char">
                         Nạp tiền
                     </span>
                 </Button>
             </div>
-            <div className="detail-wallet-content__history">
-                <div className="detail-wallet-content__history__title">
+            <div className="user-wallet-content__history">
+                <div className="user-wallet-content__history__title">
                     Lịch sử thay đổi số dư
                 </div>
-                <div className="detail-wallet-content__history__action">
-                    <div className="detail-wallet-content__history__action__select">
+                <div className="user-wallet-content__history__action">
+                    <div className="user-wallet-content__history__action__select">
                         <span>Hiển thị </span>
                         <select
-                            defaultValue={{ value: pageSize }}
-                            onChange={(e) => setPageSize(e.target.value)}
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    pageSize: e.target.value,
+                                })
+                            }
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -318,28 +271,44 @@ function UserWallet() {
                     <Dropdown overlay={menu} trigger="click" placement="bottom">
                         <div
                             className={
-                                activeFilter
-                                    ? 'detail-wallet-content__history__action__filter-active'
-                                    : 'detail-wallet-content__history__action__filter-unactive'
+                                params.type_id !== null ||
+                                params.state !== null ||
+                                (params.from_date !== null &&
+                                    params.from_date !== '') ||
+                                (params.to_date !== null &&
+                                    params.to_date !== '')
+                                    ? 'user-wallet-content__history__action__filter-active'
+                                    : 'user-wallet-content__history__action__filter-unactive'
                             }
                         >
                             <FilterOutlined />
                         </div>
                     </Dropdown>
-                    <div className="detail-wallet-content__history__action__search">
-                        <Search className="search-box" allowClear suffix />
-                        <SearchOutlined className="detail-wallet-content__history__action__search__icon" />
+                    <div className="user-wallet-content__history__action__search">
+                        <Search
+                            className="search-box"
+                            placeholder="Loại giao dịch"
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
+                            allowClear
+                            suffix
+                        />
+                        <SearchOutlined className="user-wallet-content__history__action__search__icon" />
                     </div>
                 </div>
-                <div className="detail-wallet-content__history__table">
+                <div className="user-wallet-content__history__table">
                     <Table
                         columns={columns}
                         dataSource={transactionList}
                         pagination={walletState.pagination}
                         rowClassName={(record, index) =>
                             record.money >= 0
-                                ? 'detail-wallet-content__history__table__row-green'
-                                : 'detail-wallet-content__history__table__row-red'
+                                ? 'user-wallet-content__history__table__row-green'
+                                : 'user-wallet-content__history__table__row-red'
                         }
                     />
                     <Modal
@@ -356,7 +325,7 @@ function UserWallet() {
                             onFinish={handleSubmit}
                         >
                             <div className="recharge-content__sub__info">
-                                <div className="recharge-content__sub__info__item">
+                                <div className="recharge-content__sub__info">
                                     <span className="span">Nhà mạng</span>
                                     <Form.Item
                                         name="home_network"
@@ -375,7 +344,7 @@ function UserWallet() {
                                         </Select>
                                     </Form.Item>
                                 </div>
-                                <div className="recharge-content__sub__info__item">
+                                <div className="recharge-content__sub__info">
                                     <span className="span">Mệnh giá</span>
                                     <Form.Item
                                         name="card"
@@ -403,7 +372,7 @@ function UserWallet() {
                                         </Select>
                                     </Form.Item>
                                 </div>
-                                <div className="recharge-content__sub__info__item">
+                                <div className="recharge-content__sub__info">
                                     <span className="span">Serial</span>
                                     <Form.Item
                                         name="serial"
@@ -418,7 +387,7 @@ function UserWallet() {
                                         <Input type="string" />
                                     </Form.Item>
                                 </div>
-                                <div className="recharge-content__sub__info__item">
+                                <div className="recharge-content__sub__info">
                                     <span className="span">Mã thẻ</span>
                                     <Form.Item
                                         name="card_code"
@@ -443,7 +412,7 @@ function UserWallet() {
                             <div className="recharge-content__sub__button">
                                 <Button
                                     className="button-cancel"
-                                    onClick={handleCancle}
+                                    onClick={() => setShowModal(false)}
                                 >
                                     Thoát
                                 </Button>
