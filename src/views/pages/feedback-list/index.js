@@ -48,14 +48,14 @@ function ParkingLots() {
     const [feedbackTypeList, setFeedbackTypeList] = useState([])
     const [featureList, setFeatureList] = useState([])
     const [feedback, setFeedback] = useState({})
-    const [params, setParams] = useState({
-        limit: 10,
+    const defaultParams = {
         page: 1,
         txt_search: null,
         type_id: null,
         feature_id: null,
         is_processed: null,
-    })
+    }
+    const [params, setParams] = useState(defaultParams)
 
     const showFeedbackItem = (record) => {
         setShowParkingUserModal(true)

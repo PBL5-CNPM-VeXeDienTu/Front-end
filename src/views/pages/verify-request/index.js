@@ -85,7 +85,7 @@ function VerifyRequest() {
     const [total, setTotal] = useState(0)
     const [parkingLotList, setParkingLotList] = useState()
     const [vehicleList, setVehicleList] = useState()
-    const [params, setParams] = useState({
+    const defaultParams = {
         limit: 10,
         page: 1,
         tab_state: TAB_VEHICLE,
@@ -93,7 +93,8 @@ function VerifyRequest() {
         verify_state: null,
         from_date: null,
         to_date: null,
-    })
+    }
+    const [params, setParams] = useState(defaultParams)
 
     const state = {
         pagination: {
@@ -227,11 +228,7 @@ function VerifyRequest() {
                         className="button-unactive"
                         onClick={(e) => {
                             setParams({
-                                ...params,
-                                txt_search: null,
-                                verify_state: null,
-                                from_date: null,
-                                to_date: null,
+                                ...defaultParams,
                                 tab_state: TAB_PARKING_LOT,
                             })
                         }}
@@ -333,11 +330,7 @@ function VerifyRequest() {
                         className="button-unactive"
                         onClick={(e) => {
                             setParams({
-                                ...params,
-                                txt_search: null,
-                                verify_state: null,
-                                from_date: null,
-                                to_date: null,
+                                ...defaultParams,
                                 tab_state: TAB_VEHICLE,
                             })
                         }}
