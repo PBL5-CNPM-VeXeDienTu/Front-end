@@ -221,7 +221,9 @@ function Accounts() {
                     </button>
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: roles.ADMIN })}
+                        onClick={() =>
+                            setParams({ ...params, role: roles.ADMIN })
+                        }
                     >
                         Admin
                     </button>
@@ -324,7 +326,9 @@ function Accounts() {
                     <button className="button-active">Parking-lot User</button>
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: roles.ADMIN })}
+                        onClick={() =>
+                            setParams({ ...params, role: roles.ADMIN })
+                        }
                     >
                         Admin
                     </button>
@@ -425,7 +429,12 @@ function Accounts() {
                     </button>
                     <button
                         className="button-unactive"
-                        onClick={() => setParams({ ...params, role: roles.PARKING_LOT_USER })}
+                        onClick={() =>
+                            setParams({
+                                ...params,
+                                role: roles.PARKING_LOT_USER,
+                            })
+                        }
                     >
                         Parking-lot User
                     </button>
