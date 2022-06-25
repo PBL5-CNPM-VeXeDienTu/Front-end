@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import QR from 'components/qr-code/index'
 import useAuth from 'hooks/useAuth'
 import parkingHistoryApi from 'api/parkingHistoryApi'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './qr-checkout.scss'
 
 function QrCheckout() {
     const { user } = useAuth()
     const [QRList, setQRList] = useState([])
-    const [params, setParams] = useState({
+    const [params] = useState({
         is_parking: 1,
     })
 
@@ -35,7 +36,11 @@ function QrCheckout() {
         }
     }, [user, params])
 
-    const listQRs = QRList.map((value, index) => {
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.VEHICLE_AVATAR
+    }
+
+    const listQRs = QRList.map((value, _) => {
         return (
             <div
                 className="qr-checkout-container__content__sub"
@@ -50,6 +55,7 @@ function QrCheckout() {
                                     process.env.REACT_APP_API_URL + value.avatar
                                 }
                                 alt=""
+                                onError={handleGetImageError}
                             />
                         </div>
                         <div>
@@ -88,14 +94,13 @@ function QrCheckout() {
 
     return (
         <div className="qr-checkout-container">
-            <div
-                className={
-                    listQRs.length === 0 ? 'qr-content' : 'qr-content-unactive'
-                }
-            ></div>
-            <div className="qr-checkout-container__content">
-                <div>{listQRs}</div>
-            </div>
+            {listQRs.length === 0 ? (
+                <div className="qr-content">
+                    Hiện bạn đang không có xe nào đang đỗ
+                </div>
+            ) : (
+                <div className="qr-checkout-container__content">{listQRs}</div>
+            )}
         </div>
     )
 }

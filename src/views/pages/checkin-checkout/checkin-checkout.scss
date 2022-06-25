@@ -109,7 +109,6 @@
                     color: #000;
                     font-size: 1.1rem;
                     text-align: center;
-                    cursor: pointer;
                     background-color: #b4e2b3;
                 }
 
@@ -170,6 +169,7 @@
                 height: 8.5vh;
                 display: grid;
                 padding: auto 0;
+                text-align: left;
                 grid-template-columns: 30% 60%;
                 .span {
                     font-weight: bold;
@@ -229,9 +229,9 @@
                 color: #fff;
             }
 
-            &__taskPhoto {
+            &__take-photo {
                 position: relative;
-                top: -53.5vh;
+                top: -52vh;
                 right: -162%;
                 width: 12vw;
                 height: 5vh;

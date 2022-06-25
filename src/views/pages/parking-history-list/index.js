@@ -295,6 +295,7 @@ function ParkingHistories() {
                     <h1 className="title">Thông tin lịch sử gửi xe</h1>
                     <Form
                         className="parking-history-modal__sub"
+                        onFinish={handleSubmit}
                         fields={[
                             {
                                 name: ['parking_lot_name'],
@@ -428,7 +429,6 @@ function ParkingHistories() {
                                 className="button-green"
                                 type="primary"
                                 htmlType="submit"
-                                onClick={handleSubmit}
                             >
                                 Lưu
                             </button>

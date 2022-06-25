@@ -9,6 +9,7 @@ import useAuth from 'hooks/useAuth'
 import checkinApi from 'api/checkinApi'
 import checkoutApi from 'api/checkoutApi'
 import parkingLotApi from 'api/parkingLotApi'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './checkin-checkout.scss'
 const { Option } = Select
 
@@ -37,6 +38,10 @@ function CheckinCheckout() {
     useEffect(() => {
         onchange = (data) => {}
     })
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.VEHICLE_AVATAR
+    }
 
     const handleCancel = () => {
         setShowSuccessModal(false)
@@ -359,9 +364,9 @@ function CheckinCheckout() {
                             Checkout
                         </Button>
                     </Form>
-                    <div className="checkin-checkout-content__sub__form__taskPhoto">
+                    <div className="checkin-checkout-content__sub__form__take-photo">
                         <button
-                            className="checkin-checkout-content__sub__form__taskPhoto__btn"
+                            className="checkin-checkout-content__sub__form__take-photo__btn"
                             onClick={handleSubmit}
                         >
                             <ScanOutlined className="icon-scan" />
@@ -405,6 +410,7 @@ function CheckinCheckout() {
                                         infoVehicle.avatar
                                     }
                                     alt=""
+                                    onError={handleGetImageError}
                                 />
                             </div>
                             <div className="div">
@@ -432,7 +438,7 @@ function CheckinCheckout() {
                                         className="text"
                                         disabled
                                         size="medium"
-                                    ></Input>
+                                    />
                                 </Form.Item>
                             </div>
                             <div className="div">
@@ -446,7 +452,7 @@ function CheckinCheckout() {
                                         className="text"
                                         disabled
                                         size="medium"
-                                    ></Input>
+                                    />
                                 </Form.Item>
                             </div>
                             <div className="div">
