@@ -9,10 +9,13 @@ import {
     PlusCircleOutlined,
 } from '@ant-design/icons'
 import * as roles from 'shared/constants/role'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './wallet-list.scss'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
+
+
 
 function Wallets() {
     const { user } = useAuth()
@@ -21,8 +24,19 @@ function Wallets() {
     const [total, setTotal] = useState(0)
     const [walletList, setWalletList] = useState()
     let navigate = useNavigate()
+    const defaultParams = {
+        limit: 10,
+        page: 1,
+        role: roles.PARKING_USER,
+        txt_search: null,
+        from_date: null,
+        to_date: null,
+    }
+    const [params, setParams] = useState(defaultParams)
 
-    const onSearch = (value) => console.log(value)
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.USER_AVATAR
+    }
 
     const columns = [
         {
@@ -31,7 +45,14 @@ function Wallets() {
             width: '10%',
             render: (text, record) => {
                 let imgSource = process.env.REACT_APP_API_URL + record.avatar
-                return <img src={imgSource} className="avatar-user" alt="" />
+                return (
+                    <img
+                        src={imgSource}
+                        className="avatar-user"
+                        alt=""
+                        onError={handleGetImageError}
+                    />
+                )
             },
         },
         {
@@ -68,93 +89,72 @@ function Wallets() {
         },
     ]
 
-    const walletState = {
+    const state = {
         pagination: {
-            pageSize: pageSize,
+            pageSize: params.limit,
             total: total,
             onChange: (page, pageSize) => {
-                const params = {
+                setParams({
+                    ...params,
                     limit: pageSize,
                     page: page,
-                    role: swapPage
-                        ? roles.PARKING_USER
-                        : roles.PARKING_LOT_USER,
-                }
-                walletApi.getListWallets(params).then((response) => {
-                    setTotal(response.data.count)
-                    setWalletList(
-                        response.data.rows.map((wallet) => ({
-                            id: wallet.Owner.id,
-                            avatar: wallet.Owner.UserInfo.avatar,
-                            name: wallet.Owner.name,
-                            balance: wallet.balance,
-                            updated_at: wallet.Transactions[0].createdAt,
-                            amount_trans:
-                                wallet.Transactions[0].amount < 0
-                                    ? wallet.Transactions[0].amount
-                                    : '+' + wallet.Transactions[0].amount,
-                        })),
-                    )
                 })
             },
         },
     }
 
     useEffect(() => {
-        const params = {
-            limit: pageSize,
-            page: 1,
-            role: swapPage ? roles.PARKING_USER : roles.PARKING_LOT_USER,
-        }
-        if (!!user) {
-            walletApi.getListWallets(params).then((response) => {
-                setTotal(response.data.count)
-                setWalletList(
-                    response.data.rows.map((wallet) => ({
-                        id: wallet.Owner.id,
-                        avatar: wallet.Owner.UserInfo.avatar,
-                        name: wallet.Owner.name,
-                        balance: wallet.balance,
-                        updated_at: wallet.Transactions[0].createdAt,
-                        amount_trans:
-                            wallet.Transactions[0].amount < 0
-                                ? wallet.Transactions[0].amount
-                                : '+' + wallet.Transactions[0].amount,
-                    })),
-                )
-            })
-        }
-    }, [user, pageSize, swapPage])
+        walletApi.getListWallets(params).then((response) => {
+            setTotal(response.data.count)
+            setWalletList(
+                response.data.rows.map((wallet) => ({
+                    id: wallet.Owner.id,
+                    avatar: wallet.Owner.UserInfo.avatar,
+                    name: wallet.Owner.name,
+                    balance: wallet.balance,
+                    updated_at: wallet.Transactions[0].createdAt,
+                    amount_trans:
+                        wallet.Transactions[0].amount < 0
+                            ? wallet.Transactions[0].amount
+                            : '+' + wallet.Transactions[0].amount,
+                })),
+            )
+        })
+    }, [params])
 
     const menu = () => {
         return (
             <Menu class="wallet-list-menu">
+                <div className="border-bottom">Thời điểm giao dịch gần nhất</div>
                 <div className="wallet-list-menu__item">
-                    <span className="wallet-list-menu__item__span">
-                        Thời điểm giao dịch
+                    <span className="wallet-list-menu__item__span padding-left">
+                        Từ ngày :
                     </span>
-                    <div className="wallet-list-menu__item__row">
-                        <span className="wallet-list-menu__item__row__span">
-                            Bắt đầu
-                        </span>
-                        <DatePicker
-                            size="medium"
-                            className="input"
-                            placeholder="Thời gian kết thúc"
-                        />
-                    </div>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                from_date: dateString,
+                            })
+                        }
+                    />
                 </div>
                 <div className="wallet-list-menu__item">
-                    <div className="wallet-list-menu__item__row">
-                        <span className="wallet-list-menu__item__row__span">
-                            Kết thúc
-                        </span>
-                        <DatePicker
-                            size="medium"
-                            className="input"
-                            placeholder="Thời gian kết thúc"
-                        />
-                    </div>
+                    <span className="wallet-list-menu__item__span padding-left">
+                        Đến ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                to_date: dateString,
+                            })
+                        }
+                    />
                 </div>
             </Menu>
         )
@@ -164,7 +164,7 @@ function Wallets() {
         <div>
             <div
                 className={
-                    swapPage
+                    params.role === roles.PARKING_USER
                         ? 'wallet-list-content'
                         : 'wallet-list-content-unactive'
                 }
@@ -175,7 +175,12 @@ function Wallets() {
                     <button className="button-active">Parking User</button>
                     <button
                         className="button-unactive"
-                        onClick={(e) => setSwapPage(false)}
+                        onClick={(e) =>
+                            setParams({
+                                ...defaultParams,
+                                role: roles.PARKING_LOT_USER,
+                            })
+                        }
                     >
                         Parking-lot User
                     </button>
@@ -185,8 +190,10 @@ function Wallets() {
                     <div className="wallet-list-content__action__select">
                         <span>Hiển thị</span>
                         <select
-                            defaultValue={{ value: pageSize }}
-                            onChange={(e) => setPageSize(e.target.value)}
+                            defaultValue={{ value: params.limit }}
+                            onChange={(e) =>
+                                setParams({ ...params, limit: e.target.value })
+                            }
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -200,7 +207,12 @@ function Wallets() {
                     <Dropdown overlay={menu} trigger="click" placement="bottom">
                         <div
                             className={
-                                'wallet-list-content__action__filter-unactive'
+                                (params.from_date !== null &&
+                                    params.from_date !== '') ||
+                                (params.to_date !== null &&
+                                    params.to_date !== '')
+                                    ? 'wallet-list-content__action__filter-active'
+                                    : 'wallet-list-content__action__filter-unactive'
                             }
                         >
                             <FilterOutlined />
@@ -211,7 +223,12 @@ function Wallets() {
                         <Search
                             className="search-box"
                             placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -224,7 +241,7 @@ function Wallets() {
                         className="wallet-list-content__sub__table"
                         columns={columns}
                         dataSource={walletList}
-                        pagination={walletState.pagination}
+                        pagination={state.pagination}
                         rowClassName={(record, index) =>
                             record.amount_trans >= 0
                                 ? 'wallet-list-content__sub__table__row-green'
@@ -243,16 +260,21 @@ function Wallets() {
 
             <div
                 className={
-                    swapPage
-                        ? 'wallet-list-content-unactive'
-                        : 'wallet-list-content'
+                    params.role === roles.PARKING_LOT_USER
+                        ? 'wallet-list-content'
+                        : 'wallet-list-content-unactive'
                 }
             >
                 <div className="title">Danh sách ví cá nhân</div>
                 <div className="wallet-list-content__swap-page">
                     <button
                         className="button-unactive"
-                        onClick={(e) => setSwapPage(true)}
+                        onClick={(e) =>
+                            setParams({
+                                ...defaultParams,
+                                role: roles.PARKING_USER,
+                            })
+                        }
                     >
                         Parking User
                     </button>
@@ -262,8 +284,10 @@ function Wallets() {
                     <div className="wallet-list-content__action__select">
                         <span>Hiển thị</span>
                         <select
-                            defaultValue={{ value: pageSize }}
-                            onChange={(e) => setPageSize(e.target.value)}
+                            defaultValue={{ value: params.limit }}
+                            onChange={(e) =>
+                                setParams({ ...params, limit: e.target.value })
+                            }
                         >
                             {numOfItem.map((numOfItem, index) => {
                                 return (
@@ -288,7 +312,12 @@ function Wallets() {
                         <Search
                             className="search-box"
                             placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -301,7 +330,7 @@ function Wallets() {
                         className="wallet-list-content__sub__table"
                         columns={columns}
                         dataSource={walletList}
-                        pagination={walletState.pagination}
+                        pagination={state.pagination}
                         rowClassName={(record, index) =>
                             record.amount_trans >= 0
                                 ? 'wallet-list-content__sub__table__row-green'
