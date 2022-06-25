@@ -64,3 +64,15 @@
         }
     }
 }
+.qr-content-unactive {
+    display: none;
+}
+.qr-content {
+    width: 100%;
+    height: fit-content;
+    min-height: 84vh;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
+    background-color: #fff;
+    border-radius: 20px;
+    font-size: 1.1rem;
+}

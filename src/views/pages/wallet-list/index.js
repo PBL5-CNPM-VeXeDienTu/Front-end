@@ -15,8 +15,6 @@ import './wallet-list.scss'
 const { Search } = Input
 const numOfItem = [10, 15, 25]
 
-
-
 function Wallets() {
     const { user } = useAuth()
     const [pageSize, setPageSize] = useState(10)
@@ -125,7 +123,9 @@ function Wallets() {
     const menu = () => {
         return (
             <Menu class="wallet-list-menu">
-                <div className="border-bottom">Thời điểm giao dịch gần nhất</div>
+                <div className="border-bottom">
+                    Thời điểm giao dịch gần nhất
+                </div>
                 <div className="wallet-list-menu__item">
                     <span className="wallet-list-menu__item__span padding-left">
                         Từ ngày :
