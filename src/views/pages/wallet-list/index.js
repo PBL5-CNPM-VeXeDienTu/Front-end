@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown, Space, DatePicker } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import useAuth from 'hooks/useAuth'
 import walletApi from 'api/walletApi'
 import {
     FilterOutlined,
@@ -9,57 +8,15 @@ import {
     PlusCircleOutlined,
 } from '@ant-design/icons'
 import * as roles from 'shared/constants/role'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './wallet-list.scss'
 
 const { Search } = Input
 const numOfItem = [10, 15, 25]
 
-const columns = [
-    {
-        title: 'Avatar',
-        dataIndex: 'avatar',
-        width: '10%',
-        render: (text, record) => {
-            let imgSource = process.env.REACT_APP_API_URL + record.avatar
-            return <img src={imgSource} className="avatar-user" alt="" />
-        },
-    },
-    {
-        title: 'Chủ tài khoản',
-        dataIndex: 'name',
-        width: '20%',
-    },
-    {
-        title: 'Số dư (VND)',
-        dataIndex: 'balance',
-        width: '20%',
-    },
-    {
-        title: 'Giao dịch gần nhất',
-        dataIndex: 'updated_at',
-        width: '15%',
-    },
-    {
-        title: 'Số tiền giao dịch (VND)',
-        dataIndex: 'amount_trans',
-        width: '20%',
-    },
-    {
-        title: 'Action',
-        dataIndex: 'action',
-        width: '15%',
-        render: () => (
-            <Space size="middle">
-                <a href="/wallets/payment">
-                    <PlusCircleOutlined className="icon-edit" />
-                </a>
-            </Space>
-        ),
-    },
-]
+
 
 function Wallets() {
-    const { user } = useAuth()
     const [total, setTotal] = useState(0)
     const [walletList, setWalletList] = useState()
     let navigate = useNavigate()
@@ -72,6 +29,61 @@ function Wallets() {
         to_date: null,
     }
     const [params, setParams] = useState(defaultParams)
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.USER_AVATAR
+    }
+
+    const columns = [
+        {
+            title: 'Avatar',
+            dataIndex: 'avatar',
+            width: '10%',
+            render: (text, record) => {
+                let imgSource = process.env.REACT_APP_API_URL + record.avatar
+                return (
+                    <img
+                        src={imgSource}
+                        className="avatar-user"
+                        alt=""
+                        onError={handleGetImageError}
+                    />
+                )
+            },
+        },
+        {
+            title: 'Chủ tài khoản',
+            dataIndex: 'name',
+            width: '20%',
+        },
+        {
+            title: 'Số dư (VND)',
+            dataIndex: 'balance',
+            width: '20%',
+        },
+        {
+            title: 'Giao dịch gần nhất',
+            dataIndex: 'updated_at',
+            width: '15%',
+        },
+        {
+            title: 'Số tiền giao dịch (VND)',
+            dataIndex: 'amount_trans',
+            width: '20%',
+        },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            width: '15%',
+            render: () => (
+                <Space size="middle">
+                    <a href="/wallets/payment">
+                        <PlusCircleOutlined className="icon-edit" />
+                    </a>
+                </Space>
+            ),
+        },
+    ]
 
     const state = {
         pagination: {
