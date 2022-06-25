@@ -54,7 +54,7 @@ function ParkingHistories() {
     const [parkingHistory, setParkingHistory] = useState({})
     const [showModal, setShowModal] = useState(false)
     const [total, setTotal] = useState(0)
-    const [params, setParams] = useState({
+    const defaultParams = {
         limit: 10,
         page: 1,
         txt_search: null,
@@ -63,20 +63,8 @@ function ParkingHistories() {
         checkin_to_date: null,
         checkout_from_date: null,
         checkout_to_date: null,
-    })
-
-    const state = {
-        pagination: {
-            pageSize: params.limit,
-            total: total,
-            onChange: (page, pageSize) => {
-                setParams({
-                    limit: pageSize,
-                    page: page,
-                })
-            },
-        },
     }
+    const [params, setParams] = useState(defaultParams)
 
     const onClickRow = (value) => {
         setParkingHistory(value)
@@ -120,6 +108,19 @@ function ParkingHistories() {
                 })
         }
     }, [user, params])
+
+    const state = {
+        pagination: {
+            pageSize: params.limit,
+            total: total,
+            onChange: (page, pageSize) => {
+                setParams({
+                    limit: pageSize,
+                    page: page,
+                })
+            },
+        },
+    }
 
     const menu = () => {
         return (

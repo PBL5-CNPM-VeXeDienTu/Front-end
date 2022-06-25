@@ -55,13 +55,14 @@ function ParkingLots() {
     const navigate = useNavigate()
     const [total, setTotal] = useState(0)
     const [parkingLotList, setParkingLotList] = useState([])
-    const [params, setParams] = useState({
+    const defaultParams = {
         limit: 10,
         page: 1,
         txt_search: null,
         is_open: null,
         is_full: 0,
-    })
+    }
+    const [params, setParams] = useState(defaultParams)
 
     const state = {
         pagination: {

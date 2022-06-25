@@ -71,7 +71,10 @@ const RenderMenu = () => {
                 key="4"
                 icon={<WalletOutlined className="menu-item-icon" />}
             >
-                <Link className="sider-bar__link" to="/user-wallet">
+                <Link
+                    className="sider-bar__link"
+                    to={`/user-wallet/${user.id}`}
+                >
                     Ví cá nhân
                 </Link>
             </Menu.Item>
@@ -132,7 +135,10 @@ const RenderMenu = () => {
                 key="4"
                 icon={<WalletOutlined className="menu-item-icon" />}
             >
-                <Link className="sider-bar__link" to="/user-wallet">
+                <Link
+                    className="sider-bar__link"
+                    to={`/user-wallet/${user.id}`}
+                >
                     Ví cá nhân
                 </Link>
             </Menu.Item>

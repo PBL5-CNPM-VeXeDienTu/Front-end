@@ -1,8 +1,11 @@
 import axiosClient from './axiosClient'
 
 const packageTypeApi = {
-    getAll: () => {
-        const url = '/api/package-types'
+    getAll: (params) => {
+        let url = '/api/package-types?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getPackageTypeById: (id) => {

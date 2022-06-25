@@ -1,8 +1,11 @@
 import axiosClient from './axiosClient'
 
 const feedbackTypeApi = {
-    getAll: () => {
-        const url = '/api/feedback-types'
+    getAll: (params) => {
+        let url = '/api/feedback-types?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getFeedbackTypeById: (id) => {

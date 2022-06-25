@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Form, Table, Input, Space, Modal } from 'antd'
+import {
+    Button,
+    Form,
+    Table,
+    Input,
+    Space,
+    Modal,
+    Dropdown,
+    Menu,
+    DatePicker,
+} from 'antd'
 import {
     EditOutlined,
     SearchOutlined,
     DeleteOutlined,
     PlusCircleOutlined,
+    FilterOutlined,
 } from '@ant-design/icons'
-import useAuth from 'hooks/useAuth'
 import transactionTypeApi from 'api/transactionTypeApi'
 import vehicleTypeApi from 'api/vehicleTypeApi'
 import packageTypeApi from 'api/packageTypeApi'
@@ -22,9 +32,9 @@ const TAB_FEEDBACK_TYPE = 'Loại feedback'
 const TAB_FEATURE = 'Chức năng'
 
 const { Search } = Input
+const numOfItem = [10, 15, 25]
 
 function Setting() {
-    const { user } = useAuth()
     const [isEdit, setIsEdit] = useState(false)
     const [showTransactionModal, setShowTransactionModal] = useState(false)
     const [showVehicleModal, setShowVehicleModal] = useState(false)
@@ -46,6 +56,10 @@ function Setting() {
         txt_search: null,
         type_id: null,
         vehicle_type_id: null,
+        created_from_date: null,
+        created_to_date: null,
+        updated_from_date: null,
+        updated_to_date: null,
     }
     const [params, setParams] = useState(defaultParams)
 
@@ -63,7 +77,146 @@ function Setting() {
         },
     }
 
-    const onSearch = (value) => console.log(value)
+    useEffect(() => {
+        switch (tabActive) {
+            case TAB_TRANSACTION_TYPE:
+                transactionTypeApi.getAll(params).then((response) => {
+                    setTotal(response.data.count)
+                    setTransactionType(
+                        response.data.rows.map((transaction) => ({
+                            id: transaction.id,
+                            createdAt: transaction.createdAt,
+                            type_name: transaction.type_name,
+                            updatedAt: transaction.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_VEHICLE_TYPE:
+                vehicleTypeApi.getAll(params).then((response) => {
+                    setTotal(response.data.count)
+                    setVehicleType(
+                        response.data.rows.map((vehicleType) => ({
+                            id: vehicleType.id,
+                            createdAt: vehicleType.createdAt,
+                            type_name: vehicleType.type_name,
+                            updatedAt: vehicleType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_PACKAGE_TYPE:
+                packageTypeApi.getAll(params).then((response) => {
+                    setTotal(response.data.count)
+                    setPackageType(
+                        response.data.rows.map((packageType) => ({
+                            id: packageType.id,
+                            createdAt: packageType.createdAt,
+                            type_name: packageType.type_name,
+                            updatedAt: packageType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_FEEDBACK_TYPE:
+                feedbackTypeApi.getAll(params).then((response) => {
+                    setTotal(response.data.count)
+                    setFeedbackType(
+                        response.data.rows.map((feedbackType) => ({
+                            id: feedbackType.id,
+                            createdAt: feedbackType.createdAt,
+                            type_name: feedbackType.type_name,
+                            updatedAt: feedbackType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_FEATURE:
+                featureApi.getAll(params).then((response) => {
+                    setTotal(response.data.count)
+                    setFeatures(
+                        response.data.rows.map((featureType) => ({
+                            id: featureType.id,
+                            createdAt: featureType.createdAt,
+                            name: featureType.name,
+                            updatedAt: featureType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            default:
+                break
+        }
+    }, [tabActive, params])
+
+    const menu = () => {
+        return (
+            <Menu class="setting-menu">
+                <div className="border-bottom">Thời điểm tạo</div>
+                <div className="setting-menu__item">
+                    <span className="setting-menu__item__span padding-left">
+                        Từ ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                created_from_date: dateString,
+                            })
+                        }
+                    />
+                </div>
+                <div className="setting-menu__item">
+                    <span className="setting-menu__item__span padding-left">
+                        Đến ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                created_to_date: dateString,
+                            })
+                        }
+                    />
+                </div>
+                <div className="border-bottom">Thời điểm cập nhật</div>
+                <div className="setting-menu__item">
+                    <span className="setting-menu__item__span padding-left">
+                        Từ ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                updated_from_date: dateString,
+                            })
+                        }
+                    />
+                </div>
+                <div className="setting-menu__item">
+                    <span className="setting-menu__item__span padding-left">
+                        Đến ngày :
+                    </span>
+                    <DatePicker
+                        className="input"
+                        size="medium"
+                        onChange={(date, dateString) =>
+                            setParams({
+                                ...params,
+                                updated_to_date: dateString,
+                            })
+                        }
+                    />
+                </div>
+            </Menu>
+        )
+    }
 
     useEffect(() => {
         switch (tabActive) {
@@ -598,11 +751,50 @@ function Setting() {
                 }
             >
                 <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({ ...params, limit: e.target.value })
+                            }
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                (params.created_from_date !== null &&
+                                    params.created_from_date !== '') ||
+                                (params.created_to_date !== null &&
+                                    params.created_to_date !== '') ||
+                                (params.updated_from_date !== null &&
+                                    params.updated_from_date !== '') ||
+                                (params.updated_to_date !== null &&
+                                    params.updated_to_date !== '')
+                                    ? 'setting-content__tab__action__filter-active'
+                                    : 'setting-content__tab__action__filter-unactive'
+                            }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
                     <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -626,7 +818,7 @@ function Setting() {
                         className="setting-content__tab__sub__table"
                         columns={columnsTransaction}
                         dataSource={transactionType}
-                        //pagination={state.pagination}
+                        pagination={state.pagination}
                     />
 
                     <Modal
@@ -715,11 +907,50 @@ function Setting() {
                 }
             >
                 <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({ ...params, limit: e.target.value })
+                            }
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                (params.created_from_date !== null &&
+                                    params.created_from_date !== '') ||
+                                (params.created_to_date !== null &&
+                                    params.created_to_date !== '') ||
+                                (params.updated_from_date !== null &&
+                                    params.updated_from_date !== '') ||
+                                (params.updated_to_date !== null &&
+                                    params.updated_to_date !== '')
+                                    ? 'setting-content__tab__action__filter-active'
+                                    : 'setting-content__tab__action__filter-unactive'
+                            }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
                     <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -742,7 +973,7 @@ function Setting() {
                         className="setting-content__tab__sub__table"
                         columns={columnsVehicle}
                         dataSource={vehicleType}
-                        //pagination={state.pagination}
+                        pagination={state.pagination}
                     />
                     <Modal
                         className="modal"
@@ -829,11 +1060,50 @@ function Setting() {
                 }
             >
                 <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({ ...params, limit: e.target.value })
+                            }
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                (params.created_from_date !== null &&
+                                    params.created_from_date !== '') ||
+                                (params.created_to_date !== null &&
+                                    params.created_to_date !== '') ||
+                                (params.updated_from_date !== null &&
+                                    params.updated_from_date !== '') ||
+                                (params.updated_to_date !== null &&
+                                    params.updated_to_date !== '')
+                                    ? 'setting-content__tab__action__filter-active'
+                                    : 'setting-content__tab__action__filter-unactive'
+                            }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
                     <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -856,7 +1126,7 @@ function Setting() {
                         className="setting-content__tab__sub__table"
                         columns={columnsPackage}
                         dataSource={packageType}
-                        //pagination={state.pagination}
+                        pagination={state.pagination}
                     />
                     <Modal
                         className="modal"
@@ -943,11 +1213,50 @@ function Setting() {
                 }
             >
                 <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({ ...params, limit: e.target.value })
+                            }
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                (params.created_from_date !== null &&
+                                    params.created_from_date !== '') ||
+                                (params.created_to_date !== null &&
+                                    params.created_to_date !== '') ||
+                                (params.updated_from_date !== null &&
+                                    params.updated_from_date !== '') ||
+                                (params.updated_to_date !== null &&
+                                    params.updated_to_date !== '')
+                                    ? 'setting-content__tab__action__filter-active'
+                                    : 'setting-content__tab__action__filter-unactive'
+                            }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
                     <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -970,7 +1279,7 @@ function Setting() {
                         className="setting-content__tab__sub__table"
                         columns={columnsFeedback}
                         dataSource={feedbackType}
-                        //pagination={state.pagination}
+                        pagination={state.pagination}
                     />
                     <Modal
                         className="modal"
@@ -1055,11 +1364,50 @@ function Setting() {
                 }
             >
                 <div className="setting-content__tab__action">
+                    <div className="setting-content__tab__action__select">
+                        <span>Hiển thị </span>
+                        <select
+                            defaultValue={{ value: params.pageSize }}
+                            onChange={(e) =>
+                                setParams({ ...params, limit: e.target.value })
+                            }
+                        >
+                            {numOfItem.map((numOfItem, index) => {
+                                return (
+                                    <option key={index} value={numOfItem}>
+                                        {numOfItem}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                    </div>
+                    <Dropdown overlay={menu} trigger="click" placement="bottom">
+                        <div
+                            className={
+                                (params.created_from_date !== null &&
+                                    params.created_from_date !== '') ||
+                                (params.created_to_date !== null &&
+                                    params.created_to_date !== '') ||
+                                (params.updated_from_date !== null &&
+                                    params.updated_from_date !== '') ||
+                                (params.updated_to_date !== null &&
+                                    params.updated_to_date !== '')
+                                    ? 'setting-content__tab__action__filter-active'
+                                    : 'setting-content__tab__action__filter-unactive'
+                            }
+                        >
+                            <FilterOutlined />
+                        </div>
+                    </Dropdown>
                     <div className="setting-content__tab__action__search">
                         <Search
                             className="search-box"
-                            placeholder="Tìm kiếm"
-                            onSearch={onSearch}
+                            onChange={(e) =>
+                                setParams({
+                                    ...params,
+                                    txt_search: e.target.value,
+                                })
+                            }
                             allowClear
                             suffix
                         />
@@ -1082,7 +1430,7 @@ function Setting() {
                         className="setting-content__tab__sub__table"
                         columns={columnsFeature}
                         dataSource={features}
-                        //pagination={state.pagination}
+                        pagination={state.pagination}
                     />
                     <Modal
                         className="modal"
