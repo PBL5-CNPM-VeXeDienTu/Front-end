@@ -164,7 +164,7 @@ function Accounts() {
                 <div className="account-list-menu__item">
                     <div className="account-list-menu__item__row">
                         <span className="account-list-menu__item__row__span">
-                            Địa chỉ
+                            Trạng thái
                         </span>
                         <select
                             className="account-list-menu__item__row__select"

@@ -50,6 +50,7 @@ function ParkingLots() {
     const [feedback, setFeedback] = useState({})
     const defaultParams = {
         page: 1,
+        limit: 10,
         txt_search: null,
         type_id: null,
         feature_id: null,
@@ -88,8 +89,8 @@ function ParkingLots() {
                       setFeedbackList(
                           response.data.rows.map((feedback) => ({
                               id: feedback.id,
-                              feedback_type: feedback.Feature.name,
-                              feature: feedback.FeedbackType.type_name,
+                              feedback_type: feedback.FeedbackType.type_name,
+                              feature: feedback.Feature.name,
                               is_processed: feedback.is_processed
                                   ? 'Đã duyệt'
                                   : 'Chưa duyệt',

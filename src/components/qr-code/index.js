@@ -7,13 +7,12 @@ import QRCode from 'qrcode'
 function QR(props) {
     const [src, setSrc] = useState({})
     const [clickedImg, setClickedImg] = useState(null)
-
-    const data = {
+    const [data, setData] = useState({
         vehicle_id: props.vehicle_id,
         parking_lot_id: props.parking_lot_id,
         checkin_time: props.checkin_time,
         qr_key: props.qr_key,
-    }
+    })
     useEffect(() => {
         QRCode.toDataURL(JSON.stringify(data)).then((data) => {
             setSrc(data)

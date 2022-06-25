@@ -201,7 +201,7 @@
     &__item {
         height: 5vh;
         display: grid;
-        grid-template-columns: 30% 70%;
+        grid-template-columns: 40% 60%;
         margin: 5px 0;
         &__span {
             margin: auto 0;
@@ -219,6 +219,12 @@
         option {
             border-radius: 0px;
         }
+    }
+    .border-bottom {
+        border-bottom: 1px solid #555;
+    }
+    .padding-left {
+        padding-left: 30px;
     }
 }
 
