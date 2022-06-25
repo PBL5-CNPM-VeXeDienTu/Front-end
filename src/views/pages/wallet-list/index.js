@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Input, Menu, Dropdown, Space, DatePicker } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import useAuth from 'hooks/useAuth'
 import walletApi from 'api/walletApi'
 import {
     FilterOutlined,
@@ -17,6 +18,9 @@ const numOfItem = [10, 15, 25]
 
 
 function Wallets() {
+    const { user } = useAuth()
+    const [pageSize, setPageSize] = useState(10)
+    const [swapPage, setSwapPage] = useState(true)
     const [total, setTotal] = useState(0)
     const [walletList, setWalletList] = useState()
     let navigate = useNavigate()

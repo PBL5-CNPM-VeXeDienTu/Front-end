@@ -66,19 +66,6 @@ function ParkingHistories() {
     }
     const [params, setParams] = useState(defaultParams)
 
-    const state = {
-        pagination: {
-            pageSize: params.limit,
-            total: total,
-            onChange: (page, pageSize) => {
-                setParams({
-                    limit: pageSize,
-                    page: page,
-                })
-            },
-        },
-    }
-
     const onClickRow = (value) => {
         setParkingHistory(value)
         setShowModal(true)
@@ -121,6 +108,19 @@ function ParkingHistories() {
                 })
         }
     }, [user, params])
+
+    const state = {
+        pagination: {
+            pageSize: params.limit,
+            total: total,
+            onChange: (page, pageSize) => {
+                setParams({
+                    limit: pageSize,
+                    page: page,
+                })
+            },
+        },
+    }
 
     const menu = () => {
         return (

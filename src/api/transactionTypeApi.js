@@ -1,12 +1,11 @@
 import axiosClient from './axiosClient'
 
 const transactionTypeApi = {
-    getAll: () => {
-        const url = '/api/transaction-types'
-        return axiosClient.get(url)
-    },
-    getTransationTypeById: (id) => {
-        const url = `/api/transaction-types/${id}`
+    getAll: (params) => {
+        let url = '/api/transaction-types?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     createNew: (credentials) => {
@@ -17,9 +16,9 @@ const transactionTypeApi = {
         const url = `/api/transaction-types/${id}`
         return axiosClient.patch(url, credentials)
     },
-    deleteById: (id, credentials) => {
+    deleteById: (id) => {
         const url = `/api/transaction-types/${id}`
-        return axiosClient.delete(url, credentials)
+        return axiosClient.delete(url)
     },
 }
 
