@@ -5,21 +5,17 @@ import 'components/qr-code/qrcode.scss'
 import QRCode from 'qrcode'
 
 function QR(props) {
-    const [src, setSrc] = useState('')
+    const [src, setSrc] = useState({})
     const [clickedImg, setClickedImg] = useState(null)
 
-    var data =
-        'User_Id: ' +
-        props.userid +
-        '\n' +
-        'License_plate: ' +
-        props.license_plates +
-        '\n' +
-        'QR_key: ' +
-        props.qr_key
-
+    const data = {
+        vehicle_id: props.vehicle_id,
+        parking_lot_id: props.parking_lot_id,
+        checkin_time: props.checkin_time,
+        qr_key: props.qr_key,
+    }
     useEffect(() => {
-        QRCode.toDataURL(data).then((data) => {
+        QRCode.toDataURL(JSON.stringify(data)).then((data) => {
             setSrc(data)
         })
     }, [data])

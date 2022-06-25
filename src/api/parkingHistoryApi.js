@@ -15,6 +15,10 @@ const parkingHistoryApi = {
         }
         return axiosClient.get(url)
     },
+    getListParkingVehicle: (id, params) => {
+        const url = `/api/parking-histories/get-by-user/${id}?is_parking=${params.is_parking}`
+        return axiosClient.get(url)
+    },
     getOneById: (id) => {
         const url = `/api/parking-histories/${id}`
         return axiosClient.get(url)
