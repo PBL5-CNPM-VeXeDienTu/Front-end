@@ -12,6 +12,7 @@ import Icon, {
     LeftOutlined,
     CheckCircleOutlined,
     RightOutlined,
+    SettingOutlined,
 } from '@ant-design/icons'
 import useAuth from 'hooks/useAuth'
 import * as roles from 'shared/constants/role'
@@ -70,7 +71,10 @@ const RenderMenu = () => {
                 key="4"
                 icon={<WalletOutlined className="menu-item-icon" />}
             >
-                <Link className="sider-bar__link" to={`/wallet/user-wallet`}>
+                <Link
+                    className="sider-bar__link"
+                    to={`/user-wallet/${user.id}`}
+                >
                     Ví cá nhân
                 </Link>
             </Menu.Item>
@@ -131,7 +135,10 @@ const RenderMenu = () => {
                 key="4"
                 icon={<WalletOutlined className="menu-item-icon" />}
             >
-                <Link className="sider-bar__link" to={`/wallet/user-wallet`}>
+                <Link
+                    className="sider-bar__link"
+                    to={`/user-wallet/${user.id}`}
+                >
                     Ví cá nhân
                 </Link>
             </Menu.Item>
@@ -202,6 +209,14 @@ const RenderMenu = () => {
             >
                 <Link className="sider-bar__link" to="/feedbacks">
                     Quản lí feedback
+                </Link>
+            </Menu.Item>
+            <Menu.Item
+                key="6"
+                icon={<SettingOutlined className="menu-item-icon" />}
+            >
+                <Link className="sider-bar__link" to="/setting">
+                    Setting
                 </Link>
             </Menu.Item>
         </>

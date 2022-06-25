@@ -1,8 +1,11 @@
 import axiosClient from './axiosClient'
 
 const featureApi = {
-    getAll: () => {
-        const url = '/api/features'
+    getAll: (params) => {
+        let url = '/api/features?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getFeatureById: (id) => {
@@ -17,9 +20,9 @@ const featureApi = {
         const url = `/api/features/${id}`
         return axiosClient.patch(url, credentials)
     },
-    deleteById: (id, credentials) => {
+    deleteById: (id) => {
         const url = `/api/features/${id}`
-        return axiosClient.delete(url, credentials)
+        return axiosClient.delete(url)
     },
 }
 

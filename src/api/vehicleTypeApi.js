@@ -1,8 +1,11 @@
 import axiosClient from './axiosClient'
 
 const vehicleTypeApi = {
-    getAll: () => {
-        const url = `/api/vehicle-types`
+    getAll: (params) => {
+        let url = '/api/vehicle-types?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     createNew: (credentials) => {
@@ -13,9 +16,9 @@ const vehicleTypeApi = {
         const url = `/api/vehicle-types/${id}`
         return axiosClient.patch(url, credentials)
     },
-    deleteById: (id, credentials) => {
+    deleteById: (id) => {
         const url = `/api/vehicle-types/${id}`
-        return axiosClient.delete(url, credentials)
+        return axiosClient.delete(url)
     },
 }
 

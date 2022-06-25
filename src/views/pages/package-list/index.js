@@ -100,7 +100,7 @@ function Packages() {
     const [userPackageList, setUserPackageList] = useState([])
     const [userPackage, setUserPackage] = useState({})
     const [packageItem, setPackageItem] = useState({})
-    const [params, setParams] = useState({
+    const defaultParams = {
         limit: 10,
         page: 1,
         tab_state: TAB_ALL,
@@ -112,7 +112,8 @@ function Packages() {
         created_to_date: null,
         expired_from_date: null,
         expired_to_date: null,
-    })
+    }
+    const [params, setParams] = useState(defaultParams)
 
     const state = {
         pagination: {
@@ -546,10 +547,7 @@ function Packages() {
                         className="button-unactive"
                         onClick={(e) =>
                             setParams({
-                                ...params,
-                                txt_search: null,
-                                type_id: null,
-                                vehicle_type_id: null,
+                                ...defaultParams,
                                 tab_state: TAB_OWNER,
                             })
                         }
@@ -741,16 +739,8 @@ function Packages() {
                         className="button-unactive"
                         onClick={(e) =>
                             setParams({
-                                ...params,
+                                ...defaultParams,
                                 tab_state: TAB_ALL,
-                                txt_search: null,
-                                type_id: null,
-                                vehicle_type_id: null,
-                                is_expired: null,
-                                created_from_date: null,
-                                created_to_date: null,
-                                expired_from_date: null,
-                                expired_to_date: null,
                             })
                         }
                     >

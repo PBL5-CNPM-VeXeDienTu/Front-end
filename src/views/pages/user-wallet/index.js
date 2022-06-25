@@ -20,7 +20,7 @@ import {
     SearchOutlined,
 } from '@ant-design/icons'
 import * as roles from 'shared/constants/role'
-import './detail-wallet.scss'
+import './user-wallet.scss'
 
 const { Search } = Input
 const { Option } = Select
@@ -53,7 +53,7 @@ const columns = [
     },
 ]
 
-function DetailWallet() {
+function UserWallet() {
     const { user } = useAuth()
     const { id } = useParams()
     const [walletType, setWalletType] = useState('All')
@@ -65,6 +65,16 @@ function DetailWallet() {
     const [activeFilter, setActiveFilter] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [pageSize, setPageSize] = useState(10)
+    const [params, setParams] = useState({
+        limit: 10,
+        page: 1,
+        txt_search: null,
+        type_id: null,
+        state: 0,
+        from_date: null,
+        to_date: null,
+    })
+
     const walletTypeOfItem = [
         'All',
         'Nạp Card',
@@ -453,4 +463,4 @@ function DetailWallet() {
     )
 }
 
-export default DetailWallet
+export default UserWallet
