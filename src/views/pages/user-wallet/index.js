@@ -20,7 +20,6 @@ import {
     PlusCircleOutlined,
     SearchOutlined,
 } from '@ant-design/icons'
-import * as roles from 'shared/constants/role'
 import './user-wallet.scss'
 
 const { Search } = Input

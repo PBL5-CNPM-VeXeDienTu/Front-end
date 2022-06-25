@@ -174,10 +174,10 @@ function VerifyRequest() {
                         </option>
                     </select>
                 </div>
-
+                <div className="border-bottom">Thời điểm đăng kí</div>
                 <div className="verify-request-menu__item">
-                    <span className="verify-request-menu__item__span">
-                        Từ ngày
+                    <span className="verify-request-menu__item__span padding-left">
+                        Từ ngày :
                     </span>
                     <DatePicker
                         className="input"
@@ -192,8 +192,8 @@ function VerifyRequest() {
                     />
                 </div>
                 <div className="verify-request-menu__item">
-                    <span className="verify-request-menu__item__span">
-                        Đến ngày
+                    <span className="verify-request-menu__item__span padding-left">
+                        Đến ngày :
                     </span>
                     <DatePicker
                         className="input"

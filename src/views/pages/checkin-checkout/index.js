@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { useNavigate, useParams, Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { QrReader } from 'react-qr-reader'
 import { Form, Input, Button, Select, Modal } from 'antd'
 import { ScanOutlined, WarningOutlined, CheckOutlined } from '@ant-design/icons'
@@ -20,7 +20,6 @@ function CheckinCheckout() {
     const navigate = useNavigate()
     const videoRef = useRef(null)
     const photoRef = useRef(null)
-    const [hasPhoto, setHasPhoto] = useState(false)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
     const [infoVehicle, setInfoVehicle] = useState({})
     const [licensePlate, setLicensePlate] = useState(
@@ -28,10 +27,12 @@ function CheckinCheckout() {
     )
 
     useEffect(() => {
-        parkingLotApi.getListByUserId(user.id).then((response) => {
-            setParkingLotList(response.data.rows)
-        })
-    }, [])
+        if (!!user) {
+            parkingLotApi.getListByUserId(user.id).then((response) => {
+                setParkingLotList(response.data.rows)
+            })
+        }
+    }, [user])
 
     useEffect(() => {
         onchange = (data) => {}
@@ -51,8 +52,6 @@ function CheckinCheckout() {
 
         let ctx = photo.getContext('2d')
         ctx.drawImage(video, 0, 0, 640, 480)
-
-        setHasPhoto(true)
 
         var img = new Image()
         img.onload = function () {
@@ -332,20 +331,20 @@ function CheckinCheckout() {
                         />
                         <div className="checkin-checkout-content__sub__form__textqr">
                             <span className="span">
-                                {data != 'No result'
+                                {data !== 'No result'
                                     ? 'Mã QR quét thành công '
                                     : 'Mã QR chưa được quét '}
                             </span>
                             <WarningOutlined
                                 className={
-                                    data != 'No result'
+                                    data !== 'No result'
                                         ? 'warning-content-unactive'
                                         : 'warning-content'
                                 }
                             />
                             <CheckOutlined
                                 className={
-                                    data != 'No result'
+                                    data !== 'No result'
                                         ? 'success-content'
                                         : 'success-content-unactive'
                                 }
