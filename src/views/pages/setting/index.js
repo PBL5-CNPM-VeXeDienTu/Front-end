@@ -69,6 +69,7 @@ function Setting() {
             total: total,
             onChange: (page, pageSize) => {
                 setParams({
+                    ...params,
                     limit: pageSize,
                     page: page,
                 })
@@ -216,6 +217,73 @@ function Setting() {
             </Menu>
         )
     }
+
+    useEffect(() => {
+        switch (tabActive) {
+            case TAB_TRANSACTION_TYPE:
+                transactionTypeApi.getAll().then((response) => {
+                    setTransactionType(
+                        response.data.rows.map((transaction) => ({
+                            id: transaction.id,
+                            createdAt: transaction.createdAt,
+                            type_name: transaction.type_name,
+                            updatedAt: transaction.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_VEHICLE_TYPE:
+                vehicleTypeApi.getAll().then((response) => {
+                    setVehicleType(
+                        response.data.rows.map((vehicleType) => ({
+                            id: vehicleType.id,
+                            createdAt: vehicleType.createdAt,
+                            type_name: vehicleType.type_name,
+                            updatedAt: vehicleType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_PACKAGE_TYPE:
+                packageTypeApi.getAll().then((response) => {
+                    setPackageType(
+                        response.data.rows.map((packageType) => ({
+                            id: packageType.id,
+                            createdAt: packageType.createdAt,
+                            type_name: packageType.type_name,
+                            updatedAt: packageType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_FEEDBACK_TYPE:
+                feedbackTypeApi.getAll().then((response) => {
+                    setFeedbackType(
+                        response.data.rows.map((feedbackType) => ({
+                            id: feedbackType.id,
+                            createdAt: feedbackType.createdAt,
+                            type_name: feedbackType.type_name,
+                            updatedAt: feedbackType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            case TAB_FEATURE:
+                featureApi.getAll().then((response) => {
+                    setFeatures(
+                        response.data.rows.map((featureType) => ({
+                            id: featureType.id,
+                            createdAt: featureType.createdAt,
+                            name: featureType.name,
+                            updatedAt: featureType.updatedAt,
+                        })),
+                    )
+                })
+                break
+            default:
+                break
+        }
+    }, [tabActive])
 
     const columnsTransaction = [
         {
@@ -523,19 +591,20 @@ function Setting() {
             const response = await featureApi.updateById(data.id, values)
             alert(response.data.message)
             setShowFeatureModal(false)
-            window.location.reload()
+            // window.location.reload()
         } catch (error) {
             alert(error.response.data.message)
         }
     }
 
     const handleAddFeaturesSubmit = async (values) => {
+        console.log(values)
         try {
             const response = await featureApi.createNew(values)
 
             alert(response.data.message)
             setShowFeatureModal(false)
-            window.location.reload()
+            //window.location.reload()
         } catch (error) {
             alert(error.response.data.message)
         }
