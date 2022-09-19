@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
             }
         } else {
             // User logout
+            setUser('null')
             localStorage.setItem('token', null)
             localStorage.setItem('user', null)
         }

@@ -2,11 +2,21 @@ import axiosClient from './axiosClient'
 
 const parkingHistoryApi = {
     getListByParams: (params) => {
-        const url = `/api/parking-histories?limit=${params.limit}&page=${params.page}`
+        let url = '/api/parking-histories?'
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
         return axiosClient.get(url)
     },
     getListByParkingLotUserId: (id, params) => {
-        const url = `/api/parking-histories/get-by-user/${id}?limit=${params.limit}&page=${params.page}`
+        let url = `/api/parking-histories/get-by-user/${id}?`
+        for (let key in params) {
+            if (params[key] !== null) url += `${key}=${params[key]}&`
+        }
+        return axiosClient.get(url)
+    },
+    getListParkingVehicle: (id, params) => {
+        const url = `/api/parking-histories/get-by-user/${id}?is_parking=${params.is_parking}`
         return axiosClient.get(url)
     },
     getOneById: (id) => {

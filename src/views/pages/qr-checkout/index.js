@@ -1,31 +1,46 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import QR from 'components/qr-code/index'
-
+import useAuth from 'hooks/useAuth'
+import parkingHistoryApi from 'api/parkingHistoryApi'
+import * as defaultImageUrl from 'shared/constants/defaultImageUrl'
 import './qr-checkout.scss'
 
 function QrCheckout() {
-    const avatarURL =
-        process.env.REACT_APP_API_URL +
-        'public/images/avatars/vehicle/default-avatar.png'
+    const { user } = useAuth()
+    const [QRList, setQRList] = useState([])
+    const [params] = useState({
+        is_parking: 1,
+    })
 
-    const QRList = [
-        {
-            user_id: '32',
-            license_plates: '34-B11234',
-            qr_key: '29,219219',
-        },
-        {
-            user_id: '11',
-            license_plates: '55-A99234',
-            qr_key: '21,1361723821',
-        },
-        {
-            user_id: '44',
-            license_plates: '22-A99234',
-            qr_key: '17,12831823',
-        },
-    ]
-    const listQRs = QRList.map((value, index) => {
+    useEffect(() => {
+        if (!!user) {
+            parkingHistoryApi
+                .getListParkingVehicle(user.id, params)
+                .then((response) => {
+                    setQRList(
+                        response.data.rows.map((parkingHistory) => ({
+                            key: parkingHistory.id,
+                            parking_lot_id: parkingHistory.parking_lot_id,
+                            vehicle_id: parkingHistory.vehicle_id,
+                            license_plate:
+                                parkingHistory.Vehicle?.license_plate,
+                            qr_key: parkingHistory.qr_key,
+                            checkin_time: parkingHistory.checkin_time,
+                            memo: parkingHistory.memo,
+                            name: parkingHistory.ParkingLot?.name,
+                            address: parkingHistory.ParkingLot?.address,
+                            avatar: parkingHistory.Vehicle?.avatar,
+                        })),
+                    )
+                })
+        }
+    }, [user, params])
+
+    const handleGetImageError = (e) => {
+        e.target.src = defaultImageUrl.VEHICLE_AVATAR
+    }
+
+    const listQRs = QRList.map((value, _) => {
         return (
             <div
                 className="qr-checkout-container__content__sub"
@@ -35,37 +50,41 @@ function QrCheckout() {
                     <div className="qr-checkout-container__content__item__info">
                         <div>
                             <span className="properties">Hình ảnh xe</span>
-                            <img src={avatarURL} alt="" />
+                            <img
+                                src={
+                                    process.env.REACT_APP_API_URL + value.avatar
+                                }
+                                alt=""
+                                onError={handleGetImageError}
+                            />
                         </div>
                         <div>
                             <span className="properties">Tên bãi đỗ xe</span>
-                            <span>Bãi xe Nhật Hào</span>
+                            <span>{value.name}</span>
                         </div>
                         <div>
                             <span className="properties">
                                 Địa chỉ bãi đỗ xe
                             </span>
-                            <span>142/20 Âu Cơ</span>
+                            <span>{value.address}</span>
                         </div>
                         <div>
                             <span className="properties">
                                 Thời gian checkin
                             </span>
-                            <span>2022-03-22 07:12:37</span>
+                            <span>{value.checkin_time}</span>
                         </div>
                         <div>
                             <span className="properties">Ghi chú</span>
-                            <span>
-                                Gần cột màu đỏ, dưới cửa sổ, gần biển treo tường
-                                màu xanh
-                            </span>
+                            <span>{value.memo}</span>
                         </div>
                     </div>
 
                     <QR
                         className="qr-code"
-                        user_id={value.user_id}
-                        license_plates={value.license_plates}
+                        vehicle_id={value.vehicle_id}
+                        parking_lot_id={value.parking_lot_id}
+                        checkin_time={value.checkin_time}
                         qr_key={value.qr_key}
                     />
                 </div>
@@ -75,9 +94,13 @@ function QrCheckout() {
 
     return (
         <div className="qr-checkout-container">
-            <div className="qr-checkout-container__content">
-                <div>{listQRs}</div>
-            </div>
+            {listQRs.length === 0 ? (
+                <div className="qr-content">
+                    Hiện bạn đang không có xe nào đang đỗ
+                </div>
+            ) : (
+                <div className="qr-checkout-container__content">{listQRs}</div>
+            )}
         </div>
     )
 }

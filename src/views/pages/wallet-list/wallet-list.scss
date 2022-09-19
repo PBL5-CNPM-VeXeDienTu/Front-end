@@ -68,6 +68,29 @@
             }
         }
 
+        &__filter-unactive {
+            height: 5.5vh;
+            width: 5.5vh;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            cursor: pointer;
+        }
+        &__filter-active {
+            height: 5.5vh;
+            width: 5.5vh;
+            border-radius: 50%;
+            background-color: #41bc3f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            cursor: pointer;
+        }
+
         &__add {
             width: 9vw;
             height: 5.5vh;
@@ -142,6 +165,47 @@
     }
 }
 
+.wallet-list-menu {
+    width: 20vw;
+    height: fit-content;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 #999;
+    padding: 2vh 2vh;
+
+    &__item {
+        width: 100%;
+        height: 5vh;
+        display: grid;
+        grid-template-columns: 40% 60%;
+        margin: 5px 0;
+        &__span {
+            width: 100%;
+            margin: auto 0;
+        }
+
+        select,
+        .input {
+            margin: auto;
+            height: 4vh;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #ddd !important;
+            padding-left: 0.5vw;
+        }
+
+        option {
+            border-radius: 0px;
+        }
+    }
+    .border-bottom {
+        border-bottom: 1px solid #555;
+    }
+    .padding-left {
+        padding-left: 30px;
+    }
+}
+
 .ant-table-cell .avatar-user {
     border-radius: 50%;
     width: 50px;
@@ -150,45 +214,6 @@
 
 .wallet-list-content-unactive {
     display: none;
-}
-
-.wallet-list-menu {
-    width: 25vw;
-    height: fit-content;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 5px 0 #999;
-    padding: 2vh 2vh;
-
-    &__item {
-        &__span {
-            margin: auto auto;
-            font-weight: bold;
-        }
-        &__row {
-            height: 5vh;
-            display: grid;
-            grid-template-columns: 30% 70%;
-            margin-top: 2%;
-
-            &__span {
-                margin: auto 0;
-            }
-
-            select {
-                margin: auto;
-                height: 4vh;
-                width: 100%;
-                background-color: #fff;
-                border: 1px solid #ddd !important;
-                padding-left: 0.5vw;
-            }
-
-            option {
-                border-radius: 0px;
-            }
-        }
-    }
 }
 
 .ant-input-group .ant-input {
